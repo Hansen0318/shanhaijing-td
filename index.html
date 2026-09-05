@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#101a16">
+  <meta name="description" content="Shanhaijing TD 山海經 Roguelike Tower Defense Graybox Prototype">
+  <title>Shanhaijing TD — V0.01</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="game-shell" aria-label="Shanhaijing TD 遊戲">
+    <header class="hud">
+      <div class="resource"><span>❤️ Base</span><strong id="base-hp">20</strong></div>
+      <div class="resource"><span>🪙 Gold</span><strong id="gold">300</strong></div>
+      <div class="resource"><span>🌊 Wave</span><strong id="wave">0 / 10</strong></div>
+      <button id="speed-button" class="hud-button" aria-label="切換遊戲速度">1×</button>
+      <button id="pause-button" class="hud-button" aria-label="暫停遊戲">Ⅱ</button>
+    </header>
+
+    <section class="battlefield" aria-label="塔防戰場">
+      <canvas id="game-canvas" width="390" height="610" aria-label="S 型道路與八個塔位"></canvas>
+      <div id="wave-control" class="wave-control">
+        <span id="countdown-label">準備 15 秒</span>
+        <button id="start-wave-button">立即開始</button>
+      </div>
+      <div id="boss-hud" class="boss-hud" hidden><strong>窮奇</strong><div class="boss-track"><span id="boss-hp-fill"></span></div><small id="boss-hp-text">2500 / 2500</small></div>
+      <div id="banner" class="banner" hidden></div>
+    </section>
+
+    <section id="context-panel" class="context-panel" aria-live="polite">
+      <p class="panel-hint">點擊圓形塔位，部署山海異獸</p>
+    </section>
+  </main>
+
+  <section id="blessing-overlay" class="overlay" hidden aria-modal="true" role="dialog">
+    <div class="modal blessing-modal"><p class="eyebrow">波次完成</p><h1>選擇山海祝福</h1><div id="blessing-choices" class="blessing-choices"></div></div>
+  </section>
+  <section id="pause-overlay" class="overlay" hidden aria-modal="true" role="dialog">
+    <div class="modal compact"><p class="eyebrow">遊戲暫停</p><h1>暫停</h1><button data-action="continue">繼續</button><button class="secondary" data-action="restart">重新開始</button></div>
+  </section>
+  <section id="result-overlay" class="overlay" hidden aria-modal="true" role="dialog">
+    <div class="modal compact"><p class="eyebrow">本次防守結果</p><h1 id="result-title">防守成功</h1><ul id="result-stats"></ul><button id="retry-button" data-action="restart">再次挑戰</button></div>
+  </section>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
