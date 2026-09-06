@@ -15,22 +15,14 @@ test('context panel is not rebuilt when its state signature is unchanged', () =>
   assert.equal(ui.shouldRenderContext('slot-0-gold-180'), true);
 });
 
-test('context panel expands only while a tower slot is selected', () => {
-  const states = new Map();
-  const ui = Object.create(UIController.prototype);
-  ui.dom = {
-    'game-shell': {
-      classList: {
-        toggle(name, enabled) { states.set(name, enabled); },
-      },
-    },
-  };
+test('mobile layout reserves invariant space for context controls and boss health', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
 
-  ui.setContextExpanded(false);
-  assert.equal(states.get('context-open'), false);
-
-  ui.setContextExpanded(true);
-  assert.equal(states.get('context-open'), true);
+  assert.match(html, /class="boss-slot"[\s\S]*id="boss-hud"/);
+  assert.match(css, /\.boss-slot\s*\{[^}]*flex:\s*0\s+0\s+44px[^}]*min-height:\s*44px/s);
+  assert.match(css, /\.context-panel\s*\{[^}]*min-height:\s*142px[^}]*flex:\s*0\s+0\s+142px/s);
+  assert.doesNotMatch(css, /\.context-open\s+\.context-panel/);
 });
 
 test('CSS prevents horizontal overflow and provides minimum tap targets', async () => {
