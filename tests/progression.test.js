@@ -20,6 +20,14 @@ test('blessing draw returns three distinct choices and weights deployed towers',
   assert.equal(blessings.modifiers.bifangDamage, 0.4);
 });
 
+test('capped blessings are removed from later choice pools', () => {
+  const blessings = new BlessingSystem(BLESSING_DATA, () => 0);
+  blessings.select('bifangDamage');
+  blessings.select('bifangDamage');
+  const choices = blessings.drawChoices(['bifang']);
+  assert.equal(choices.some(choice => choice.id === 'bifangDamage'), false);
+});
+
 test('global damage and attack speed blessings also cap at two stacks', () => {
   const blessings = new BlessingSystem(BLESSING_DATA, () => 0.2);
   for (const id of ['allDamage', 'attackSpeed']) {
