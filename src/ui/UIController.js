@@ -14,6 +14,9 @@ export class UIController {
     this.contextKey = key;
     return true;
   }
+  setContextExpanded(expanded) {
+    this.dom['game-shell'].classList.toggle('context-open', expanded);
+  }
   bind() {
     this.renderer.canvas.addEventListener('pointerdown', event => this.onBattlefieldTap(event));
     this.dom['pause-button'].addEventListener('click', () => { this.game.togglePause(); this.render(); });
@@ -55,6 +58,7 @@ export class UIController {
   renderContext() {
     const panel = this.dom['context-panel'];
     const index = this.game.selectedSlot;
+    this.setContextExpanded(index != null);
     const towerState = index == null ? null : this.game.towers[index];
     const key = JSON.stringify([index, this.game.economy.gold, this.game.state, this.game.pendingSellSlot, towerState?.type, towerState?.level, this.game.blessings.modifiers]);
     if (!this.shouldRenderContext(key)) return;
