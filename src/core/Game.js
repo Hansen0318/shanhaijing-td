@@ -195,8 +195,8 @@ export class Game {
   }
   completeWave() {
     const number = this.wave.waveNumber;
+    if (number >= 10) return;
     this.wave.finish();
-    if (number >= 10) { if (this.state !== 'victory') this.end('victory'); return; }
     this.currentChoices = this.blessings.drawChoices([...new Set(this.towers.filter(Boolean).map(tower => tower.type))]);
     this.state = 'blessing';
     this.time.setPaused(true);
