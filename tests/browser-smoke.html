@@ -24,6 +24,10 @@
     <button data-state="wave10">Wave 10</button>
     <button data-state="frenzy">Boss 50%</button>
     <button data-state="victory">擊敗 Boss</button>
+    <button data-width="320">320px</button>
+    <button data-width="375">375px</button>
+    <button data-width="390">390px</button>
+    <button data-width="430">430px</button>
     <p id="status">等待遊戲載入</p>
   </div>
   <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html"></iframe>
@@ -53,6 +57,13 @@
     }
 
     document.addEventListener('click', async event => {
+      const widthButton = event.target.closest('[data-width]');
+      if (widthButton) {
+        await ready();
+        frame.style.width = `${widthButton.dataset.width}px`;
+        requestAnimationFrame(() => requestAnimationFrame(() => snapshot(`${widthButton.dataset.width}px`)));
+        return;
+      }
       const button = event.target.closest('[data-state]');
       if (!button) return;
       await ready();
