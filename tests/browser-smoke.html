@@ -30,6 +30,7 @@
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
     <button data-width="430">430px</button>
+    <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
   <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html"></iframe>
@@ -45,8 +46,9 @@
     function snapshot(label) {
       const game = frame.contentWindow.__SHANHAIJING_TD__;
       const rect = frame.contentDocument.querySelector('#game-canvas').getBoundingClientRect();
-      const boss = game.enemies.find(enemy => enemy.isBoss);
-      status.textContent = `${label}｜state ${game.state}｜wave ${game.wave.waveNumber}｜canvas ${rect.width.toFixed(2)}×${rect.height.toFixed(2)}｜boss ${boss ? Math.ceil(boss.hp) : 'none'}｜banner ${game.banner || 'none'}`;
+      const bosses = game.enemies.filter(enemy => enemy.isBoss);
+      const queuedBosses = game.wave.queue.filter(type => type === 'qiongqi').length;
+      status.textContent = `${label}｜state ${game.state}｜wave ${game.wave.waveNumber}｜canvas ${rect.width.toFixed(2)}×${rect.height.toFixed(2)}｜boss ${bosses[0] ? Math.ceil(bosses[0].hp) : 'none'}｜boss count ${bosses.length}｜queued boss ${queuedBosses}｜banner ${game.banner || 'none'}`;
     }
 
     function configureMixedWave(game) {
@@ -59,6 +61,13 @@
     }
 
     document.addEventListener('click', async event => {
+      const heightButton = event.target.closest('[data-height]');
+      if (heightButton) {
+        await ready();
+        frame.style.height = `${heightButton.dataset.height}px`;
+        requestAnimationFrame(() => requestAnimationFrame(() => snapshot(`高度 ${heightButton.dataset.height}px`)));
+        return;
+      }
       const widthButton = event.target.closest('[data-width]');
       if (widthButton) {
         await ready();
@@ -85,7 +94,14 @@
           game.enemies.at(-1).pathDistance = distance;
         });
       }
-      if (state === 'wave10') { game.restart(); game.wave.waveNumber = 9; game.startWaveNow(); game.spawnEnemy('qiongqi'); }
+      if (state === 'wave10') {
+        game.restart();
+        game.wave.waveNumber = 9;
+        game.startWaveNow();
+        const queuedBoss = game.wave.queue.indexOf('qiongqi');
+        if (queuedBoss >= 0) game.wave.queue.splice(queuedBoss, 1);
+        game.spawnEnemy('qiongqi');
+      }
       if (state === 'frenzy') {
         const boss = game.enemies.find(enemy => enemy.isBoss);
         if (boss) { boss.hp = boss.maxHp * 0.5; game.update(0); }
