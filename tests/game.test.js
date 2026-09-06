@@ -2,11 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 
-test('game starts in preparation and can start wave immediately', () => {
+test('game starts in preparation and waits for the player to start wave one', () => {
   const game = new Game();
   assert.equal(game.state, 'preparation');
   assert.equal(game.baseHp, 20);
   assert.equal(game.economy.gold, 300);
+  game.update(30);
+  assert.equal(game.state, 'preparation');
+  assert.equal(game.wave.waveNumber, 0);
   assert.equal(game.startWaveNow(), true);
   assert.equal(game.state, 'combat');
   assert.equal(game.wave.waveNumber, 1);
@@ -42,7 +45,7 @@ test('pause preserves state and speed affects the shared clock', () => {
   assert.equal(game.state, 'preparation');
 });
 
-test('wave completion requires blessing then begins three second countdown', () => {
+test('wave completion requires blessing then waits in preparation until the player starts', () => {
   const game = new Game();
   game.startWaveNow();
   game.wave.queue.length = 0;
@@ -51,8 +54,22 @@ test('wave completion requires blessing then begins three second countdown', () 
   assert.equal(game.state, 'blessing');
   assert.equal(game.currentChoices.length, 3);
   assert.equal(game.selectBlessing(game.currentChoices[0].id), true);
-  assert.equal(game.state, 'countdown');
-  assert.equal(game.countdown, 3);
+  assert.equal(game.state, 'preparation');
+  game.update(30);
+  assert.equal(game.state, 'preparation');
+  assert.equal(game.wave.waveNumber, 1);
+  assert.equal(game.startWaveNow(), true);
+  assert.equal(game.state, 'combat');
+  assert.equal(game.wave.waveNumber, 2);
+});
+
+test('tower management remains available during combat', () => {
+  const game = new Game();
+  game.startWaveNow();
+  assert.equal(game.state, 'combat');
+  assert.equal(game.buildTower(0, 'bifang').ok, true);
+  game.economy.add(300);
+  assert.equal(game.upgradeTower(0).ok, true);
 });
 
 test('base damage causes defeat and restart creates a fresh run', () => {
