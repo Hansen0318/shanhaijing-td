@@ -20,6 +20,7 @@
     <button data-state="tower">塔資訊</button>
     <button data-state="upgrade">升級／出售</button>
     <button data-state="wave1">Wave 1</button>
+    <button data-state="wave8preview">Wave 8 預告</button>
     <button data-state="wave8">Wave 8</button>
     <button data-state="wave10">Wave 10</button>
     <button data-state="frenzy">Boss 50%</button>
@@ -74,6 +75,7 @@
       if (state === 'tower') { game.restart(); game.buildTower(0, 'bifang'); game.selectedSlot = 0; }
       if (state === 'upgrade') { game.restart(); game.economy.add(500); game.buildTower(0, 'bifang'); game.upgradeTower(0); game.sellTower(0); game.selectedSlot = 0; }
       if (state === 'wave1') { game.restart(); game.buildTower(0, 'bifang'); game.buildTower(4, 'fuzhu'); game.startWaveNow(); }
+      if (state === 'wave8preview') configureMixedWave(game);
       if (state === 'wave8') {
         configureMixedWave(game);
         game.startWaveNow();
