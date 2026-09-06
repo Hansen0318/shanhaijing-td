@@ -31,9 +31,9 @@ test('wave manager expands fixed queues without overlap', () => {
 test('wave preview returns the configured groups without duplicating UI wave data', () => {
   const manager = new WaveManager(WAVE_DATA);
   assert.deepEqual(manager.getWaveGroups(8), [
-    { type: 'minion', count: 16 },
-    { type: 'swift', count: 6 },
-    { type: 'giant', count: 3 },
+    { type: 'minion', count: 18 },
+    { type: 'swift', count: 8 },
+    { type: 'giant', count: 5 },
   ]);
   assert.deepEqual(manager.getWaveGroups(11), []);
 });
