@@ -30,11 +30,11 @@ export const WAVE_DATA = Object.freeze([
   wave([{ type: 'minion', count: 8 }, { type: 'swift', count: 4 }], 0.9),
   wave([{ type: 'minion', count: 12 }, { type: 'swift', count: 6 }], 0.82),
   wave([{ type: 'minion', count: 8 }, { type: 'giant', count: 3 }], 1.1),
-  wave([{ type: 'minion', count: 14 }, { type: 'swift', count: 10 }], 0.68, { hpMultiplier: 1.15 }),
-  wave([{ type: 'swift', count: 10 }, { type: 'giant', count: 7 }], 0.82, { hpMultiplier: 1.25 }),
-  wave([{ type: 'minion', count: 18 }, { type: 'swift', count: 8 }, { type: 'giant', count: 5 }], 0.62, { hpMultiplier: 1.35 }),
-  wave([{ type: 'swift', count: 16 }, { type: 'giant', count: 8 }], 0.7, { hpMultiplier: 1.45 }),
-  wave([{ type: 'minion', count: 4 }, { type: 'qiongqi', count: 1 }], 1.2, { hpMultiplier: 1.35, bossHpMultiplier: 1.3 }),
+  wave([{ type: 'minion', count: 14 }, { type: 'swift', count: 10 }], 0.68, { hpMultiplier: 1.5 }),
+  wave([{ type: 'swift', count: 10 }, { type: 'giant', count: 7 }], 0.82, { hpMultiplier: 1.8 }),
+  wave([{ type: 'minion', count: 18 }, { type: 'swift', count: 8 }, { type: 'giant', count: 5 }], 0.62, { hpMultiplier: 2.2 }),
+  wave([{ type: 'swift', count: 16 }, { type: 'giant', count: 8 }], 0.7, { hpMultiplier: 2.8 }),
+  wave([{ type: 'minion', count: 4 }, { type: 'qiongqi', count: 1 }], 1.2, { hpMultiplier: 2.4, bossHpMultiplier: 2 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
