@@ -89,6 +89,23 @@ test('killing qiongqi produces victory', () => {
   assert.equal(game.state, 'victory');
 });
 
+test('wave ten cannot clear while qiongqi is still alive', () => {
+  const game = new Game();
+  game.state = 'combat';
+  game.wave.waveNumber = 10;
+  game.wave.active = true;
+  game.wave.queue.length = 0;
+  game.wave.spawnedAlive = 0;
+  game.spawnEnemy('qiongqi');
+  const boss = game.enemies.find(enemy => enemy.isBoss);
+  assert.equal(boss.alive, true);
+
+  game.completeWave();
+
+  assert.equal(game.state, 'combat');
+  assert.equal(boss.alive, true);
+});
+
 test('a kill emits the actual Fortune-adjusted gold reward at the death position', () => {
   const game = new Game();
   game.blessings.select('goldReward');
