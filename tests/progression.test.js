@@ -13,9 +13,23 @@ test('blessing draw returns three distinct choices and weights deployed towers',
   assert.equal(choices.length, 3);
   assert.equal(new Set(choices.map(choice => choice.id)).size, 3);
   assert.ok(blessings.weightFor(BLESSING_DATA.find(b => b.tower === 'bifang'), ['bifang']) > blessings.weightFor(BLESSING_DATA.find(b => b.tower === 'fuzhu'), ['bifang']));
-  blessings.select('bifangDamage');
-  blessings.select('bifangDamage');
+  assert.equal(blessings.select('bifangDamage'), true);
+  assert.equal(blessings.select('bifangDamage'), true);
+  assert.equal(blessings.select('bifangDamage'), false);
   assert.equal(blessings.stacks.bifangDamage, 2);
+  assert.equal(blessings.modifiers.bifangDamage, 0.4);
+});
+
+test('global damage and attack speed blessings also cap at two stacks', () => {
+  const blessings = new BlessingSystem(BLESSING_DATA, () => 0.2);
+  for (const id of ['allDamage', 'attackSpeed']) {
+    assert.equal(blessings.select(id), true);
+    assert.equal(blessings.select(id), true);
+    assert.equal(blessings.select(id), false);
+    assert.equal(blessings.stacks[id], 2);
+  }
+  assert.equal(blessings.modifiers.allDamage, 0.2);
+  assert.equal(blessings.modifiers.attackSpeed, 0.2);
 });
 
 test('wave manager expands fixed queues without overlap', () => {
