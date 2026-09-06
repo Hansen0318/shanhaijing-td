@@ -9,7 +9,7 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js';
 import { WaveManager } from '../systems/WaveManager.js';
 
-const PLAYABLE_STATES = new Set(['preparation', 'countdown', 'combat']);
+const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
 export class Game {
   constructor(random = Math.random) { this.random = random; this.resetRun(); }
@@ -22,7 +22,6 @@ export class Game {
     this.baseHp = GAME_CONFIG.baseHp;
     this.state = 'preparation';
     this.previousState = null;
-    this.countdown = GAME_CONFIG.preparationSeconds;
     this.enemies = [];
     this.towers = Array(MAP_DATA.slots.length).fill(null);
     this.projectiles = [];
@@ -33,6 +32,7 @@ export class Game {
     this.banner = '';
     this.bannerTimer = 0;
     this.stats = { kills: 0, built: 0 };
+    this.time.setPaused(true);
   }
   restart() { this.resetRun(); return true; }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
@@ -68,7 +68,7 @@ export class Game {
   }
   cancelSell() { this.pendingSellSlot = null; }
   startWaveNow() {
-    if (this.state !== 'preparation' && this.state !== 'countdown') return false;
+    if (this.state !== 'preparation') return false;
     const next = this.wave.waveNumber + 1;
     if (next > GAME_CONFIG.totalWaves) return false;
     if (next === 10) { this.banner = 'BOSS\n窮奇'; this.bannerTimer = GAME_CONFIG.bossBannerSeconds; }
@@ -80,16 +80,22 @@ export class Game {
   setTimeScale(scale) { this.time.setScale(scale); return this.time.scale; }
   togglePause() {
     if (['victory', 'defeat', 'blessing'].includes(this.state)) return false;
-    if (this.state === 'paused') { this.state = this.previousState; this.previousState = null; this.time.setPaused(false); }
-    else { this.previousState = this.state; this.state = 'paused'; this.time.setPaused(true); }
+    if (this.state === 'paused') {
+      this.state = this.previousState;
+      this.previousState = null;
+      this.time.setPaused(this.state === 'preparation');
+    } else {
+      this.previousState = this.state;
+      this.state = 'paused';
+      this.time.setPaused(true);
+    }
     return true;
   }
   selectBlessing(id) {
     if (this.state !== 'blessing' || !this.currentChoices.some(choice => choice.id === id) || !this.blessings.select(id)) return false;
     this.currentChoices = [];
-    this.state = 'countdown';
-    this.countdown = GAME_CONFIG.nextWaveSeconds;
-    this.time.setPaused(false);
+    this.state = 'preparation';
+    this.time.setPaused(true);
     return true;
   }
   damageBase(amount) {
@@ -109,11 +115,7 @@ export class Game {
     this.bannerTimer = Math.max(0, this.bannerTimer - realDelta);
     this.effects.forEach(effect => { effect.life -= realDelta; });
     this.effects = this.effects.filter(effect => effect.life > 0);
-    if (this.state === 'preparation' || this.state === 'countdown') {
-      this.countdown = Math.max(0, this.countdown - realDelta);
-      if (this.countdown === 0) this.startWaveNow();
-      return;
-    }
+    if (this.state === 'preparation') return;
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
     this.wave.update(dt, type => this.spawnEnemy(type));
