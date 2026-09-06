@@ -24,6 +24,7 @@
     <button data-state="wave8">Wave 8</button>
     <button data-state="wave10">Wave 10</button>
     <button data-state="frenzy">Boss 50%</button>
+    <button data-state="nextbanner">下一段提示</button>
     <button data-state="victory">擊敗 Boss</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
@@ -79,13 +80,17 @@
       if (state === 'wave8') {
         configureMixedWave(game);
         game.startWaveNow();
-        ['minion', 'swift', 'giant'].forEach((type, index) => { game.spawnEnemy(type); game.enemies.at(-1).pathDistance = 285 + index * 16; });
+        [['minion', 100], ['swift', 200], ['giant', 280], ['minion', 300]].forEach(([type, distance]) => {
+          game.spawnEnemy(type);
+          game.enemies.at(-1).pathDistance = distance;
+        });
       }
       if (state === 'wave10') { game.restart(); game.wave.waveNumber = 9; game.startWaveNow(); game.spawnEnemy('qiongqi'); }
       if (state === 'frenzy') {
         const boss = game.enemies.find(enemy => enemy.isBoss);
         if (boss) { boss.hp = boss.maxHp * 0.5; game.update(0); }
       }
+      if (state === 'nextbanner') game.advanceBanner(game.bannerTimer + 0.01);
       if (state === 'victory') {
         const boss = game.enemies.find(enemy => enemy.isBoss);
         if (boss) { boss.takeDamage(boss.maxHp); game.update(0); }
