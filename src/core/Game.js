@@ -129,7 +129,16 @@ export class Game {
     }
   }
   spawnEnemy(type) {
-    this.enemies.push(new Enemy(type, ENEMY_DATA[type], this.map));
+    const baseData = ENEMY_DATA[type];
+    if (!baseData) return;
+    const waveData = WAVE_DATA[this.wave.waveNumber - 1];
+    const hpMultiplier = baseData.isBoss
+      ? (waveData?.bossHpMultiplier ?? waveData?.hpMultiplier ?? 1)
+      : (waveData?.hpMultiplier ?? 1);
+    const enemyData = hpMultiplier === 1
+      ? baseData
+      : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
+    this.enemies.push(new Enemy(type, enemyData, this.map));
     if (type === 'qiongqi') this.queueBanner('窮奇現身', 1.1);
   }
   onEnemyKilled(enemy) {
