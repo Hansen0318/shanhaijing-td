@@ -23,18 +23,18 @@ export const ENEMY_DATA = Object.freeze({
   qiongqi: { id: 'qiongqi', name: '窮奇', emoji: '🐅', hp: 2500, speed: 23, baseDamage: 20, reward: 0, radius: 22, isBoss: true },
 });
 
-const wave = (groups, interval) => ({ groups, interval });
+const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
 export const WAVE_DATA = Object.freeze([
   wave([{ type: 'minion', count: 8 }], 1.05),
   wave([{ type: 'minion', count: 12 }], 0.95),
   wave([{ type: 'minion', count: 8 }, { type: 'swift', count: 4 }], 0.9),
   wave([{ type: 'minion', count: 12 }, { type: 'swift', count: 6 }], 0.82),
   wave([{ type: 'minion', count: 8 }, { type: 'giant', count: 3 }], 1.1),
-  wave([{ type: 'minion', count: 14 }, { type: 'swift', count: 10 }], 0.68),
-  wave([{ type: 'swift', count: 10 }, { type: 'giant', count: 7 }], 0.82),
-  wave([{ type: 'minion', count: 18 }, { type: 'swift', count: 8 }, { type: 'giant', count: 5 }], 0.62),
-  wave([{ type: 'swift', count: 16 }, { type: 'giant', count: 8 }], 0.7),
-  wave([{ type: 'minion', count: 4 }, { type: 'qiongqi', count: 1 }], 1.2),
+  wave([{ type: 'minion', count: 14 }, { type: 'swift', count: 10 }], 0.68, { hpMultiplier: 1.15 }),
+  wave([{ type: 'swift', count: 10 }, { type: 'giant', count: 7 }], 0.82, { hpMultiplier: 1.25 }),
+  wave([{ type: 'minion', count: 18 }, { type: 'swift', count: 8 }, { type: 'giant', count: 5 }], 0.62, { hpMultiplier: 1.35 }),
+  wave([{ type: 'swift', count: 16 }, { type: 'giant', count: 8 }], 0.7, { hpMultiplier: 1.45 }),
+  wave([{ type: 'minion', count: 4 }, { type: 'qiongqi', count: 1 }], 1.2, { hpMultiplier: 1.35, bossHpMultiplier: 1.3 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
