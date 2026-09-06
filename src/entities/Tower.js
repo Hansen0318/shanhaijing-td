@@ -9,7 +9,8 @@ export class Tower {
     this.invested = data.cost;
   }
   getStats(modifiers = {}) {
-    const levelDamage = this.data.damage * (this.level >= 2 ? 1.3 : 1) * (this.level >= 3 ? 1.3 : 1);
+    const levelDamageMultiplier = this.level >= 3 ? 1.5 : this.level >= 2 ? 1.3 : 1;
+    const levelDamage = this.data.damage * levelDamageMultiplier;
     const towerDamage = modifiers[`${this.type}Damage`] ?? 0;
     const stats = {
       damage: Number((levelDamage * (1 + (modifiers.allDamage ?? 0)) * (1 + towerDamage)).toFixed(3)),
