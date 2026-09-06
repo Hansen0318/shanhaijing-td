@@ -19,8 +19,9 @@ test('mobile layout reserves invariant space for context controls and boss healt
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
 
-  assert.match(html, /class="boss-slot"[\s\S]*id="boss-hud"/);
+  assert.match(html, /class="boss-slot"[\s\S]*id="wave-preview"[\s\S]*id="boss-hud"/);
   assert.match(css, /\.boss-slot\s*\{[^}]*flex:\s*0\s+0\s+44px[^}]*min-height:\s*44px/s);
+  assert.match(css, /\.wave-preview\s*\{[^}]*height:\s*100%/s);
   assert.match(css, /\.context-panel\s*\{[^}]*min-height:\s*142px[^}]*flex:\s*0\s+0\s+142px/s);
   assert.doesNotMatch(css, /\.context-open\s+\.context-panel/);
 });

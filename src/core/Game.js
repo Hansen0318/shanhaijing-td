@@ -31,6 +31,7 @@ export class Game {
     this.selectedSlot = null;
     this.banner = '';
     this.bannerTimer = 0;
+    this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
     this.time.setPaused(true);
   }
@@ -71,7 +72,7 @@ export class Game {
     if (this.state !== 'preparation') return false;
     const next = this.wave.waveNumber + 1;
     if (next > GAME_CONFIG.totalWaves) return false;
-    if (next === 10) { this.banner = 'BOSS\n窮奇'; this.bannerTimer = GAME_CONFIG.bossBannerSeconds; }
+    if (next === 10) this.queueBanner('BOSS 警告', GAME_CONFIG.bossBannerSeconds);
     this.wave.start(next);
     this.state = 'combat';
     this.time.setPaused(false);
@@ -103,16 +104,44 @@ export class Game {
     if (this.baseHp <= 0) this.end('defeat');
   }
   end(state) { this.state = state; this.time.setPaused(true); this.pendingSellSlot = null; }
-  spawnEnemy(type) { this.enemies.push(new Enemy(type, ENEMY_DATA[type], this.map)); }
+  queueBanner(text, duration) {
+    if (this.bannerTimer <= 0) {
+      this.banner = text;
+      this.bannerTimer = duration;
+      return;
+    }
+    this.bannerQueue.push({ text, duration });
+  }
+  advanceBanner(realDelta) {
+    let remaining = realDelta;
+    while (this.bannerTimer > 0 && remaining >= this.bannerTimer) {
+      remaining -= this.bannerTimer;
+      const next = this.bannerQueue.shift();
+      if (!next) { this.banner = ''; this.bannerTimer = 0; return; }
+      this.banner = next.text;
+      this.bannerTimer = next.duration;
+    }
+    this.bannerTimer = Math.max(0, this.bannerTimer - remaining);
+    if (this.bannerTimer <= 0 && this.bannerQueue.length) {
+      const next = this.bannerQueue.shift();
+      this.banner = next.text;
+      this.bannerTimer = next.duration;
+    }
+  }
+  spawnEnemy(type) {
+    this.enemies.push(new Enemy(type, ENEMY_DATA[type], this.map));
+    if (type === 'qiongqi') this.queueBanner('窮奇現身', 1.1);
+  }
   onEnemyKilled(enemy) {
     if (enemy.rewarded) return;
     enemy.rewarded = true;
     this.stats.kills += 1;
-    this.economy.reward(enemy.reward, 1 + (this.blessings.modifiers.goldReward ?? 0));
+    const reward = this.economy.reward(enemy.reward, 1 + (this.blessings.modifiers.goldReward ?? 0));
+    if (reward > 0) this.effects.push({ type: 'gold', x: enemy.x, y: enemy.y, amount: reward, life: 0.9, duration: 0.9 });
     if (enemy.type === 'qiongqi') this.end('victory');
   }
   update(realDelta) {
-    this.bannerTimer = Math.max(0, this.bannerTimer - realDelta);
+    this.advanceBanner(realDelta);
     this.effects.forEach(effect => { effect.life -= realDelta; });
     this.effects = this.effects.filter(effect => effect.life > 0);
     if (this.state === 'preparation') return;
@@ -124,7 +153,7 @@ export class Game {
     this.projectiles.forEach(projectile => projectile.update(dt, this.enemies));
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
     this.enemies.forEach(enemy => {
-      if (enemy.alive && enemy.checkFrenzy()) { this.banner = '窮奇進入狂暴！'; this.bannerTimer = 1.4; }
+      if (enemy.alive && enemy.checkFrenzy()) this.queueBanner('窮奇進入狂暴！', 1.4);
       if (!enemy.alive && !enemy.processed) {
         enemy.processed = true;
         if (enemy.reachedBase) this.damageBase(enemy.baseDamage); else this.onEnemyKilled(enemy);
@@ -145,8 +174,14 @@ export class Game {
       tower.cooldown += stats.interval;
       if (tower.type === 'yinglong') {
         const hit = CombatSystem.penetrate(this.enemies, stats.penetration, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability, bossBonus: stats.bossBonus }, tower, stats.range);
-        this.effects.push({ type: 'beam', x1: tower.x, y1: tower.y, targets: hit.map(item => ({ x: item.x, y: item.y })), life: 0.14 });
-      } else this.projectiles.push(new Projectile(tower, target, stats, this.blessings.modifiers));
+        this.effects.push({
+          type: 'beam',
+          points: [{ x: tower.x, y: tower.y }, ...hit.map(item => ({ x: item.x, y: item.y }))],
+          hitCount: hit.length,
+          life: 0.2,
+          duration: 0.2,
+        });
+      } else this.projectiles.push(new Projectile(tower, target, stats, this.blessings.modifiers, this.effects));
     }
   }
   completeWave() {

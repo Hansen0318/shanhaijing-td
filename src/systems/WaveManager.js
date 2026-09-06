@@ -1,6 +1,10 @@
 export class WaveManager {
   constructor(waves) { this.waves = waves; this.reset(); }
   reset() { this.waveNumber = 0; this.queue = []; this.spawnTimer = 0; this.spawnedAlive = 0; this.active = false; }
+  getWaveGroups(number) {
+    const groups = this.waves[number - 1]?.groups ?? [];
+    return groups.map(group => ({ ...group }));
+  }
   start(number) {
     if (this.active) return false;
     const wave = this.waves[number - 1];

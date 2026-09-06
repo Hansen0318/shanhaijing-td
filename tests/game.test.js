@@ -88,3 +88,53 @@ test('killing qiongqi produces victory', () => {
   game.onEnemyKilled({ type: 'qiongqi', reward: 0, rewarded: false });
   assert.equal(game.state, 'victory');
 });
+
+test('a kill emits the actual Fortune-adjusted gold reward at the death position', () => {
+  const game = new Game();
+  game.blessings.select('goldReward');
+  game.onEnemyKilled({ type: 'giant', reward: 25, rewarded: false, x: 123, y: 234 });
+  assert.equal(game.economy.gold, 330);
+  assert.deepEqual(game.effects.at(-1), {
+    type: 'gold', x: 123, y: 234, amount: 30, life: 0.9, duration: 0.9,
+  });
+});
+
+test('yinglong effect records one ordered beam through every penetrated target', () => {
+  const game = new Game();
+  assert.equal(game.buildTower(0, 'yinglong').ok, true);
+  const enemy = (x, pathDistance) => ({
+    x, y: 100, pathDistance, alive: true, statuses: {}, isBoss: false,
+    takeDamage(amount) { this.hp -= amount; }, hp: 100,
+  });
+  game.enemies = [enemy(80, 20), enemy(90, 10)];
+  game.updateTowers(0.1);
+  assert.deepEqual(game.effects[0], {
+    type: 'beam',
+    points: [{ x: 80, y: 135 }, { x: 80, y: 100 }, { x: 90, y: 100 }],
+    hitCount: 2,
+    life: 0.2,
+    duration: 0.2,
+  });
+});
+
+test('wave ten presents boss warning, arrival and one frenzy message in order', () => {
+  const game = new Game();
+  game.wave.waveNumber = 9;
+  assert.equal(game.startWaveNow(), true);
+  game.spawnEnemy('qiongqi');
+  const boss = game.enemies.at(-1);
+  boss.hp = boss.maxHp * 0.5;
+  game.update(0);
+  game.update(0);
+
+  assert.deepEqual(
+    [game.banner, ...game.bannerQueue.map(item => item.text)],
+    ['BOSS 警告', '窮奇現身', '窮奇進入狂暴！'],
+  );
+  assert.equal(boss.frenzied, true);
+
+  game.advanceBanner(1.31);
+  assert.equal(game.banner, '窮奇現身');
+  game.advanceBanner(1.11);
+  assert.equal(game.banner, '窮奇進入狂暴！');
+});

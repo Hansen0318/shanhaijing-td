@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { CombatSystem } from '../src/systems/CombatSystem.js';
+import { Projectile } from '../src/entities/Projectile.js';
 
 const target = (x, hp = 100) => ({
   x, y: 0, hp, maxHp: hp, alive: true, statuses: {}, isBoss: false, hitFlash: 0,
@@ -23,6 +24,23 @@ test('bifang impact damages every enemy in explosion radius', () => {
   const enemies = [target(0), target(30), target(80)];
   CombatSystem.areaDamage(enemies, { x: 0, y: 0 }, 55, 18, {});
   assert.deepEqual(enemies.map(e => e.hp), [82, 82, 100]);
+});
+
+test('bifang impact emits an explosion matching its real radius and hit count', () => {
+  const enemies = [target(0), target(30), target(80)];
+  const effects = [];
+  const projectile = new Projectile(
+    { type: 'bifang', x: -10, y: 0 },
+    enemies[0],
+    { damage: 18, projectileSpeed: 310, explosionRadius: 55, burnDps: 0 },
+    {},
+    effects,
+  );
+  projectile.impact(enemies);
+  assert.deepEqual(effects, [{
+    type: 'explosion', x: 0, y: 0, radius: 55, hitCount: 2,
+    hitPoints: [{ x: 0, y: 0 }, { x: 30, y: 0 }], life: 0.36, duration: 0.36,
+  }]);
 });
 
 test('yinglong penetration hits only ordered targets', () => {

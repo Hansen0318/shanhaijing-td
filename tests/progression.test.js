@@ -28,6 +28,16 @@ test('wave manager expands fixed queues without overlap', () => {
   assert.equal(manager.isComplete(), true);
 });
 
+test('wave preview returns the configured groups without duplicating UI wave data', () => {
+  const manager = new WaveManager(WAVE_DATA);
+  assert.deepEqual(manager.getWaveGroups(8), [
+    { type: 'minion', count: 16 },
+    { type: 'swift', count: 6 },
+    { type: 'giant', count: 3 },
+  ]);
+  assert.deepEqual(manager.getWaveGroups(11), []);
+});
+
 test('qiongqi frenzy triggers exactly once at 50 percent health', () => {
   const boss = new Enemy('qiongqi', ENEMY_DATA.qiongqi, new GameMap(MAP_DATA));
   boss.hp = 1250;

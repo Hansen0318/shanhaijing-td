@@ -1,4 +1,4 @@
-import { TOWER_DATA } from '../config/gameData.js';
+import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {
@@ -54,7 +54,7 @@ export class UIController {
       this.dom['countdown-label'].textContent = game.wave.waveNumber === 0 ? '先配置異獸，再開始第一波' : `配置完成後開始 Wave ${nextWave}`;
       this.dom['start-wave-button'].textContent = `開始 Wave ${nextWave}`;
     }
-    this.renderContext(); this.renderBlessings(); this.renderPause(); this.renderResult(); this.renderBoss(); this.renderBanner();
+    this.renderContext(); this.renderBlessings(); this.renderPause(); this.renderResult(); this.renderBossSlot(); this.renderBanner();
   }
   renderContext() {
     const panel = this.dom['context-panel'];
@@ -89,8 +89,20 @@ export class UIController {
     this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
     this.dom['retry-button'].textContent = this.game.state === 'victory' ? '再次挑戰' : '重新挑戰';
   }
-  renderBoss() {
+  renderBossSlot() {
     const boss = this.game.enemies.find(enemy => enemy.isBoss);
+    const preview = this.dom['wave-preview'];
+    const showPreview = this.game.state === 'preparation' && !boss;
+    preview.hidden = !showPreview;
+    if (showPreview) {
+      const nextWave = this.game.wave.waveNumber + 1;
+      const groups = this.game.wave.getWaveGroups(nextWave);
+      this.dom['wave-preview-title'].textContent = `下一波 ${nextWave}`;
+      this.dom['wave-preview-enemies'].innerHTML = groups.map(group => {
+        const enemy = ENEMY_DATA[group.type];
+        return `<span>${enemy.emoji}${enemy.name} ×${group.count}</span>`;
+      }).join('');
+    }
     this.dom['boss-hud'].hidden = !boss;
     if (boss) { this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`; this.dom['boss-hp-text'].textContent = `${Math.ceil(boss.hp)} / ${boss.maxHp}`; }
   }

@@ -2,7 +2,7 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 
 export class Projectile {
-  constructor(tower, target, stats, modifiers) {
+  constructor(tower, target, stats, modifiers, effects = []) {
     this.type = tower.type;
     this.x = tower.x;
     this.y = tower.y;
@@ -10,6 +10,7 @@ export class Projectile {
     this.targetPoint = { x: target.x, y: target.y };
     this.stats = stats;
     this.modifiers = modifiers;
+    this.effects = effects;
     this.alive = true;
   }
   update(dt, enemies) {
@@ -25,6 +26,12 @@ export class Projectile {
     if (this.type === 'bifang') {
       const hit = CombatSystem.areaDamage(enemies, this.targetPoint, this.stats.explosionRadius, this.stats.damage, { slowedVulnerability: this.modifiers.slowedVulnerability });
       hit.forEach(enemy => StatusSystem.applyBurn(enemy, this.stats.burnDps, 2));
+      this.effects.push({
+        type: 'explosion', x: this.targetPoint.x, y: this.targetPoint.y,
+        radius: this.stats.explosionRadius, hitCount: hit.length,
+        hitPoints: hit.map(enemy => ({ x: enemy.x, y: enemy.y })),
+        life: 0.36, duration: 0.36,
+      });
     } else if (this.target.alive) {
       CombatSystem.hit(this.target, this.stats.damage, { slowedVulnerability: this.modifiers.slowedVulnerability });
       StatusSystem.applySlow(this.target, this.stats.slow, this.stats.slowDuration);

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shanhaijing TD V0.02 Browser Smoke</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 10px; background: #e8ece9; color: #18241d; font-family: system-ui, sans-serif; }
+    .toolbar { position: sticky; z-index: 2; top: 0; display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; background: rgba(232,236,233,.96); }
+    button { min-height: 44px; padding: 7px 10px; border: 1px solid #55705d; border-radius: 8px; background: #274d37; color: white; font-weight: 700; }
+    #status { width: 100%; margin: 0; font-size: 12px; }
+    iframe { display: block; width: 100%; height: 760px; border: 2px solid #55705d; background: #101a16; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button data-state="reset">重設</button>
+    <button data-state="empty">空塔位</button>
+    <button data-state="tower">塔資訊</button>
+    <button data-state="upgrade">升級／出售</button>
+    <button data-state="wave1">Wave 1</button>
+    <button data-state="wave8">Wave 8</button>
+    <button data-state="wave10">Wave 10</button>
+    <button data-state="frenzy">Boss 50%</button>
+    <button data-state="victory">擊敗 Boss</button>
+    <p id="status">等待遊戲載入</p>
+  </div>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html"></iframe>
+  <script type="module">
+    const frame = document.querySelector('#game-frame');
+    const status = document.querySelector('#status');
+
+    const ready = () => new Promise(resolve => {
+      if (frame.contentWindow?.__SHANHAIJING_TD__) return resolve();
+      frame.addEventListener('load', resolve, { once: true });
+    });
+
+    function snapshot(label) {
+      const game = frame.contentWindow.__SHANHAIJING_TD__;
+      const rect = frame.contentDocument.querySelector('#game-canvas').getBoundingClientRect();
+      const boss = game.enemies.find(enemy => enemy.isBoss);
+      status.textContent = `${label}｜state ${game.state}｜wave ${game.wave.waveNumber}｜canvas ${rect.width.toFixed(2)}×${rect.height.toFixed(2)}｜boss ${boss ? Math.ceil(boss.hp) : 'none'}｜banner ${game.banner || 'none'}`;
+    }
+
+    function configureMixedWave(game) {
+      game.restart();
+      game.economy.add(2000);
+      game.buildTower(0, 'bifang');
+      game.buildTower(1, 'fuzhu');
+      game.buildTower(6, 'yinglong');
+      game.wave.waveNumber = 7;
+    }
+
+    document.addEventListener('click', async event => {
+      const button = event.target.closest('[data-state]');
+      if (!button) return;
+      await ready();
+      const game = frame.contentWindow.__SHANHAIJING_TD__;
+      const state = button.dataset.state;
+      if (state === 'reset') game.restart();
+      if (state === 'empty') { game.restart(); game.selectedSlot = 0; }
+      if (state === 'tower') { game.restart(); game.buildTower(0, 'bifang'); game.selectedSlot = 0; }
+      if (state === 'upgrade') { game.restart(); game.economy.add(500); game.buildTower(0, 'bifang'); game.upgradeTower(0); game.sellTower(0); game.selectedSlot = 0; }
+      if (state === 'wave1') { game.restart(); game.buildTower(0, 'bifang'); game.buildTower(4, 'fuzhu'); game.startWaveNow(); }
+      if (state === 'wave8') {
+        configureMixedWave(game);
+        game.startWaveNow();
+        ['minion', 'swift', 'giant'].forEach((type, index) => { game.spawnEnemy(type); game.enemies.at(-1).pathDistance = 285 + index * 16; });
+      }
+      if (state === 'wave10') { game.restart(); game.wave.waveNumber = 9; game.startWaveNow(); game.spawnEnemy('qiongqi'); }
+      if (state === 'frenzy') {
+        const boss = game.enemies.find(enemy => enemy.isBoss);
+        if (boss) { boss.hp = boss.maxHp * 0.5; game.update(0); }
+      }
+      if (state === 'victory') {
+        const boss = game.enemies.find(enemy => enemy.isBoss);
+        if (boss) { boss.takeDamage(boss.maxHp); game.update(0); }
+      }
+      requestAnimationFrame(() => requestAnimationFrame(() => snapshot(button.textContent)));
+    });
+
+    await ready();
+    snapshot('初始');
+  </script>
+</body>
+</html>

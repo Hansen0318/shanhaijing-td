@@ -24,7 +24,7 @@ test('economy spends, rewards, upgrades and sells exactly', () => {
   assert.equal(economy.gold, 140);
   assert.equal(economy.spend(160), false);
   assert.equal(economy.gold, 140);
-  economy.reward(10, 1.2);
+  assert.equal(economy.reward(10, 1.2), 12);
   assert.equal(economy.gold, 152);
   assert.equal(Economy.upgradeCost(TOWER_DATA.bifang, 1), 96);
   assert.equal(Economy.upgradeCost(TOWER_DATA.bifang, 2), 144);

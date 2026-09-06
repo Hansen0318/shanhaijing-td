@@ -1,70 +1,48 @@
-# Shanhaijing TD — Project State
+# Shanhaijing TD Project State
 
-Last updated: 2026-09-06
+## Current Release
 
-## Current version
+- Version: Graybox Prototype V0.02
+- Scope: First level only
+- Platform: Mobile Web, optimized for 320–430px portrait screens
+- Deployment: GitHub Pages from `Hansen0318/shanhaijing-td`
 
-Graybox Prototype V0.01
+## Implemented First-Level Systems
 
-## Source of truth
+- Fixed S-shaped waypoint map with eight fixed tower slots
+- Bifang AOE, Fuzhu Slow, and Yinglong penetration towers with three levels
+- Build, upgrade, double-confirm sell, Gold economy, Pause, and shared 1×/2× time scale
+- Ten fixed Waves, weighted repeatable Blessing choices, and unlimited player-confirmed preparation
+- Data-driven next-wave preview during preparation
+- Bifang explosion radius feedback, Fuzhu Slow marker, Yinglong ordered penetration beam, and actual Gold reward float text
+- Wave 10 Qiongqi warning, arrival, fixed Boss HP HUD, one-shot 50% frenzy, Victory, Defeat, and Restart
+- Fixed-height Boss/preview slot and Context Panel so gameplay canvas size does not change with UI state
 
-- Repository: `Hansen0318/shanhaijing-td`
-- Branch: `main`
-- GitHub is the canonical project source. Do not resume from an older Work sandbox copy without first syncing latest `main`.
+## Architecture
 
-## Current gameplay decisions
+- `src/config/gameData.js`: tower, enemy, blessing, wave, map, and shared game constants
+- `src/core/`: run state, game loop coordination, and shared game time
+- `src/map/`: waypoint path and tower-slot hit testing
+- `src/entities/`: tower, enemy, and projectile state
+- `src/systems/`: wave, combat, status, blessing, and economy rules
+- `src/render/Renderer.js`: Canvas-only battlefield drawing and transient feedback
+- `src/ui/UIController.js`: HUD, preview, fixed context panel, overlays, and input binding
+- `tests/`: unit/system acceptance coverage plus responsive and state-injection browser fixtures
 
-- Mobile-first vertical Web tower defense.
-- Three towers: 畢方 / 夫諸 / 應龍.
-- Ten fixed waves; Wave 10 includes 窮奇 Boss.
-- Wave combat allows building, upgrading and selling towers using Gold earned during combat.
-- Wave completion opens a Roguelike Blessing choice.
-- After choosing a Blessing, the game enters an unlimited Preparation phase.
-- Preparation has no automatic countdown.
-- Only the player's `開始 Wave N` action starts the next wave.
-- Gold remains the only combat economy resource; no extra score/mana currency should be introduced at this stage.
+## V0.02 Verification Strategy
 
-## Changes completed in the latest Chat handoff
+- Automated tests cover Wave Preview data, reward calculation, AOE, Slow, penetration, Boss frenzy, and campaign acceptance.
+- `tests/browser-smoke.html` injects Wave 1, Wave 8, Wave 10, and Boss 50% states without shipping debug controls in the production game UI.
+- Mobile browser checks compare exact Canvas bounding boxes before and after selection, management, and Boss state changes.
 
-1. Replaced the automatic 3-second post-Blessing countdown with an unlimited manual Preparation phase.
-2. Initial preparation also waits indefinitely for the player.
-3. Tower management remains enabled during combat.
-4. Updated UI copy from countdown language to `配置完成後開始 Wave N` / `開始 Wave N`.
-5. Moved the Boss HP HUD outside the battlefield DOM so it reserves its own layout space and does not overlay the Boss or enemies.
-6. Updated mobile CSS so the Boss HUD is a separate flex item and the preparation control remains usable on narrow screens.
-7. Updated README to document the new flow and expected GitHub Pages URL.
-8. Updated unit tests to specify manual preparation behavior and combat-time tower management.
+## Remaining First-Level Prototype Issues
 
-## Validation status
+- Balance still needs broader testing by real players; automated acceptance only proves the campaign can be won and lost.
+- Emoji appearance varies by operating system and remains temporary graybox presentation.
+- Dense combat can visually overlap floating rewards and enemy markers.
+- Accessibility is basic: the Canvas battle state has labels but no complete screen-reader representation.
+- No persistence, audio, formal art, analytics, or long-session performance profiling is included in V0.02.
 
-Static source review confirms the state-machine changes are present on `main`.
+## Scope Boundary
 
-This Chat environment cannot execute the repository's Node test suite or launch an interactive browser instance from the connected GitHub repository. Therefore the following must still be verified by Work or another executable development environment before claiming full completion:
-
-- `npm test`
-- `npm run check`
-- Manual/automated browser test at 320–430px width
-- Preparation waits indefinitely after Blessing selection
-- `開始 Wave N` is the only transition from Preparation to Combat
-- Build / upgrade / sell work during Combat
-- Gold earned during Combat immediately enables purchases/upgrades
-- Boss HP HUD never overlaps 窮奇 at spawn or during movement
-- Pause and 1×/2× remain compatible with Preparation and Combat states
-- GitHub Pages is actually enabled and serving the current `main`
-
-## GitHub Pages
-
-The repository is already structured as a static site and contains `.nojekyll`. The intended public URL is:
-
-`https://hansen0318.github.io/shanhaijing-td/`
-
-If the URL is not live, enable GitHub Pages from `main` / root, then verify the deployed revision matches latest `main`.
-
-## Next recommended Work task
-
-1. Sync latest `main` first.
-2. Run the full test suite and syntax checks.
-3. Fix any failures caused by the new Preparation state.
-4. Launch the game at mobile viewport sizes and verify the UX items above.
-5. Verify/enable GitHub Pages and return the live `github.io` URL.
-6. Do not add new gameplay features until the current flow passes these checks.
+Do not start a second level until first-level playtesting confirms tower roles, economy pacing, Wave readability, Blessing value, and Qiongqi difficulty.
