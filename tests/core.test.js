@@ -48,10 +48,10 @@ test('enemy follows waypoints and deals base damage at the end', () => {
   assert.equal(enemy.baseDamage, 3);
 });
 
-test('tower level stats use cumulative damage and specialties', () => {
+test('tower level stats use moderated cumulative damage and specialties', () => {
   const bifang = new Tower('bifang', TOWER_DATA.bifang, MAP_DATA.slots[0]);
   bifang.level = 3;
-  assert.equal(bifang.getStats().damage, 30.42);
+  assert.equal(bifang.getStats().damage, 27);
   assert.ok(bifang.getStats().explosionRadius > 55);
   const fuzhu = new Tower('fuzhu', TOWER_DATA.fuzhu, MAP_DATA.slots[1]);
   fuzhu.level = 3;
