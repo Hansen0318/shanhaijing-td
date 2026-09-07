@@ -65,7 +65,17 @@
   color: #fffdf2;
   text-shadow: 0 2px 3px rgba(0, 0, 0, .95), 0 0 1px #000;
 }
-.result-panel .eyebrow { margin: 0 0 4px; color: #f0d77b; }
+.result-panel .eyebrow {
+  margin: 0 0 6px;
+  justify-self: center;
+  padding: 4px 10px;
+  border: 1px solid rgba(224, 190, 103, .72);
+  border-radius: 999px;
+  background: rgba(5, 22, 16, .9);
+  color: #ffe39a;
+  line-height: 1.15;
+  text-shadow: 0 1px 2px #000, 0 0 1px #000;
+}
 .result-panel #result-title { margin: 0 0 14px; font-size: 28px; line-height: 1.1; }
 #result-stats {
   margin: 0 0 12px;
