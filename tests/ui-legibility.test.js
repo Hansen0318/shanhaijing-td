@@ -28,7 +28,12 @@ test('result panel reserves artwork-safe header space and readable stats', async
   assert.match(css, /#retry-button\s*\{[^}]*width:\s*100%/s);
 });
 
+test('result eyebrow has its own dark contrast field over decorative artwork', async () => {
+  const css = await combinedCss();
+  assert.match(css, /\.result-panel \.eyebrow\s*\{[^}]*justify-self:\s*center[^}]*background:\s*rgba\(5,\s*22,\s*16,\s*\.9\)[^}]*border-radius:/s);
+});
+
 test('index loads the art readability override after the base stylesheet', async () => {
-  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8').catch(() => '<link rel=\"stylesheet\" href=\"./styles.css\">');
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8').catch(() => '<link rel="stylesheet" href="./styles.css">');
   assert.match(html, /styles\.css[\s\S]*styles-fixes\.css/);
 });
