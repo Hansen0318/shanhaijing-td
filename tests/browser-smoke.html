@@ -26,6 +26,8 @@
     <button data-state="frenzy">Boss 50%</button>
     <button data-state="nextbanner">下一段提示</button>
     <button data-state="victory">擊敗 Boss</button>
+    <button data-state="blessing">Blessing</button>
+    <button data-state="defeat">Defeat</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -111,6 +113,12 @@
         const boss = game.enemies.find(enemy => enemy.isBoss);
         if (boss) { boss.takeDamage(boss.maxHp); game.update(0); }
       }
+      if (state === 'blessing') {
+        game.restart();
+        game.currentChoices = game.blessings.drawChoices([]);
+        game.state = 'blessing';
+      }
+      if (state === 'defeat') { game.restart(); game.damageBase(game.baseHp); }
       requestAnimationFrame(() => requestAnimationFrame(() => snapshot(button.textContent)));
     });
 
