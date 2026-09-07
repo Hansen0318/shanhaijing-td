@@ -1,0 +1,37 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const moduleUrl = new URL('../src/config/artAssets.js', import.meta.url);
+
+test('art catalog exposes all 27 packaged assets and every file is deployable', async () => {
+  assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
+  const { ART_ASSETS, assetUrl } = await import(moduleUrl);
+  const entries = Object.entries(ART_ASSETS);
+
+  assert.equal(entries.length, 27);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 27);
+  assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.png');
+  assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
+
+  for (const [id, path] of entries) {
+    const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
+    assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}$`));
+  }
+});
+
+test('art store returns a drawable image only after that image has loaded', async () => {
+  assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
+  const { ArtStore } = await import(moduleUrl);
+  class FakeImage {
+    constructor() { this.complete = false; this.naturalWidth = 0; }
+  }
+  const store = new ArtStore(FakeImage);
+  assert.equal(store.get('bifang'), null);
+  store.images.bifang.complete = true;
+  store.images.bifang.naturalWidth = 1192;
+  assert.equal(store.get('bifang'), store.images.bifang);
+  assert.equal(store.get('unknown'), null);
+});
