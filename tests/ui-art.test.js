@@ -27,7 +27,7 @@ test('wave preview renders packaged enemy images from configured groups', () => 
   const ui = Object.create(UIController.prototype);
   ui.game = {
     state: 'preparation', enemies: [],
-    wave: { waveNumber: 0, getWaveGroups: () => [{ type: 'minion', count: 8 }, { type: 'swift', count: 4 }] },
+    wave: { waveNumber: 0, queue: [], getWaveGroups: () => [{ type: 'minion', count: 8 }, { type: 'swift', count: 4 }] },
   };
   ui.dom = {
     'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
@@ -39,6 +39,49 @@ test('wave preview renders packaged enemy images from configured groups', () => 
 
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /assets\/enemies\/enemy_xiaoyao_v1\.png/);
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /assets\/enemies\/enemy_jiyao_v1\.png/);
+});
+
+test('wave enemy status remains visible after combat starts', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    state: 'combat',
+    enemies: [{ type: 'swift', alive: true }, { type: 'giant', alive: true }],
+    wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [] },
+  };
+  ui.dom = {
+    'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
+    'wave-preview-title': { textContent: '' }, 'wave-preview-enemies': { innerHTML: '' },
+    'boss-hp-fill': { style: {} }, 'boss-hp-text': { textContent: '' },
+  };
+
+  ui.renderBossSlot();
+
+  assert.equal(ui.dom['wave-preview'].hidden, false);
+  assert.equal(ui.dom['wave-preview-title'].textContent, 'Wave 9');
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /疾妖 ×3/);
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /巨妖 ×2/);
+});
+
+test('combat enemy counts decrease when enemies leave play', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    state: 'combat',
+    enemies: [{ type: 'swift', alive: true }, { type: 'giant', alive: true }],
+    wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [] },
+  };
+  ui.dom = {
+    'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
+    'wave-preview-title': { textContent: '' }, 'wave-preview-enemies': { innerHTML: '' },
+    'boss-hp-fill': { style: {} }, 'boss-hp-text': { textContent: '' },
+  };
+
+  ui.renderBossSlot();
+  ui.game.enemies = [{ type: 'giant', alive: true }];
+  ui.game.wave.queue = ['swift', 'giant'];
+  ui.renderBossSlot();
+
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /疾妖 ×1/);
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /巨妖 ×2/);
 });
 
 test('result panel exposes victory and defeat state for the matching skin', () => {
