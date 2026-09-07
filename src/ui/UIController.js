@@ -1,4 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
+import { assetUrl } from '../config/artAssets.js';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {
@@ -65,13 +66,13 @@ export class UIController {
     if (index == null) { panel.innerHTML = '<p class="panel-hint">點擊圓形塔位，部署山海異獸</p>'; return; }
     const tower = this.game.towers[index];
     if (!tower) {
-      panel.innerHTML = `<div class="build-grid">${Object.values(TOWER_DATA).map(item => `<button class="unit-card" data-action="build" data-type="${item.id}" ${this.game.economy.canAfford(item.cost) && this.game.canManageTowers() ? '' : 'disabled'}><span class="unit-emoji">${item.emoji}</span><strong>${item.name}</strong><small>${item.role}</small><b>${item.cost} G</b></button>`).join('')}</div>`;
+      panel.innerHTML = `<div class="build-grid">${Object.values(TOWER_DATA).map(item => `<button class="unit-card" data-action="build" data-type="${item.id}" ${this.game.economy.canAfford(item.cost) && this.game.canManageTowers() ? '' : 'disabled'}><img class="unit-art" src="${assetUrl(item.id)}" alt=""><strong>${item.name}</strong><small>${item.role}</small><b>${item.cost} G</b></button>`).join('')}</div>`;
       return;
     }
     const stats = tower.getStats(this.game.blessings.modifiers);
     const cost = tower.level < 3 ? Economy.upgradeCost(tower.data, tower.level) : 0;
     const special = tower.type === 'bifang' ? `爆炸 ${Math.round(stats.explosionRadius)}` : tower.type === 'fuzhu' ? `緩速 ${Math.round(stats.slow * 100)}% / ${stats.slowDuration}秒` : `穿透 ${stats.penetration}`;
-    panel.innerHTML = `<div class="tower-info"><div><h2>${tower.data.emoji} ${tower.data.name} <span>Lv.${tower.level}</span></h2><p>傷害 ${Math.round(stats.damage * 10) / 10}　間隔 ${stats.interval.toFixed(2)}秒　射程 ${Math.round(stats.range)}</p><p>${special}</p></div><div class="tower-actions"><button data-action="upgrade" ${tower.level >= 3 || !this.game.economy.canAfford(cost) || !this.game.canManageTowers() ? 'disabled' : ''}>${tower.level >= 3 ? '已滿級' : `升級 ${cost} G`}</button><button class="sell" data-action="sell" ${!this.game.canManageTowers() ? 'disabled' : ''}>${this.game.pendingSellSlot === index ? `再次點擊確認 +${Economy.sellValue(tower.invested)} G` : `出售 +${Economy.sellValue(tower.invested)} G`}</button></div></div>`;
+    panel.innerHTML = `<div class="tower-info"><div><h2><img class="tower-info-art" src="${assetUrl(tower.type)}" alt="">${tower.data.name} <span>Lv.${tower.level}</span></h2><p>傷害 ${Math.round(stats.damage * 10) / 10}　間隔 ${stats.interval.toFixed(2)}秒　射程 ${Math.round(stats.range)}</p><p>${special}</p></div><div class="tower-actions"><button data-action="upgrade" ${tower.level >= 3 || !this.game.economy.canAfford(cost) || !this.game.canManageTowers() ? 'disabled' : ''}>${tower.level >= 3 ? '已滿級' : `升級 ${cost} G`}</button><button class="sell" data-action="sell" ${!this.game.canManageTowers() ? 'disabled' : ''}>${this.game.pendingSellSlot === index ? `再次點擊確認 +${Economy.sellValue(tower.invested)} G` : `出售 +${Economy.sellValue(tower.invested)} G`}</button></div></div>`;
   }
   renderBlessings() {
     const overlay = this.dom['blessing-overlay']; overlay.hidden = this.game.state !== 'blessing';
@@ -85,6 +86,7 @@ export class UIController {
     const ended = this.game.state === 'victory' || this.game.state === 'defeat';
     this.dom['result-overlay'].hidden = !ended;
     if (!ended) return;
+    this.dom['result-panel'].dataset.result = this.game.state;
     this.dom['result-title'].textContent = this.game.state === 'victory' ? '防守成功' : '防守失敗';
     this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
     this.dom['retry-button'].textContent = this.game.state === 'victory' ? '再次挑戰' : '重新挑戰';
@@ -100,7 +102,7 @@ export class UIController {
       this.dom['wave-preview-title'].textContent = `下一波 ${nextWave}`;
       this.dom['wave-preview-enemies'].innerHTML = groups.map(group => {
         const enemy = ENEMY_DATA[group.type];
-        return `<span>${enemy.emoji}${enemy.name} ×${group.count}</span>`;
+        return `<span><img class="preview-art" src="${assetUrl(group.type)}" alt="">${enemy.name} ×${group.count}</span>`;
       }).join('');
     }
     this.dom['boss-hud'].hidden = !boss;

@@ -7,16 +7,17 @@ button:disabled { opacity: .36; cursor: not-allowed; filter: grayscale(.5); }
 button:active:not(:disabled) { transform: scale(.98); }
 .game-shell { width: min(100%, 430px); height: 100dvh; min-height: 0; padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 7px; overflow: hidden; background: #101a16; }
 .hud { display: grid; grid-template-columns: repeat(3, 1fr) 48px 48px; gap: 5px; align-items: stretch; }
-.resource { min-width: 0; padding: 6px 5px; border: 1px solid #2c4537; border-radius: 9px; background: #16251e; text-align: center; }
+.resource { min-width: 0; padding: 3px 2px; border: 6px solid transparent; border-radius: 9px; border-image: url('./assets/ui/ui_resource_panel_v1.png') 90 fill / 6px / 0 stretch; background: #16251e; text-align: center; }
 .resource span { display: block; overflow: hidden; font-size: 10px; color: #a9bbae; white-space: nowrap; }
 .resource strong { display: block; margin-top: 2px; font-size: 15px; }
-.hud-button { min-width: 44px; padding: 0; font-size: 16px; }
+.hud-button { min-width: 44px; padding: 0; border: 7px solid transparent; border-image: url('./assets/ui/ui_hud_button_v1.png') 130 fill / 7px / 0 stretch; background: #224837; font-size: 16px; text-shadow: 0 1px 2px #07110c; }
 .boss-slot { width: 100%; flex: 0 0 44px; min-height: 44px; }
-.wave-preview { width: 100%; height: 100%; padding: 5px 9px; display: flex; align-items: center; gap: 9px; overflow: hidden; border: 1px solid #526b59; border-radius: 10px; background: #16251e; }
+.wave-preview { width: 100%; height: 100%; padding: 3px 7px; display: flex; align-items: center; gap: 9px; overflow: hidden; border: 6px solid transparent; border-radius: 10px; border-image: url('./assets/ui/ui_wave_preview_panel_v1.png') 60 fill / 6px / 0 stretch; background: #16251e; }
 .wave-preview > strong { flex: 0 0 auto; color: #e7cb70; font-size: 12px; }
 .wave-preview-enemies { min-width: 0; display: flex; justify-content: flex-end; gap: 8px; overflow: hidden; font-size: 11px; white-space: nowrap; }
-.wave-preview-enemies span { flex: 0 0 auto; }
-.boss-hud { width: 100%; height: 100%; padding: 6px 10px; border: 1px solid #a84545; border-radius: 10px; background: #2a0b0f; text-align: center; }
+.wave-preview-enemies span { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 2px; }
+.preview-art { width: 20px; height: 20px; object-fit: contain; }
+.boss-hud { width: 100%; height: 100%; padding: 2px 8px; border: 6px solid transparent; border-radius: 10px; border-image: url('./assets/ui/ui_boss_panel_v1.png') 70 fill / 6px / 0 stretch; background: #2a0b0f; text-align: center; }
 .boss-hud strong { display: block; color: #ffcfad; }
 .boss-track { height: 8px; margin: 3px 0; overflow: hidden; border-radius: 99px; background: #2e1518; }
 .boss-track span { display: block; height: 100%; background: #d84b4b; transition: width .1s linear; }
@@ -27,18 +28,21 @@ button:active:not(:disabled) { transform: scale(.98); }
 .wave-control span { min-width: 0; white-space: normal; line-height: 1.25; }
 .wave-control button { flex: 0 0 auto; min-height: 44px; padding: 5px 10px; font-size: 12px; }
 .banner { position: absolute; top: 42%; left: 50%; min-width: 190px; transform: translate(-50%, -50%); padding: 14px 18px; border: 2px solid #d5b85c; border-radius: 12px; background: rgba(35,17,13,.93); color: #ffe190; text-align: center; white-space: pre-line; font-size: 23px; font-weight: 900; box-shadow: 0 7px 24px rgba(0,0,0,.45); }
-.context-panel { min-height: 142px; flex: 0 0 142px; padding: 6px 8px; overflow: hidden; border: 1px solid #2f493a; border-radius: 12px; background: #14231c; }
+.context-panel { min-height: 142px; flex: 0 0 142px; padding: 7px 10px; overflow: hidden; border: 8px solid transparent; border-radius: 12px; border-image: url('./assets/ui/ui_context_panel_v1.png') 80 fill / 8px / 0 stretch; background: #14231c; }
 .panel-hint { height: 100%; margin: 0; display: grid; place-items: center; color: #9fb1a5; text-align: center; font-size: 14px; }
 .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
-.unit-card { min-height: 122px; padding: 7px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
-.unit-card .unit-emoji { font-size: 25px; }.unit-card small { font-size: 11px; color: #c8d6cb; }.unit-card b { color: #ffe28a; font-size: 12px; }
-.tower-info h2 { margin: 0 0 4px; font-size: 18px; }.tower-info h2 span { color: #e6c867; font-size: 13px; }.tower-info p { margin: 3px 0; color: #c5d2c8; font-size: 12px; }
-.tower-actions { display: grid; grid-template-columns: 1fr 1.3fr; gap: 7px; margin-top: 7px; }.tower-actions .sell { border-color: #9b6868; background: #593235; font-size: 12px; }
+.unit-card { min-height: 122px; padding: 6px 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border: 9px solid transparent; border-image: url('./assets/ui/ui_build_card_v1.png') 160 fill / 9px / 0 stretch; background: #173629; }
+.unit-art { width: 42px; height: 42px; object-fit: contain; pointer-events: none; }.unit-card small { font-size: 10px; color: #c8d6cb; }.unit-card b { color: #ffe28a; font-size: 12px; }
+.tower-info h2 { margin: 0 0 3px; display: flex; align-items: center; gap: 5px; font-size: 18px; }.tower-info-art { width: 34px; height: 34px; object-fit: contain; }.tower-info h2 span { color: #e6c867; font-size: 13px; }.tower-info p { margin: 2px 0; color: #c5d2c8; font-size: 12px; }
+.tower-actions { display: grid; grid-template-columns: 1fr 1.3fr; gap: 7px; margin-top: 5px; }.tower-actions button, .wave-control button, .compact button { border: 7px solid transparent; border-image: url('./assets/ui/ui_action_button_v1.png') 90 fill / 7px / 0 stretch; background: #31513d; }.tower-actions .sell { background: #593235; font-size: 12px; }
 .overlay { position: fixed; z-index: 10; inset: 0; padding: 18px; display: grid; place-items: center; background: rgba(2,7,5,.82); backdrop-filter: blur(4px); }
 [hidden] { display: none !important; }
 .modal { width: min(100%, 400px); padding: 20px; border: 1px solid #65836b; border-radius: 17px; background: #14231c; box-shadow: 0 18px 60px rgba(0,0,0,.55); }.modal h1 { margin: 2px 0 16px; font-size: 25px; }.eyebrow { margin: 0; color: #d7bd66; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-.blessing-choices { display: grid; gap: 9px; }.blessing-card { min-height: 86px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; text-align: left; }.blessing-card strong { font-size: 18px; }.blessing-card span { grid-column: 1 / -1; margin-top: 2px; color: #e0eae2; font-size: 13px; }.blessing-card small { color: #b7c7ba; }
+.blessing-choices { display: grid; gap: 9px; }.blessing-card { min-height: 86px; padding: 8px 10px; display: grid; grid-template-columns: 1fr auto; border: 10px solid transparent; border-image: url('./assets/ui/ui_blessing_card_v1.png') 160 fill / 10px / 0 stretch; background: #173629; text-align: left; }.blessing-card strong { font-size: 18px; }.blessing-card span { grid-column: 1 / -1; margin-top: 2px; color: #e0eae2; font-size: 13px; }.blessing-card small { color: #b7c7ba; }
 .compact { display: grid; gap: 9px; text-align: center; }.compact h1 { margin-bottom: 8px; }.compact .secondary { background: #2b3630; }.compact ul { margin: 0 0 10px; padding: 0; list-style: none; color: #d8e2da; line-height: 1.8; }
+.result-panel { border: 16px solid transparent; background: #14231c; }
+.result-panel[data-result="victory"] { border-image: url('./assets/ui/ui_victory_overlay_v1.png') 150 fill / 16px / 0 stretch; }
+.result-panel[data-result="defeat"] { border-image: url('./assets/ui/ui_defeat_overlay_v1.png') 150 fill / 16px / 0 stretch; }
 @media (max-width: 350px) { .wave-preview { gap: 5px; padding-inline: 6px; }.wave-preview-enemies { gap: 4px; font-size: 10px; } }
 @media (max-height: 720px) { .game-shell { gap: 4px; }.context-panel { min-height: 126px; flex-basis: 126px; }.unit-card { min-height: 106px; }.boss-hud { padding: 4px 8px; }.boss-hud small { font-size: 10px; } }
 @media (min-width: 600px) { html, body { height: auto; min-height: 100%; overflow-y: auto; } body { padding: 16px 0; }.game-shell { height: auto; min-height: auto; overflow: visible; border: 1px solid #304a3a; border-radius: 18px; }.battlefield { flex: none; }.context-panel { min-height: 142px; flex-basis: 142px; } #game-canvas { height: auto; aspect-ratio: 390 / 610; } }
