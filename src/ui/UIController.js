@@ -94,15 +94,22 @@ export class UIController {
   renderBossSlot() {
     const boss = this.game.enemies.find(enemy => enemy.isBoss);
     const preview = this.dom['wave-preview'];
-    const showPreview = this.game.state === 'preparation' && !boss;
+    const preparing = this.game.state === 'preparation';
+    const inCombat = this.game.state === 'combat' && this.game.wave.waveNumber > 0;
+    const showPreview = !boss && (preparing || inCombat);
     preview.hidden = !showPreview;
     if (showPreview) {
-      const nextWave = this.game.wave.waveNumber + 1;
-      const groups = this.game.wave.getWaveGroups(nextWave);
-      this.dom['wave-preview-title'].textContent = `下一波 ${nextWave}`;
+      const number = preparing ? this.game.wave.waveNumber + 1 : this.game.wave.waveNumber;
+      const groups = this.game.wave.getWaveGroups(number);
+      this.dom['wave-preview-title'].textContent = preparing ? `下一波 ${number}` : `Wave ${number}`;
+      const counts = Object.fromEntries(groups.map(group => [group.type, preparing ? group.count : 0]));
+      if (inCombat) {
+        for (const type of this.game.wave.queue) if (type in counts) counts[type] += 1;
+        for (const enemy of this.game.enemies) if (enemy.alive && enemy.type in counts) counts[enemy.type] += 1;
+      }
       this.dom['wave-preview-enemies'].innerHTML = groups.map(group => {
         const enemy = ENEMY_DATA[group.type];
-        return `<span><img class="preview-art" src="${assetUrl(group.type)}" alt="">${enemy.name} ×${group.count}</span>`;
+        return `<span><img class="preview-art" src="${assetUrl(group.type)}" alt="">${enemy.name} ×${counts[group.type]}</span>`;
       }).join('');
     }
     this.dom['boss-hud'].hidden = !boss;
