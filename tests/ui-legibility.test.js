@@ -30,7 +30,10 @@ test('result panel reserves artwork-safe header space and readable stats', async
 
 test('result eyebrow has its own dark contrast field over decorative artwork', async () => {
   const css = await combinedCss();
-  assert.match(css, /\.result-panel \.eyebrow\s*\{[^}]*justify-self:\s*center[^}]*background:\s*rgba\(5,\s*22,\s*16,\s*\.9\)[^}]*border-radius:/s);
+  const rule = css.match(/\.result-panel \.eyebrow\s*\{[^}]*\}/s)?.[0] ?? '';
+  assert.match(rule, /justify-self:\s*center/);
+  assert.match(rule, /background:\s*rgba\(5,\s*22,\s*16,\s*\.9\)/);
+  assert.match(rule, /border-radius:\s*999px/);
 });
 
 test('index loads the art readability override after the base stylesheet', async () => {
