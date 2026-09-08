@@ -1,3 +1,9 @@
+export const LEVEL_DATA = Object.freeze({
+  id: 1,
+  name: '崑崙山門',
+  baseName: '山海關',
+});
+
 export const GAME_CONFIG = Object.freeze({
   baseHp: 20,
   initialGold: 300,
