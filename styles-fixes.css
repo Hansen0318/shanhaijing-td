@@ -1,4 +1,15 @@
 /* Mobile art-integration readability fixes. Keep layout contracts intact. */
+body.art-loading { background: #07110d; }
+body.art-loading .game-shell,
+body.art-loading .overlay { visibility: hidden; }
+body.art-loading::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #07110d;
+}
+
 .wave-preview { padding: 3px 8px; gap: 6px; }
 .wave-preview > strong {
   flex: 0 0 27%;
