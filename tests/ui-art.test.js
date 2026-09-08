@@ -23,7 +23,7 @@ test('build choices render the three packaged tower images', () => {
   assert.equal((ui.dom['context-panel'].innerHTML.match(/class="unit-art"/g) ?? []).length, 3);
 });
 
-test('wave preview renders packaged enemy images from configured groups', () => {
+test('wave preview renders packaged enemy images and first-level identity', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
     state: 'preparation', enemies: [],
@@ -31,12 +31,14 @@ test('wave preview renders packaged enemy images from configured groups', () => 
   };
   ui.dom = {
     'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
-    'wave-preview-title': { textContent: '' }, 'wave-preview-enemies': { innerHTML: '' },
+    'wave-preview-title': { textContent: '', innerHTML: '' }, 'wave-preview-enemies': { innerHTML: '' },
     'boss-hp-fill': { style: {} }, 'boss-hp-text': { textContent: '' },
   };
 
   ui.renderBossSlot();
 
+  assert.match(ui.dom['wave-preview-title'].innerHTML, /第1關・崑崙山門/);
+  assert.match(ui.dom['wave-preview-title'].innerHTML, /下一波 1/);
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /assets\/enemies\/enemy_xiaoyao_v1\.png/);
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /assets\/enemies\/enemy_jiyao_v1\.png/);
 });
@@ -50,14 +52,15 @@ test('wave enemy status remains visible after combat starts', () => {
   };
   ui.dom = {
     'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
-    'wave-preview-title': { textContent: '' }, 'wave-preview-enemies': { innerHTML: '' },
+    'wave-preview-title': { textContent: '', innerHTML: '' }, 'wave-preview-enemies': { innerHTML: '' },
     'boss-hp-fill': { style: {} }, 'boss-hp-text': { textContent: '' },
   };
 
   ui.renderBossSlot();
 
   assert.equal(ui.dom['wave-preview'].hidden, false);
-  assert.equal(ui.dom['wave-preview-title'].textContent, 'Wave 9');
+  assert.match(ui.dom['wave-preview-title'].innerHTML, /第1關・崑崙山門/);
+  assert.match(ui.dom['wave-preview-title'].innerHTML, /Wave 9/);
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /疾妖 ×3/);
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /巨妖 ×2/);
 });
@@ -71,7 +74,7 @@ test('combat enemy counts decrease when enemies leave play', () => {
   };
   ui.dom = {
     'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
-    'wave-preview-title': { textContent: '' }, 'wave-preview-enemies': { innerHTML: '' },
+    'wave-preview-title': { textContent: '', innerHTML: '' }, 'wave-preview-enemies': { innerHTML: '' },
     'boss-hp-fill': { style: {} }, 'boss-hp-text': { textContent: '' },
   };
 
