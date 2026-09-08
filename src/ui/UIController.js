@@ -1,4 +1,4 @@
-import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
+import { LEVEL_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
 import { assetUrl } from '../config/artAssets.js';
 import { Economy } from '../systems/Economy.js';
 
@@ -101,7 +101,8 @@ export class UIController {
     if (showPreview) {
       const number = preparing ? this.game.wave.waveNumber + 1 : this.game.wave.waveNumber;
       const groups = this.game.wave.getWaveGroups(number);
-      this.dom['wave-preview-title'].textContent = preparing ? `下一波 ${number}` : `Wave ${number}`;
+      const phaseLabel = preparing ? `下一波 ${number}` : `Wave ${number}`;
+      this.dom['wave-preview-title'].innerHTML = `<small class="level-name">第${LEVEL_DATA.id}關・${LEVEL_DATA.name}</small><span>${phaseLabel}</span>`;
       const counts = Object.fromEntries(groups.map(group => [group.type, preparing ? group.count : 0]));
       if (inCombat) {
         for (const type of this.game.wave.queue) if (type in counts) counts[type] += 1;
