@@ -42,6 +42,10 @@ export class ArtStore {
     }));
   }
 
+  isReady() {
+    return Object.values(this.images).every(image => image.complete);
+  }
+
   get(id) {
     const image = this.images[id];
     return image?.complete && image.naturalWidth > 0 ? image : null;
