@@ -10,9 +10,21 @@ async function combinedCss() {
 
 test('wave preview keeps title, enemy icons, and counts vertically aligned', async () => {
   const css = await combinedCss();
-  assert.match(css, /\.wave-preview > strong\s*\{[^}]*display:\s*flex[^}]*align-items:\s*center[^}]*line-height:\s*1/s);
+  assert.match(css, /\.wave-preview > strong\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column[^}]*align-items:\s*flex-start[^}]*line-height:\s*1/s);
   assert.match(css, /\.wave-preview-enemies\s*\{[^}]*align-items:\s*center[^}]*justify-content:\s*flex-start[^}]*line-height:\s*1/s);
   assert.match(css, /\.preview-art\s*\{[^}]*display:\s*block[^}]*flex:\s*0\s+0\s+18px/s);
+});
+
+test('level label is readable without crowding wave enemy counts', async () => {
+  const css = await combinedCss();
+  const titleRule = css.match(/\.wave-preview > strong\s*\{[^}]*\}/s)?.[0] ?? '';
+  const levelRule = css.match(/\.wave-preview > strong \.level-name\s*\{[^}]*\}/s)?.[0] ?? '';
+  assert.match(titleRule, /flex:\s*0\s+0\s+30%/);
+  assert.match(levelRule, /font-size:\s*12px/);
+  assert.match(levelRule, /font-weight:\s*800/);
+  assert.match(levelRule, /color:\s*#fff0b0/);
+  assert.match(levelRule, /text-shadow:/);
+  assert.match(levelRule, /white-space:\s*nowrap/);
 });
 
 test('blessing cards reserve a clean readable content field', async () => {
