@@ -35,3 +35,14 @@ test('art store returns a drawable image only after that image has loaded', asyn
   assert.equal(store.get('bifang'), store.images.bifang);
   assert.equal(store.get('unknown'), null);
 });
+
+test('art store waits until every packaged image has settled before revealing the game', async () => {
+  const { ArtStore } = await import(moduleUrl);
+  class FakeImage {
+    constructor() { this.complete = false; this.naturalWidth = 0; }
+  }
+  const store = new ArtStore(FakeImage);
+  assert.equal(store.isReady(), false);
+  for (const image of Object.values(store.images)) image.complete = true;
+  assert.equal(store.isReady(), true, 'failed images count as settled so fallback can render');
+});
