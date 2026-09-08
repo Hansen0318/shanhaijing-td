@@ -4,8 +4,9 @@
 
 - Version: Graybox Prototype V0.02 + First-Level Formal Art Vertical Slice
 - Scope: First level implemented; multi-level campaign structure planned
-- Status: First level functionality, first-round balance, and first formal-art integration complete pending final closeout smoke
+- Status: `第一關：功能、第一輪平衡、正式美術整合與關卡識別完成`
 - Gameplay baseline commit: `b03f9102097d7419734bee76b6341660b0bd7a8b`
+- First-level completion baseline commit: `7714ff815efcaeb9ae4947236db8aa026d652d10`
 - Platform: Mobile Web, optimized for 320–430px portrait screens
 - Deployment: GitHub Pages from `Hansen0318/shanhaijing-td`
 
@@ -70,6 +71,7 @@ Only Level 1 is currently implemented. The later names are design direction, not
 - First-level gameplay closeout verification previously covered `npm test`, JS/MJS syntax checks, recent balance/logic changes, a 390px mobile viewport, and a short 390×700px viewport.
 - Formal GitHub Pages playtesting confirmed the first-level flow and first-round balance were acceptable before the gameplay baseline was recorded.
 - During art/UI iteration, targeted regression checks plus user mobile playtesting are preferred to repeated full Wave 1–10 runs; perform a final focused engineering closeout once the visual direction is locked.
+- Final first-level closeout verified all JS/MJS syntax, focused Victory/Boss/Blessing tests, the formal-art preload gate, and a 390px GitHub Pages Wave preview without running the full Wave 1–10 acceptance route.
 
 ## Remaining First-Level Issues / Closeout
 
@@ -77,8 +79,8 @@ Only Level 1 is currently implemented. The later names are design direction, not
 - Dense combat can visually overlap floating rewards and enemy markers.
 - Accessibility is basic: the Canvas battle state has labels but no complete screen-reader representation.
 - No persistence, audio, analytics, or long-session performance profiling is included yet.
-- A final minimal art/UI closeout smoke should be run before treating the first level as the locked multi-level campaign baseline.
+- The first-level closeout is complete; the remaining items above are prototype limitations rather than blockers for the current baseline.
 
 ## Scope Boundary
 
-The first-level gameplay baseline is locked at `b03f9102097d7419734bee76b6341660b0bd7a8b`. Presentation and formal-art integration have continued after that baseline without intentionally reopening validated balance. Future Level 1 changes should focus on clearly reproduced regressions or final presentation closeout. Level 2 work should preserve the campaign progression contract above unless a new approved design explicitly changes it.
+The gameplay-balance baseline remains `b03f9102097d7419734bee76b6341660b0bd7a8b`. The completed first-level baseline, including formal art and level identity, is locked at `7714ff815efcaeb9ae4947236db8aa026d652d10`. Future Level 1 changes should focus only on clearly reproduced regressions. Level 2 work should preserve the campaign progression contract above unless a new approved design explicitly changes it.

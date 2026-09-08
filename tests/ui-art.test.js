@@ -48,7 +48,7 @@ test('wave enemy status remains visible after combat starts', () => {
   ui.game = {
     state: 'combat',
     enemies: [{ type: 'swift', alive: true }, { type: 'giant', alive: true }],
-    wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [] },
+    wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [{ type: 'swift', count: 12 }, { type: 'giant', count: 6 }] },
   };
   ui.dom = {
     'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },
@@ -70,7 +70,7 @@ test('combat enemy counts decrease when enemies leave play', () => {
   ui.game = {
     state: 'combat',
     enemies: [{ type: 'swift', alive: true }, { type: 'giant', alive: true }],
-    wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [] },
+    wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [{ type: 'swift', count: 12 }, { type: 'giant', count: 6 }] },
   };
   ui.dom = {
     'wave-preview': { hidden: true }, 'boss-hud': { hidden: true },

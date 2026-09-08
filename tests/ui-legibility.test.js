@@ -17,8 +17,8 @@ test('wave preview keeps title, enemy icons, and counts vertically aligned', asy
 
 test('level label is readable without crowding wave enemy counts', async () => {
   const css = await combinedCss();
-  const titleRule = css.match(/\.wave-preview > strong\s*\{[^}]*\}/s)?.[0] ?? '';
-  const levelRule = css.match(/\.wave-preview > strong \.level-name\s*\{[^}]*\}/s)?.[0] ?? '';
+  const titleRule = [...css.matchAll(/\.wave-preview > strong\s*\{[^}]*\}/gs)].at(-1)?.[0] ?? '';
+  const levelRule = [...css.matchAll(/\.wave-preview > strong \.level-name\s*\{[^}]*\}/gs)].at(-1)?.[0] ?? '';
   assert.match(titleRule, /flex:\s*0\s+0\s+30%/);
   assert.match(levelRule, /font-size:\s*12px/);
   assert.match(levelRule, /font-weight:\s*800/);
