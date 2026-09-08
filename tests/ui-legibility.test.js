@@ -40,3 +40,15 @@ test('index loads the art readability override after the base stylesheet', async
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8').catch(() => '<link rel="stylesheet" href="./styles.css">');
   assert.match(html, /styles\.css[\s\S]*styles-fixes\.css/);
 });
+
+test('initial page stays behind an art-loading gate until packaged images settle', async () => {
+  const [html, css, main] = await Promise.all([
+    readFile(new URL('../index.html', import.meta.url), 'utf8'),
+    combinedCss(),
+    readFile(new URL('../src/main.js', import.meta.url), 'utf8'),
+  ]);
+  assert.match(html, /<body class="art-loading">/);
+  assert.match(css, /body\.art-loading\s+\.game-shell[^}]*visibility:\s*hidden/s);
+  assert.match(css, /body\.art-loading::before[^}]*position:\s*fixed/s);
+  assert.match(main, /renderer\.art\.isReady\(\)[\s\S]*classList\.remove\('art-loading'\)/);
+});
