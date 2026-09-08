@@ -14,7 +14,9 @@ body.art-loading::before {
 .wave-preview > strong {
   flex: 0 0 27%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   height: 100%;
   padding-left: 2px;
   color: #f4d66f;
@@ -22,6 +24,16 @@ body.art-loading::before {
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .95);
 }
+.wave-preview > strong .level-name {
+  display: block;
+  margin-bottom: 3px;
+  color: #d8cda8;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+.wave-preview > strong > span { display: block; white-space: nowrap; }
 .wave-preview-enemies {
   min-width: 0;
   flex: 1 1 auto;
