@@ -12,7 +12,7 @@ body.art-loading::before {
 
 .wave-preview { padding: 3px 8px; gap: 6px; }
 .wave-preview > strong {
-  flex: 0 0 27%;
+  flex: 0 0 30%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -26,12 +26,13 @@ body.art-loading::before {
 }
 .wave-preview > strong .level-name {
   display: block;
-  margin-bottom: 3px;
-  color: #d8cda8;
-  font-size: 8px;
-  font-weight: 700;
+  margin-bottom: 4px;
+  color: #fff0b0;
+  font-size: 12px;
+  font-weight: 800;
   line-height: 1;
   white-space: nowrap;
+  text-shadow: 0 1px 2px #000, 0 0 2px rgba(0, 0, 0, .9);
 }
 .wave-preview > strong > span { display: block; white-space: nowrap; }
 .wave-preview-enemies {
