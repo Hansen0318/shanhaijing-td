@@ -125,7 +125,7 @@ test('yinglong effect records one ordered beam through every penetrated target',
   });
   game.enemies = [enemy(80, 20), enemy(90, 10)];
   game.updateTowers(0.1);
-  assert.deepEqual(game.effects[0], {
+  assert.deepEqual(game.effects.find(effect => effect.type === 'beam'), {
     type: 'beam',
     points: [{ x: 80, y: 135 }, { x: 80, y: 100 }, { x: 90, y: 100 }],
     hitCount: 2,
