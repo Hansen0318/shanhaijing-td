@@ -6,56 +6,68 @@
 
 ## 已完成
 
-- 已同步最新 GitHub `main`：`e62f86063a6489af6670c25fd1826ad25191cc5d`。
+- 已同步最新 GitHub `main`，本輪基線為 `e62f86063a6489af6670c25fd1826ad25191cc5d`。
 - 已讀取前一輪 COMPLETE 進度與 Git history，未重做已通過的 Motion Lite。
-- 已確認 Motion Lite enemy transform 的 `xOffset` 固定為 0，gameplay `x/y/pathDistance` 與 render transform 分離。
-- 已量測各敵人透明邊界與 alpha centroid；不同圖片存在少量視覺重心差異，但換算至目前 render 尺寸不足以解釋截圖中的大幅道路偏離。
-- 已定位黑屏原因：既有 `art-loading` 僅顯示純色全螢幕遮罩，沒有載入文字；而 `LEVEL_ART_IDS` 目前把 Boss、Boss VFX、結果 UI 也納入關卡 ready 條件。
+- 已完成 RED → GREEN：failed asset readiness、critical/deferred preload、Loading overlay 契約皆有 focused tests。
+- 已沿用 `ArtStore` 與 `art-loading`，加入全畫面「山海異獸載入中…」狀態、輕量 pulse/dots 與 200ms fade out；退出後 `pointer-events: none`。
+- failed asset 以 `onerror` 記為 settled，保留既有靜態 fallback，不會永久卡 loading。
+- fresh load 必要 preload：當前關背景／Spawn／Base、塔位、三塔、Wave 1 小妖、即時攻擊特效與 HUD／Wave／Context／操作按鈕。
+- Level 1 → Level 2 必要 preload：共用首屏素材加赤水背景／Spawn／Base；Wave 2 後敵人、Boss、Boss VFX、Blessing／結果面板改為 ready 後背景載入。
+- 已疊加正式背景與 logical waypoints 診斷兩關：第一關與目前第二關 path centerline 均貼近道路中央，未再修改 waypoint。
+- 已確認 enemy gameplay anchor 與 render translate 共用相同 X；Motion Lite enemy `xOffset` 固定為 0，bob 僅作用 Y。
+- 已量測不同 enemy PNG 的透明邊界與 alpha centroid；換算現有 36–50px render box 後水平視覺重心差約 0–2px，不足以造成截圖中的大幅偏移。
+- 已完成 390×700 正式 Pages smoke：Canvas 368×424、Context Panel bottom 688／viewport 696、無水平溢出、loader 結束後不攔截操作。
+- 已完成第一關 Wave 1 與第二關 Wave 8、1×／2× smoke；兩關 Canvas 尺寸一致，應用程式 runtime error 0。
 
 ## 進行中
 
-- 建立 Loading ready／failed asset／deferred preload 與道路 anchor 的最小 failing tests。
+- 無。
 
 ## 未完成
 
-- Loading overlay 文字、輕量動畫與 150–250ms fade out。
-- 將首屏必要素材與 Boss／後期 VFX 等 deferred preload 分離。
-- 完成第一、第二關道路診斷；只對仍有實證偏差的關卡做最小修正。
-- focused tests、syntax、390px／390×700、1×／2× browser smoke。
-- 完成後 commit、push，並將本檔標記 COMPLETE。
+- 無工程項目；僅待玩家在 iPhone 慢速／fresh cache 環境確認 Loading 顯示時間與道路視覺體感。
 
 ## 已修改檔案
 
 - `docs/WORK_PROGRESS.md`
+- `index.html`
+- `styles-fixes.css`
+- `src/config/artAssets.js`
+- `src/main.js`
+- `src/render/Renderer.js`
+- `src/ui/UIController.js`
+- `tests/art-assets.test.js`
+- `tests/ui-legibility.test.js`
 
 ## 已執行測試與結果
 
-- 尚未進入 production implementation；已完成靜態程式與素材 alpha 診斷。
+- Loading／preload／path／Motion focused tests：33/33 PASS（production 前先確認 3 項 RED）。
+- `npm test`：81/81 PASS。
+- 全 JS/MJS `node --check`：PASS。
+- `git diff --check`：PASS。
+- 正式 GitHub Pages browser smoke：390×700、Level 1 Wave 1、Level 2 transition／Wave 8、1×／2×、runtime error 0；PASS。
 
 ## 尚未執行測試
 
-- Loading 與 preload focused tests。
-- Path／Motion regression。
-- JS/MJS syntax。
-- Browser smoke。
+- 未完整人工重跑 Wave 1–10（依本輪最小驗證約束）。
 
 ## Root cause
 
-- Loading：純色 pseudo-element 遮罩沒有狀態文字；全關素材（含非首屏 Boss／VFX）共同阻塞 ready。
-- 道路：Motion bob 無 X 位移，透明邊界造成的換算偏移很小；正在以背景中心線抽樣確認是否仍是第二關 waypoint 局部偏差。
+- Loading 黑屏：原本 `art-loading` 只有純色 pseudo-element，沒有任何狀態文字；同時 `LEVEL_ART_IDS` 把非首屏 Boss、Boss VFX 與結果 UI 全部納入 ready 條件。
+- 道路觀感：最新兩關 gameplay centerline 與背景道路一致，Motion 不改 X；畫面中密集敵人使用相同 path centerline 並互相疊圖，sprite 外緣會超出道路，但 anchor 並未水平漂移，因此本輪不再移動 waypoint。
 
 ## 最新 commit SHA
 
-- GitHub `main` 基線：`e62f86063a6489af6670c25fd1826ad25191cc5d`
+- Loading／preload implementation baseline：`f1c82670996ce0d9f371f4209a18c4bda40f5fe9`
 
 ## 下一步從哪裡接
 
-先完成 RED tests，再實作 ArtStore critical/deferred scope 與 Loading overlay；其後以相同診斷只修仍失準的路段。
+等待玩家以 iPhone fresh cache 或較慢網路確認 Loading 顯示與淡出體感；若仍認為敵群錯位，下一步應先顯示單一 enemy anchor debug，而不是再次整段搬動 waypoint。
 
 ## 尚未解決問題及原因
 
-- 第二關截圖顯示部分隊列視覺上離開道路中心；需完成 gameplay anchor 與背景中心線的同座標比對，才能區分 waypoint 與 sprite 視覺重心。
+- 無工程 blocker。
 
 ## 狀態
 
-IN_PROGRESS
+COMPLETE
