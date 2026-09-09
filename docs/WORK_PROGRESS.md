@@ -10,28 +10,39 @@
 - 已建立隔離分支 `feature/motion-lite`。
 - 已執行基線 `npm test`：69/69 通過。
 - 已新增 `tests/motion.test.js`；RED 階段 5 項中 4 項依預期失敗，證明 bob、hit/death、recoil 與吞噬 scale 尚未實作；靜態回退既有行為測試通過。
+- 已新增集中式 `ENABLE_UNIT_MOTION` 與 Motion Lite config。
+- 已完成赤羽妖／岩甲妖 bob、90ms hit flash、180ms／220ms death shrink + fade。
+- 已完成畢方／應龍 idle scale 與 90ms render-only recoil；Beam 起點維持 gameplay tower 座標。
+- 已完成狍鴞 idle scale 與吞噬短暫 scale；既有吞噬 HP／threshold 結果未變。
+- Motion Lite focused tests 5/5、相關 combat/game/renderer/level2 regression 38/38 通過。
+- 全 `src/`、`tests/` JS/MJS syntax 與 `git diff --check` 通過。
 
 ## 尚未完成項目
 
-- 集中式 `ENABLE_UNIT_MOTION` 與 motion config。
-- 赤羽妖、岩甲妖、畢方、應龍與狍鴞指定動畫。
-- focused tests、JS/MJS syntax、1×／2×、390px／390×700 browser smoke。
+- 1×／2×、390px／390×700 browser smoke。
 - 分階段 push main 與最終 COMPLETE 標記。
 
 ## 已修改檔案
 
 - `docs/WORK_PROGRESS.md`
 - `tests/motion.test.js`
+- `src/config/motionData.js`
+- `src/systems/MotionSystem.js`
+- `src/entities/Enemy.js`
+- `src/core/Game.js`
+- `src/render/Renderer.js`
+- `tests/game.test.js`
 
 ## 已執行測試與結果
 
 - `npm test`：69/69 PASS（修改前基線）。
 - `node --test tests/motion.test.js`：RED 已確認（1 PASS／4 項預期 FAIL）。
+- `node --test tests/motion.test.js`：5/5 PASS（GREEN）。
+- Motion Lite + combat/game/renderer/level2 focused regression：38/38 PASS。
+- 全 `src/`、`tests/` JS/MJS syntax：PASS。
 
 ## 尚未執行測試
 
-- Motion Lite focused tests。
-- 全 JS/MJS syntax check。
 - 正式 GitHub Pages browser smoke。
 
 ## 最新 commit SHA
@@ -40,7 +51,7 @@
 
 ## 下一步應從哪裡開始
 
-依 `tests/motion.test.js` 實作集中式 motion config 與最小 production code，使 focused tests 轉為 GREEN。
+將 production implementation 與測試 checkpoint 推送 main，等待 GitHub Pages 更新後執行指定 browser smoke。
 
 ## 尚未解決問題及原因
 
