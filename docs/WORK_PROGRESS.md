@@ -1,74 +1,52 @@
-# Motion Lite 工作進度
+# Motion Lite 第二輪工作進度
 
 ## 本輪任務目標
 
-以可快速關閉的純渲染 Motion Lite，改善赤羽妖、岩甲妖、畢方、應龍與狍鴞的視覺動態，不改任何 gameplay 數值、座標或判定。
+將 Motion Lite 正式擴充至小妖、疾妖、巨妖、窮奇與夫諸，並以實際 gameplay anchor、sprite anchor 與背景道路為依據修正第一、第二關道路錯位，不改 gameplay 數值、塔位或關卡平衡。
 
 ## 已完成項目
 
-- 已確認 GitHub `main` 最新基線為 `d4ff6bf4c2021533fdece5f94816f6045a45d56d`，本地工作樹內容與該基線一致。
-- 已建立隔離分支 `feature/motion-lite`。
-- 已執行基線 `npm test`：69/69 通過。
-- 已新增 `tests/motion.test.js`；RED 階段 5 項中 4 項依預期失敗，證明 bob、hit/death、recoil 與吞噬 scale 尚未實作；靜態回退既有行為測試通過。
-- 已新增集中式 `ENABLE_UNIT_MOTION` 與 Motion Lite config。
-- 已完成赤羽妖／岩甲妖 bob、90ms hit flash、180ms／220ms death shrink + fade。
-- 已完成畢方／應龍 idle scale 與 90ms render-only recoil；Beam 起點維持 gameplay tower 座標。
-- 已完成狍鴞 idle scale 與吞噬短暫 scale；既有吞噬 HP／threshold 結果未變。
-- Motion Lite focused tests 5/5、相關 combat/game/renderer/level2 regression 38/38 通過。
-- 全 `src/`、`tests/` JS/MJS syntax 與 `git diff --check` 通過。
-- 正式 Pages smoke 發現舊模組 URL 快取仍載入前版；已為本輪入口與新動畫模組加入 `motion-lite-1` 版本參數，避免玩家取得混合版本。
-- 資源版本修正後 focused regression 21/21、全 JS/MJS syntax 與 `git diff --check` 通過。
-- 已完成正式 GitHub Pages 最小 smoke：390px 與 390×700px、1×／2×、第二關混合 Wave、狍鴞 70%／40% 吞噬流程皆正常，沒有遊戲 runtime error。
-- 390×700 下 Canvas 為 368×424，Context Panel 底緣 688px、viewport 696px，操作區完整可見且無水平溢出。
-- 最終 `npm test`：74/74 PASS；全 `src/`、`tests/` JS/MJS syntax 與 `git diff --check` PASS。
+- 已同步 GitHub `main`，本輪基線為 `2c6eced68fd6bba127c2435b6e434b397fb3c4a9`。
+- 已讀取上一輪 `docs/WORK_PROGRESS.md` 與 Git history，未重做已通過的 Motion Lite 第一輪。
+- 已執行基線 `npm test`：74/74 PASS。
+- 已檢查 Renderer transform：現有 Motion bob 的 `xOffset` 固定為 0，gameplay `x/y/pathDistance` 與 visual transform 分離。
+- 已量測正式 PNG 透明邊界；各素材左右透明邊界接近對稱，尚無證據顯示圖片尺寸造成明顯水平偏移。
+- 初次合併式基線命令遭環境網路審核中止；拆分為純本地命令後正常，未造成檔案變更。
 
 ## 尚未完成項目
 
-- 無；僅待玩家實機確認 Motion Lite 動畫體感。
+- 建立道路錯位 reproduction／diagnostic 與 Motion 第二輪 failing tests。
+- 確認道路錯位 root cause，完成最小修正。
+- 擴充 Motion config／helper 至指定單位並移除 A/B 實驗總開關。
+- focused regression、JS/MJS syntax、390px／390×700px、1×／2× browser smoke。
 
 ## 已修改檔案
 
 - `docs/WORK_PROGRESS.md`
-- `tests/motion.test.js`
-- `src/config/motionData.js`
-- `src/systems/MotionSystem.js`
-- `src/entities/Enemy.js`
-- `src/core/Game.js`
-- `src/render/Renderer.js`
-- `tests/game.test.js`
-- `index.html`
-- `src/main.js`
-- `tests/browser-smoke.html`
 
 ## 已執行測試與結果
 
-- `npm test`：69/69 PASS（修改前基線）。
-- `node --test tests/motion.test.js`：RED 已確認（1 PASS／4 項預期 FAIL）。
-- `node --test tests/motion.test.js`：5/5 PASS（GREEN）。
-- Motion Lite + combat/game/renderer/level2 focused regression：38/38 PASS。
-- 全 `src/`、`tests/` JS/MJS syntax：PASS。
-- 資源版本修正後 Motion/Game/Renderer focused regression：21/21 PASS。
-- 最終 `npm test`：74/74 PASS。
-- 全 `src/`、`tests/` JS/MJS syntax：PASS。
-- `git diff --check`：PASS。
-- 正式 GitHub Pages browser smoke：390px、390×700px、1×／2×、第二關 Wave 8、第二關 Wave 10、狍鴞 70%／40% 吞噬均 PASS；遊戲 runtime error 0。
+- `npm test`：74/74 PASS（修改前基線）。
+- 正式素材透明邊界診斷：PASS；未發現足以解釋明顯水平錯位的不對稱透明留白。
 
 ## 尚未執行測試
 
-- 無。
+- Motion 第二輪 RED/GREEN tests。
+- 道路中心 reproduction／regression test。
+- 最終完整 `npm test`、syntax check 與 browser smoke。
 
 ## 最新 commit SHA
 
-- 已驗證 GitHub `main` Motion Lite baseline：`fbb499d3fcf749c686d9a32082d3f9dc5f7d5e8e`
+- GitHub `main` 基線：`2c6eced68fd6bba127c2435b6e434b397fb3c4a9`
 
 ## 下一步應從哪裡開始
 
-等待玩家在 iPhone 實機確認 bob、hit flash、death fade、塔 recoil 與狍鴞吞噬 scale 的體感，再決定是否保留預設開啟或微調集中式參數。
+以背景 crop 對應的 logical coordinate 建立道路中心診斷，先產生會失敗的測試，再依診斷結果修 render anchor 或該關 waypoint。
 
 ## 尚未解決問題及原因
 
-- 無工程 blocker；動畫舒適度仍需玩家實機主觀確認。
+- 道路錯位 root cause 尚未完成量測；目前已排除 Motion 水平 offset 與明顯素材左右透明留白。
 
 ## 狀態
 
-COMPLETE
+IN_PROGRESS
