@@ -1,5 +1,5 @@
-import { Game } from './core/Game.js';
-import { Renderer } from './render/Renderer.js';
+import { Game } from './core/Game.js?v=motion-lite-1';
+import { Renderer } from './render/Renderer.js?v=motion-lite-1';
 import { UIController } from './ui/UIController.js';
 
 const canvas = document.querySelector('#game-canvas');

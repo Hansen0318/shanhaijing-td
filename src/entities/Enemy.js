@@ -1,5 +1,5 @@
 import { StatusSystem } from '../systems/StatusSystem.js';
-import { UNIT_MOTION_CONFIG } from '../config/motionData.js';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=motion-lite-1';
 
 let nextEnemyId = 1;
 export class Enemy {

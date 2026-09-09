@@ -16,6 +16,8 @@
 - 已完成狍鴞 idle scale 與吞噬短暫 scale；既有吞噬 HP／threshold 結果未變。
 - Motion Lite focused tests 5/5、相關 combat/game/renderer/level2 regression 38/38 通過。
 - 全 `src/`、`tests/` JS/MJS syntax 與 `git diff --check` 通過。
+- 正式 Pages smoke 發現舊模組 URL 快取仍載入前版；已為本輪入口與新動畫模組加入 `motion-lite-1` 版本參數，避免玩家取得混合版本。
+- 資源版本修正後 focused regression 21/21、全 JS/MJS syntax 與 `git diff --check` 通過。
 
 ## 尚未完成項目
 
@@ -32,6 +34,8 @@
 - `src/core/Game.js`
 - `src/render/Renderer.js`
 - `tests/game.test.js`
+- `index.html`
+- `src/main.js`
 
 ## 已執行測試與結果
 
@@ -40,6 +44,7 @@
 - `node --test tests/motion.test.js`：5/5 PASS（GREEN）。
 - Motion Lite + combat/game/renderer/level2 focused regression：38/38 PASS。
 - 全 `src/`、`tests/` JS/MJS syntax：PASS。
+- 資源版本修正後 Motion/Game/Renderer focused regression：21/21 PASS。
 
 ## 尚未執行測試
 
@@ -51,11 +56,11 @@
 
 ## 下一步應從哪裡開始
 
-將 production implementation 與測試 checkpoint 推送 main，等待 GitHub Pages 更新後執行指定 browser smoke。
+推送資源版本修正，等待 GitHub Pages 更新後執行指定 browser smoke。
 
 ## 尚未解決問題及原因
 
-- 無；尚在正常 TDD 實作階段。
+- GitHub Pages 曾持續載入舊模組快取；已加入本輪資源版本參數，待正式站更新後確認排除。
 
 ## 狀態
 
