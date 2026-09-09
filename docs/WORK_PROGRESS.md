@@ -18,11 +18,13 @@
 - 全 `src/`、`tests/` JS/MJS syntax 與 `git diff --check` 通過。
 - 正式 Pages smoke 發現舊模組 URL 快取仍載入前版；已為本輪入口與新動畫模組加入 `motion-lite-1` 版本參數，避免玩家取得混合版本。
 - 資源版本修正後 focused regression 21/21、全 JS/MJS syntax 與 `git diff --check` 通過。
+- 已完成正式 GitHub Pages 最小 smoke：390px 與 390×700px、1×／2×、第二關混合 Wave、狍鴞 70%／40% 吞噬流程皆正常，沒有遊戲 runtime error。
+- 390×700 下 Canvas 為 368×424，Context Panel 底緣 688px、viewport 696px，操作區完整可見且無水平溢出。
+- 最終 `npm test`：74/74 PASS；全 `src/`、`tests/` JS/MJS syntax 與 `git diff --check` PASS。
 
 ## 尚未完成項目
 
-- 1×／2×、390px／390×700 browser smoke。
-- 分階段 push main 與最終 COMPLETE 標記。
+- 無；僅待玩家實機確認 Motion Lite 動畫體感。
 
 ## 已修改檔案
 
@@ -36,6 +38,7 @@
 - `tests/game.test.js`
 - `index.html`
 - `src/main.js`
+- `tests/browser-smoke.html`
 
 ## 已執行測試與結果
 
@@ -45,23 +48,27 @@
 - Motion Lite + combat/game/renderer/level2 focused regression：38/38 PASS。
 - 全 `src/`、`tests/` JS/MJS syntax：PASS。
 - 資源版本修正後 Motion/Game/Renderer focused regression：21/21 PASS。
+- 最終 `npm test`：74/74 PASS。
+- 全 `src/`、`tests/` JS/MJS syntax：PASS。
+- `git diff --check`：PASS。
+- 正式 GitHub Pages browser smoke：390px、390×700px、1×／2×、第二關 Wave 8、第二關 Wave 10、狍鴞 70%／40% 吞噬均 PASS；遊戲 runtime error 0。
 
 ## 尚未執行測試
 
-- 正式 GitHub Pages browser smoke。
+- 無。
 
 ## 最新 commit SHA
 
-- GitHub `main`：`d4ff6bf4c2021533fdece5f94816f6045a45d56d`
+- 已驗證 GitHub `main` Motion Lite baseline：`fbb499d3fcf749c686d9a32082d3f9dc5f7d5e8e`
 
 ## 下一步應從哪裡開始
 
-推送資源版本修正，等待 GitHub Pages 更新後執行指定 browser smoke。
+等待玩家在 iPhone 實機確認 bob、hit flash、death fade、塔 recoil 與狍鴞吞噬 scale 的體感，再決定是否保留預設開啟或微調集中式參數。
 
 ## 尚未解決問題及原因
 
-- GitHub Pages 曾持續載入舊模組快取；已加入本輪資源版本參數，待正式站更新後確認排除。
+- 無工程 blocker；動畫舒適度仍需玩家實機主觀確認。
 
 ## 狀態
 
-IN_PROGRESS
+COMPLETE
