@@ -17,11 +17,12 @@
 - 已完成第二關 waypoint 最小修正；未修改第一關 path、背景或任何 tower slot。
 - 已將 Motion Lite 擴充至小妖、疾妖、巨妖、窮奇與夫諸；窮奇 frenzy pulse 共用既有 pulse helper。
 - focused Motion／path／Game／Renderer regression：38/38 PASS。
+- 已將瀏覽器入口與 Motion 模組版本更新為 `motion-lite-2`，避免 Pages 混用第一輪快取。
+- 版本更新後 focused regression 38/38、全 JS/MJS syntax 與 `git diff --check` PASS。
 
 ## 尚未完成項目
 
-- 更新資源版本參數，確保 GitHub Pages 不混用舊 Motion 模組。
-- focused regression、JS/MJS syntax、390px／390×700px、1×／2× browser smoke。
+- 最終完整 `npm test`、390px／390×700px、1×／2× browser smoke。
 
 ## 已修改檔案
 
@@ -33,6 +34,11 @@
 - `tests/level2.test.js`
 - `tests/motion.test.js`
 - `tests/renderer-art.test.js`
+- `index.html`
+- `src/main.js`
+- `src/entities/Enemy.js`
+- `src/render/Renderer.js`
+- `tests/browser-smoke.html`
 
 ## 已執行測試與結果
 
@@ -40,10 +46,12 @@
 - 正式素材透明邊界診斷：PASS；未發現足以解釋明顯水平錯位的不對稱透明留白。
 - Motion／path RED：15 PASS／5 項預期 FAIL。
 - focused Motion／path／Game／Renderer regression：38/38 PASS。
+- 資源版本更新後 focused regression：38/38 PASS。
+- 全 JS/MJS syntax、`git diff --check`：PASS。
 
 ## 尚未執行測試
 
-- 最終完整 `npm test`、syntax check 與 browser smoke。
+- 最終完整 `npm test` 與 browser smoke。
 
 ## 最新 commit SHA
 
@@ -51,7 +59,7 @@
 
 ## 下一步應從哪裡開始
 
-建立 Motion Lite 第二輪程式 checkpoint，更新瀏覽器資源版本後執行最終自動測試與正式 Pages smoke。
+推送 `motion-lite-2` 資源版本 checkpoint，等待 Pages 更新後執行最終自動測試與正式 Pages smoke。
 
 ## 尚未解決問題及原因
 

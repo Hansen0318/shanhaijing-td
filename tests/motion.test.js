@@ -5,8 +5,8 @@ import { Renderer } from '../src/render/Renderer.js';
 import { Enemy } from '../src/entities/Enemy.js';
 import { ENEMY_DATA, LEVELS } from '../src/config/gameData.js';
 import { GameMap } from '../src/map/GameMap.js';
-import { MotionSystem } from '../src/systems/MotionSystem.js?v=motion-lite-1';
-import { UNIT_MOTION_CONFIG } from '../src/config/motionData.js?v=motion-lite-1';
+import { MotionSystem } from '../src/systems/MotionSystem.js?v=motion-lite-2';
+import { UNIT_MOTION_CONFIG } from '../src/config/motionData.js?v=motion-lite-2';
 
 function fakeContext() {
   const calls = { drawImage: [], translate: [], scale: [], filters: [] };
