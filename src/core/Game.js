@@ -9,11 +9,17 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js';
 import { WaveManager } from '../systems/WaveManager.js';
 import { BossSystem } from '../systems/BossSystem.js';
+import { MotionSystem } from '../systems/MotionSystem.js';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
 export class Game {
-  constructor(random = Math.random, initialLevelId = 1) { this.random = random; this.resetRun(initialLevelId); }
+  constructor(random = Math.random, initialLevelId = 1, { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
+    this.random = random;
+    this.motionEnabled = motionEnabled;
+    this.resetRun(initialLevelId);
+  }
   resetRun(levelId = this.levelId ?? 1) {
     const level = getLevelData(levelId);
     if (!level) return false;
@@ -31,6 +37,7 @@ export class Game {
     this.towers = Array(level.map.slots.length).fill(null);
     this.projectiles = [];
     this.effects = [];
+    this.visualTime = 0;
     this.currentChoices = [];
     this.pendingSellSlot = null;
     this.selectedSlot = null;
@@ -154,6 +161,8 @@ export class Game {
   onEnemyKilled(enemy) {
     if (enemy.rewarded) return;
     enemy.rewarded = true;
+    const deathEffect = MotionSystem.deathEffect(enemy, this.motionEnabled);
+    if (deathEffect) this.effects.push(deathEffect);
     this.stats.kills += 1;
     const reward = this.economy.reward(enemy.reward, 1 + (this.blessings.modifiers.goldReward ?? 0));
     if (reward > 0) this.effects.push({ type: 'gold', x: enemy.x, y: enemy.y, amount: reward, life: 0.9, duration: 0.9 });
@@ -163,6 +172,10 @@ export class Game {
     this.advanceBanner(realDelta);
     this.effects.forEach(effect => { effect.life -= realDelta; });
     this.effects = this.effects.filter(effect => effect.life > 0);
+    if (this.motionEnabled) {
+      this.visualTime += realDelta;
+      this.enemies.forEach(enemy => enemy.updateVisual(realDelta));
+    }
     if (this.state === 'preparation') return;
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
@@ -206,6 +219,8 @@ export class Game {
       const target = CombatSystem.acquireTarget(tower, this.enemies, stats.range);
       if (!target) continue;
       tower.cooldown += stats.interval;
+      const recoil = MotionSystem.recoilEffect(tower, target, this.motionEnabled);
+      if (recoil) this.effects.push(recoil);
       if (tower.type === 'yinglong') {
         const hit = CombatSystem.penetrate(this.enemies, stats.penetration, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability, bossBonus: stats.bossBonus }, tower, stats.range);
         this.effects.push({
