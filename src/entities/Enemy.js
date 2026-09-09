@@ -1,4 +1,5 @@
 import { StatusSystem } from '../systems/StatusSystem.js';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js';
 
 let nextEnemyId = 1;
 export class Enemy {
@@ -18,6 +19,7 @@ export class Enemy {
     this.reachedBase = false;
     this.statuses = {};
     this.hitFlash = 0;
+    this.visualHitFlash = 0;
     this.speedMultiplier = 1;
     this.frenzied = false;
     this.triggeredBossThresholds = new Set();
@@ -32,10 +34,12 @@ export class Enemy {
     Object.assign(this, this.map.positionAt(this.pathDistance));
     if (this.pathDistance >= this.map.totalLength) { this.reachedBase = true; this.alive = false; }
   }
+  updateVisual(realDelta) { this.visualHitFlash = Math.max(0, this.visualHitFlash - realDelta); }
   takeDamage(amount) {
     if (!this.alive) return false;
     this.hp = Math.max(0, this.hp - amount);
     this.hitFlash = 0.8;
+    if (UNIT_MOTION_CONFIG.enemies[this.type]) this.visualHitFlash = UNIT_MOTION_CONFIG.hitFlashSeconds;
     if (this.hp <= 0) this.alive = false;
     return true;
   }
