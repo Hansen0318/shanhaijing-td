@@ -198,6 +198,7 @@ export class Game {
   handleBossEvent(enemy, event) {
     if (event.type === 'frenzy') {
       this.queueBanner(`${enemy.data.name}狂暴！`, 1.4);
+      this.effects.push({ type: 'qiongqiFrenzyPulse', x: enemy.x, y: enemy.y, life: 0.32, duration: 0.32 });
       return;
     }
     if (event.type !== 'consume') return;

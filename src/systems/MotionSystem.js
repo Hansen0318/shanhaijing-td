@@ -13,13 +13,13 @@ export class MotionSystem {
       ? 1 + config.idleScale * (0.5 + Math.sin(visualTime * TAU * config.idleHz) * 0.5)
       : 1;
 
-    if (enemy.type === 'paoxiao') {
-      const consume = effects.find(effect => effect.type === 'paoxiaoEnrage' && effect.life > 0);
-      if (consume) {
-        const elapsed = consume.duration - consume.life;
-        if (elapsed >= 0 && elapsed <= config.consumeSeconds) {
-          const pulse = Math.sin(Math.PI * elapsed / config.consumeSeconds);
-          scale = Math.max(scale, 1 + config.consumeScale * pulse);
+    if (config.pulseEffect) {
+      const pulseEffect = effects.find(effect => effect.type === config.pulseEffect && effect.life > 0);
+      if (pulseEffect) {
+        const elapsed = pulseEffect.duration - pulseEffect.life;
+        if (elapsed >= 0 && elapsed <= config.pulseSeconds) {
+          const pulse = Math.sin(Math.PI * elapsed / config.pulseSeconds);
+          scale = Math.max(scale, 1 + config.pulseScale * pulse);
         }
       }
     }
@@ -62,7 +62,9 @@ export class MotionSystem {
   static deathEffect(enemy, enabled = ENABLE_UNIT_MOTION) {
     const config = enabled ? UNIT_MOTION_CONFIG.enemies[enemy.type] : null;
     if (!config?.deathSeconds) return null;
-    const next = enemy.map.positionAt(Math.min(enemy.map.totalLength, enemy.pathDistance + 1));
+    const next = enemy.map?.positionAt
+      ? enemy.map.positionAt(Math.min(enemy.map.totalLength, enemy.pathDistance + 1))
+      : { x: enemy.x, y: enemy.y };
     return {
       type: 'unitDeath', unitType: enemy.type, x: enemy.x, y: enemy.y,
       mirror: next.x < enemy.x,

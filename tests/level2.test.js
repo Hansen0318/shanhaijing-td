@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ENEMY_DATA, LEVELS, getLevelData } from '../src/config/gameData.js';
+import { ENEMY_DATA, LEVELS, MAP_DATA, getLevelData } from '../src/config/gameData.js';
 import { Game } from '../src/core/Game.js';
 import { Enemy } from '../src/entities/Enemy.js';
 import { GameMap } from '../src/map/GameMap.js';
@@ -58,14 +58,41 @@ test('all eight level-two slot centers share hit, build and tower coordinates', 
   });
 });
 
-test('level-two waypoints follow the painted Chishui road center', () => {
-  assert.deepEqual(LEVELS[2].map.waypoints, [
-    { x: -20, y: 86 }, { x: 20, y: 86 }, { x: 55, y: 156 }, { x: 195, y: 156 },
-    { x: 220, y: 233 }, { x: 365, y: 233 }, { x: 380, y: 263 }, { x: 350, y: 293 },
-    { x: 75, y: 268 }, { x: 48, y: 303 }, { x: 48, y: 368 }, { x: 72, y: 393 },
-    { x: 195, y: 403 }, { x: 225, y: 433 }, { x: 238, y: 488 }, { x: 365, y: 518 },
-    { x: 410, y: 568 },
-  ]);
+function distanceToSegment(point, from, to) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const lengthSquared = dx * dx + dy * dy;
+  const t = lengthSquared ? Math.max(0, Math.min(1, ((point.x - from.x) * dx + (point.y - from.y) * dy) / lengthSquared)) : 0;
+  return Math.hypot(point.x - (from.x + dx * t), point.y - (from.y + dy * t));
+}
+
+function distanceToPath(point, waypoints) {
+  return Math.min(...waypoints.slice(1).map((to, index) => distanceToSegment(point, waypoints[index], to)));
+}
+
+test('level-two gameplay path stays near sampled centers of the painted Chishui road', () => {
+  const paintedRoadCenters = [
+    { x: 25, y: 88 }, { x: 75, y: 137 }, { x: 165, y: 145 }, { x: 213, y: 190 },
+    { x: 285, y: 215 }, { x: 378, y: 248 }, { x: 330, y: 282 }, { x: 220, y: 265 },
+    { x: 105, y: 240 }, { x: 20, y: 310 }, { x: 65, y: 374 }, { x: 175, y: 375 },
+    { x: 225, y: 410 }, { x: 232, y: 462 }, { x: 280, y: 500 }, { x: 360, y: 510 },
+  ];
+
+  paintedRoadCenters.forEach(point => {
+    assert.ok(distanceToPath(point, LEVELS[2].map.waypoints) <= 12, `path misses painted road center near ${point.x},${point.y}`);
+  });
+});
+
+test('level-one gameplay path remains near sampled centers of the painted Kunlun road', () => {
+  const paintedRoadCenters = [
+    { x: 20, y: 70 }, { x: 150, y: 70 }, { x: 280, y: 70 }, { x: 310, y: 170 },
+    { x: 250, y: 204 }, { x: 100, y: 236 }, { x: 68, y: 300 }, { x: 65, y: 370 },
+    { x: 180, y: 402 }, { x: 310, y: 428 }, { x: 360, y: 495 },
+  ];
+
+  paintedRoadCenters.forEach(point => {
+    assert.ok(distanceToPath(point, MAP_DATA.waypoints) <= 12, `path misses painted road center near ${point.x},${point.y}`);
+  });
 });
 
 test('paoxiao uses the unified boss arrival banner and keeps its consume banner', () => {

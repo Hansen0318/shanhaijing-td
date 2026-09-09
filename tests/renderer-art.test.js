@@ -102,6 +102,8 @@ test('enemy renderer swaps to frenzy qiongqi art and mirrors only by travel dire
   }] });
 
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'qiongqiFrenzy'), true);
-  assert.deepEqual(ctx.calls.scale.at(-1), [-1, 1]);
+  const [scaleX, scaleY] = ctx.calls.scale.at(-1);
+  assert.ok(scaleX < 0 && scaleY > 0);
+  assert.equal(Math.abs(scaleX), scaleY, 'idle motion must preserve proportional horizontal mirroring');
   assert.equal(ctx.calls.rotate.length, 0, 'enemy art must stay upright');
 });

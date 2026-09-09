@@ -5,6 +5,8 @@ import { Renderer } from '../src/render/Renderer.js';
 import { Enemy } from '../src/entities/Enemy.js';
 import { ENEMY_DATA, LEVELS } from '../src/config/gameData.js';
 import { GameMap } from '../src/map/GameMap.js';
+import { MotionSystem } from '../src/systems/MotionSystem.js?v=motion-lite-1';
+import { UNIT_MOTION_CONFIG } from '../src/config/motionData.js?v=motion-lite-1';
 
 function fakeContext() {
   const calls = { drawImage: [], translate: [], scale: [], filters: [] };
@@ -46,7 +48,7 @@ function rendererFixture(options) {
 function visualEnemy(type, x, y) {
   return {
     id: type === 'chiyu' ? 1 : 2,
-    type, x, y, radius: ENEMY_DATA[type].radius, hp: 100, maxHp: 100,
+    type, x, y, radius: ENEMY_DATA[type]?.radius ?? 12, hp: 100, maxHp: 100,
     isBoss: type === 'paoxiao', hitFlash: 0, visualHitFlash: 0,
     statuses: {}, pathDistance: 20,
     map: { totalLength: 100, positionAt: () => ({ x: x + 1, y }) },
@@ -171,4 +173,94 @@ test('paoxiao consume scale is visual-only and preserves HP and threshold result
   renderer.drawEnemies(ctx, game);
   assert.ok(ctx.calls.scale.some(([sx, sy]) => sx > 1 && sy > 1));
   assert.deepEqual({ x: boss.x, y: boss.y }, { x, y });
+});
+
+test('first-level enemies have distinct render-only weight and speed motion', () => {
+  const samples = ['minion', 'swift', 'giant'].map(type => {
+    const enemy = visualEnemy(type, 80, 120);
+    const before = { x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance };
+    const transform = MotionSystem.enemyTransform(enemy, 0.125, []);
+    assert.equal(transform.xOffset, 0);
+    assert.deepEqual({ x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance }, before);
+    return [type, transform, UNIT_MOTION_CONFIG.enemies[type]];
+  });
+
+  const configs = Object.fromEntries(samples.map(([type, , config]) => [type, config]));
+  assert.ok(configs.swift.bobHz > configs.minion.bobHz);
+  assert.ok(configs.giant.bobHz < configs.minion.bobHz);
+  assert.ok(configs.giant.bobPixels < configs.minion.bobPixels);
+  assert.ok(samples.every(([, transform]) => transform.yOffset !== 0));
+});
+
+test('first-level enemy hit and death visuals use configured durations', () => {
+  const game = new Game(() => 0, 1);
+  for (const [type, expectedDeath] of [['minion', 0.18], ['swift', 0.16], ['giant', 0.22]]) {
+    game.spawnEnemy(type);
+    const enemy = game.enemies.at(-1);
+    enemy.takeDamage(1);
+    assert.equal(enemy.visualHitFlash, UNIT_MOTION_CONFIG.hitFlashSeconds);
+    enemy.takeDamage(enemy.maxHp);
+    game.onEnemyKilled(enemy);
+    assert.equal(game.effects.findLast(effect => effect.type === 'unitDeath')?.duration, expectedDeath);
+  }
+});
+
+test('qiongqi frenzy pulse and hit flash never alter boss gameplay state', () => {
+  const game = new Game(() => 0, 1);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.spawnEnemy('qiongqi');
+  const boss = game.enemies[0];
+  const position = { x: boss.x, y: boss.y, pathDistance: boss.pathDistance };
+  boss.takeDamage(1);
+  assert.equal(boss.visualHitFlash, UNIT_MOTION_CONFIG.hitFlashSeconds);
+  boss.hp = boss.maxHp * 0.5;
+  game.update(0);
+
+  assert.equal(boss.frenzied, true);
+  assert.equal(boss.speedMultiplier, 1.5);
+  assert.deepEqual({ x: boss.x, y: boss.y, pathDistance: boss.pathDistance }, position);
+  assert.ok(game.effects.some(effect => effect.type === 'qiongqiFrenzyPulse'));
+  assert.ok(MotionSystem.enemyTransform(boss, game.visualTime, game.effects).scale > 1);
+});
+
+test('fuzhu idle and recoil keep slow projectile origin on its gameplay coordinates', () => {
+  const game = new Game(() => 0, 1);
+  game.economy.add(1000);
+  game.buildTower(0, 'fuzhu');
+  const tower = game.towers[0];
+  game.spawnEnemy('minion');
+  game.enemies[0].x = tower.x + 40;
+  game.enemies[0].y = tower.y;
+  const before = { x: tower.x, y: tower.y };
+
+  game.updateTowers(0);
+
+  assert.ok(game.effects.some(effect => effect.type === 'towerRecoil' && effect.towerType === 'fuzhu'));
+  assert.deepEqual({ x: game.projectiles[0].x, y: game.projectiles[0].y }, before);
+  assert.deepEqual({ x: tower.x, y: tower.y }, before);
+  assert.ok(MotionSystem.towerTransform(tower, 0.125, game.effects).scale !== 1);
+});
+
+test('missing motion configuration falls back to a centered static sprite', () => {
+  const enemy = visualEnemy('unknown', 88, 99);
+  assert.deepEqual(MotionSystem.enemyTransform(enemy, 1, []), { xOffset: 0, yOffset: 0, scale: 1, flash: false });
+  assert.deepEqual(MotionSystem.towerTransform({ type: 'unknown', x: 1, y: 2 }, 1, []), { xOffset: 0, yOffset: 0, scale: 1 });
+});
+
+test('different source image sizes keep their render origin horizontally centered', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.art = {
+    get(id) {
+      return id === 'minion'
+        ? { id, naturalWidth: 80, naturalHeight: 100 }
+        : { id, naturalWidth: 180, naturalHeight: 90 };
+    },
+  };
+
+  renderer.drawContained(ctx, 'minion', 120, 90, 36, 38);
+  renderer.drawContained(ctx, 'giant', 120, 90, 48, 48);
+
+  assert.deepEqual(ctx.calls.translate, [[120, 90], [120, 90]]);
+  ctx.calls.drawImage.forEach(([, drawX, , width]) => assert.equal(drawX, -width / 2));
 });
