@@ -11,6 +11,10 @@
 - 11 張第二關素材、關卡專用載入、敵人／Boss／特效／Boss HUD 渲染。
 - 第一關 Victory 的「前往第2關」與「再次挑戰」；第二關沒有第3關按鈕。
 - 第二關 smoke state injection：入口、Wave 8、Wave 10、兩段吞噬、Victory。
+- `npm test` 66/66、全 JS/MJS syntax、`git diff --check` 通過。
+- 正式 GitHub Pages 390px 與 390×700 smoke 通過：Canvas 分別為 `368×475`、`368×440`，無頁面溢出或遊戲 runtime error。
+- Wave 10 注入確認只有 1 隻狍鴞且 queue 無重複 Boss；Boss HUD 顯示 `狍鴞`／`5400 HP`。
+- 70% 吞噬後 HP 為 `4212 / 5400`；40% 吞噬後為 `2592 / 5400`；第二關 Victory 正常且無第3關按鈕。
 
 ## 未完成
 
@@ -34,6 +38,10 @@
 - `src/ui/UIController.js`
 - `tests/level2.test.js`
 - `tests/browser-smoke.html`
+
+## 目前 commit SHA
+
+- 第二關功能 baseline 已推送至 GitHub `main`：`48261627b0d4206cb355c1cfb405170b439c5119`
 
 ## 下一步
 
