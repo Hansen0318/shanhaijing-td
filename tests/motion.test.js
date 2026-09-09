@@ -91,6 +91,10 @@ test('hit flash lasts 90ms and death visuals expire without changing enemy coord
   const original = { x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance };
   enemy.takeDamage(1);
   assert.equal(enemy.visualHitFlash, 0.09);
+  const flashFixture = rendererFixture({ motionEnabled: true });
+  flashFixture.renderer.drawEnemies(flashFixture.ctx, { visualTime: 0, enemies: [enemy], effects: [] });
+  assert.equal(flashFixture.ctx.calls.drawImage.filter(args => args[0].id === 'chiyu').length, 2);
+  assert.ok(flashFixture.ctx.calls.filters.some(value => value.includes('brightness')));
 
   const game = new Game(() => 0, 2);
   game.spawnEnemy('chiyu');
@@ -104,6 +108,12 @@ test('hit flash lasts 90ms and death visuals expire without changing enemy coord
   const { renderer, ctx } = rendererFixture({ motionEnabled: true });
   renderer.drawEffects(ctx, { effects: [death, { ...death, life: 0 }] });
   assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'chiyu').length, 1);
+
+  const armoredGame = new Game(() => 0, 2);
+  armoredGame.spawnEnemy('yanjia');
+  armoredGame.enemies[0].takeDamage(armoredGame.enemies[0].maxHp);
+  armoredGame.onEnemyKilled(armoredGame.enemies[0]);
+  assert.equal(armoredGame.effects.find(effect => effect.type === 'unitDeath').duration, 0.22);
 });
 
 test('tower recoil is visual-only and projectile or beam origins stay on gameplay coordinates', () => {
