@@ -149,7 +149,7 @@ export class Game {
       ? baseData
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
     this.enemies.push(new Enemy(type, enemyData, this.map));
-    if (baseData.isBoss) this.queueBanner(`${baseData.name}現身`, 1.1);
+    if (baseData.isBoss) this.queueBanner(`Boss 現身・${baseData.name}`, 1.1);
   }
   onEnemyKilled(enemy) {
     if (enemy.rewarded) return;
@@ -184,7 +184,7 @@ export class Game {
   }
   handleBossEvent(enemy, event) {
     if (event.type === 'frenzy') {
-      this.queueBanner(`${enemy.data.name}進入狂暴！`, 1.4);
+      this.queueBanner(`${enemy.data.name}狂暴！`, 1.4);
       return;
     }
     if (event.type !== 'consume') return;

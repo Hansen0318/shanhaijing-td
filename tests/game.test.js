@@ -134,7 +134,7 @@ test('yinglong effect records one ordered beam through every penetrated target',
   });
 });
 
-test('wave ten presents boss warning, arrival and one frenzy message in order', () => {
+test('wave ten presents the unified boss arrival and qiongqi frenzy banners in order', () => {
   const game = new Game();
   game.wave.waveNumber = 9;
   assert.equal(game.startWaveNow(), true);
@@ -146,12 +146,12 @@ test('wave ten presents boss warning, arrival and one frenzy message in order', 
 
   assert.deepEqual(
     [game.banner, ...game.bannerQueue.map(item => item.text)],
-    ['BOSS 警告', '窮奇現身', '窮奇進入狂暴！'],
+    ['BOSS 警告', 'Boss 現身・窮奇', '窮奇狂暴！'],
   );
   assert.equal(boss.frenzied, true);
 
   game.advanceBanner(1.31);
-  assert.equal(game.banner, '窮奇現身');
+  assert.equal(game.banner, 'Boss 現身・窮奇');
   game.advanceBanner(1.11);
-  assert.equal(game.banner, '窮奇進入狂暴！');
+  assert.equal(game.banner, '窮奇狂暴！');
 });

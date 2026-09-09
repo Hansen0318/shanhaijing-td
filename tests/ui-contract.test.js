@@ -33,3 +33,13 @@ test('CSS prevents horizontal overflow and provides minimum tap targets', async 
   assert.match(css, /env\(safe-area-inset-bottom\)/);
   assert.doesNotMatch(css, /min-height:\s*(?:[0-3]?\d|4[0-3])px/);
 });
+
+test('short iPhone layout keeps context actions inside the reserved panel', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  const shortRule = css.match(/@media \(max-height:\s*720px\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
+
+  assert.match(css, /\.game-shell\s*\{[^}]*height:\s*100svh/s);
+  assert.match(shortRule, /\.context-panel\s*\{[^}]*min-height:\s*142px[^}]*flex-basis:\s*142px/s);
+  assert.match(css, /\.unit-card\s*\{[^}]*min-height:\s*110px/s);
+  assert.match(css, /\.tower-actions\s*\{[^}]*margin-top:\s*3px/s);
+});

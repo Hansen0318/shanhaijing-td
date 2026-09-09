@@ -46,3 +46,12 @@
 ## 下一步
 
 在正式 GitHub Pages 使用 iPhone 實玩第二關；只針對可重現的視覺、路徑或平衡問題進行下一輪修正，不開始第3關。
+
+## 2026-09-09 手機實測修正進度
+
+- 已完成：找出短螢幕 Context Panel 內容被自身固定高度裁切的原因，調整共用面板內容尺寸與穩定 viewport 高度。
+- 已完成：依赤水荒原正式背景重新校準第二關道路中心 waypoints；第一關 path 未更動。
+- 已完成：Boss 登場統一為 `Boss 現身・窮奇`／`Boss 現身・狍鴞`，特殊階段保留 `窮奇狂暴！`／`狍鴞吞噬妖氣！`。
+- 已完成：三組 focused regression tests，26/26 通過。
+- 待完成：全 JS/MJS syntax、390px／390×700 正式 Pages smoke、更新本節結果並 push main。
+- 工作分支：`fix/iphone-safe-area-path-banners`。

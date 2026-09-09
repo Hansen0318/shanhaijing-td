@@ -58,6 +58,33 @@ test('all eight level-two slot centers share hit, build and tower coordinates', 
   });
 });
 
+test('level-two waypoints follow the painted Chishui road center', () => {
+  assert.deepEqual(LEVELS[2].map.waypoints, [
+    { x: -20, y: 86 }, { x: 20, y: 86 }, { x: 55, y: 156 }, { x: 195, y: 156 },
+    { x: 220, y: 233 }, { x: 365, y: 233 }, { x: 380, y: 263 }, { x: 350, y: 293 },
+    { x: 75, y: 268 }, { x: 48, y: 303 }, { x: 48, y: 368 }, { x: 72, y: 393 },
+    { x: 195, y: 403 }, { x: 225, y: 433 }, { x: 238, y: 488 }, { x: 365, y: 518 },
+    { x: 410, y: 568 },
+  ]);
+});
+
+test('paoxiao uses the unified boss arrival banner and keeps its consume banner', () => {
+  const game = new Game(() => 0.2);
+  game.end('victory');
+  game.enterLevel(2);
+  game.wave.waveNumber = 9;
+  game.startWaveNow();
+  game.spawnEnemy('paoxiao');
+  const boss = game.enemies.at(-1);
+  boss.hp = boss.maxHp * 0.7;
+  game.update(0);
+
+  assert.deepEqual(
+    [game.banner, ...game.bannerQueue.map(item => item.text)],
+    ['BOSS 警告', 'Boss 現身・狍鴞', '狍鴞吞噬妖氣！'],
+  );
+});
+
 test('only level-one victory can enter level two and the new run is clean', () => {
   const game = new Game(() => 0.2);
   game.buildTower(0, 'bifang');
