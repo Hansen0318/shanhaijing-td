@@ -140,6 +140,17 @@ test('tower recoil is visual-only and projectile or beam origins stay on gamepla
   renderer.drawTowers(ctx, { ...game, visualTime: 0.125, selectedSlot: null });
   assert.notDeepEqual(ctx.calls.translate[0], [tower.x, tower.y + 4]);
   assert.deepEqual({ x: tower.x, y: tower.y }, original);
+
+  const projectileGame = new Game(() => 0, 2);
+  projectileGame.economy.add(1000);
+  projectileGame.buildTower(0, 'bifang');
+  const bifang = projectileGame.towers[0];
+  projectileGame.spawnEnemy('yanjia');
+  projectileGame.enemies[0].x = bifang.x + 40;
+  projectileGame.enemies[0].y = bifang.y;
+  projectileGame.updateTowers(0);
+  assert.deepEqual({ x: projectileGame.projectiles[0].x, y: projectileGame.projectiles[0].y }, { x: bifang.x, y: bifang.y });
+  assert.deepEqual({ x: bifang.x, y: bifang.y }, { x: LEVELS[2].map.slots[0].x, y: LEVELS[2].map.slots[0].y });
 });
 
 test('paoxiao consume scale is visual-only and preserves HP and threshold results', () => {
