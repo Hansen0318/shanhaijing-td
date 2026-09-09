@@ -1,5 +1,5 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { ArtStore } from '../config/artAssets.js';
+import { ArtStore } from '../config/artAssets.js?v=loading-1';
 import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=motion-lite-2';
 import { MotionSystem } from '../systems/MotionSystem.js?v=motion-lite-2';
 

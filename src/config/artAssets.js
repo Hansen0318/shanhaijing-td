@@ -39,16 +39,30 @@ export const ART_ASSETS = Object.freeze({
   paoxiaoBossPanel: 'assets/ui/ui_boss_paoxiao_panel_v1.png',
 });
 
-const SHARED_ART_IDS = Object.freeze([
-  'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
+const SHARED_REQUIRED_ART_IDS = Object.freeze([
+  'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion',
   'bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam',
   'resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'buildCard',
-  'actionButton', 'blessingCard', 'victoryOverlay', 'defeatOverlay',
+  'actionButton',
+]);
+
+const SHARED_DEFERRED_ART_IDS = Object.freeze([
+  'swift', 'giant', 'blessingCard', 'victoryOverlay', 'defeatOverlay',
 ]);
 
 export const LEVEL_ART_IDS = Object.freeze({
-  1: Object.freeze([...SHARED_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
-  2: Object.freeze([...SHARED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
+  1: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
+  2: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
+});
+
+export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
+  1: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'background', 'spawnRift', 'baseSeal']),
+  2: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base']),
+});
+
+export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
+  1: Object.freeze(LEVEL_ART_IDS[1].filter(id => !LEVEL_REQUIRED_ART_IDS[1].includes(id))),
+  2: Object.freeze(LEVEL_ART_IDS[2].filter(id => !LEVEL_REQUIRED_ART_IDS[2].includes(id))),
 });
 
 export function assetUrl(id) {
@@ -61,8 +75,9 @@ export class ArtStore {
     this.ImageConstructor = ImageConstructor;
     this.images = {};
     this.pending = {};
+    this.settled = new Set();
     this.initialLevelId = initialLevelId;
-    this.loadIds(LEVEL_ART_IDS[initialLevelId]);
+    this.loadIds(LEVEL_REQUIRED_ART_IDS[initialLevelId]);
   }
 
   loadIds(ids = []) {
@@ -71,21 +86,29 @@ export class ArtStore {
       const image = new this.ImageConstructor();
       this.images[id] = image;
       this.pending[id] = new Promise(resolve => {
-        image.onload = resolve;
-        image.onerror = resolve;
+        const settle = () => {
+          this.settled.add(id);
+          resolve();
+        };
+        image.onload = settle;
+        image.onerror = settle;
         image.src = assetUrl(id);
-        if (image.complete) resolve();
+        if (image.complete) settle();
       });
       return this.pending[id];
     }));
   }
 
   ensureLevel(levelId) {
-    return this.loadIds(LEVEL_ART_IDS[levelId]);
+    return this.loadIds(LEVEL_REQUIRED_ART_IDS[levelId]);
+  }
+
+  preloadDeferred(levelId) {
+    return this.loadIds(LEVEL_DEFERRED_ART_IDS[levelId]);
   }
 
   isLevelReady(levelId) {
-    return (LEVEL_ART_IDS[levelId] ?? []).every(id => this.images[id]?.complete);
+    return (LEVEL_REQUIRED_ART_IDS[levelId] ?? []).every(id => this.settled.has(id));
   }
 
   isReady() {

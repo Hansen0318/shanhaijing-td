@@ -40,26 +40,38 @@ test('art store returns a drawable image only after that image has loaded', asyn
   assert.equal(store.get('unknown'), null);
 });
 
-test('art store waits until every packaged image has settled before revealing the game', async () => {
+test('art store reveals a level when required art settles, including failed assets', async () => {
   const { ArtStore } = await import(moduleUrl);
   class FakeImage {
     constructor() { this.complete = false; this.naturalWidth = 0; }
   }
   const store = new ArtStore(FakeImage);
   assert.equal(store.isReady(), false);
-  for (const image of Object.values(store.images)) image.complete = true;
+  for (const image of Object.values(store.images)) image.onerror();
+  await Promise.resolve();
   assert.equal(store.isReady(), true, 'failed images count as settled so fallback can render');
 });
 
-test('art store loads second-level assets only when that level is requested', async () => {
-  const { ArtStore, LEVEL_ART_IDS } = await import(moduleUrl);
+test('art store blocks on immediate level art but defers boss and late-wave VFX', async () => {
+  const { ArtStore, LEVEL_ART_IDS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
   class FakeImage {
-    constructor() { this.complete = true; this.naturalWidth = 100; }
+    constructor() { this.complete = false; this.naturalWidth = 100; }
   }
   const store = new ArtStore(FakeImage);
   assert.equal(store.images.level2Background, undefined);
-  await store.ensureLevel(2);
+  const ready = store.ensureLevel(2);
   assert.ok(store.images.level2Background);
+  assert.ok(store.images.minion);
+  assert.equal(store.images.paoxiao, undefined, 'level-two boss must not block the preparation screen');
+  assert.equal(store.images.paoxiaoExplosion, undefined, 'late boss VFX must not block the preparation screen');
+  for (const image of Object.values(store.images)) image.onload();
+  await ready;
   assert.equal(store.isLevelReady(2), true);
   assert.ok(LEVEL_ART_IDS[2].includes('paoxiaoBossPanel'));
+  assert.ok(LEVEL_REQUIRED_ART_IDS[2].includes('level2Background'));
+  assert.equal(LEVEL_REQUIRED_ART_IDS[2].includes('paoxiao'), false);
+  assert.ok(LEVEL_DEFERRED_ART_IDS[2].includes('paoxiao'));
+  store.preloadDeferred(2);
+  assert.ok(store.images.paoxiao);
+  assert.ok(store.images.paoxiaoExplosion);
 });

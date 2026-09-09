@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { assetUrl } from '../config/artAssets.js';
+import { assetUrl } from '../config/artAssets.js?v=loading-1';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {
@@ -47,6 +47,7 @@ export class UIController {
     if (!this.game.enterLevel(levelId)) { document.body.classList.remove('art-loading'); return false; }
     await this.renderer.prepareLevel(levelId);
     document.body.classList.remove('art-loading');
+    this.renderer.art.preloadDeferred(levelId);
     this.contextKey = null;
     this.render();
     return true;

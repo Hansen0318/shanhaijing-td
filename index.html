@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="./styles-fixes.css">
 </head>
 <body class="art-loading">
+  <div id="art-loading-overlay" class="art-loading-overlay" role="status" aria-live="polite" aria-label="山海異獸載入中">
+    <p>山海異獸載入中<span class="loading-dots" aria-hidden="true"><i></i><i></i><i></i></span></p>
+  </div>
   <main id="game-shell" class="game-shell" aria-label="Shanhaijing TD 遊戲">
     <header class="hud">
       <div class="resource"><span>❤️ Base</span><strong id="base-hp">20</strong></div>
@@ -50,6 +53,6 @@
   <section id="result-overlay" class="overlay" hidden aria-modal="true" role="dialog">
     <div id="result-panel" class="modal compact result-panel"><p class="eyebrow">本次防守結果</p><h1 id="result-title">防守成功</h1><ul id="result-stats"></ul><button id="next-level-button" data-action="next-level" hidden>前往第2關</button><button id="retry-button" data-action="restart">再次挑戰</button></div>
   </section>
-  <script type="module" src="./src/main.js?v=motion-lite-2"></script>
+  <script type="module" src="./src/main.js?v=loading-1"></script>
 </body>
 </html>

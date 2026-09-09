@@ -60,7 +60,12 @@ test('initial page stays behind an art-loading gate until packaged images settle
     readFile(new URL('../src/main.js', import.meta.url), 'utf8'),
   ]);
   assert.match(html, /<body class="art-loading">/);
+  assert.match(html, /id="art-loading-overlay"[^>]*role="status"/);
+  assert.match(html, /山海異獸載入中/);
   assert.match(css, /body\.art-loading\s+\.game-shell[^}]*visibility:\s*hidden/s);
-  assert.match(css, /body\.art-loading::before[^}]*position:\s*fixed/s);
+  assert.match(css, /\.art-loading-overlay\s*\{[^}]*position:\s*fixed[^}]*transition:\s*opacity\s+\.2s/s);
+  assert.match(css, /body\.art-loading\s+\.art-loading-overlay[^}]*opacity:\s*1[^}]*pointer-events:\s*auto/s);
+  assert.match(css, /@keyframes\s+loading-pulse/);
   assert.match(main, /renderer\.art\.isLevelReady\(game\.levelId\)[\s\S]*classList\.remove\('art-loading'\)/);
+  assert.match(main, /renderer\.art\.preloadDeferred\(game\.levelId\)/);
 });

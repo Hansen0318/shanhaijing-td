@@ -1,6 +1,6 @@
 import { Game } from './core/Game.js?v=motion-lite-2';
-import { Renderer } from './render/Renderer.js?v=motion-lite-2';
-import { UIController } from './ui/UIController.js';
+import { Renderer } from './render/Renderer.js?v=loading-1';
+import { UIController } from './ui/UIController.js?v=loading-1';
 
 const canvas = document.querySelector('#game-canvas');
 const game = new Game();
@@ -14,7 +14,10 @@ function frame(now) {
   game.update(delta);
   renderer.render(game);
   ui.render();
-  if (renderer.art.isLevelReady(game.levelId)) document.body.classList.remove('art-loading');
+  if (document.body.classList.contains('art-loading') && renderer.art.isLevelReady(game.levelId)) {
+    document.body.classList.remove('art-loading');
+    renderer.art.preloadDeferred(game.levelId);
+  }
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
