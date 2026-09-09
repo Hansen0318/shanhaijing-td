@@ -9,10 +9,10 @@
 - 已確認 GitHub `main` 最新基線為 `d4ff6bf4c2021533fdece5f94816f6045a45d56d`，本地工作樹內容與該基線一致。
 - 已建立隔離分支 `feature/motion-lite`。
 - 已執行基線 `npm test`：69/69 通過。
+- 已新增 `tests/motion.test.js`；RED 階段 5 項中 4 項依預期失敗，證明 bob、hit/death、recoil 與吞噬 scale 尚未實作；靜態回退既有行為測試通過。
 
 ## 尚未完成項目
 
-- Motion Lite 最小 failing tests。
 - 集中式 `ENABLE_UNIT_MOTION` 與 motion config。
 - 赤羽妖、岩甲妖、畢方、應龍與狍鴞指定動畫。
 - focused tests、JS/MJS syntax、1×／2×、390px／390×700 browser smoke。
@@ -21,10 +21,12 @@
 ## 已修改檔案
 
 - `docs/WORK_PROGRESS.md`
+- `tests/motion.test.js`
 
 ## 已執行測試與結果
 
 - `npm test`：69/69 PASS（修改前基線）。
+- `node --test tests/motion.test.js`：RED 已確認（1 PASS／4 項預期 FAIL）。
 
 ## 尚未執行測試
 
@@ -38,7 +40,7 @@
 
 ## 下一步應從哪裡開始
 
-新增 `tests/motion.test.js`，先驗證 motion 關閉、座標隔離、攻擊起點與狍鴞吞噬邏輯，確認 RED 後再寫 production code。
+依 `tests/motion.test.js` 實作集中式 motion config 與最小 production code，使 focused tests 轉為 GREEN。
 
 ## 尚未解決問題及原因
 
