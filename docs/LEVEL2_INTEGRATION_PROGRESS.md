@@ -53,5 +53,10 @@
 - 已完成：依赤水荒原正式背景重新校準第二關道路中心 waypoints；第一關 path 未更動。
 - 已完成：Boss 登場統一為 `Boss 現身・窮奇`／`Boss 現身・狍鴞`，特殊階段保留 `窮奇狂暴！`／`狍鴞吞噬妖氣！`。
 - 已完成：三組 focused regression tests，26/26 通過。
-- 待完成：全 JS/MJS syntax、390px／390×700 正式 Pages smoke、更新本節結果並 push main。
+- 已完成：全 JS/MJS syntax 與 `git diff --check` 通過。
+- 已完成：正式 GitHub Pages 390px／390×700 smoke；短螢幕 Canvas 固定為 `368×424`，Context Panel 高 `142px`，升級／出售按鈕底緣 `676.375px`，完整位於面板底緣 `688px` 與頁面底緣 `696px` 之內。
+- 已完成：第二關 Wave 8 畫面確認敵人沿正式赤水荒原道路中心移動；第一關道路資料未修改。
+- 已完成：第一、第二關 Boss 登場與特殊階段 Banner 實際 smoke，且 GitHub Pages 遊戲來源無 runtime error。
+- 已推送：本輪程式修正 commit `49ee4624a46cf9be5ae3432fa6028e4c0f7095a8` 至 GitHub `main`。
+- 未完成：無；等待玩家實機確認。
 - 工作分支：`fix/iphone-safe-area-path-banners`。
