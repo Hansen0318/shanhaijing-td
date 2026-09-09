@@ -11,7 +11,7 @@ test('configuration contains the complete V0.01 roster and waves', () => {
   assert.equal(GAME_CONFIG.initialGold, 300);
   assert.equal(GAME_CONFIG.baseHp, 20);
   assert.deepEqual(Object.keys(TOWER_DATA), ['bifang', 'fuzhu', 'yinglong']);
-  assert.deepEqual(Object.keys(ENEMY_DATA), ['minion', 'swift', 'giant', 'qiongqi']);
+  assert.deepEqual(Object.keys(ENEMY_DATA).filter(type => ['minion', 'swift', 'giant', 'qiongqi'].includes(type)), ['minion', 'swift', 'giant', 'qiongqi']);
   assert.equal(WAVE_DATA.length, 10);
   assert.equal(BLESSING_DATA.length, 12);
   assert.equal(MAP_DATA.slots.length, 8);

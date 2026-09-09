@@ -7,6 +7,8 @@ export class CombatSystem {
     let damage = base;
     if (enemy.statuses?.slow) damage *= 1 + (modifiers.slowedVulnerability ?? 0);
     if (enemy.isBoss) damage *= 1 + (modifiers.bossBonus ?? 0);
+    damage *= enemy.data?.normalDamageMultiplier ?? 1;
+    if (damage > 0) damage = Math.max(enemy.data?.minimumNormalDamage ?? 0, damage);
     return Number(damage.toFixed(3));
   }
   static hit(enemy, damage, modifiers = {}) { enemy.takeDamage(this.resolveDamage(damage, enemy, modifiers)); }

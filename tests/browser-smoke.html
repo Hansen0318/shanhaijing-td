@@ -28,6 +28,12 @@
     <button data-state="victory">擊敗 Boss</button>
     <button data-state="blessing">Blessing</button>
     <button data-state="defeat">Defeat</button>
+    <button data-state="level2">第2關</button>
+    <button data-state="level2wave8">第2關 Wave 8</button>
+    <button data-state="level2wave10">第2關 Wave 10</button>
+    <button data-state="consume70">吞噬 70%</button>
+    <button data-state="consume40">吞噬 40%</button>
+    <button data-state="level2victory">第2關 Victory</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -49,8 +55,8 @@
       const game = frame.contentWindow.__SHANHAIJING_TD__;
       const rect = frame.contentDocument.querySelector('#game-canvas').getBoundingClientRect();
       const bosses = game.enemies.filter(enemy => enemy.isBoss);
-      const queuedBosses = game.wave.queue.filter(type => type === 'qiongqi').length;
-      status.textContent = `${label}｜state ${game.state}｜wave ${game.wave.waveNumber}｜canvas ${rect.width.toFixed(2)}×${rect.height.toFixed(2)}｜boss ${bosses[0] ? Math.ceil(bosses[0].hp) : 'none'}｜boss count ${bosses.length}｜queued boss ${queuedBosses}｜banner ${game.banner || 'none'}`;
+      const queuedBosses = game.wave.queue.filter(type => type === game.level.bossType).length;
+      status.textContent = `${label}｜level ${game.levelId} ${game.level.name}｜state ${game.state}｜wave ${game.wave.waveNumber}｜canvas ${rect.width.toFixed(2)}×${rect.height.toFixed(2)}｜boss ${bosses[0] ? Math.ceil(bosses[0].hp) : 'none'}｜boss count ${bosses.length}｜queued boss ${queuedBosses}｜banner ${game.banner || 'none'}`;
     }
 
     function configureMixedWave(game) {
@@ -60,6 +66,37 @@
       game.buildTower(1, 'fuzhu');
       game.buildTower(6, 'yinglong');
       game.wave.waveNumber = 7;
+    }
+
+    const twoFrames = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    async function enterLevel2(game) {
+      if (game.levelId === 2) { game.restart(); return; }
+      game.end('victory');
+      await twoFrames();
+      frame.contentDocument.querySelector('#next-level-button').click();
+      while (game.levelId !== 2 || frame.contentDocument.body.classList.contains('art-loading')) {
+        await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      await twoFrames();
+    }
+
+    async function configureLevel2MixedWave(game) {
+      await enterLevel2(game);
+      game.economy.add(2000);
+      game.buildTower(0, 'bifang');
+      game.buildTower(3, 'fuzhu');
+      game.buildTower(6, 'yinglong');
+      game.wave.waveNumber = 7;
+    }
+
+    async function configureLevel2Boss(game) {
+      await enterLevel2(game);
+      game.wave.waveNumber = 9;
+      game.startWaveNow();
+      const queuedBoss = game.wave.queue.indexOf('paoxiao');
+      if (queuedBoss >= 0) game.wave.queue.splice(queuedBoss, 1);
+      game.spawnEnemy('paoxiao');
     }
 
     document.addEventListener('click', async event => {
@@ -119,6 +156,34 @@
         game.state = 'blessing';
       }
       if (state === 'defeat') { game.restart(); game.damageBase(game.baseHp); }
+      if (state === 'level2') await enterLevel2(game);
+      if (state === 'level2wave8') {
+        await configureLevel2MixedWave(game);
+        game.startWaveNow();
+        [['chiyu', 120], ['swift', 210], ['yanjia', 290]].forEach(([type, distance]) => {
+          game.spawnEnemy(type);
+          game.enemies.at(-1).pathDistance = distance;
+        });
+      }
+      if (state === 'level2wave10') await configureLevel2Boss(game);
+      if (state === 'consume70') {
+        let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
+        if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }
+        boss.hp = boss.maxHp * 0.7;
+        game.update(0);
+      }
+      if (state === 'consume40') {
+        let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
+        if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }
+        boss.hp = boss.maxHp * 0.4;
+        game.update(0);
+      }
+      if (state === 'level2victory') {
+        let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
+        if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }
+        boss.takeDamage(boss.maxHp);
+        game.update(0);
+      }
       requestAnimationFrame(() => requestAnimationFrame(() => snapshot(button.textContent)));
     });
 

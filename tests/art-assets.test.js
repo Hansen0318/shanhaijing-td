@@ -5,15 +5,19 @@ import { fileURLToPath } from 'node:url';
 
 const moduleUrl = new URL('../src/config/artAssets.js', import.meta.url);
 
-test('art catalog exposes all 27 packaged assets and every file is deployable', async () => {
+test('art catalog exposes all 38 packaged assets and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 27);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 27);
+  assert.equal(entries.length, 38);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 38);
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.png');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
+  assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.png');
+  assert.equal(ART_ASSETS.chiyu, 'assets/enemies/enemy_chiyu_v1.png');
+  assert.equal(ART_ASSETS.yanjia, 'assets/enemies/enemy_yanjia_v1.png');
+  assert.equal(ART_ASSETS.paoxiao, 'assets/bosses/boss_paoxiao_v1.png');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
@@ -45,4 +49,17 @@ test('art store waits until every packaged image has settled before revealing th
   assert.equal(store.isReady(), false);
   for (const image of Object.values(store.images)) image.complete = true;
   assert.equal(store.isReady(), true, 'failed images count as settled so fallback can render');
+});
+
+test('art store loads second-level assets only when that level is requested', async () => {
+  const { ArtStore, LEVEL_ART_IDS } = await import(moduleUrl);
+  class FakeImage {
+    constructor() { this.complete = true; this.naturalWidth = 100; }
+  }
+  const store = new ArtStore(FakeImage);
+  assert.equal(store.images.level2Background, undefined);
+  await store.ensureLevel(2);
+  assert.ok(store.images.level2Background);
+  assert.equal(store.isLevelReady(2), true);
+  assert.ok(LEVEL_ART_IDS[2].includes('paoxiaoBossPanel'));
 });

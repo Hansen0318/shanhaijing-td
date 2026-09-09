@@ -62,5 +62,5 @@ test('initial page stays behind an art-loading gate until packaged images settle
   assert.match(html, /<body class="art-loading">/);
   assert.match(css, /body\.art-loading\s+\.game-shell[^}]*visibility:\s*hidden/s);
   assert.match(css, /body\.art-loading::before[^}]*position:\s*fixed/s);
-  assert.match(main, /renderer\.art\.isReady\(\)[\s\S]*classList\.remove\('art-loading'\)/);
+  assert.match(main, /renderer\.art\.isLevelReady\(game\.levelId\)[\s\S]*classList\.remove\('art-loading'\)/);
 });

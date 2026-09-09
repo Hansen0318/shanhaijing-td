@@ -1,9 +1,8 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
 import { ArtStore } from '../config/artAssets.js';
 
-const BACKGROUND_CROP = Object.freeze({ x: 100, y: 129, width: 1083, height: 1145 });
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54] });
-const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68] });
+const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72] });
 
 export class Renderer {
   constructor(canvas, art = new ArtStore()) {
@@ -23,28 +22,31 @@ export class Renderer {
     const rect = this.canvas.getBoundingClientRect();
     return { x: (event.clientX - rect.left) * MAP_DATA.width / rect.width, y: (event.clientY - rect.top) * MAP_DATA.height / rect.height };
   }
+  prepareLevel(levelId) { return this.art.ensureLevel(levelId); }
   render(game) {
     const ctx = this.ctx;
-    ctx.clearRect(0, 0, MAP_DATA.width, MAP_DATA.height);
-    this.drawBackground(ctx);
+    const map = game.level.map;
+    ctx.clearRect(0, 0, map.width, map.height);
+    this.drawBackground(ctx, game);
     this.drawSlots(ctx, game);
-    this.drawMapProps(ctx);
+    this.drawMapProps(ctx, game);
     this.drawTowers(ctx, game);
     this.drawEnemies(ctx, game);
     this.drawProjectiles(ctx, game);
     this.drawEffects(ctx, game);
-    this.drawLabels(ctx);
+    this.drawLabels(ctx, game);
   }
-  drawBackground(ctx) {
-    const image = this.art.get('background');
+  drawBackground(ctx, game) {
+    const { map, art } = game.level;
+    const image = this.art.get(art.background);
     if (image) {
-      const crop = BACKGROUND_CROP;
-      ctx.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, MAP_DATA.width, MAP_DATA.height);
+      const crop = art.backgroundCrop;
+      ctx.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, map.width, map.height);
       return;
     }
-    ctx.fillStyle = '#17231d'; ctx.fillRect(0, 0, MAP_DATA.width, MAP_DATA.height);
-    this.drawGrid(ctx);
-    this.drawPath(ctx);
+    ctx.fillStyle = '#17231d'; ctx.fillRect(0, 0, map.width, map.height);
+    this.drawGrid(ctx, map);
+    this.drawPath(ctx, map);
   }
   drawContained(ctx, id, x, y, boxWidth, boxHeight, { anchorY = 0.5, mirror = false, rotation = 0, alpha = 1 } = {}) {
     const image = this.art.get(id);
@@ -76,20 +78,20 @@ export class Renderer {
     ctx.restore();
     return true;
   }
-  drawGrid(ctx) {
+  drawGrid(ctx, map) {
     ctx.strokeStyle = 'rgba(255,255,255,.035)'; ctx.lineWidth = 1;
-    for (let x = 0; x < MAP_DATA.width; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, MAP_DATA.height); ctx.stroke(); }
-    for (let y = 0; y < MAP_DATA.height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(MAP_DATA.width, y); ctx.stroke(); }
+    for (let x = 0; x < map.width; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, map.height); ctx.stroke(); }
+    for (let y = 0; y < map.height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(map.width, y); ctx.stroke(); }
   }
-  drawPath(ctx) {
-    const points = MAP_DATA.waypoints;
+  drawPath(ctx, map) {
+    const points = map.waypoints;
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#37443c'; ctx.lineWidth = MAP_DATA.pathWidth + 8; ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y); points.slice(1).forEach(p => ctx.lineTo(p.x, p.y)); ctx.stroke();
-    ctx.strokeStyle = '#7b725c'; ctx.lineWidth = MAP_DATA.pathWidth; ctx.stroke();
+    ctx.strokeStyle = '#37443c'; ctx.lineWidth = map.pathWidth + 8; ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y); points.slice(1).forEach(p => ctx.lineTo(p.x, p.y)); ctx.stroke();
+    ctx.strokeStyle = '#7b725c'; ctx.lineWidth = map.pathWidth; ctx.stroke();
     ctx.setLineDash([7, 12]); ctx.strokeStyle = 'rgba(245,229,180,.32)'; ctx.lineWidth = 2; ctx.stroke(); ctx.setLineDash([]);
   }
   drawSlots(ctx, game) {
-    MAP_DATA.slots.forEach((slot, index) => {
+    game.level.map.slots.forEach((slot, index) => {
       const drewPlatform = this.drawContained(ctx, 'slotPlatform', slot.x, slot.y + 2, 52, 40);
       if (game.towers[index]) return;
       ctx.beginPath(); ctx.arc(slot.x, slot.y, 19, 0, Math.PI * 2);
@@ -98,9 +100,10 @@ export class Renderer {
       ctx.fillStyle = '#e7efe7'; ctx.font = 'bold 20px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('+', slot.x, slot.y - 1);
     });
   }
-  drawMapProps(ctx) {
-    this.drawContained(ctx, 'spawnRift', 10, 70, 66, 66, { anchorY: 0.54 });
-    this.drawContained(ctx, 'baseSeal', 372, 558, 76, 76, { anchorY: 0.58 });
+  drawMapProps(ctx, game) {
+    const { art } = game.level;
+    this.drawContained(ctx, art.spawn, art.spawnPosition.x, art.spawnPosition.y, 66, 66, { anchorY: 0.54 });
+    this.drawContained(ctx, art.base, art.basePosition.x, art.basePosition.y, 76, 76, { anchorY: 0.58 });
   }
   drawTowers(ctx, game) {
     game.towers.forEach((tower, index) => {
@@ -145,6 +148,24 @@ export class Renderer {
     });
   }
   drawEffects(ctx, game) {
+    game.effects.filter(effect => effect.type === 'paoxiaoEnrage').forEach(effect => {
+      const alpha = Math.max(0, effect.life / effect.duration);
+      this.drawContained(ctx, 'paoxiaoEnrage', effect.x, effect.y, 105, 105, { alpha });
+    });
+    game.effects.filter(effect => effect.type === 'paoxiaoProjectile').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      const x = effect.from.x + (effect.to.x - effect.from.x) * progress;
+      const y = effect.from.y + (effect.to.y - effect.from.y) * progress;
+      this.drawContained(ctx, 'paoxiaoProjectile', x, y, 38, 38, { rotation: Math.atan2(effect.to.y - effect.from.y, effect.to.x - effect.from.x) });
+    });
+    game.effects.filter(effect => effect.type === 'paoxiaoExplosion').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'paoxiaoExplosion', effect.x, effect.y, 90 + progress * 30, 90 + progress * 30, { alpha: effect.life / effect.duration });
+    });
+    game.effects.filter(effect => effect.type === 'paoxiaoGroundslam').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'paoxiaoGroundslam', effect.x, effect.y + 12, 120 + progress * 35, 72 + progress * 20, { alpha: effect.life / effect.duration });
+    });
     game.effects.filter(effect => effect.type === 'explosion').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       const radius = effect.radius * (0.35 + progress * 0.65);
@@ -190,8 +211,9 @@ export class Renderer {
       ctx.restore();
     });
   }
-  drawLabels(ctx) {
+  drawLabels(ctx, game) {
+    const map = game.level.map;
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = 'bold 11px system-ui'; ctx.fillStyle = '#d7e7d8'; ctx.fillText('敵人入口', 10, 38);
-    ctx.textAlign = 'right'; ctx.fillText('山海關', MAP_DATA.width - 10, MAP_DATA.height - 20);
+    ctx.textAlign = 'right'; ctx.fillText(game.level.baseName, map.width - 10, map.height - 20);
   }
 }

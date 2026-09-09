@@ -20,6 +20,7 @@ export class Enemy {
     this.hitFlash = 0;
     this.speedMultiplier = 1;
     this.frenzied = false;
+    this.triggeredBossThresholds = new Set();
     Object.assign(this, map.positionAt(0));
   }
   update(dt) {
@@ -39,9 +40,10 @@ export class Enemy {
     return true;
   }
   checkFrenzy() {
-    if (!this.isBoss || this.frenzied || this.hp > this.maxHp * 0.5) return false;
+    const mechanic = this.data.bossMechanic;
+    if (!this.isBoss || mechanic?.type !== 'frenzy' || this.frenzied || this.hp > this.maxHp * mechanic.threshold) return false;
     this.frenzied = true;
-    this.speedMultiplier = 1.5;
+    this.speedMultiplier = mechanic.speedMultiplier;
     return true;
   }
 }

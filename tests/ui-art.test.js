@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { UIController } from '../src/ui/UIController.js';
+import { LEVELS } from '../src/config/gameData.js';
 
 test('build choices render the three packaged tower images', () => {
   const ui = Object.create(UIController.prototype);
   ui.contextKey = null;
   ui.game = {
+    level: LEVELS[1], levelId: 1,
     selectedSlot: 0,
     towers: [null],
     economy: { gold: 300, canAfford: () => true },
@@ -26,6 +28,7 @@ test('build choices render the three packaged tower images', () => {
 test('wave preview renders packaged enemy images and first-level identity', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
+    level: LEVELS[1], levelId: 1,
     state: 'preparation', enemies: [],
     wave: { waveNumber: 0, queue: [], getWaveGroups: () => [{ type: 'minion', count: 8 }, { type: 'swift', count: 4 }] },
   };
@@ -46,6 +49,7 @@ test('wave preview renders packaged enemy images and first-level identity', () =
 test('wave enemy status remains visible after combat starts', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
+    level: LEVELS[1], levelId: 1,
     state: 'combat',
     enemies: [{ type: 'swift', alive: true }, { type: 'giant', alive: true }],
     wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [{ type: 'swift', count: 12 }, { type: 'giant', count: 6 }] },
@@ -68,6 +72,7 @@ test('wave enemy status remains visible after combat starts', () => {
 test('combat enemy counts decrease when enemies leave play', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
+    level: LEVELS[1], levelId: 1,
     state: 'combat',
     enemies: [{ type: 'swift', alive: true }, { type: 'giant', alive: true }],
     wave: { waveNumber: 9, queue: ['swift', 'swift', 'giant'], getWaveGroups: () => [{ type: 'swift', count: 12 }, { type: 'giant', count: 6 }] },
@@ -89,16 +94,43 @@ test('combat enemy counts decrease when enemies leave play', () => {
 
 test('result panel exposes victory and defeat state for the matching skin', () => {
   const ui = Object.create(UIController.prototype);
-  ui.game = { state: 'victory', baseHp: 12, wave: { waveNumber: 10 }, stats: { kills: 99, built: 8 } };
+  ui.game = { state: 'victory', levelId: 1, baseHp: 12, wave: { waveNumber: 10 }, stats: { kills: 99, built: 8 } };
   ui.dom = {
     'result-overlay': { hidden: true }, 'result-panel': { dataset: {} },
     'result-title': { textContent: '' }, 'result-stats': { innerHTML: '' }, 'retry-button': { textContent: '' },
+    'next-level-button': { hidden: true },
   };
 
   ui.renderResult();
   assert.equal(ui.dom['result-panel'].dataset.result, 'victory');
+  assert.equal(ui.dom['next-level-button'].hidden, false);
+
+  ui.game.levelId = 2;
+  ui.renderResult();
+  assert.equal(ui.dom['next-level-button'].hidden, true);
 
   ui.game.state = 'defeat';
   ui.renderResult();
   assert.equal(ui.dom['result-panel'].dataset.result, 'defeat');
+});
+
+test('wave preview and boss HUD use the active second-level identity and art', () => {
+  const ui = Object.create(UIController.prototype);
+  const boss = { isBoss: true, hp: 4320, maxHp: 5400, data: { name: '狍鴞' } };
+  ui.game = {
+    level: LEVELS[2], levelId: 2, state: 'combat', enemies: [boss],
+    wave: { waveNumber: 10, queue: [], getWaveGroups: () => [] },
+  };
+  ui.dom = {
+    'wave-preview': { hidden: true }, 'boss-hud': { hidden: true, style: {} },
+    'boss-name': { textContent: '' }, 'wave-preview-title': { innerHTML: '' },
+    'wave-preview-enemies': { innerHTML: '' }, 'boss-hp-fill': { style: {} },
+    'boss-hp-text': { textContent: '' },
+  };
+
+  ui.renderBossSlot();
+
+  assert.equal(ui.dom['boss-name'].textContent, '狍鴞');
+  assert.equal(ui.dom['boss-hp-text'].textContent, '4320 / 5400');
+  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_paoxiao_panel_v1\.png/);
 });

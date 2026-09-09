@@ -14,7 +14,7 @@ function frame(now) {
   game.update(delta);
   renderer.render(game);
   ui.render();
-  if (renderer.art.isReady()) document.body.classList.remove('art-loading');
+  if (renderer.art.isLevelReady(game.levelId)) document.body.classList.remove('art-loading');
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

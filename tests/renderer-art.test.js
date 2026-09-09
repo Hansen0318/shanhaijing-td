@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Renderer } from '../src/render/Renderer.js';
-import { MAP_DATA } from '../src/config/gameData.js';
+import { LEVELS, MAP_DATA } from '../src/config/gameData.js';
 
 function fakeContext() {
   const calls = { drawImage: [], rotate: [], scale: [] };
@@ -38,12 +38,18 @@ function rendererFixture() {
   return { renderer, ctx };
 }
 
+function emptyGame(level = LEVELS[1]) {
+  return {
+    level,
+    map: { data: level.map },
+    towers: Array(level.map.slots.length).fill(null), selectedSlot: null,
+    enemies: [], projectiles: [], effects: [], blessings: { modifiers: {} },
+  };
+}
+
 test('renderer draws the cropped map art, eight platforms, spawn and base without changing map coordinates', () => {
   const { renderer, ctx } = rendererFixture();
-  renderer.render({
-    towers: Array(MAP_DATA.slots.length).fill(null), selectedSlot: null, enemies: [], projectiles: [], effects: [],
-    blessings: { modifiers: {} },
-  });
+  renderer.render(emptyGame());
 
   assert.ok(ctx.calls.drawImage.length > 0, 'renderer did not draw packaged art');
   assert.equal(ctx.calls.drawImage[0][0].id, 'background');
@@ -51,6 +57,29 @@ test('renderer draws the cropped map art, eight platforms, spawn and base withou
   assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'spawnRift'), true);
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'baseSeal'), true);
+});
+
+test('renderer uses the active level map, crop, props and eight slots', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.render(emptyGame(LEVELS[2]));
+
+  assert.equal(ctx.calls.drawImage[0][0].id, 'level2Background');
+  assert.deepEqual(ctx.calls.drawImage[0].slice(1, 5), [70, 0, 897, 1402]);
+  assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level2Spawn'), true);
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level2Base'), true);
+});
+
+test('renderer draws all new level-two enemy and boss art', () => {
+  const { renderer, ctx } = rendererFixture();
+  const map = { totalLength: 100, positionAt: () => ({ x: 80, y: 20 }) };
+  renderer.drawEnemies(ctx, { enemies: ['chiyu', 'yanjia', 'paoxiao'].map((type, index) => ({
+    type, x: 50 + index * 20, y: 20, radius: 12, hp: 100, maxHp: 100,
+    isBoss: type === 'paoxiao', hitFlash: 0, statuses: {}, map, pathDistance: 40,
+  })) });
+  for (const id of ['chiyu', 'yanjia', 'paoxiao']) {
+    assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
+  }
 });
 
 test('directional projectile art rotates toward its target while radial art does not rotate', () => {

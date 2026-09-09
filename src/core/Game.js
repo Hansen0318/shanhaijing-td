@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, WAVE_DATA, BLESSING_DATA, MAP_DATA } from '../config/gameData.js';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
 import { Enemy } from '../entities/Enemy.js';
@@ -8,22 +8,27 @@ import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js';
 import { WaveManager } from '../systems/WaveManager.js';
+import { BossSystem } from '../systems/BossSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
 export class Game {
-  constructor(random = Math.random) { this.random = random; this.resetRun(); }
-  resetRun() {
+  constructor(random = Math.random, initialLevelId = 1) { this.random = random; this.resetRun(initialLevelId); }
+  resetRun(levelId = this.levelId ?? 1) {
+    const level = getLevelData(levelId);
+    if (!level) return false;
+    this.levelId = level.id;
+    this.level = level;
     this.time = new GameTime();
-    this.map = new GameMap(MAP_DATA);
+    this.map = new GameMap(level.map);
     this.economy = new Economy(GAME_CONFIG.initialGold);
     this.blessings = new BlessingSystem(BLESSING_DATA, this.random);
-    this.wave = new WaveManager(WAVE_DATA);
+    this.wave = new WaveManager(level.waves);
     this.baseHp = GAME_CONFIG.baseHp;
     this.state = 'preparation';
     this.previousState = null;
     this.enemies = [];
-    this.towers = Array(MAP_DATA.slots.length).fill(null);
+    this.towers = Array(level.map.slots.length).fill(null);
     this.projectiles = [];
     this.effects = [];
     this.currentChoices = [];
@@ -34,14 +39,19 @@ export class Game {
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
     this.time.setPaused(true);
+    return true;
   }
-  restart() { this.resetRun(); return true; }
+  restart() { return this.resetRun(this.levelId); }
+  enterLevel(levelId) {
+    if (this.state !== 'victory' || this.levelId !== 1 || levelId !== 2) return false;
+    return this.resetRun(levelId);
+  }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
   buildTower(slotIndex, type) {
     const data = TOWER_DATA[type];
-    if (!this.canManageTowers() || !data || this.towers[slotIndex] || !MAP_DATA.slots[slotIndex]) return { ok: false };
+    if (!this.canManageTowers() || !data || this.towers[slotIndex] || !this.level.map.slots[slotIndex]) return { ok: false };
     if (!this.economy.spend(data.cost)) return { ok: false, reason: 'gold' };
-    this.towers[slotIndex] = new Tower(type, data, MAP_DATA.slots[slotIndex]);
+    this.towers[slotIndex] = new Tower(type, data, this.level.map.slots[slotIndex]);
     this.stats.built += 1;
     this.pendingSellSlot = null;
     return { ok: true };
@@ -71,7 +81,7 @@ export class Game {
   startWaveNow() {
     if (this.state !== 'preparation') return false;
     const next = this.wave.waveNumber + 1;
-    if (next > GAME_CONFIG.totalWaves) return false;
+    if (next > this.level.waves.length) return false;
     if (next === 10) this.queueBanner('BOSS 警告', GAME_CONFIG.bossBannerSeconds);
     this.wave.start(next);
     this.state = 'combat';
@@ -131,7 +141,7 @@ export class Game {
   spawnEnemy(type) {
     const baseData = ENEMY_DATA[type];
     if (!baseData) return;
-    const waveData = WAVE_DATA[this.wave.waveNumber - 1];
+    const waveData = this.level.waves[this.wave.waveNumber - 1];
     const hpMultiplier = baseData.isBoss
       ? (waveData?.bossHpMultiplier ?? waveData?.hpMultiplier ?? 1)
       : (waveData?.hpMultiplier ?? 1);
@@ -139,7 +149,7 @@ export class Game {
       ? baseData
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
     this.enemies.push(new Enemy(type, enemyData, this.map));
-    if (type === 'qiongqi') this.queueBanner('窮奇現身', 1.1);
+    if (baseData.isBoss) this.queueBanner(`${baseData.name}現身`, 1.1);
   }
   onEnemyKilled(enemy) {
     if (enemy.rewarded) return;
@@ -147,7 +157,7 @@ export class Game {
     this.stats.kills += 1;
     const reward = this.economy.reward(enemy.reward, 1 + (this.blessings.modifiers.goldReward ?? 0));
     if (reward > 0) this.effects.push({ type: 'gold', x: enemy.x, y: enemy.y, amount: reward, life: 0.9, duration: 0.9 });
-    if (enemy.type === 'qiongqi') this.end('victory');
+    if (enemy.isBoss || enemy.type === this.level.bossType) this.end('victory');
   }
   update(realDelta) {
     this.advanceBanner(realDelta);
@@ -162,7 +172,7 @@ export class Game {
     this.projectiles.forEach(projectile => projectile.update(dt, this.enemies));
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
     this.enemies.forEach(enemy => {
-      if (enemy.alive && enemy.checkFrenzy()) this.queueBanner('窮奇進入狂暴！', 1.4);
+      for (const event of BossSystem.check(enemy)) this.handleBossEvent(enemy, event);
       if (!enemy.alive && !enemy.processed) {
         enemy.processed = true;
         if (enemy.reachedBase) this.damageBase(enemy.baseDamage); else this.onEnemyKilled(enemy);
@@ -171,6 +181,21 @@ export class Game {
     });
     this.enemies = this.enemies.filter(enemy => !enemy.processed);
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
+  }
+  handleBossEvent(enemy, event) {
+    if (event.type === 'frenzy') {
+      this.queueBanner(`${enemy.data.name}進入狂暴！`, 1.4);
+      return;
+    }
+    if (event.type !== 'consume') return;
+    this.queueBanner('狍鴞吞噬妖氣！', 1.4);
+    this.effects.push({ type: 'paoxiaoEnrage', x: enemy.x, y: enemy.y, life: 0.8, duration: 0.8 });
+    if (event.threshold === 0.7) {
+      this.effects.push({ type: 'paoxiaoProjectile', from: { x: enemy.x + 90, y: enemy.y - 45 }, to: { x: enemy.x, y: enemy.y }, life: 0.48, duration: 0.48 });
+      this.effects.push({ type: 'paoxiaoExplosion', x: enemy.x, y: enemy.y, life: 0.55, duration: 0.55 });
+    } else {
+      this.effects.push({ type: 'paoxiaoGroundslam', x: enemy.x, y: enemy.y, life: 0.7, duration: 0.7 });
+    }
   }
   updateTowers(dt) {
     for (const tower of this.towers) {
@@ -195,7 +220,7 @@ export class Game {
   }
   completeWave() {
     const number = this.wave.waveNumber;
-    if (number >= 10) return;
+    if (number >= this.level.waves.length) return;
     this.wave.finish();
     this.currentChoices = this.blessings.drawChoices([...new Set(this.towers.filter(Boolean).map(tower => tower.type))]);
     this.state = 'blessing';

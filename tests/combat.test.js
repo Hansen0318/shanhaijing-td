@@ -58,3 +58,22 @@ test('slowed vulnerability and boss bonus apply in one pipeline', () => {
   const damage = CombatSystem.resolveDamage(100, enemy, { slowedVulnerability: 0.1, bossBonus: 0.3 });
   assert.equal(damage, 143);
 });
+
+test('rock armor reduces normal hits to 65 percent with a minimum of one', () => {
+  const enemy = target(0);
+  enemy.data = { normalDamageMultiplier: 0.65, minimumNormalDamage: 1 };
+  CombatSystem.hit(enemy, 100);
+  assert.equal(enemy.hp, 35);
+
+  enemy.hp = 10;
+  CombatSystem.hit(enemy, 0.5);
+  assert.equal(enemy.hp, 9);
+});
+
+test('burn damage bypasses rock armor because it is not a normal hit', () => {
+  const enemy = target(0);
+  enemy.data = { normalDamageMultiplier: 0.65, minimumNormalDamage: 1 };
+  StatusSystem.applyBurn(enemy, 5, 2);
+  StatusSystem.update(enemy, 1);
+  assert.equal(enemy.hp, 95);
+});

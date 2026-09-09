@@ -1,4 +1,4 @@
-import { LEVEL_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
+import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
 import { assetUrl } from '../config/artAssets.js';
 import { Economy } from '../systems/Economy.js';
 
@@ -39,13 +39,23 @@ export class UIController {
     if (action === 'blessing') this.game.selectBlessing(button.dataset.id);
     if (action === 'continue') this.game.togglePause();
     if (action === 'restart') this.game.restart();
+    if (action === 'next-level') { this.transitionToLevel(2); return; }
     this.render();
+  }
+  async transitionToLevel(levelId) {
+    document.body.classList.add('art-loading');
+    if (!this.game.enterLevel(levelId)) { document.body.classList.remove('art-loading'); return false; }
+    await this.renderer.prepareLevel(levelId);
+    document.body.classList.remove('art-loading');
+    this.contextKey = null;
+    this.render();
+    return true;
   }
   render() {
     const game = this.game;
     this.dom['base-hp'].textContent = game.baseHp;
     this.dom.gold.textContent = game.economy.gold;
-    this.dom.wave.textContent = `${game.wave.waveNumber} / 10`;
+    this.dom.wave.textContent = `${game.wave.waveNumber} / ${game.level.waves.length}`;
     this.dom['speed-button'].textContent = `${game.time.scale}×`;
     this.dom['pause-button'].disabled = ['blessing', 'victory', 'defeat'].includes(game.state);
     const preparing = game.state === 'preparation';
@@ -90,6 +100,7 @@ export class UIController {
     this.dom['result-title'].textContent = this.game.state === 'victory' ? '防守成功' : '防守失敗';
     this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
     this.dom['retry-button'].textContent = this.game.state === 'victory' ? '再次挑戰' : '重新挑戰';
+    this.dom['next-level-button'].hidden = !(this.game.state === 'victory' && this.game.levelId === 1);
   }
   renderBossSlot() {
     const boss = this.game.enemies.find(enemy => enemy.isBoss);
@@ -102,7 +113,7 @@ export class UIController {
       const number = preparing ? this.game.wave.waveNumber + 1 : this.game.wave.waveNumber;
       const groups = this.game.wave.getWaveGroups(number);
       const phaseLabel = preparing ? `下一波 ${number}` : `Wave ${number}`;
-      this.dom['wave-preview-title'].innerHTML = `<small class="level-name">第${LEVEL_DATA.id}關・${LEVEL_DATA.name}</small><span>${phaseLabel}</span>`;
+      this.dom['wave-preview-title'].innerHTML = `<small class="level-name">第${this.game.level.id}關・${this.game.level.name}</small><span>${phaseLabel}</span>`;
       const counts = Object.fromEntries(groups.map(group => [group.type, preparing ? group.count : 0]));
       if (inCombat) {
         for (const type of this.game.wave.queue) if (type in counts) counts[type] += 1;
@@ -114,7 +125,12 @@ export class UIController {
       }).join('');
     }
     this.dom['boss-hud'].hidden = !boss;
-    if (boss) { this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`; this.dom['boss-hp-text'].textContent = `${Math.ceil(boss.hp)} / ${boss.maxHp}`; }
+    if (boss) {
+      this.dom['boss-name'].textContent = boss.data.name;
+      this.dom['boss-hud'].style.borderImageSource = `url('${assetUrl(this.game.level.art.bossPanel)}')`;
+      this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`;
+      this.dom['boss-hp-text'].textContent = `${Math.ceil(boss.hp)} / ${boss.maxHp}`;
+    }
   }
   renderBanner() { this.dom.banner.hidden = this.game.bannerTimer <= 0; if (!this.dom.banner.hidden) this.dom.banner.textContent = this.game.banner; }
 }

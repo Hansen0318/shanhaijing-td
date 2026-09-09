@@ -5,7 +5,7 @@ import { UIController } from '../src/ui/UIController.js';
 
 test('HTML exposes the complete mobile game interface', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  for (const value of ['viewport-fit=cover', 'game-canvas', 'base-hp', 'gold', 'wave', 'pause-button', 'speed-button', 'context-panel', 'blessing-overlay', 'pause-overlay', 'result-overlay', 'src/main.js']) assert.match(html, new RegExp(value));
+  for (const value of ['viewport-fit=cover', 'game-canvas', 'base-hp', 'gold', 'wave', 'pause-button', 'speed-button', 'context-panel', 'blessing-overlay', 'pause-overlay', 'result-overlay', 'next-level-button', 'boss-name', 'src/main.js']) assert.match(html, new RegExp(value));
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

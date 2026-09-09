@@ -26,6 +26,29 @@ export const ART_ASSETS = Object.freeze({
   blessingCard: 'assets/ui/ui_blessing_card_v1.png',
   victoryOverlay: 'assets/ui/ui_victory_overlay_v1.png',
   defeatOverlay: 'assets/ui/ui_defeat_overlay_v1.png',
+  level2Background: 'assets/levels/level2/bg_chishui_wasteland_v1.png',
+  level2Spawn: 'assets/levels/level2/map_spawn_fire_rift_v1.png',
+  level2Base: 'assets/levels/level2/map_base_chishui_fort_v1.png',
+  chiyu: 'assets/enemies/enemy_chiyu_v1.png',
+  yanjia: 'assets/enemies/enemy_yanjia_v1.png',
+  paoxiao: 'assets/bosses/boss_paoxiao_v1.png',
+  paoxiaoProjectile: 'assets/effects/fx_paoxiao_projectile_v1.png',
+  paoxiaoExplosion: 'assets/effects/fx_paoxiao_explosion_v1.png',
+  paoxiaoEnrage: 'assets/effects/fx_paoxiao_enrage_v1.png',
+  paoxiaoGroundslam: 'assets/effects/fx_paoxiao_groundslam_v1.png',
+  paoxiaoBossPanel: 'assets/ui/ui_boss_paoxiao_panel_v1.png',
+});
+
+const SHARED_ART_IDS = Object.freeze([
+  'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
+  'bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam',
+  'resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'buildCard',
+  'actionButton', 'blessingCard', 'victoryOverlay', 'defeatOverlay',
+]);
+
+export const LEVEL_ART_IDS = Object.freeze({
+  1: Object.freeze([...SHARED_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
+  2: Object.freeze([...SHARED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
 });
 
 export function assetUrl(id) {
@@ -34,16 +57,39 @@ export function assetUrl(id) {
 }
 
 export class ArtStore {
-  constructor(ImageConstructor = Image) {
-    this.images = Object.fromEntries(Object.keys(ART_ASSETS).map(id => {
-      const image = new ImageConstructor();
-      image.src = assetUrl(id);
-      return [id, image];
+  constructor(ImageConstructor = Image, initialLevelId = 1) {
+    this.ImageConstructor = ImageConstructor;
+    this.images = {};
+    this.pending = {};
+    this.initialLevelId = initialLevelId;
+    this.loadIds(LEVEL_ART_IDS[initialLevelId]);
+  }
+
+  loadIds(ids = []) {
+    return Promise.all(ids.map(id => {
+      if (this.pending[id]) return this.pending[id];
+      const image = new this.ImageConstructor();
+      this.images[id] = image;
+      this.pending[id] = new Promise(resolve => {
+        image.onload = resolve;
+        image.onerror = resolve;
+        image.src = assetUrl(id);
+        if (image.complete) resolve();
+      });
+      return this.pending[id];
     }));
   }
 
+  ensureLevel(levelId) {
+    return this.loadIds(LEVEL_ART_IDS[levelId]);
+  }
+
+  isLevelReady(levelId) {
+    return (LEVEL_ART_IDS[levelId] ?? []).every(id => this.images[id]?.complete);
+  }
+
   isReady() {
-    return Object.values(this.images).every(image => image.complete);
+    return this.isLevelReady(this.initialLevelId);
   }
 
   get(id) {
