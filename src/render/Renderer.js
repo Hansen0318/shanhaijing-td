@@ -1,14 +1,17 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
 import { ArtStore } from '../config/artAssets.js';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js';
+import { MotionSystem } from '../systems/MotionSystem.js';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54] });
 const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72] });
 
 export class Renderer {
-  constructor(canvas, art = new ArtStore()) {
+  constructor(canvas, art = new ArtStore(), { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.art = art;
+    this.motionEnabled = motionEnabled;
     this.resize();
     addEventListener('resize', () => this.resize());
   }
@@ -48,7 +51,7 @@ export class Renderer {
     this.drawGrid(ctx, map);
     this.drawPath(ctx, map);
   }
-  drawContained(ctx, id, x, y, boxWidth, boxHeight, { anchorY = 0.5, mirror = false, rotation = 0, alpha = 1 } = {}) {
+  drawContained(ctx, id, x, y, boxWidth, boxHeight, { anchorY = 0.5, mirror = false, rotation = 0, alpha = 1, scale: visualScale = 1, filter = 'none' } = {}) {
     const image = this.art.get(id);
     if (!image) return false;
     const scale = Math.min(boxWidth / image.naturalWidth, boxHeight / image.naturalHeight);
@@ -57,8 +60,9 @@ export class Renderer {
     ctx.save();
     ctx.translate(x, y);
     if (rotation) ctx.rotate(rotation);
-    if (mirror) ctx.scale(-1, 1);
+    if (mirror || visualScale !== 1) ctx.scale(mirror ? -visualScale : visualScale, visualScale);
     ctx.globalAlpha = alpha;
+    ctx.filter = filter;
     ctx.drawImage(image, -width / 2, -height * anchorY, width, height);
     ctx.restore();
     return true;
@@ -110,7 +114,8 @@ export class Renderer {
       if (!tower) return;
       if (index === game.selectedSlot) { const range = tower.getStats(game.blessings.modifiers).range; ctx.beginPath(); ctx.arc(tower.x, tower.y, range, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,205,103,.09)'; ctx.fill(); ctx.strokeStyle = 'rgba(241,205,103,.65)'; ctx.lineWidth = 1.5; ctx.stroke(); }
       const [width, height] = TOWER_BOXES[tower.type];
-      const drewTower = this.drawContained(ctx, tower.type, tower.x, tower.y + 4, width, height, { anchorY: 0.58 });
+      const motion = MotionSystem.towerTransform(tower, game.visualTime ?? 0, game.effects, this.motionEnabled);
+      const drewTower = this.drawContained(ctx, tower.type, tower.x + motion.xOffset, tower.y + 4 + motion.yOffset, width, height, { anchorY: 0.58, scale: motion.scale });
       if (!drewTower) {
         ctx.beginPath(); ctx.arc(tower.x, tower.y, 22, 0, Math.PI * 2); ctx.fillStyle = '#102d25'; ctx.fill(); ctx.strokeStyle = '#e5c15a'; ctx.lineWidth = 3; ctx.stroke();
         ctx.font = '24px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(TOWER_DATA[tower.type].emoji, tower.x, tower.y);
@@ -130,7 +135,16 @@ export class Renderer {
       const next = enemy.map.positionAt(Math.min(enemy.map.totalLength, enemy.pathDistance + 1));
       const id = enemy.type === 'qiongqi' && enemy.frenzied ? 'qiongqiFrenzy' : enemy.type;
       const [width, height] = ENEMY_BOXES[enemy.type];
-      const drewEnemy = this.drawContained(ctx, id, enemy.x, enemy.y + 3, width, height, { anchorY: 0.56, mirror: next.x < enemy.x });
+      const motion = MotionSystem.enemyTransform(enemy, game.visualTime ?? 0, game.effects, this.motionEnabled);
+      const spriteOptions = { anchorY: 0.56, mirror: next.x < enemy.x, scale: motion.scale };
+      const drewEnemy = this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + 3 + motion.yOffset, width, height, spriteOptions);
+      if (drewEnemy && motion.flash) {
+        this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + 3 + motion.yOffset, width, height, {
+          ...spriteOptions,
+          alpha: UNIT_MOTION_CONFIG.hitFlashAlpha,
+          filter: UNIT_MOTION_CONFIG.hitFlashFilter,
+        });
+      }
       if (!drewEnemy) {
         ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 3, 0, Math.PI * 2); ctx.fillStyle = enemy.isBoss ? '#6b1d28' : '#39272b'; ctx.fill();
         ctx.font = `${enemy.isBoss ? 28 : 18}px system-ui`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(ENEMY_DATA[enemy.type].emoji, enemy.x, enemy.y);
@@ -148,6 +162,13 @@ export class Renderer {
     });
   }
   drawEffects(ctx, game) {
+    game.effects.filter(effect => effect.type === 'unitDeath' && effect.life > 0).forEach(effect => {
+      const [width, height] = ENEMY_BOXES[effect.unitType];
+      const motion = MotionSystem.deathTransform(effect);
+      this.drawContained(ctx, effect.unitType, effect.x, effect.y + 3, width, height, {
+        anchorY: 0.56, mirror: effect.mirror, scale: motion.scale, alpha: motion.alpha,
+      });
+    });
     game.effects.filter(effect => effect.type === 'paoxiaoEnrage').forEach(effect => {
       const alpha = Math.max(0, effect.life / effect.duration);
       this.drawContained(ctx, 'paoxiaoEnrage', effect.x, effect.y, 105, 105, { alpha });
