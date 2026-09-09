@@ -19,10 +19,14 @@
 - focused Motion／path／Game／Renderer regression：38/38 PASS。
 - 已將瀏覽器入口與 Motion 模組版本更新為 `motion-lite-2`，避免 Pages 混用第一輪快取。
 - 版本更新後 focused regression 38/38、全 JS/MJS syntax 與 `git diff --check` PASS。
+- 最終 `npm test`：81/81 PASS；全 JS/MJS syntax、`git diff --check` PASS。
+- 正式 GitHub Pages smoke 已完成：390px、390×700px、1×／2×、第一關 Wave 8、窮奇 Wave 10／50% 狂暴、第二關 Wave 8／Wave 10／狍鴞吞噬均正常，runtime error 0。
+- 正式頁目視確認第二關敵人沿修正後道路中心線行走；Canvas 在 390×700 為 368×424，Context Panel 完整可見且無水平溢出。
+- Motion Lite 為正式預設；不提供玩家 UI，集中式 config 與靜態 fallback 保留。
 
 ## 尚未完成項目
 
-- 最終完整 `npm test`、390px／390×700px、1×／2× browser smoke。
+- 無；僅待玩家手機實機確認新增單位動畫體感與第二關道路貼合度。
 
 ## 已修改檔案
 
@@ -48,23 +52,26 @@
 - focused Motion／path／Game／Renderer regression：38/38 PASS。
 - 資源版本更新後 focused regression：38/38 PASS。
 - 全 JS/MJS syntax、`git diff --check`：PASS。
+- 最終 `npm test`：81/81 PASS。
+- 正式 GitHub Pages browser smoke：PASS；390px、390×700px、1×／2×、第一關 Wave 8／10、第二關 Wave 8／10，runtime error 0。
 
 ## 尚未執行測試
 
-- 最終完整 `npm test` 與 browser smoke。
+- 無。
 
 ## 最新 commit SHA
 
 - GitHub `main` 基線：`2c6eced68fd6bba127c2435b6e434b397fb3c4a9`
+- 已驗證 Motion Lite 第二輪程式 baseline：`aa59e81007666a6ab854a825b93230d63599e718`
 
 ## 下一步應從哪裡開始
 
-推送 `motion-lite-2` 資源版本 checkpoint，等待 Pages 更新後執行最終自動測試與正式 Pages smoke。
+等待玩家以 iPhone 實機確認小妖／疾妖／巨妖／窮奇／夫諸動畫體感，以及第二關各回彎道路貼合度。
 
 ## 尚未解決問題及原因
 
-- 無已知程式問題；待正式 Pages browser smoke。
+- 無工程 blocker；僅剩玩家實機主觀確認。
 
 ## 狀態
 
-IN_PROGRESS
+COMPLETE
