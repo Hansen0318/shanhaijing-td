@@ -7,6 +7,8 @@ const devLevel = Number.parseInt(new URLSearchParams(window.location.search).get
 const initialLevelId = [1, 2, 3].includes(devLevel) ? devLevel : 1;
 const game = new Game(Math.random, initialLevelId);
 const renderer = new Renderer(canvas);
+if (initialLevelId !== 1) renderer.prepareLevel(initialLevelId);
+document.body.dataset.level = String(game.levelId);
 const ui = new UIController(game, renderer);
 let previous = performance.now();
 
