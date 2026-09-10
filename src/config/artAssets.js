@@ -37,7 +37,7 @@ export const ART_ASSETS = Object.freeze({
   paoxiaoEnrage: 'assets/effects/fx_paoxiao_enrage_v1.png',
   paoxiaoGroundslam: 'assets/effects/fx_paoxiao_groundslam_v1.png',
   paoxiaoBossPanel: 'assets/ui/ui_boss_paoxiao_panel_v1.png',
-  level3Background: 'assets/levels/level3/bg_ruoshui_valley_v1.png',
+  level3Background: 'assets/levels/level3/bg_ruoshui_valley_v1.jpg',
   level3Spawn: 'assets/levels/level3/map_spawn_ruoshui_rift_v1.png',
   level3Base: 'assets/levels/level3/map_base_xuanwater_altar_v1.png',
   shuixiao: 'assets/enemies/enemy_shuixiao_v1.png',

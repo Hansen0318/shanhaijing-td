@@ -19,10 +19,13 @@
 - 已用正式背景疊加 waypoint 與塔位中心診斷，修正第三關道路中心線與 8 個圓台座標。
 - 已將入口與所有變更模組快取版本統一為 `level3-1`，避免 GitHub Pages 載入舊版。
 - 已擴充 browser smoke helper，可直接驗證第三關混合 Wave、相柳三階段與白澤解鎖，不需完整重跑 10 Waves。
+- 正式 Pages smoke 發現第三關背景僅顯示頂部；已確認為大型 binary 經 GitHub 寫入介面時遭截斷，非 Canvas crop 或 waypoint。
+- 已將背景裁切為實際 390×610 並壓縮為完整 JPG；其餘 11 張素材依實際顯示尺寸縮圖並重新輸出完整透明 PNG，單檔皆低於 700KB。
+- 已新增檔頭、IEND／EOI 與部署大小 regression，防止不完整圖片再次進入正式站。
 
 ## 進行中
 
-- 第一個可玩 checkpoint commit/push，接著執行手機 browser smoke。
+- 推送圖片完整性修正後，重新執行正式 Pages 手機 browser smoke。
 
 ## 未完成
 
@@ -74,6 +77,9 @@
 - `git diff --check`：PASS。
 - Cache-version focused test：6/6 PASS（production 前已確認 RED）。
 - `npm test`：90/90 PASS（快取版本與 smoke helper 完成後）。
+- 圖片完整性／大小 tests：11/11 PASS（修正前已重現 truncated PNG 與背景過大）。
+- `npm test`：91/91 PASS（圖片完整性修正後）。
+- 全部第三關圖片以 ImageMagick decode：PASS。
 
 ## 尚未執行測試
 
@@ -82,7 +88,7 @@
 ## Root cause / 已知問題
 
 - 無工程 blocker；未指定的初版數值與 wave 組成將沿用第二關曲線建立最小可測版。
-- 素材內容格式與副檔名不一致，整合前需確實轉檔。
+- 正式背景只顯示頂部的 root cause：大型 binary 上傳內容遭截斷；已改為符合實際渲染尺寸的部署資產並加入完整性測試。
 
 ## 最新 commit SHA
 
@@ -90,7 +96,7 @@
 
 ## 下一步從哪裡接
 
-先跑完整 regression 與 syntax；通過後 commit/push checkpoint，再做手機 browser smoke。
+推送最新圖片修正，等 Pages 更新後從第三關 Wave 8 的 390×700 smoke 接續。
 
 ## 狀態
 

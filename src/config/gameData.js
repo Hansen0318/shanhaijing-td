@@ -176,7 +176,7 @@ const levelThree = Object.freeze({
   map: LEVEL3_MAP_DATA,
   waves: LEVEL3_WAVE_DATA,
   art: Object.freeze({
-    background: 'level3Background', backgroundCrop: { x: 103, y: 0, width: 905, height: 1415 },
+    background: 'level3Background', backgroundCrop: { x: 0, y: 0, width: 390, height: 610 },
     spawn: 'level3Spawn', spawnPosition: { x: 5, y: 26 },
     base: 'level3Base', basePosition: { x: 5, y: 566 }, bossPanel: 'xiangliuBossPanel',
   }),

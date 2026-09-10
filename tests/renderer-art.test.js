@@ -74,7 +74,7 @@ test('renderer uses level-three map art and draws both enemies plus Xiangliu', (
   const { renderer, ctx } = rendererFixture();
   renderer.render(emptyGame(LEVELS[3]));
   assert.equal(ctx.calls.drawImage[0][0].id, 'level3Background');
-  assert.deepEqual(ctx.calls.drawImage[0].slice(1, 5), [103, 0, 905, 1415]);
+  assert.deepEqual(ctx.calls.drawImage[0].slice(1, 5), [0, 0, 390, 610]);
   assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level3Spawn'), true);
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level3Base'), true);

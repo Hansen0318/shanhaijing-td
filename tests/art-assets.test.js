@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const moduleUrl = new URL('../src/config/artAssets.js', import.meta.url);
@@ -18,7 +19,7 @@ test('art catalog exposes all 50 packaged assets and every file is deployable', 
   assert.equal(ART_ASSETS.chiyu, 'assets/enemies/enemy_chiyu_v1.png');
   assert.equal(ART_ASSETS.yanjia, 'assets/enemies/enemy_yanjia_v1.png');
   assert.equal(ART_ASSETS.paoxiao, 'assets/bosses/boss_paoxiao_v1.png');
-  assert.equal(ART_ASSETS.level3Background, 'assets/levels/level3/bg_ruoshui_valley_v1.png');
+  assert.equal(ART_ASSETS.level3Background, 'assets/levels/level3/bg_ruoshui_valley_v1.jpg');
   assert.equal(ART_ASSETS.shuixiao, 'assets/enemies/enemy_shuixiao_v1.png');
   assert.equal(ART_ASSETS.xuanjiashou, 'assets/enemies/enemy_xuanjiashou_v1.png');
   assert.equal(ART_ASSETS.xiangliu, 'assets/bosses/boss_xiangliu_v1.png');
@@ -28,6 +29,24 @@ test('art catalog exposes all 50 packaged assets and every file is deployable', 
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
     assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}$`));
   }
+});
+
+test('level-three optimized art is complete and small enough for reliable deployment', async () => {
+  const { ART_ASSETS } = await import(moduleUrl);
+  const transparentIds = [
+    'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu',
+    'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'xiangliuBossPanel', 'baizeUnlock',
+  ];
+  for (const id of transparentIds) {
+    const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
+    assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], `${id} must be a real PNG`);
+    assert.equal(bytes.subarray(-8, -4).toString('ascii'), 'IEND', `${id} PNG is truncated`);
+    assert.ok(bytes.length < 700_000, `${id} is too large for reliable deployment: ${bytes.length}`);
+  }
+  const background = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS.level3Background}`, moduleUrl)));
+  assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
+  assert.deepEqual([...background.subarray(-2)], [255, 217]);
+  assert.ok(background.length < 700_000);
 });
 
 test('art store returns a drawable image only after that image has loaded', async () => {
