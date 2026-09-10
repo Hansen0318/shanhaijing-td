@@ -8,10 +8,11 @@ test('HTML exposes the complete mobile game interface', async () => {
   for (const value of ['viewport-fit=cover', 'game-canvas', 'base-hp', 'gold', 'wave', 'pause-button', 'speed-button', 'context-panel', 'blessing-overlay', 'pause-overlay', 'result-overlay', 'next-level-button', 'boss-name', 'src/main.js']) assert.match(html, new RegExp(value));
 });
 
-test('level-three release uses one cache version through the module entry chain', async () => {
+test('level-three mobile fixes use a fresh entry/cache version while imported modules stay coherent', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
-  assert.match(html, /src\/main\.js\?v=level3-1/);
+  assert.match(html, /styles-fixes\.css\?v=level3-mobilefix-1/);
+  assert.match(html, /src\/main\.js\?v=level3-mobilefix-1/);
   assert.equal((main.match(/\?v=level3-1/g) ?? []).length, 3);
 });
 
