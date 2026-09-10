@@ -7,7 +7,7 @@
   <meta name="description" content="Shanhaijing TD 山海經 Roguelike Tower Defense Graybox Prototype">
   <title>Shanhaijing TD — V0.02</title>
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./styles-fixes.css?v=level3-mobilefix-1">
+  <link rel="stylesheet" href="./styles-fixes.css?v=prep-loading-1">
 </head>
 <body class="art-loading">
   <div id="art-loading-overlay" class="art-loading-overlay" role="status" aria-live="polite" aria-label="山海異獸載入中">
@@ -26,16 +26,13 @@
       <div id="wave-preview" class="wave-preview" aria-live="polite">
         <strong id="wave-preview-title">下一波 1</strong>
         <div id="wave-preview-enemies" class="wave-preview-enemies"><span>👺小妖 ×8</span></div>
+        <button id="start-wave-button" class="start-wave-inline">開始 W1</button>
       </div>
       <div id="boss-hud" class="boss-hud" hidden aria-live="polite"><strong id="boss-name">窮奇</strong><div class="boss-track"><span id="boss-hp-fill"></span></div><small id="boss-hp-text">2500 / 2500</small></div>
     </div>
 
     <section class="battlefield" aria-label="塔防戰場">
       <canvas id="game-canvas" width="390" height="610" aria-label="S 型道路與八個塔位"></canvas>
-      <div id="wave-control" class="wave-control">
-        <span id="countdown-label">先配置異獸，再開始第一波</span>
-        <button id="start-wave-button">開始 Wave 1</button>
-      </div>
       <div id="banner" class="banner" hidden></div>
     </section>
 
@@ -53,6 +50,6 @@
   <section id="result-overlay" class="overlay" hidden aria-modal="true" role="dialog">
     <div id="result-panel" class="modal compact result-panel"><p class="eyebrow">本次防守結果</p><h1 id="result-title">防守成功</h1><ul id="result-stats"></ul><button id="next-level-button" data-action="next-level" hidden>前往第2關</button><button id="retry-button" data-action="restart">再次挑戰</button></div>
   </section>
-  <script type="module" src="./src/main.js?v=level3-mobilefix-2"></script>
+  <script type="module" src="./src/main.js?v=prep-loading-1"></script>
 </body>
 </html>
