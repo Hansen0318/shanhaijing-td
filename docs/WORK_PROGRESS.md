@@ -22,14 +22,15 @@
 - 正式 Pages smoke 發現第三關背景僅顯示頂部；已確認為大型 binary 經 GitHub 寫入介面時遭截斷，非 Canvas crop 或 waypoint。
 - 已將背景裁切為實際 390×610 並壓縮為完整 JPG；其餘 11 張素材依實際顯示尺寸縮圖並重新輸出完整透明 PNG，單檔皆低於 700KB。
 - 已新增檔頭、IEND／EOI 與部署大小 regression，防止不完整圖片再次進入正式站。
+- 正式 Pages 已完成第三關 390px／390×700、Wave 8、1×／2×、相柳三階段、勝利與白澤解鎖 smoke。
 
 ## 進行中
 
-- 推送圖片完整性修正後，重新執行正式 Pages 手機 browser smoke。
+- 無。
 
 ## 未完成
 
-- 手機 browser smoke、正式 Pages 驗證與推送 main。
+- 無。
 
 ## 已修改檔案
 
@@ -80,24 +81,31 @@
 - 圖片完整性／大小 tests：11/11 PASS（修正前已重現 truncated PNG 與背景過大）。
 - `npm test`：91/91 PASS（圖片完整性修正後）。
 - 全部第三關圖片以 ImageMagick decode：PASS。
+- 正式 Pages fresh load／Level 2→3：loading feedback 正常顯示，必要素材 ready 後正常淡出。
+- 正式 Pages 390px／390×700：PASS；390×700 Canvas 為 368×424。
+- 正式 Pages 第三關 Wave 8 混合敵人：PASS。
+- 正式 Pages 1×／2× 切換：PASS。
+- 正式 Pages 相柳 75%／50%／25%：PASS；三階段 Banner 與 HP 變化正常。
+- 正式 Pages Victory：PASS；顯示「新異獸解鎖：白澤」。
+- 遊戲頁來源 runtime error：0（瀏覽器測試擴充本身的 metadata 訊息不屬於遊戲來源）。
 
 ## 尚未執行測試
 
-- 390px／390×700 browser smoke。
+- 無。
 
 ## Root cause / 已知問題
 
-- 無工程 blocker；未指定的初版數值與 wave 組成將沿用第二關曲線建立最小可測版。
+- 無工程 blocker；未指定的初版數值與 wave 組成已沿用第二關曲線建立最小可測版。
 - 正式背景只顯示頂部的 root cause：大型 binary 上傳內容遭截斷；已改為符合實際渲染尺寸的部署資產並加入完整性測試。
 
 ## 最新 commit SHA
 
-- `2dbd7ee`
+- `00db793bbf727e972cbb279f094cb070afc57060`（最終 production checkpoint；COMPLETE 紀錄另以 docs commit 保存）
 
 ## 下一步從哪裡接
 
-推送最新圖片修正，等 Pages 更新後從第三關 Wave 8 的 390×700 smoke 接續。
+第三關建置已完成；後續只需玩家在實機確認初版平衡手感、弱水速度辨識度與道路視覺貼合。
 
 ## 狀態
 
-IN_PROGRESS
+COMPLETE
