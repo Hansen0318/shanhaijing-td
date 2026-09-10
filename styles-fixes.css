@@ -85,6 +85,9 @@ body.art-loading .art-loading-overlay {
 }
 .preview-art { display: block; width: 18px; height: 18px; flex: 0 0 18px; object-fit: contain; }
 
+body[data-level="3"] .wave-control { pointer-events: none; }
+body[data-level="3"] .wave-control button { pointer-events: auto; }
+
 .blessing-modal { width: min(100%, 380px); padding: 18px 16px; }
 .blessing-modal h1 { margin: 2px 0 14px; }
 .blessing-choices { gap: 10px; }
