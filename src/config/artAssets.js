@@ -51,27 +51,21 @@ export const ART_ASSETS = Object.freeze({
   baizeUnlock: 'assets/ui/unlock_baize_v1.png',
 });
 
-const SHARED_REQUIRED_ART_IDS = Object.freeze([
-  'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion',
+const SHARED_RUNTIME_ART_IDS = Object.freeze([
+  'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
   'bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam',
-  'resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'buildCard',
-  'actionButton',
-]);
-
-const SHARED_DEFERRED_ART_IDS = Object.freeze([
-  'swift', 'giant', 'blessingCard', 'victoryOverlay', 'defeatOverlay',
 ]);
 
 export const LEVEL_ART_IDS = Object.freeze({
-  1: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
-  2: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
-  3: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu', 'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'xiangliuBossPanel', 'baizeUnlock']),
+  1: Object.freeze([...SHARED_RUNTIME_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy']),
+  2: Object.freeze([...SHARED_RUNTIME_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam']),
+  3: Object.freeze([...SHARED_RUNTIME_ART_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu', 'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'baizeUnlock']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
-  1: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'background', 'spawnRift', 'baseSeal']),
-  2: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base']),
-  3: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
+  1: Object.freeze(['slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
+  2: Object.freeze(['slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
+  3: Object.freeze(['slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
