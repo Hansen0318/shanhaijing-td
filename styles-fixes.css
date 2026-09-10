@@ -36,17 +36,17 @@ body.art-loading .art-loading-overlay {
 @keyframes loading-pulse { 0%, 100% { opacity: .72; } 50% { opacity: 1; } }
 @keyframes loading-dot { 0%, 60%, 100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-2px); opacity: 1; } }
 
-.wave-preview { padding: 3px 8px; gap: 6px; }
+.wave-preview { padding: 3px 7px; gap: 5px; }
 .wave-preview > strong {
-  flex: 0 0 30%;
+  flex: 0 0 29%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   height: 100%;
-  padding-left: 2px;
+  padding-left: 1px;
   color: #f4d66f;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .95);
 }
@@ -54,7 +54,7 @@ body.art-loading .art-loading-overlay {
   display: block;
   margin-bottom: 4px;
   color: #fff0b0;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   line-height: 1;
   white-space: nowrap;
@@ -68,9 +68,9 @@ body.art-loading .art-loading-overlay {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 6px;
   overflow: hidden;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
   white-space: nowrap;
 }
@@ -78,15 +78,38 @@ body.art-loading .art-loading-overlay {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
   height: 100%;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .95);
 }
-.preview-art { display: block; width: 18px; height: 18px; flex: 0 0 18px; object-fit: contain; }
+.preview-art { display: block; width: 17px; height: 17px; flex: 0 0 17px; object-fit: contain; }
+.start-wave-inline {
+  flex: 0 0 auto;
+  min-height: 34px;
+  min-width: 68px;
+  padding: 4px 7px;
+  border: 6px solid transparent;
+  border-image: url('./assets/ui/ui_action_button_v1.png') 90 fill / 6px / 0 stretch;
+  background: #31513d;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+}
 
-body[data-level="3"] .wave-control { pointer-events: none; }
-body[data-level="3"] .wave-control button { pointer-events: auto; }
+.dev-level-menu {
+  width: min(calc(100% - 32px), 360px);
+  margin: auto;
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+  border: 1px solid #65836b;
+  border-radius: 16px;
+  background: #14231c;
+  text-align: center;
+}
+.dev-level-menu h1 { margin: 0 0 4px; font-size: 22px; }
+.dev-level-menu button { width: 100%; }
 
 .blessing-modal { width: min(100%, 380px); padding: 18px 16px; }
 .blessing-modal h1 { margin: 2px 0 14px; }
@@ -148,6 +171,14 @@ body[data-level="3"] .wave-control button { pointer-events: auto; }
   font-weight: 800;
 }
 .unlock-result img { width: 54px; height: 54px; object-fit: contain; flex: 0 0 54px; }
+
+@media (max-width: 350px) {
+  .wave-preview { gap: 3px; padding-inline: 5px; }
+  .wave-preview > strong { flex-basis: 28%; }
+  .wave-preview-enemies { gap: 3px; font-size: 9px; }
+  .preview-art { width: 15px; height: 15px; flex-basis: 15px; }
+  .start-wave-inline { min-width: 62px; padding-inline: 5px; font-size: 10px; }
+}
 
 @media (max-height: 720px) {
   .blessing-modal { padding: 14px; }
