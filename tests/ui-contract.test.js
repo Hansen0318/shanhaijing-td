@@ -37,10 +37,23 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
   assert.doesNotMatch(main, /renderer\.prepareLevel\(initialLevelId\)/);
 });
 
+test('dev path diagnostics and fresh-load metrics are opt-in/runtime only', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(html, /devPath|SHANHAIJING_LOAD_METRICS/);
+  assert.match(main, /params\.get\('devPath'\) !== '1' \|\| game\.levelId !== 3/);
+  assert.match(main, /const runtime = game\.map\.waypoints/);
+  assert.match(main, /const anchors = game\.level\.map\.waypoints/);
+  assert.match(main, /game\.enemies\.forEach\(enemy =>/);
+  assert.match(main, /__SHANHAIJING_LOAD_METRICS__/);
+  assert.match(main, /requiredAssets: LEVEL_REQUIRED_ART_IDS\[game\.levelId\]\.length/);
+  assert.match(main, /blockingMs: Math\.round\(performance\.now\(\) - blockingStartedAt\)/);
+});
+
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   assert.match(html, /styles-fixes\.css\?v=prep-loading-1/);
-  assert.match(html, /src\/main\.js\?v=prep-loading-1/);
+  assert.match(html, /src\/main\.js\?v=prep-loading-2/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
