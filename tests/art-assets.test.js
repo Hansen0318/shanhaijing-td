@@ -57,6 +57,7 @@ test('art store returns a drawable image only after that image has loaded', asyn
   }
   const store = new ArtStore(FakeImage);
   assert.equal(store.get('bifang'), null);
+  store.images.bifang = new FakeImage();
   store.images.bifang.complete = true;
   store.images.bifang.naturalWidth = 1192;
   assert.equal(store.get('bifang'), store.images.bifang);
@@ -75,36 +76,32 @@ test('art store reveals a level when required art settles, including failed asse
   assert.equal(store.isReady(), true, 'failed images count as settled so fallback can render');
 });
 
-test('art store blocks on immediate level art but defers boss and late-wave VFX', async () => {
+test('blocking art contains only preparation-first-screen assets', async () => {
   const { ArtStore, LEVEL_ART_IDS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
+  assert.deepEqual(LEVEL_REQUIRED_ART_IDS[1], ['slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']);
+  assert.deepEqual(LEVEL_REQUIRED_ART_IDS[2], ['slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']);
+  assert.deepEqual(LEVEL_REQUIRED_ART_IDS[3], ['slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']);
+
+  for (const levelId of [1, 2, 3]) assert.equal(LEVEL_REQUIRED_ART_IDS[levelId].length, 5);
+  for (const id of ['bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[1].includes(id), false, `${id} must be deferred`);
+  }
+  for (const id of ['resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'buildCard', 'actionButton', 'blessingCard', 'victoryOverlay', 'defeatOverlay', 'bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel']) {
+    assert.equal(LEVEL_ART_IDS[1].includes(id) || LEVEL_ART_IDS[2].includes(id) || LEVEL_ART_IDS[3].includes(id), false, `${id} is CSS-driven and should not be loaded by ArtStore`);
+  }
+  assert.ok(LEVEL_DEFERRED_ART_IDS[2].includes('paoxiao'));
+  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('xiangliu'));
+  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('baizeUnlock'));
+
   class FakeImage {
     constructor() { this.complete = false; this.naturalWidth = 100; }
   }
-  const store = new ArtStore(FakeImage);
-  assert.equal(store.images.level2Background, undefined);
-  const ready = store.ensureLevel(2);
-  assert.ok(store.images.level2Background);
-  assert.ok(store.images.minion);
-  assert.equal(store.images.paoxiao, undefined, 'level-two boss must not block the preparation screen');
-  assert.equal(store.images.paoxiaoExplosion, undefined, 'late boss VFX must not block the preparation screen');
-  for (const image of Object.values(store.images)) image.onload();
-  await ready;
-  assert.equal(store.isLevelReady(2), true);
-  assert.ok(LEVEL_ART_IDS[2].includes('paoxiaoBossPanel'));
-  assert.ok(LEVEL_REQUIRED_ART_IDS[2].includes('level2Background'));
-  assert.equal(LEVEL_REQUIRED_ART_IDS[2].includes('paoxiao'), false);
-  assert.ok(LEVEL_DEFERRED_ART_IDS[2].includes('paoxiao'));
-  store.preloadDeferred(2);
-  assert.ok(store.images.paoxiao);
-  assert.ok(store.images.paoxiaoExplosion);
-
-  const levelThreeReady = store.ensureLevel(3);
-  assert.ok(store.images.level3Background);
-  assert.ok(store.images.shuixiao);
-  assert.equal(store.images.xiangliu, undefined, 'level-three boss must not block the preparation screen');
-  for (const image of Object.values(store.images)) image.onload();
-  await levelThreeReady;
-  assert.equal(store.isLevelReady(3), true);
-  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('xiangliu'));
-  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('baizeUnlock'));
+  const directLevelThree = new ArtStore(FakeImage, 3);
+  assert.ok(directLevelThree.images.level3Background);
+  assert.ok(directLevelThree.images.shuixiao);
+  assert.equal(directLevelThree.images.background, undefined, 'direct Level3 must not begin Level1 unique preload');
+  assert.equal(directLevelThree.images.xiangliu, undefined, 'boss remains deferred');
+  for (const image of Object.values(directLevelThree.images)) image.onload();
+  await Promise.resolve();
+  assert.equal(directLevelThree.isReady(), true);
 });
