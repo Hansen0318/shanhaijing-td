@@ -12,8 +12,17 @@ test('level-three mobile fixes use a fresh entry/cache version while imported mo
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
   assert.match(html, /styles-fixes\.css\?v=level3-mobilefix-1/);
-  assert.match(html, /src\/main\.js\?v=level3-mobilefix-1/);
+  assert.match(html, /src\/main\.js\?v=level3-mobilefix-2/);
   assert.equal((main.match(/\?v=level3-1/g) ?? []).length, 3);
+});
+
+test('devLevel entry selects a valid level and preloads direct non-level-one art', async () => {
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  assert.match(main, /URLSearchParams\(window\.location\.search\).*get\('devLevel'\)/);
+  assert.match(main, /\[1, 2, 3\]\.includes\(devLevel\) \? devLevel : 1/);
+  assert.match(main, /new Game\(Math\.random, initialLevelId\)/);
+  assert.match(main, /if \(initialLevelId !== 1\) renderer\.prepareLevel\(initialLevelId\)/);
+  assert.match(main, /document\.body\.dataset\.level = String\(game\.levelId\)/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
