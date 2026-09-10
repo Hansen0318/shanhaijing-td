@@ -31,40 +31,36 @@ test('level three defines Ruoshui identity, ten waves, eight slots and Xiangliu 
   assert.equal(level.waves[9].groups.at(-1).type, 'xiangliu');
 });
 
-test('level-three anchors follow the painted road and all eight painted platforms', () => {
+test('level-three recalibrated anchors preserve all eight painted platforms', () => {
   const map = LEVELS[3].map;
-  const roadCenters = [
-    { x: 15, y: 36 }, { x: 88, y: 83 }, { x: 150, y: 142 }, { x: 235, y: 171 },
-    { x: 282, y: 220 }, { x: 245, y: 258 }, { x: 150, y: 280 }, { x: 145, y: 326 },
-    { x: 225, y: 351 }, { x: 282, y: 398 }, { x: 280, y: 454 }, { x: 205, y: 490 },
-    { x: 100, y: 515 }, { x: 28, y: 562 },
-  ];
-  roadCenters.forEach(point => assert.ok(distanceToPath(point, map.waypoints) <= 8));
+  assert.ok(map.waypoints.length >= 40, 'dense manual anchors are required around S bends');
   assert.deepEqual(map.slots, [
     { x: 132, y: 61 }, { x: 288, y: 88 }, { x: 121, y: 165 }, { x: 344, y: 190 },
     { x: 190, y: 283 }, { x: 350, y: 348 }, { x: 153, y: 434 }, { x: 323, y: 492 },
   ]);
+  for (const point of [{ x: 281, y: 226 }, { x: 132, y: 308 }, { x: 289, y: 434 }, { x: 154, y: 500 }]) {
+    assert.ok(distanceToPath(point, map.waypoints) <= 0.01);
+  }
 });
 
-test('level three smooths runtime path between painted-road anchors without moving anchors', () => {
+test('level three uses weaker smoothing over denser manual road anchors', () => {
   const game = new Game(() => 0.2, 3);
-  assert.equal(game.level.map.pathSmoothing, 4);
+  assert.equal(game.level.map.pathSmoothing, 2);
   assert.ok(game.map.waypoints.length > game.level.map.waypoints.length);
   for (const waypoint of game.level.map.waypoints) {
     assert.ok(game.map.waypoints.some(point => Math.hypot(point.x - waypoint.x, point.y - waypoint.y) <= 0.01));
   }
 });
 
-test('level three waves one to three are eased locally while wave four onward stays unchanged', () => {
+test('level three water speed and waves one to three are eased again while wave four stays unchanged', () => {
   const waves = LEVELS[3].waves;
-  assert.deepEqual(waves[0].groups, [{ type: 'shuixiao', count: 7 }]);
-  assert.equal(waves[0].interval, 1.05);
-  assert.deepEqual(waves[1].groups, [{ type: 'shuixiao', count: 10 }]);
-  assert.equal(waves[1].interval, 0.95);
-  assert.deepEqual(waves[2].groups, [{ type: 'shuixiao', count: 8 }, { type: 'xuanjiashou', count: 2 }]);
-  assert.equal(waves[2].interval, 0.95);
-  assert.deepEqual(waves[3].groups, [{ type: 'xuanjiashou', count: 7 }]);
-  assert.equal(waves[3].hpMultiplier, 1.05);
+  assert.equal(ENEMY_DATA.shuixiao.speed, 90);
+  assert.equal(ENEMY_DATA.shuixiao.weakWaterSpeedMultiplier, 1.25);
+  assert.equal(ENEMY_DATA.shuixiao.speed * ENEMY_DATA.shuixiao.weakWaterSpeedMultiplier, 112.5);
+  assert.deepEqual(waves[0], { groups: [{ type: 'shuixiao', count: 6 }], interval: 1.1 });
+  assert.deepEqual(waves[1], { groups: [{ type: 'shuixiao', count: 8 }], interval: 1 });
+  assert.deepEqual(waves[2], { groups: [{ type: 'shuixiao', count: 6 }, { type: 'xuanjiashou', count: 1 }], interval: 1 });
+  assert.deepEqual(waves[3], { groups: [{ type: 'xuanjiashou', count: 7 }], interval: 1.02, hpMultiplier: 1.05 });
 });
 
 test('level two victory enters a clean level three and level three victory records Baize unlock', () => {
@@ -111,7 +107,7 @@ test('weak water modifies actual movement without changing path or render coordi
   xuanjia.update(1);
 
   assert.equal(normal.pathDistance, 85);
-  assert.equal(shuixiao.pathDistance, 135);
+  assert.equal(shuixiao.pathDistance, 125);
   assert.equal(xuanjia.pathDistance, 68, '40% slow at 50% effectiveness combines with weak-water 0.85×');
   assert.deepEqual({ x: normal.x, y: normal.y }, map.positionAt(normal.pathDistance));
 });
