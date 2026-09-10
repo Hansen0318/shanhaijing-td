@@ -60,12 +60,8 @@ export class UIController {
     this.dom['speed-button'].textContent = `${game.time.scale}×`;
     this.dom['pause-button'].disabled = ['blessing', 'victory', 'defeat'].includes(game.state);
     const preparing = game.state === 'preparation';
-    this.dom['wave-control'].hidden = !preparing;
-    if (preparing) {
-      const nextWave = game.wave.waveNumber + 1;
-      this.dom['countdown-label'].textContent = game.wave.waveNumber === 0 ? '先配置異獸，再開始第一波' : `配置完成後開始 Wave ${nextWave}`;
-      this.dom['start-wave-button'].textContent = `開始 Wave ${nextWave}`;
-    }
+    this.dom['start-wave-button'].hidden = !preparing;
+    if (preparing) this.dom['start-wave-button'].textContent = `開始 W${game.wave.waveNumber + 1}`;
     this.renderContext(); this.renderBlessings(); this.renderPause(); this.renderResult(); this.renderBossSlot(); this.renderBanner();
   }
   renderContext() {
