@@ -8,21 +8,39 @@ test('HTML exposes the complete mobile game interface', async () => {
   for (const value of ['viewport-fit=cover', 'game-canvas', 'base-hp', 'gold', 'wave', 'pause-button', 'speed-button', 'context-panel', 'blessing-overlay', 'pause-overlay', 'result-overlay', 'next-level-button', 'boss-name', 'src/main.js']) assert.match(html, new RegExp(value));
 });
 
-test('level-three mobile fixes use a fresh entry/cache version while imported modules stay coherent', async () => {
+test('preparation CTA lives in wave preview and no longer overlays battlefield', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
-  assert.match(html, /styles-fixes\.css\?v=level3-mobilefix-1/);
-  assert.match(html, /src\/main\.js\?v=level3-mobilefix-2/);
-  assert.equal((main.match(/\?v=level3-1/g) ?? []).length, 3);
+  const ui = await readFile(new URL('../src/ui/UIController.js', import.meta.url), 'utf8');
+  const fixes = await readFile(new URL('../styles-fixes.css', import.meta.url), 'utf8');
+  const preview = html.match(/<div id="wave-preview"[\s\S]*?<\/div>\s*<div id="boss-hud"/)?.[0] ?? '';
+  const battlefield = html.match(/<section class="battlefield"[\s\S]*?<\/section>/)?.[0] ?? '';
+
+  assert.match(preview, /id="start-wave-button"/);
+  assert.doesNotMatch(battlefield, /wave-control|countdown-label|start-wave-button/);
+  assert.match(ui, /start-wave-button'\]\.hidden = !preparing/);
+  assert.match(ui, /`開始 W\$\{game\.wave\.waveNumber \+ 1\}`/);
+  assert.match(fixes, /\.start-wave-inline\s*\{/);
+  assert.doesNotMatch(fixes, /body\[data-level="3"\] \.wave-control/);
 });
 
-test('devLevel entry selects a valid level and preloads direct non-level-one art', async () => {
+test('dev menu is opt-in only and direct level initialization selects the ArtStore level first', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
-  assert.match(main, /URLSearchParams\(window\.location\.search\).*get\('devLevel'\)/);
+
+  assert.doesNotMatch(html, /dev-level-menu|Level1<\/button>|Level2<\/button>|Level3<\/button>/);
+  assert.match(main, /params\.get\('devMenu'\) === '1'/);
+  assert.match(main, /renderDevMenu\(\)/);
+  assert.match(main, /data-dev-level="1"[\s\S]*data-dev-level="2"[\s\S]*data-dev-level="3"/);
   assert.match(main, /\[1, 2, 3\]\.includes\(devLevel\) \? devLevel : 1/);
-  assert.match(main, /new Game\(Math\.random, initialLevelId\)/);
-  assert.match(main, /if \(initialLevelId !== 1\) renderer\.prepareLevel\(initialLevelId\)/);
-  assert.match(main, /document\.body\.dataset\.level = String\(game\.levelId\)/);
+  assert.match(main, /new ArtStore\(Image, initialLevelId\)/);
+  assert.match(main, /new Renderer\(canvas, art\)/);
+  assert.doesNotMatch(main, /renderer\.prepareLevel\(initialLevelId\)/);
+});
+
+test('entry and style cache versions are fresh for this release', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /styles-fixes\.css\?v=prep-loading-1/);
+  assert.match(html, /src\/main\.js\?v=prep-loading-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
