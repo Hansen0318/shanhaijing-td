@@ -64,9 +64,9 @@ export const LEVEL2_WAVE_DATA = Object.freeze([
 ]);
 
 export const LEVEL3_WAVE_DATA = Object.freeze([
-  wave([{ type: 'shuixiao', count: 10 }], 0.92),
-  wave([{ type: 'shuixiao', count: 14 }], 0.78),
-  wave([{ type: 'shuixiao', count: 10 }, { type: 'xuanjiashou', count: 4 }], 0.82),
+  wave([{ type: 'shuixiao', count: 7 }], 1.05),
+  wave([{ type: 'shuixiao', count: 10 }], 0.95),
+  wave([{ type: 'shuixiao', count: 8 }, { type: 'xuanjiashou', count: 2 }], 0.95),
   wave([{ type: 'xuanjiashou', count: 7 }], 1.02, { hpMultiplier: 1.05 }),
   wave([{ type: 'shuixiao', count: 14 }, { type: 'xuanjiashou', count: 6 }], 0.74, { hpMultiplier: 1.1 }),
   wave([{ type: 'shuixiao', count: 22 }, { type: 'xuanjiashou', count: 5 }], 0.56, { hpMultiplier: 1.15 }),
@@ -123,6 +123,7 @@ export const LEVEL3_MAP_DATA = Object.freeze({
   width: 390,
   height: 610,
   pathWidth: 54,
+  pathSmoothing: 4,
   waypoints: [
     { x: -20, y: 30 }, { x: 15, y: 36 }, { x: 52, y: 54 }, { x: 88, y: 83 },
     { x: 118, y: 120 }, { x: 150, y: 142 }, { x: 190, y: 156 }, { x: 235, y: 171 },
