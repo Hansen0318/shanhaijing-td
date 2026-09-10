@@ -107,7 +107,14 @@ test('result panel exposes victory and defeat state for the matching skin', () =
 
   ui.game.levelId = 2;
   ui.renderResult();
+  assert.equal(ui.dom['next-level-button'].hidden, false);
+  assert.equal(ui.dom['next-level-button'].textContent, '前往第3關');
+
+  ui.game.levelId = 3;
+  ui.renderResult();
   assert.equal(ui.dom['next-level-button'].hidden, true);
+  assert.match(ui.dom['result-stats'].innerHTML, /新異獸解鎖：白澤/);
+  assert.match(ui.dom['result-stats'].innerHTML, /unlock_baize_v1\.png/);
 
   ui.game.state = 'defeat';
   ui.renderResult();

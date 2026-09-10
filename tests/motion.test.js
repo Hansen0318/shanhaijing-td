@@ -264,3 +264,21 @@ test('different source image sizes keep their render origin horizontally centere
   assert.deepEqual(ctx.calls.translate, [[120, 90], [120, 90]]);
   ctx.calls.drawImage.forEach(([, drawX, , width]) => assert.equal(drawX, -width / 2));
 });
+
+test('level-three units reuse render-only Motion Lite and Xiangliu stage pulses', () => {
+  for (const type of ['shuixiao', 'xuanjiashou']) {
+    const enemy = visualEnemy(type, 90, 120);
+    const before = { x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance };
+    const transform = MotionSystem.enemyTransform(enemy, 0.125, []);
+    assert.equal(transform.xOffset, 0);
+    assert.notEqual(transform.yOffset, 0);
+    assert.deepEqual({ x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance }, before);
+    assert.ok(UNIT_MOTION_CONFIG.enemies[type].deathSeconds > 0);
+  }
+  assert.ok(UNIT_MOTION_CONFIG.enemies.shuixiao.bobHz > UNIT_MOTION_CONFIG.enemies.xuanjiashou.bobHz);
+
+  const boss = visualEnemy('xiangliu', 150, 200);
+  const effects = [{ type: 'xiangliuHealPulse', x: 150, y: 200, life: 0.2, duration: 0.32 }];
+  assert.ok(MotionSystem.enemyTransform(boss, 0, effects).scale > 1);
+  assert.equal(MotionSystem.enemyTransform(boss, 0, effects).xOffset, 0);
+});

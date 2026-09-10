@@ -136,6 +136,15 @@ body.art-loading .art-loading-overlay {
   line-height: 1.7;
 }
 #retry-button { width: 100%; margin-top: 4px; }
+.unlock-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  color: #dffbff;
+  font-weight: 800;
+}
+.unlock-result img { width: 54px; height: 54px; object-fit: contain; flex: 0 0 54px; }
 
 @media (max-height: 720px) {
   .blessing-modal { padding: 14px; }

@@ -108,7 +108,7 @@ test('paoxiao uses the unified boss arrival banner and keeps its consume banner'
 
   assert.deepEqual(
     [game.banner, ...game.bannerQueue.map(item => item.text)],
-    ['BOSS 警告', 'Boss 現身・狍鴞', '狍鴞吞噬妖氣！'],
+    ['BOSS 警告', 'Boss現身：狍鴞', '狍鴞吞噬妖氣！'],
   );
 });
 
@@ -153,13 +153,15 @@ test('restart keeps the active level while resetting its run', () => {
   assert.equal(game.wave.waveNumber, 0);
 });
 
-test('second-level victory does not expose an unimplemented third level', () => {
+test('second-level victory is the only state that can enter level three', () => {
   const game = new Game(() => 0.2);
+  assert.equal(game.enterLevel(3), false);
   game.end('victory');
   game.enterLevel(2);
-  game.end('victory');
   assert.equal(game.enterLevel(3), false);
-  assert.equal(game.levelId, 2);
+  game.end('victory');
+  assert.equal(game.enterLevel(3), true);
+  assert.equal(game.levelId, 3);
 });
 
 test('paoxiao consumes twice at 70 and 40 percent and heals eight percent each time', () => {

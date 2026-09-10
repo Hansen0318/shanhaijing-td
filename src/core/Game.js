@@ -18,6 +18,7 @@ export class Game {
   constructor(random = Math.random, initialLevelId = 1, { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
     this.random = random;
     this.motionEnabled = motionEnabled;
+    this.unlockedBeasts = new Set();
     this.resetRun(initialLevelId);
   }
   resetRun(levelId = this.levelId ?? 1) {
@@ -50,7 +51,7 @@ export class Game {
   }
   restart() { return this.resetRun(this.levelId); }
   enterLevel(levelId) {
-    if (this.state !== 'victory' || this.levelId !== 1 || levelId !== 2) return false;
+    if (this.state !== 'victory' || levelId !== this.levelId + 1 || !getLevelData(levelId)) return false;
     return this.resetRun(levelId);
   }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
@@ -120,7 +121,12 @@ export class Game {
     this.baseHp = Math.max(0, this.baseHp - amount);
     if (this.baseHp <= 0) this.end('defeat');
   }
-  end(state) { this.state = state; this.time.setPaused(true); this.pendingSellSlot = null; }
+  end(state) {
+    this.state = state;
+    if (state === 'victory' && this.levelId === 3) this.unlockedBeasts.add('baize');
+    this.time.setPaused(true);
+    this.pendingSellSlot = null;
+  }
   queueBanner(text, duration) {
     if (this.bannerTimer <= 0) {
       this.banner = text;
@@ -156,7 +162,7 @@ export class Game {
       ? baseData
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
     this.enemies.push(new Enemy(type, enemyData, this.map));
-    if (baseData.isBoss) this.queueBanner(`Boss 現身・${baseData.name}`, 1.1);
+    if (baseData.isBoss) this.queueBanner(`Boss現身：${baseData.name}`, 1.1);
   }
   onEnemyKilled(enemy) {
     if (enemy.rewarded) return;
@@ -197,8 +203,14 @@ export class Game {
   }
   handleBossEvent(enemy, event) {
     if (event.type === 'frenzy') {
-      this.queueBanner(`${enemy.data.name}狂暴！`, 1.4);
-      this.effects.push({ type: 'qiongqiFrenzyPulse', x: enemy.x, y: enemy.y, life: 0.32, duration: 0.32 });
+      this.queueBanner(`${enemy.data.name} 狂暴化！`, 1.4);
+      const type = enemy.type === 'xiangliu' ? 'xiangliuEnragePulse' : 'qiongqiFrenzyPulse';
+      this.effects.push({ type, x: enemy.x, y: enemy.y, life: 0.32, duration: 0.32 });
+      return;
+    }
+    if (event.type === 'heal') {
+      this.queueBanner(`${enemy.data.name}汲取弱水！`, 1.4);
+      this.effects.push({ type: 'xiangliuHealPulse', x: enemy.x, y: enemy.y, life: 0.32, duration: 0.32 });
       return;
     }
     if (event.type !== 'consume') return;

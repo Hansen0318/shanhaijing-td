@@ -30,7 +30,10 @@ export class Enemy {
     StatusSystem.update(this, dt);
     if (!this.alive) return;
     this.hitFlash = Math.max(0, this.hitFlash - dt);
-    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * dt;
+    const terrainMultiplier = this.map.isWeakWater(this)
+      ? (this.data.weakWaterSpeedMultiplier ?? 0.85)
+      : 1;
+    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * dt;
     Object.assign(this, this.map.positionAt(this.pathDistance));
     if (this.pathDistance >= this.map.totalLength) { this.reachedBase = true; this.alive = false; }
   }

@@ -7,7 +7,10 @@ export class StatusSystem {
     if (dps <= 0) return;
     enemy.statuses.burn = { dps: Math.max(dps, enemy.statuses.burn?.dps ?? 0), remaining: duration };
   }
-  static speedMultiplier(enemy) { return Math.max(0.2, 1 - (enemy.statuses.slow?.amount ?? 0)); }
+  static speedMultiplier(enemy) {
+    const slow = enemy.statuses.slow?.amount ?? 0;
+    return Math.max(0.2, 1 - slow * (enemy.data?.slowEffectiveness ?? 1));
+  }
   static update(enemy, dt) {
     const burn = enemy.statuses.burn;
     if (burn) {

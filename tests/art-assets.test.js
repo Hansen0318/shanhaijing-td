@@ -5,19 +5,23 @@ import { fileURLToPath } from 'node:url';
 
 const moduleUrl = new URL('../src/config/artAssets.js', import.meta.url);
 
-test('art catalog exposes all 38 packaged assets and every file is deployable', async () => {
+test('art catalog exposes all 50 packaged assets and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 38);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 38);
+  assert.equal(entries.length, 50);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 50);
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.png');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
   assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.png');
   assert.equal(ART_ASSETS.chiyu, 'assets/enemies/enemy_chiyu_v1.png');
   assert.equal(ART_ASSETS.yanjia, 'assets/enemies/enemy_yanjia_v1.png');
   assert.equal(ART_ASSETS.paoxiao, 'assets/bosses/boss_paoxiao_v1.png');
+  assert.equal(ART_ASSETS.level3Background, 'assets/levels/level3/bg_ruoshui_valley_v1.png');
+  assert.equal(ART_ASSETS.shuixiao, 'assets/enemies/enemy_shuixiao_v1.png');
+  assert.equal(ART_ASSETS.xuanjiashou, 'assets/enemies/enemy_xuanjiashou_v1.png');
+  assert.equal(ART_ASSETS.xiangliu, 'assets/bosses/boss_xiangliu_v1.png');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
@@ -74,4 +78,14 @@ test('art store blocks on immediate level art but defers boss and late-wave VFX'
   store.preloadDeferred(2);
   assert.ok(store.images.paoxiao);
   assert.ok(store.images.paoxiaoExplosion);
+
+  const levelThreeReady = store.ensureLevel(3);
+  assert.ok(store.images.level3Background);
+  assert.ok(store.images.shuixiao);
+  assert.equal(store.images.xiangliu, undefined, 'level-three boss must not block the preparation screen');
+  for (const image of Object.values(store.images)) image.onload();
+  await levelThreeReady;
+  assert.equal(store.isLevelReady(3), true);
+  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('xiangliu'));
+  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('baizeUnlock'));
 });

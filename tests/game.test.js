@@ -146,12 +146,12 @@ test('wave ten presents the unified boss arrival and qiongqi frenzy banners in o
 
   assert.deepEqual(
     [game.banner, ...game.bannerQueue.map(item => item.text)],
-    ['BOSS 警告', 'Boss 現身・窮奇', '窮奇狂暴！'],
+    ['BOSS 警告', 'Boss現身：窮奇', '窮奇 狂暴化！'],
   );
   assert.equal(boss.frenzied, true);
 
   game.advanceBanner(1.31);
-  assert.equal(game.banner, 'Boss 現身・窮奇');
+  assert.equal(game.banner, 'Boss現身：窮奇');
   game.advanceBanner(1.11);
-  assert.equal(game.banner, '窮奇狂暴！');
+  assert.equal(game.banner, '窮奇 狂暴化！');
 });

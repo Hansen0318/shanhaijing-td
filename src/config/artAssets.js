@@ -37,6 +37,18 @@ export const ART_ASSETS = Object.freeze({
   paoxiaoEnrage: 'assets/effects/fx_paoxiao_enrage_v1.png',
   paoxiaoGroundslam: 'assets/effects/fx_paoxiao_groundslam_v1.png',
   paoxiaoBossPanel: 'assets/ui/ui_boss_paoxiao_panel_v1.png',
+  level3Background: 'assets/levels/level3/bg_ruoshui_valley_v1.png',
+  level3Spawn: 'assets/levels/level3/map_spawn_ruoshui_rift_v1.png',
+  level3Base: 'assets/levels/level3/map_base_xuanwater_altar_v1.png',
+  shuixiao: 'assets/enemies/enemy_shuixiao_v1.png',
+  xuanjiashou: 'assets/enemies/enemy_xuanjiashou_v1.png',
+  xiangliu: 'assets/bosses/boss_xiangliu_v1.png',
+  waterSplash: 'assets/effects/fx_water_splash_v1.png',
+  waterProjectile: 'assets/effects/fx_water_projectile_v1.png',
+  waterRing: 'assets/effects/fx_water_ring_v1.png',
+  whirlpool: 'assets/effects/fx_whirlpool_v1.png',
+  xiangliuBossPanel: 'assets/ui/ui_boss_xiangliu_panel_v1.png',
+  baizeUnlock: 'assets/ui/unlock_baize_v1.png',
 });
 
 const SHARED_REQUIRED_ART_IDS = Object.freeze([
@@ -53,16 +65,19 @@ const SHARED_DEFERRED_ART_IDS = Object.freeze([
 export const LEVEL_ART_IDS = Object.freeze({
   1: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
   2: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
+  3: Object.freeze([...SHARED_REQUIRED_ART_IDS, ...SHARED_DEFERRED_ART_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu', 'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'xiangliuBossPanel', 'baizeUnlock']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
   1: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'background', 'spawnRift', 'baseSeal']),
   2: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base']),
+  3: Object.freeze([...SHARED_REQUIRED_ART_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
   1: Object.freeze(LEVEL_ART_IDS[1].filter(id => !LEVEL_REQUIRED_ART_IDS[1].includes(id))),
   2: Object.freeze(LEVEL_ART_IDS[2].filter(id => !LEVEL_REQUIRED_ART_IDS[2].includes(id))),
+  3: Object.freeze(LEVEL_ART_IDS[3].filter(id => !LEVEL_REQUIRED_ART_IDS[3].includes(id))),
 });
 
 export function assetUrl(id) {

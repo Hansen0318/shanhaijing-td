@@ -14,7 +14,8 @@ export class MotionSystem {
       : 1;
 
     if (config.pulseEffect) {
-      const pulseEffect = effects.find(effect => effect.type === config.pulseEffect && effect.life > 0);
+      const pulseTypes = Array.isArray(config.pulseEffect) ? config.pulseEffect : [config.pulseEffect];
+      const pulseEffect = effects.find(effect => pulseTypes.includes(effect.type) && effect.life > 0);
       if (pulseEffect) {
         const elapsed = pulseEffect.duration - pulseEffect.life;
         if (elapsed >= 0 && elapsed <= config.pulseSeconds) {

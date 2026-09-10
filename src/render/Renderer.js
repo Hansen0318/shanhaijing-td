@@ -4,7 +4,7 @@ import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?
 import { MotionSystem } from '../systems/MotionSystem.js?v=motion-lite-2';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54] });
-const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72] });
+const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76] });
 
 export class Renderer {
   constructor(canvas, art = new ArtStore(), { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
@@ -186,6 +186,14 @@ export class Renderer {
     game.effects.filter(effect => effect.type === 'paoxiaoGroundslam').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       this.drawContained(ctx, 'paoxiaoGroundslam', effect.x, effect.y + 12, 120 + progress * 35, 72 + progress * 20, { alpha: effect.life / effect.duration });
+    });
+    game.effects.filter(effect => ['xiangliuHealPulse', 'xiangliuEnragePulse'].includes(effect.type)).forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      const id = effect.type === 'xiangliuHealPulse' ? 'waterRing' : 'whirlpool';
+      this.drawContained(ctx, id, effect.x, effect.y + 6, 82 + progress * 34, 82 + progress * 34, {
+        alpha: Math.max(0, effect.life / effect.duration),
+        rotation: effect.type === 'xiangliuEnragePulse' ? progress * Math.PI : 0,
+      });
     });
     game.effects.filter(effect => effect.type === 'explosion').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;

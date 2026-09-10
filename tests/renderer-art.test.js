@@ -70,6 +70,23 @@ test('renderer uses the active level map, crop, props and eight slots', () => {
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level2Base'), true);
 });
 
+test('renderer uses level-three map art and draws both enemies plus Xiangliu', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.render(emptyGame(LEVELS[3]));
+  assert.equal(ctx.calls.drawImage[0][0].id, 'level3Background');
+  assert.deepEqual(ctx.calls.drawImage[0].slice(1, 5), [103, 0, 905, 1415]);
+  assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level3Spawn'), true);
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level3Base'), true);
+
+  const map = { totalLength: 100, positionAt: () => ({ x: 80, y: 20 }) };
+  renderer.drawEnemies(ctx, { visualTime: 0, effects: [], enemies: ['shuixiao', 'xuanjiashou', 'xiangliu'].map((type, index) => ({
+    type, x: 50 + index * 20, y: 20, radius: 12, hp: 100, maxHp: 100,
+    isBoss: type === 'xiangliu', hitFlash: 0, visualHitFlash: 0, statuses: {}, map, pathDistance: 40,
+  })) });
+  for (const id of ['shuixiao', 'xuanjiashou', 'xiangliu']) assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true);
+});
+
 test('renderer draws all new level-two enemy and boss art', () => {
   const { renderer, ctx } = rendererFixture();
   const map = { totalLength: 100, positionAt: () => ({ x: 80, y: 20 }) };

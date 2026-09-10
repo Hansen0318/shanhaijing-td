@@ -31,6 +31,9 @@ export const ENEMY_DATA = Object.freeze({
   chiyu: { id: 'chiyu', name: '赤羽妖', emoji: '🪶', hp: 34, speed: 108, baseDamage: 1, reward: 9, radius: 10 },
   yanjia: { id: 'yanjia', name: '岩甲妖', emoji: '🪨', hp: 170, speed: 28, baseDamage: 2, reward: 20, radius: 16, normalDamageMultiplier: 0.65, minimumNormalDamage: 1 },
   paoxiao: { id: 'paoxiao', name: '狍鴞', emoji: '🐐', hp: 3600, speed: 19, baseDamage: 20, reward: 0, radius: 24, isBoss: true, bossMechanic: { type: 'consume', thresholds: [0.7, 0.4], healRatio: 0.08 } },
+  shuixiao: { id: 'shuixiao', name: '水魈', emoji: '🌊', hp: 48, speed: 112, baseDamage: 1, reward: 11, radius: 11, weakWaterSpeedMultiplier: 1.35 },
+  xuanjiashou: { id: 'xuanjiashou', name: '玄甲獸', emoji: '🐢', hp: 240, speed: 26, baseDamage: 3, reward: 24, radius: 17, slowEffectiveness: 0.5 },
+  xiangliu: { id: 'xiangliu', name: '相柳', emoji: '🐍', hp: 4500, speed: 17, baseDamage: 20, reward: 0, radius: 25, isBoss: true, bossMechanic: { type: 'staged', stages: [{ threshold: 0.75, action: 'heal', healRatio: 0.06 }, { threshold: 0.5, action: 'heal', healRatio: 0.08 }, { threshold: 0.25, action: 'frenzy', speedMultiplier: 1.2 }] } },
 });
 
 const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
@@ -58,6 +61,19 @@ export const LEVEL2_WAVE_DATA = Object.freeze([
   wave([{ type: 'chiyu', count: 16 }, { type: 'swift', count: 10 }, { type: 'yanjia', count: 6 }], 0.6, { hpMultiplier: 1.5 }),
   wave([{ type: 'minion', count: 12 }, { type: 'chiyu', count: 18 }, { type: 'yanjia', count: 8 }, { type: 'giant', count: 4 }], 0.56, { hpMultiplier: 1.7 }),
   wave([{ type: 'chiyu', count: 10 }, { type: 'yanjia', count: 4 }, { type: 'paoxiao', count: 1 }], 0.9, { hpMultiplier: 1.55, bossHpMultiplier: 1.5 }),
+]);
+
+export const LEVEL3_WAVE_DATA = Object.freeze([
+  wave([{ type: 'shuixiao', count: 10 }], 0.92),
+  wave([{ type: 'shuixiao', count: 14 }], 0.78),
+  wave([{ type: 'shuixiao', count: 10 }, { type: 'xuanjiashou', count: 4 }], 0.82),
+  wave([{ type: 'xuanjiashou', count: 7 }], 1.02, { hpMultiplier: 1.05 }),
+  wave([{ type: 'shuixiao', count: 14 }, { type: 'xuanjiashou', count: 6 }], 0.74, { hpMultiplier: 1.1 }),
+  wave([{ type: 'shuixiao', count: 22 }, { type: 'xuanjiashou', count: 5 }], 0.56, { hpMultiplier: 1.15 }),
+  wave([{ type: 'xuanjiashou', count: 10 }, { type: 'shuixiao', count: 10 }], 0.78, { hpMultiplier: 1.25 }),
+  wave([{ type: 'shuixiao', count: 22 }, { type: 'xuanjiashou', count: 9 }], 0.54, { hpMultiplier: 1.4 }),
+  wave([{ type: 'shuixiao', count: 26 }, { type: 'xuanjiashou', count: 12 }], 0.5, { hpMultiplier: 1.55 }),
+  wave([{ type: 'shuixiao', count: 12 }, { type: 'xuanjiashou', count: 5 }, { type: 'xiangliu', count: 1 }], 0.86, { hpMultiplier: 1.45, bossHpMultiplier: 1.5 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
@@ -103,6 +119,30 @@ export const LEVEL2_MAP_DATA = Object.freeze({
   ],
 });
 
+export const LEVEL3_MAP_DATA = Object.freeze({
+  width: 390,
+  height: 610,
+  pathWidth: 54,
+  waypoints: [
+    { x: -20, y: 30 }, { x: 15, y: 36 }, { x: 52, y: 54 }, { x: 88, y: 83 },
+    { x: 118, y: 120 }, { x: 150, y: 142 }, { x: 190, y: 156 }, { x: 235, y: 171 },
+    { x: 270, y: 193 }, { x: 282, y: 220 }, { x: 274, y: 242 }, { x: 245, y: 258 },
+    { x: 190, y: 266 }, { x: 150, y: 280 }, { x: 132, y: 302 }, { x: 145, y: 326 },
+    { x: 180, y: 342 }, { x: 225, y: 351 }, { x: 260, y: 370 }, { x: 282, y: 398 },
+    { x: 289, y: 430 }, { x: 280, y: 454 }, { x: 252, y: 475 }, { x: 205, y: 490 },
+    { x: 150, y: 498 }, { x: 100, y: 515 }, { x: 62, y: 538 }, { x: 28, y: 562 },
+    { x: -20, y: 575 },
+  ],
+  weakWaterZones: [
+    { x: 130, y: 135, width: 175, height: 115 },
+    { x: 245, y: 350, width: 65, height: 125 },
+  ],
+  slots: [
+    { x: 132, y: 61 }, { x: 288, y: 88 }, { x: 121, y: 165 }, { x: 344, y: 190 },
+    { x: 190, y: 283 }, { x: 350, y: 348 }, { x: 153, y: 434 }, { x: 323, y: 492 },
+  ],
+});
+
 const levelOne = Object.freeze({
   ...LEVEL_DATA,
   map: MAP_DATA,
@@ -128,7 +168,21 @@ const levelTwo = Object.freeze({
   }),
 });
 
-export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo });
+const levelThree = Object.freeze({
+  id: 3,
+  name: '弱水幽谷',
+  baseName: '玄水祭壇',
+  bossType: 'xiangliu',
+  map: LEVEL3_MAP_DATA,
+  waves: LEVEL3_WAVE_DATA,
+  art: Object.freeze({
+    background: 'level3Background', backgroundCrop: { x: 103, y: 0, width: 905, height: 1415 },
+    spawn: 'level3Spawn', spawnPosition: { x: 5, y: 26 },
+    base: 'level3Base', basePosition: { x: 5, y: 566 }, bossPanel: 'xiangliuBossPanel',
+  }),
+});
+
+export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree });
 
 export function getLevelData(levelId) {
   return LEVELS[levelId] ?? null;

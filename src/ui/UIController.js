@@ -39,7 +39,7 @@ export class UIController {
     if (action === 'blessing') this.game.selectBlessing(button.dataset.id);
     if (action === 'continue') this.game.togglePause();
     if (action === 'restart') this.game.restart();
-    if (action === 'next-level') { this.transitionToLevel(2); return; }
+    if (action === 'next-level') { this.transitionToLevel(this.game.levelId + 1); return; }
     this.render();
   }
   async transitionToLevel(levelId) {
@@ -99,9 +99,13 @@ export class UIController {
     if (!ended) return;
     this.dom['result-panel'].dataset.result = this.game.state;
     this.dom['result-title'].textContent = this.game.state === 'victory' ? '防守成功' : '防守失敗';
-    this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
+    const unlock = this.game.state === 'victory' && this.game.levelId === 3
+      ? `<li class="unlock-result"><img src="${assetUrl('baizeUnlock')}" alt="白澤">新異獸解鎖：白澤</li>`
+      : '';
+    this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>${unlock}` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
     this.dom['retry-button'].textContent = this.game.state === 'victory' ? '再次挑戰' : '重新挑戰';
-    this.dom['next-level-button'].hidden = !(this.game.state === 'victory' && this.game.levelId === 1);
+    this.dom['next-level-button'].hidden = !(this.game.state === 'victory' && this.game.levelId < 3);
+    if (!this.dom['next-level-button'].hidden) this.dom['next-level-button'].textContent = `前往第${this.game.levelId + 1}關`;
   }
   renderBossSlot() {
     const boss = this.game.enemies.find(enemy => enemy.isBoss);
