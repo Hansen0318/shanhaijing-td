@@ -46,32 +46,25 @@ test('level-three anchors follow the painted road and all eight painted platform
   ]);
 });
 
-test('level three uses a smoothed runtime path so enemies do not cut painted bends', () => {
+test('level three smooths runtime path between painted-road anchors without moving anchors', () => {
   const game = new Game(() => 0.2, 3);
-  assert.ok(game.map.segments.length > game.level.map.waypoints.length - 1);
-  for (const waypoint of game.level.map.waypoints.slice(1, -1)) {
-    assert.ok(distanceToPath(waypoint, game.map.runtimeWaypoints) <= 0.01);
+  assert.equal(game.level.map.pathSmoothing, 4);
+  assert.ok(game.map.waypoints.length > game.level.map.waypoints.length);
+  for (const waypoint of game.level.map.waypoints) {
+    assert.ok(game.map.waypoints.some(point => Math.hypot(point.x - waypoint.x, point.y - waypoint.y) <= 0.01));
   }
 });
 
-test('level three waves one to three use localized early difficulty relief only', () => {
-  const game = new Game(() => 0.2, 3);
-  game.wave.waveNumber = 1;
-  game.spawnEnemy('shuixiao');
-  assert.equal(game.enemies[0].maxHp, Math.round(ENEMY_DATA.shuixiao.hp * 0.82));
-  assert.equal(game.enemies[0].baseSpeed, ENEMY_DATA.shuixiao.speed * 0.88);
-
-  game.enemies = [];
-  game.wave.waveNumber = 3;
-  game.spawnEnemy('xuanjiashou');
-  assert.equal(game.enemies[0].maxHp, Math.round(ENEMY_DATA.xuanjiashou.hp * 0.82));
-  assert.equal(game.enemies[0].baseSpeed, ENEMY_DATA.xuanjiashou.speed * 0.88);
-
-  game.enemies = [];
-  game.wave.waveNumber = 4;
-  game.spawnEnemy('xuanjiashou');
-  assert.equal(game.enemies[0].maxHp, Math.round(ENEMY_DATA.xuanjiashou.hp * 1.05));
-  assert.equal(game.enemies[0].baseSpeed, ENEMY_DATA.xuanjiashou.speed);
+test('level three waves one to three are eased locally while wave four onward stays unchanged', () => {
+  const waves = LEVELS[3].waves;
+  assert.deepEqual(waves[0].groups, [{ type: 'shuixiao', count: 7 }]);
+  assert.equal(waves[0].interval, 1.05);
+  assert.deepEqual(waves[1].groups, [{ type: 'shuixiao', count: 10 }]);
+  assert.equal(waves[1].interval, 0.95);
+  assert.deepEqual(waves[2].groups, [{ type: 'shuixiao', count: 8 }, { type: 'xuanjiashou', count: 2 }]);
+  assert.equal(waves[2].interval, 0.95);
+  assert.deepEqual(waves[3].groups, [{ type: 'xuanjiashou', count: 7 }]);
+  assert.equal(waves[3].hpMultiplier, 1.05);
 });
 
 test('level two victory enters a clean level three and level three victory records Baize unlock', () => {
