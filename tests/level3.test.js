@@ -46,6 +46,34 @@ test('level-three anchors follow the painted road and all eight painted platform
   ]);
 });
 
+test('level three uses a smoothed runtime path so enemies do not cut painted bends', () => {
+  const game = new Game(() => 0.2, 3);
+  assert.ok(game.map.segments.length > game.level.map.waypoints.length - 1);
+  for (const waypoint of game.level.map.waypoints.slice(1, -1)) {
+    assert.ok(distanceToPath(waypoint, game.map.runtimeWaypoints) <= 0.01);
+  }
+});
+
+test('level three waves one to three use localized early difficulty relief only', () => {
+  const game = new Game(() => 0.2, 3);
+  game.wave.waveNumber = 1;
+  game.spawnEnemy('shuixiao');
+  assert.equal(game.enemies[0].maxHp, Math.round(ENEMY_DATA.shuixiao.hp * 0.82));
+  assert.equal(game.enemies[0].baseSpeed, ENEMY_DATA.shuixiao.speed * 0.88);
+
+  game.enemies = [];
+  game.wave.waveNumber = 3;
+  game.spawnEnemy('xuanjiashou');
+  assert.equal(game.enemies[0].maxHp, Math.round(ENEMY_DATA.xuanjiashou.hp * 0.82));
+  assert.equal(game.enemies[0].baseSpeed, ENEMY_DATA.xuanjiashou.speed * 0.88);
+
+  game.enemies = [];
+  game.wave.waveNumber = 4;
+  game.spawnEnemy('xuanjiashou');
+  assert.equal(game.enemies[0].maxHp, Math.round(ENEMY_DATA.xuanjiashou.hp * 1.05));
+  assert.equal(game.enemies[0].baseSpeed, ENEMY_DATA.xuanjiashou.speed);
+});
+
 test('level two victory enters a clean level three and level three victory records Baize unlock', () => {
   const game = new Game(() => 0.2);
   game.end('victory');
