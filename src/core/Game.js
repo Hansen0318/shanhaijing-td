@@ -9,8 +9,8 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js';
 import { WaveManager } from '../systems/WaveManager.js';
 import { BossSystem } from '../systems/BossSystem.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=motion-lite-2';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=motion-lite-2';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level3-1';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level3-1';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 

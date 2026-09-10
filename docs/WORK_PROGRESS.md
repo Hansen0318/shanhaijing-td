@@ -17,6 +17,8 @@
 - 已將 12 張來源素材轉為真正 PNG；非背景素材採邊界式去背，保留白澤內部白色細節。
 - 已完成第三關 critical/deferred preload、共用 Motion Lite、Renderer、Boss HUD、結果解鎖 UI。
 - 已用正式背景疊加 waypoint 與塔位中心診斷，修正第三關道路中心線與 8 個圓台座標。
+- 已將入口與所有變更模組快取版本統一為 `level3-1`，避免 GitHub Pages 載入舊版。
+- 已擴充 browser smoke helper，可直接驗證第三關混合 Wave、相柳三階段與白澤解鎖，不需完整重跑 10 Waves。
 
 ## 進行中
 
@@ -57,6 +59,10 @@
 - `tests/motion.test.js`
 - `tests/renderer-art.test.js`
 - `tests/ui-art.test.js`
+- `tests/ui-contract.test.js`
+- `tests/browser-smoke.html`
+- `index.html`
+- `src/main.js`
 
 ## 已執行測試與結果
 
@@ -66,6 +72,8 @@
 - `npm test`：89/89 PASS（第一個可玩 checkpoint）。
 - 全 JS/MJS `node --check`：PASS。
 - `git diff --check`：PASS。
+- Cache-version focused test：6/6 PASS（production 前已確認 RED）。
+- `npm test`：90/90 PASS（快取版本與 smoke helper 完成後）。
 
 ## 尚未執行測試
 

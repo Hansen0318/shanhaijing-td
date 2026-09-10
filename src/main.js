@@ -1,6 +1,6 @@
-import { Game } from './core/Game.js?v=motion-lite-2';
-import { Renderer } from './render/Renderer.js?v=loading-1';
-import { UIController } from './ui/UIController.js?v=loading-1';
+import { Game } from './core/Game.js?v=level3-1';
+import { Renderer } from './render/Renderer.js?v=level3-1';
+import { UIController } from './ui/UIController.js?v=level3-1';
 
 const canvas = document.querySelector('#game-canvas');
 const game = new Game();

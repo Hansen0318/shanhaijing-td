@@ -34,6 +34,13 @@
     <button data-state="consume70">吞噬 70%</button>
     <button data-state="consume40">吞噬 40%</button>
     <button data-state="level2victory">第2關 Victory</button>
+    <button data-state="level3">第3關</button>
+    <button data-state="level3wave8">第3關 Wave 8</button>
+    <button data-state="level3wave10">第3關 Wave 10</button>
+    <button data-state="xiangliu75">相柳 75%</button>
+    <button data-state="xiangliu50">相柳 50%</button>
+    <button data-state="xiangliu25">相柳 25%</button>
+    <button data-state="level3victory">第3關 Victory</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -41,7 +48,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=motion-lite-2"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level3-1"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -97,6 +104,26 @@
       const queuedBoss = game.wave.queue.indexOf('paoxiao');
       if (queuedBoss >= 0) game.wave.queue.splice(queuedBoss, 1);
       game.spawnEnemy('paoxiao');
+    }
+
+    async function enterLevel3(game) {
+      await enterLevel2(game);
+      game.end('victory');
+      await twoFrames();
+      frame.contentDocument.querySelector('#next-level-button').click();
+      while (game.levelId !== 3 || frame.contentDocument.body.classList.contains('art-loading')) {
+        await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      await twoFrames();
+    }
+
+    async function configureLevel3Boss(game) {
+      await enterLevel3(game);
+      game.wave.waveNumber = 9;
+      game.startWaveNow();
+      const queuedBoss = game.wave.queue.indexOf('xiangliu');
+      if (queuedBoss >= 0) game.wave.queue.splice(queuedBoss, 1);
+      game.spawnEnemy('xiangliu');
     }
 
     document.addEventListener('click', async event => {
@@ -181,6 +208,38 @@
       if (state === 'level2victory') {
         let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
         if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }
+        boss.takeDamage(boss.maxHp);
+        game.update(0);
+      }
+      if (state === 'level3') await enterLevel3(game);
+      if (state === 'level3wave8') {
+        await enterLevel3(game);
+        game.economy.add(2000);
+        game.buildTower(0, 'bifang');
+        game.buildTower(3, 'fuzhu');
+        game.buildTower(6, 'yinglong');
+        game.wave.waveNumber = 7;
+        game.startWaveNow();
+        [['shuixiao', 120], ['xuanjiashou', 270], ['shuixiao', 440]].forEach(([type, distance]) => {
+          game.spawnEnemy(type);
+          const enemy = game.enemies.at(-1);
+          enemy.pathDistance = distance;
+          Object.assign(enemy, game.map.positionAt(distance));
+        });
+      }
+      if (state === 'level3wave10') await configureLevel3Boss(game);
+      if (['xiangliu75', 'xiangliu50', 'xiangliu25'].includes(state)) {
+        let boss = game.enemies.find(enemy => enemy.type === 'xiangliu');
+        if (!boss) { await configureLevel3Boss(game); boss = game.enemies.find(enemy => enemy.type === 'xiangliu'); }
+        const ratio = Number(state.replace('xiangliu', '')) / 100;
+        boss.hp = boss.maxHp * ratio;
+        if (ratio <= 0.5) boss.triggeredBossThresholds.add(0.75);
+        if (ratio <= 0.25) boss.triggeredBossThresholds.add(0.5);
+        game.update(0);
+      }
+      if (state === 'level3victory') {
+        let boss = game.enemies.find(enemy => enemy.type === 'xiangliu');
+        if (!boss) { await configureLevel3Boss(game); boss = game.enemies.find(enemy => enemy.type === 'xiangliu'); }
         boss.takeDamage(boss.maxHp);
         game.update(0);
       }

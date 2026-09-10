@@ -1,7 +1,7 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { ArtStore } from '../config/artAssets.js?v=loading-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=motion-lite-2';
-import { MotionSystem } from '../systems/MotionSystem.js?v=motion-lite-2';
+import { ArtStore } from '../config/artAssets.js?v=level3-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level3-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level3-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54] });
 const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76] });
