@@ -47,6 +47,7 @@ export class UIController {
     if (!this.game.enterLevel(levelId)) { document.body.classList.remove('art-loading'); return false; }
     await this.renderer.prepareLevel(levelId);
     document.body.classList.remove('art-loading');
+    window.scrollTo(0, 0);
     this.renderer.art.preloadDeferred(levelId);
     this.contextKey = null;
     this.render();
@@ -126,18 +127,26 @@ export class UIController {
     }
     this.dom['boss-hud'].hidden = !boss;
     if (boss) {
-      const bossNameInArt = boss.type === 'xiangliu';
+      this.dom['boss-hud'].dataset.bossType = boss.type;
       this.dom['boss-name'].hidden = false;
-      this.dom['boss-name'].textContent = bossNameInArt ? '\u00a0' : boss.data.name;
-      this.dom['boss-name'].style.visibility = bossNameInArt ? 'hidden' : '';
+      this.dom['boss-name'].textContent = boss.data.name;
+      this.dom['boss-name'].style.visibility = '';
       this.dom['boss-hud'].style.borderImageSource = `url('${assetUrl(this.game.level.art.bossPanel)}')`;
       this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`;
-      this.dom['boss-hp-text'].textContent = `${Math.ceil(boss.hp)} / ${boss.maxHp}`;
-      const healing = boss.type === 'xiangliu' && this.game.effects.some(effect => effect.type === 'xiangliuHealPulse' && effect.life > 0);
+      const healEffect = boss.type === 'xiangliu'
+        ? this.game.effects.find(effect => effect.type === 'bossHealText' && effect.life > 0)
+        : null;
+      this.dom['boss-hp-text'].textContent = healEffect
+        ? `回血 +${healEffect.amount} HP　${Math.ceil(boss.hp)} / ${boss.maxHp}`
+        : `${Math.ceil(boss.hp)} / ${boss.maxHp}`;
+      const healing = Boolean(healEffect);
       this.dom['boss-hud'].style.filter = healing ? 'brightness(1.22) drop-shadow(0 0 10px rgba(86,220,255,.95))' : '';
       this.dom['boss-hp-fill'].style.boxShadow = healing ? '0 0 14px rgba(119,245,255,1)' : '';
+      this.dom['boss-hp-fill'].style.background = healing ? '#55e6ff' : '';
     } else {
+      delete this.dom['boss-hud'].dataset.bossType;
       this.dom['boss-name'].style.visibility = '';
+      this.dom['boss-hp-fill'].style.background = '';
     }
   }
   renderBanner() { this.dom.banner.hidden = this.game.bannerTimer <= 0; if (!this.dom.banner.hidden) this.dom.banner.textContent = this.game.banner; }
