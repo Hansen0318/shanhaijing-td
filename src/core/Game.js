@@ -210,7 +210,8 @@ export class Game {
     }
     if (event.type === 'heal') {
       this.queueBanner(`${enemy.data.name}汲取弱水！`, 1.4);
-      this.effects.push({ type: 'xiangliuHealPulse', x: enemy.x, y: enemy.y, life: 0.32, duration: 0.32 });
+      this.effects.push({ type: 'xiangliuHealPulse', x: enemy.x, y: enemy.y, life: 0.9, duration: 0.9 });
+      this.effects.push({ type: 'bossHealText', x: enemy.x, y: enemy.y, amount: event.healAmount, life: 0.9, duration: 0.9 });
       return;
     }
     if (event.type !== 'consume') return;
