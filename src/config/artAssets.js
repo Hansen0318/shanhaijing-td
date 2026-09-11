@@ -56,16 +56,26 @@ const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam',
 ]);
 
+// These frames are visible on the first preparation paint. Waiting for them prevents
+// text from appearing before its border-image, while keeping combat/overlay art deferred.
+const SHARED_FIRST_PAINT_UI_IDS = Object.freeze([
+  'resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'actionButton',
+]);
+
+const SHARED_DEFERRED_UI_IDS = Object.freeze([
+  'buildCard', 'blessingCard', 'victoryOverlay', 'defeatOverlay',
+]);
+
 export const LEVEL_ART_IDS = Object.freeze({
-  1: Object.freeze([...SHARED_RUNTIME_ART_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy']),
-  2: Object.freeze([...SHARED_RUNTIME_ART_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam']),
-  3: Object.freeze([...SHARED_RUNTIME_ART_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu', 'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'baizeUnlock']),
+  1: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
+  2: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
+  3: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu', 'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'xiangliuBossPanel', 'baizeUnlock']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
-  1: Object.freeze(['slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
-  2: Object.freeze(['slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
-  3: Object.freeze(['slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
+  1: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, 'slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
+  2: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, 'slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
+  3: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, 'slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
