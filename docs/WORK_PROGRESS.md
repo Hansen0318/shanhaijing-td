@@ -69,12 +69,14 @@
 - 本機 no-store 並行讀取 Level1 blocking 組（交替 12 輪中位數）：10 assets / 11.737MiB / 37.3ms → 13 assets / 2.619MiB / 11.9ms；正式手機 wall-clock 仍以 Pages 實測為準。
 - 最新 main 的既有基線為 94 tests、87 PASS、7 FAIL（上一輪 UI 測試契約）；本輪不修該 UI scope，要求不得新增第 8 個失敗。
 - 本輪加入測試後全套為 95 tests、88 PASS、7 個相同既有 FAIL，未新增失敗。
-- GitHub Pages fresh-load blockingMs、第一次塔位點擊與 390 / 390×700 視覺 smoke：待推送部署後驗證。
+- GitHub Pages 已部署驗證 Level1 / 2 / 3：三關皆解除 `art-loading`、390×610 canvas 邏輯尺寸正確，背景與塔位於 targeted smoke 未見明顯品質劣化。
+- Level1 第一次點塔位後首個取樣即出現 3 張塔卡；三張 `.unit-art` 均為 `complete=true`、natural size 246×256 / 196×256 / 256×245，未觀察到文字先出、圖片延遲補上的狀況。
+- 雲端驗證視窗不支援改為 390×700 viewport，且頁面自訂 global metric 無法由該讀取層取得；真實手機 Safari 的 390×700 wall-clock / 首次 Boss、VFX 動態觀感仍列玩家實測。
 
 ### 中斷續作
 
-- 若在部署 smoke 前中斷：不要重新壓縮上述 35 張；先跑 targeted tests，再 commit / push，最後於正式 Pages 驗證三關。
-- 初始資產 checkpoint：`fc20bb7a3471622c7b4a7a70e3b887d8d711e89c`；review cache-bust 修正待 final commit。
+- 已完成發布，不要重新壓縮上述 35 張；後續若續作，只需真實手機 Safari 390×700 與首次 Boss / VFX 玩家 smoke。
+- 資產 release SHA：`033e26c5a82a782ba29a9383e9729e0f85e621e0`；其後只追加本段 Pages 驗證紀錄。
 
 ## 基線
 
