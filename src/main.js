@@ -1,7 +1,12 @@
-import { Game } from './core/Game.js?v=level3-bossfix-1';
+import { Game } from './core/Game.js?v=boss-viewport-1';
 import { Renderer } from './render/Renderer.js?v=level3-bossfix-1';
-import { UIController } from './ui/UIController.js?v=level3-bossfix-1';
+import { UIController } from './ui/UIController.js?v=boss-viewport-1';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=prep-loading-2';
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+function resetViewport() { window.scrollTo(0, 0); }
+window.addEventListener('pageshow', resetViewport);
+resetViewport();
 
 const params = new URLSearchParams(window.location.search);
 
@@ -13,6 +18,7 @@ if (params.get('devMenu') === '1') {
 
 function renderDevMenu() {
   document.body.classList.remove('art-loading');
+  resetViewport();
   document.body.innerHTML = `
     <main class="dev-level-menu" aria-label="開發測試關卡選單">
       <h1>Shanhaijing TD Dev Menu</h1>
@@ -60,6 +66,7 @@ function drawPathDebug(renderer, game) {
 }
 
 function initializeGame() {
+  resetViewport();
   const devLevel = Number.parseInt(params.get('devLevel') ?? '', 10);
   const initialLevelId = [1, 2, 3].includes(devLevel) ? devLevel : 1;
   const canvas = document.querySelector('#game-canvas');
@@ -82,6 +89,7 @@ function initializeGame() {
     ui.render();
     if (document.body.classList.contains('art-loading') && renderer.art.isLevelReady(game.levelId)) {
       document.body.classList.remove('art-loading');
+      resetViewport();
       if (!initialLoadRecorded) {
         globalThis.__SHANHAIJING_LOAD_METRICS__ = {
           levelId: game.levelId,
