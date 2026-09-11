@@ -1,6 +1,6 @@
 import { Game } from './core/Game.js?v=level3-1';
-import { Renderer } from './render/Renderer.js?v=level3-1';
-import { UIController } from './ui/UIController.js?v=level3-1';
+import { Renderer } from './render/Renderer.js?v=level3-ui-2';
+import { UIController } from './ui/UIController.js?v=level3-ui-2';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=prep-loading-2';
 
 const params = new URLSearchParams(window.location.search);
