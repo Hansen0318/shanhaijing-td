@@ -91,3 +91,19 @@ test('short iPhone layout keeps context actions inside the reserved panel', asyn
   assert.match(css, /\.unit-card\s*\{[^}]*min-height:\s*110px/s);
   assert.match(css, /\.tower-actions\s*\{[^}]*margin-top:\s*3px/s);
 });
+
+test('level three removes duplicate wave wording and makes boss/terrain feedback explicit', async () => {
+  const ui = await readFile(new URL('../src/ui/UIController.js', import.meta.url), 'utf8');
+  const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(ui, /const phaseLabel/);
+  assert.match(ui, /wave-preview-title'\]\.textContent = `第\$\{this\.game\.level\.id\}關・\$\{this\.game\.level\.name\}`/);
+  assert.match(ui, /bossNameInArt = boss\.type === 'xiangliu'/);
+  assert.match(ui, /boss-name'\]\.hidden = bossNameInArt/);
+  assert.match(ui, /汲取弱水/);
+  assert.match(renderer, /game\.level\.id === 3/);
+  assert.match(renderer, /Math\.max\(34, art\.spawnPosition\.x\)/);
+  assert.match(renderer, /Math\.max\(40, art\.basePosition\.x\)/);
+  assert.match(renderer, /enemy\.map\?\.isWeakWater\?\.\(enemy\)/);
+  assert.match(renderer, /'waterRing'/);
+});
