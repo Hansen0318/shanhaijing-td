@@ -79,7 +79,7 @@ export class UIController {
     const stats = tower.getStats(this.game.blessings.modifiers);
     const cost = tower.level < 3 ? Economy.upgradeCost(tower.data, tower.level) : 0;
     const special = tower.type === 'bifang' ? `爆炸 ${Math.round(stats.explosionRadius)}` : tower.type === 'fuzhu' ? `緩速 ${Math.round(stats.slow * 100)}% / ${stats.slowDuration}秒` : `穿透 ${stats.penetration}`;
-    panel.innerHTML = `<div class="tower-info"><div><h2><img class="tower-info-art" src="${assetUrl(tower.type)}" alt="">${tower.data.name} <span>Lv.${tower.level}</span></h2><p>傷害 ${Math.round(stats.damage * 10) / 10}　間隔 ${stats.interval.toFixed(2)}秒　射程 ${Math.round(stats.range)}</p><p>${special}</p></div><div class="tower-actions"><button data-action="upgrade" ${tower.level >= 3 || !this.game.economy.canAfford(cost) || !this.game.canManageTowers() ? 'disabled' : ''}>${tower.level >= 3 ? '已滿級' : `升級 ${cost} G`}</button><button class="sell" data-action="sell" ${!this.game.canManageTowers() ? 'disabled' : ''}>${this.game.pendingSellSlot === index ? `再次點擊確認 +${Economy.sellValue(tower.invested)} G` : `出售 +${Economy.sellValue(tower.invested)} G`}</button></div></div>`;
+    panel.innerHTML = `<div class="tower-info"><div><h2><img class="tower-info-art" src="${assetUrl(tower.type)}" alt="">${tower.data.name} <span>Lv.${tower.level}</span></h2><p>傷害 ${Math.round(stats.damage * 10) / 10}　間隔 ${stats.interval.toFixed(2)}秒　射程 ${Math.round(stats.range)}</p><p>${special}</p></div><div class="tower-actions"><button data-action="upgrade" ${tower.level >= 3 || !this.game.economy.canAfford(cost) || !this.game.canManageTowers() ? 'disabled' : ''}>${tower.level >= 3 ? '已滿級' : `升級 ${cost} G`}</button><button class="sell" data-action="sell" ${!this.game.canManageTowers() ? '' : ''} ${!this.game.canManageTowers() ? 'disabled' : ''}>${this.game.pendingSellSlot === index ? `再次點擊確認 +${Economy.sellValue(tower.invested)} G` : `出售 +${Economy.sellValue(tower.invested)} G`}</button></div></div>`;
   }
   renderBlessings() {
     const overlay = this.dom['blessing-overlay']; overlay.hidden = this.game.state !== 'blessing';
@@ -113,8 +113,7 @@ export class UIController {
     if (showPreview) {
       const number = preparing ? this.game.wave.waveNumber + 1 : this.game.wave.waveNumber;
       const groups = this.game.wave.getWaveGroups(number);
-      const phaseLabel = preparing ? `下一波 ${number}` : `Wave ${number}`;
-      this.dom['wave-preview-title'].innerHTML = `<small class="level-name">第${this.game.level.id}關・${this.game.level.name}</small><span>${phaseLabel}</span>`;
+      this.dom['wave-preview-title'].textContent = `第${this.game.level.id}關・${this.game.level.name}`;
       const counts = Object.fromEntries(groups.map(group => [group.type, preparing ? group.count : 0]));
       if (inCombat) {
         for (const type of this.game.wave.queue) if (type in counts) counts[type] += 1;
@@ -127,10 +126,15 @@ export class UIController {
     }
     this.dom['boss-hud'].hidden = !boss;
     if (boss) {
-      this.dom['boss-name'].textContent = boss.data.name;
+      const bossNameInArt = boss.type === 'xiangliu';
+      this.dom['boss-name'].hidden = bossNameInArt;
+      if (!bossNameInArt) this.dom['boss-name'].textContent = boss.data.name;
       this.dom['boss-hud'].style.borderImageSource = `url('${assetUrl(this.game.level.art.bossPanel)}')`;
       this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`;
       this.dom['boss-hp-text'].textContent = `${Math.ceil(boss.hp)} / ${boss.maxHp}`;
+      const healing = boss.type === 'xiangliu' && this.game.banner.includes('汲取弱水');
+      this.dom['boss-hud'].style.filter = healing ? 'brightness(1.18) drop-shadow(0 0 8px rgba(86,220,255,.9))' : '';
+      this.dom['boss-hp-fill'].style.boxShadow = healing ? '0 0 12px rgba(119,245,255,1)' : '';
     }
   }
   renderBanner() { this.dom.banner.hidden = this.game.bannerTimer <= 0; if (!this.dom.banner.hidden) this.dom.banner.textContent = this.game.banner; }
