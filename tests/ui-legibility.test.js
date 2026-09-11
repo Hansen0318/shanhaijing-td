@@ -30,7 +30,7 @@ test('level label is readable without crowding wave enemy counts', async () => {
 test('blessing cards reserve a clean readable content field', async () => {
   const css = await combinedCss();
   assert.match(css, /\.blessing-card\s*\{[^}]*grid-template-columns:\s*1fr;[^}]*align-content:\s*center[^}]*text-shadow:/s);
-  assert.match(css, /border-image:\s*url\('\.\/assets\/ui\/ui_blessing_card_v1\.png'\)\s+160\s*\/\s*10px\s*\/\s*0\s+stretch/);
+  assert.match(css, /border-image:\s*url\('\.\/assets\/ui\/ui_blessing_card_v1\.png\?v=asset-opt-1'\)\s+160\s*\/\s*10px\s*\/\s*0\s+stretch/);
 });
 
 test('result panel reserves artwork-safe header space and readable stats', async () => {

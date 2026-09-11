@@ -1,7 +1,7 @@
 import { Game } from './core/Game.js?v=boss-viewport-1';
-import { Renderer } from './render/Renderer.js?v=level3-bossfix-1';
-import { UIController } from './ui/UIController.js?v=boss-viewport-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=ui-preload-1';
+import { Renderer } from './render/Renderer.js?v=asset-opt-1';
+import { UIController } from './ui/UIController.js?v=asset-opt-1';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=asset-opt-1';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }

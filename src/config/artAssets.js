@@ -1,5 +1,5 @@
 export const ART_ASSETS = Object.freeze({
-  background: 'assets/backgrounds/bg_kunlun_gate_v1.png',
+  background: 'assets/backgrounds/bg_kunlun_gate_v1.jpg',
   slotPlatform: 'assets/map/map_slot_platform_v1.png',
   spawnRift: 'assets/map/map_spawn_rift_v1.png',
   baseSeal: 'assets/map/map_base_kunlun_seal_v1.png',
@@ -26,7 +26,7 @@ export const ART_ASSETS = Object.freeze({
   blessingCard: 'assets/ui/ui_blessing_card_v1.png',
   victoryOverlay: 'assets/ui/ui_victory_overlay_v1.png',
   defeatOverlay: 'assets/ui/ui_defeat_overlay_v1.png',
-  level2Background: 'assets/levels/level2/bg_chishui_wasteland_v1.png',
+  level2Background: 'assets/levels/level2/bg_chishui_wasteland_v1.jpg',
   level2Spawn: 'assets/levels/level2/map_spawn_fire_rift_v1.png',
   level2Base: 'assets/levels/level2/map_base_chishui_fort_v1.png',
   chiyu: 'assets/enemies/enemy_chiyu_v1.png',
@@ -51,6 +51,8 @@ export const ART_ASSETS = Object.freeze({
   baizeUnlock: 'assets/ui/unlock_baize_v1.png',
 });
 
+const ASSET_CACHE_VERSION = 'asset-opt-1';
+
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
   'bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam',
@@ -61,6 +63,8 @@ const SHARED_RUNTIME_ART_IDS = Object.freeze([
 const SHARED_FIRST_PAINT_UI_IDS = Object.freeze([
   'resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'actionButton',
 ]);
+
+const SHARED_BUILD_READY_ART_IDS = Object.freeze(['bifang', 'fuzhu', 'yinglong']);
 
 const SHARED_DEFERRED_UI_IDS = Object.freeze([
   'buildCard', 'blessingCard', 'victoryOverlay', 'defeatOverlay',
@@ -73,9 +77,9 @@ export const LEVEL_ART_IDS = Object.freeze({
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
-  1: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, 'slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
-  2: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, 'slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
-  3: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, 'slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
+  1: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
+  2: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
+  3: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
@@ -86,7 +90,7 @@ export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
 
 export function assetUrl(id) {
   const path = ART_ASSETS[id];
-  return path ? new URL(`../../${path}`, import.meta.url).href : '';
+  return path ? `${new URL(`../../${path}`, import.meta.url).href}?v=${ASSET_CACHE_VERSION}` : '';
 }
 
 export class ArtStore {

@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { assetUrl } from '../config/artAssets.js?v=level3-1';
+import { assetUrl } from '../config/artAssets.js?v=asset-opt-1';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {

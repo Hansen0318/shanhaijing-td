@@ -90,7 +90,7 @@ body.art-loading .art-loading-overlay {
   min-width: 68px;
   padding: 4px 7px;
   border: 6px solid transparent;
-  border-image: url('./assets/ui/ui_action_button_v1.png') 90 fill / 6px / 0 stretch;
+  border-image: url('./assets/ui/ui_action_button_v1.png?v=asset-opt-1') 90 fill / 6px / 0 stretch;
   background: #31513d;
   font-size: 11px;
   line-height: 1;
@@ -140,7 +140,7 @@ body[data-level="3"] .boss-hud[data-boss-type="xiangliu"] > * { position: relati
   align-content: center;
   gap: 2px;
   border: 10px solid transparent;
-  border-image: url('./assets/ui/ui_blessing_card_v1.png') 160 / 10px / 0 stretch;
+  border-image: url('./assets/ui/ui_blessing_card_v1.png?v=asset-opt-1') 160 / 10px / 0 stretch;
   background: rgba(12, 43, 32, .98);
   color: #fffdf2;
   text-align: left;
