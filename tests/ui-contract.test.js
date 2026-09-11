@@ -56,7 +56,7 @@ test('boss names stay programmatic, Xiangliu art title is masked, and heal feedb
   assert.match(ui, /boss-hud'\]\.dataset\.bossType = boss\.type/);
   assert.match(ui, /回血 \+\$\{healEffect\.amount\} HP/);
   assert.match(fixes, /body\[data-level="3"\] \.boss-hud\[data-boss-type="xiangliu"\]::before/);
-  assert.match(fixes, /boss-hud > \*/);
+  assert.match(fixes, /\.boss-hud\[data-boss-type="xiangliu"\] > \*/);
   assert.match(game, /xiangliuHealPulse'[\s\S]*life: 1\.2, duration: 1\.2/);
   assert.match(game, /bossHealText'[\s\S]*amount: event\.healAmount[\s\S]*life: 1\.2, duration: 1\.2/);
 });
