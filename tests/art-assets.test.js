@@ -76,22 +76,25 @@ test('art store reveals a level when required art settles, including failed asse
   assert.equal(store.isReady(), true, 'failed images count as settled so fallback can render');
 });
 
-test('blocking art contains only preparation-first-screen assets', async () => {
+test('UI frame preload is staged so first paint is complete without blocking later overlays', async () => {
   const { ArtStore, LEVEL_ART_IDS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
-  assert.deepEqual(LEVEL_REQUIRED_ART_IDS[1], ['slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']);
-  assert.deepEqual(LEVEL_REQUIRED_ART_IDS[2], ['slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']);
-  assert.deepEqual(LEVEL_REQUIRED_ART_IDS[3], ['slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']);
+  const shellUi = ['resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'actionButton'];
+  const laterUi = ['buildCard', 'blessingCard', 'victoryOverlay', 'defeatOverlay'];
 
-  for (const levelId of [1, 2, 3]) assert.equal(LEVEL_REQUIRED_ART_IDS[levelId].length, 5);
+  for (const levelId of [1, 2, 3]) {
+    for (const id of shellUi) assert.ok(LEVEL_REQUIRED_ART_IDS[levelId].includes(id), `${id} must be ready with first paint`);
+    for (const id of laterUi) assert.ok(LEVEL_DEFERRED_ART_IDS[levelId].includes(id), `${id} should load after first paint`);
+  }
+  assert.ok(LEVEL_DEFERRED_ART_IDS[1].includes('bossPanel'));
+  assert.ok(LEVEL_DEFERRED_ART_IDS[2].includes('paoxiaoBossPanel'));
+  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('xiangliuBossPanel'));
+
   for (const id of ['bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam']) {
-    assert.equal(LEVEL_REQUIRED_ART_IDS[1].includes(id), false, `${id} must be deferred`);
+    assert.equal(LEVEL_REQUIRED_ART_IDS[1].includes(id), false, `${id} must remain deferred`);
   }
-  for (const id of ['resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'buildCard', 'actionButton', 'blessingCard', 'victoryOverlay', 'defeatOverlay', 'bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel']) {
-    assert.equal(LEVEL_ART_IDS[1].includes(id) || LEVEL_ART_IDS[2].includes(id) || LEVEL_ART_IDS[3].includes(id), false, `${id} is CSS-driven and should not be loaded by ArtStore`);
+  for (const id of [...shellUi, ...laterUi, 'bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel']) {
+    assert.ok(LEVEL_ART_IDS[1].includes(id) || LEVEL_ART_IDS[2].includes(id) || LEVEL_ART_IDS[3].includes(id), `${id} must participate in staged preload`);
   }
-  assert.ok(LEVEL_DEFERRED_ART_IDS[2].includes('paoxiao'));
-  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('xiangliu'));
-  assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('baizeUnlock'));
 
   class FakeImage {
     constructor() { this.complete = false; this.naturalWidth = 100; }
@@ -99,8 +102,10 @@ test('blocking art contains only preparation-first-screen assets', async () => {
   const directLevelThree = new ArtStore(FakeImage, 3);
   assert.ok(directLevelThree.images.level3Background);
   assert.ok(directLevelThree.images.shuixiao);
+  assert.ok(directLevelThree.images.resourcePanel);
   assert.equal(directLevelThree.images.background, undefined, 'direct Level3 must not begin Level1 unique preload');
   assert.equal(directLevelThree.images.xiangliu, undefined, 'boss remains deferred');
+  assert.equal(directLevelThree.images.xiangliuBossPanel, undefined, 'boss frame remains deferred');
   for (const image of Object.values(directLevelThree.images)) image.onload();
   await Promise.resolve();
   assert.equal(directLevelThree.isReady(), true);
