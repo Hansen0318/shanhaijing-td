@@ -95,15 +95,23 @@ test('short iPhone layout keeps context actions inside the reserved panel', asyn
 test('level three removes duplicate wave wording and makes boss/terrain feedback explicit', async () => {
   const ui = await readFile(new URL('../src/ui/UIController.js', import.meta.url), 'utf8');
   const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
+  const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
+  const motion = await readFile(new URL('../src/config/motionData.js', import.meta.url), 'utf8');
 
   assert.doesNotMatch(ui, /const phaseLabel/);
   assert.match(ui, /wave-preview-title'\]\.textContent = `第\$\{this\.game\.level\.id\}關・\$\{this\.game\.level\.name\}`/);
   assert.match(ui, /bossNameInArt = boss\.type === 'xiangliu'/);
-  assert.match(ui, /boss-name'\]\.hidden = bossNameInArt/);
+  assert.match(ui, /boss-name'\]\.hidden = false/);
+  assert.match(ui, /boss-name'\]\.style\.visibility = bossNameInArt \? 'hidden' : ''/);
   assert.match(ui, /汲取弱水/);
   assert.match(renderer, /game\.level\.id === 3/);
   assert.match(renderer, /Math\.max\(34, art\.spawnPosition\.x\)/);
   assert.match(renderer, /Math\.max\(40, art\.basePosition\.x\)/);
   assert.match(renderer, /enemy\.map\?\.isWeakWater\?\.\(enemy\)/);
   assert.match(renderer, /'waterRing'/);
+  assert.match(renderer, /bossHealText/);
+  assert.match(renderer, /\+\$\{effect\.amount\} HP/);
+  assert.match(game, /xiangliuHealPulse'[\s\S]*life: 0\.9, duration: 0\.9/);
+  assert.match(game, /bossHealText'[\s\S]*amount: event\.healAmount/);
+  assert.match(motion, /xiangliu:[\s\S]*pulseSeconds: 0\.7/);
 });
