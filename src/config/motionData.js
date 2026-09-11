@@ -15,7 +15,7 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
     paoxiao: Object.freeze({ idleScale: 0.02, idleHz: 0.72, pulseScale: 0.05, pulseSeconds: 0.32, pulseEffect: 'paoxiaoEnrage' }),
     shuixiao: Object.freeze({ bobPixels: 2.4, bobHz: 2.65, deathSeconds: 0.18 }),
     xuanjiashou: Object.freeze({ bobPixels: 1.1, bobHz: 0.9, deathSeconds: 0.22 }),
-    xiangliu: Object.freeze({ idleScale: 0.016, idleHz: 0.58, pulseScale: 0.05, pulseSeconds: 0.32, pulseEffect: ['xiangliuHealPulse', 'xiangliuEnragePulse'] }),
+    xiangliu: Object.freeze({ idleScale: 0.016, idleHz: 0.58, pulseScale: 0.07, pulseSeconds: 0.7, pulseEffect: ['xiangliuHealPulse', 'xiangliuEnragePulse'] }),
   }),
   towers: Object.freeze({
     bifang: Object.freeze({ idleScale: 0.01, idleHz: 1.15, recoilPixels: 2.5, recoilSeconds: 0.09 }),
