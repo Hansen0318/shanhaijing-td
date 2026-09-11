@@ -53,7 +53,7 @@ test('dev path diagnostics and fresh-load metrics are opt-in/runtime only', asyn
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   assert.match(html, /styles-fixes\.css\?v=prep-loading-1/);
-  assert.match(html, /src\/main\.js\?v=prep-loading-2/);
+  assert.match(html, /src\/main\.js\?v=level3-ui-2/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
