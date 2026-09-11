@@ -36,7 +36,7 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   assert.match(html, /styles-fixes\.css\?v=boss-viewport-1/);
-  assert.match(html, /src\/main\.js\?v=boss-viewport-1/);
+  assert.match(html, /src\/main\.js\?v=ui-preload-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
