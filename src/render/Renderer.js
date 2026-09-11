@@ -205,11 +205,26 @@ export class Renderer {
     game.effects.filter(effect => ['xiangliuHealPulse', 'xiangliuEnragePulse'].includes(effect.type)).forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       const id = effect.type === 'xiangliuHealPulse' ? 'waterRing' : 'whirlpool';
-      const size = effect.type === 'xiangliuHealPulse' ? 108 + progress * 56 : 82 + progress * 34;
+      const size = effect.type === 'xiangliuHealPulse' ? 116 + progress * 64 : 82 + progress * 34;
       this.drawContained(ctx, id, effect.x, effect.y + 6, size, size, {
         alpha: Math.max(0, effect.life / effect.duration),
         rotation: effect.type === 'xiangliuEnragePulse' ? progress * Math.PI : 0,
       });
+    });
+    game.effects.filter(effect => effect.type === 'bossHealText').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, effect.life * 2.2);
+      ctx.fillStyle = '#b9fbff';
+      ctx.strokeStyle = 'rgba(5,35,45,.92)';
+      ctx.lineWidth = 4;
+      ctx.font = 'bold 17px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const y = effect.y - 38 - progress * 20;
+      ctx.strokeText(`+${effect.amount} HP`, effect.x, y);
+      ctx.fillText(`+${effect.amount} HP`, effect.x, y);
+      ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'explosion').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
