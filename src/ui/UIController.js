@@ -127,14 +127,17 @@ export class UIController {
     this.dom['boss-hud'].hidden = !boss;
     if (boss) {
       const bossNameInArt = boss.type === 'xiangliu';
-      this.dom['boss-name'].hidden = bossNameInArt;
-      if (!bossNameInArt) this.dom['boss-name'].textContent = boss.data.name;
+      this.dom['boss-name'].hidden = false;
+      this.dom['boss-name'].textContent = bossNameInArt ? '\u00a0' : boss.data.name;
+      this.dom['boss-name'].style.visibility = bossNameInArt ? 'hidden' : '';
       this.dom['boss-hud'].style.borderImageSource = `url('${assetUrl(this.game.level.art.bossPanel)}')`;
       this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`;
       this.dom['boss-hp-text'].textContent = `${Math.ceil(boss.hp)} / ${boss.maxHp}`;
-      const healing = boss.type === 'xiangliu' && this.game.banner.includes('汲取弱水');
-      this.dom['boss-hud'].style.filter = healing ? 'brightness(1.18) drop-shadow(0 0 8px rgba(86,220,255,.9))' : '';
-      this.dom['boss-hp-fill'].style.boxShadow = healing ? '0 0 12px rgba(119,245,255,1)' : '';
+      const healing = boss.type === 'xiangliu' && this.game.effects.some(effect => effect.type === 'xiangliuHealPulse' && effect.life > 0);
+      this.dom['boss-hud'].style.filter = healing ? 'brightness(1.22) drop-shadow(0 0 10px rgba(86,220,255,.95))' : '';
+      this.dom['boss-hp-fill'].style.boxShadow = healing ? '0 0 14px rgba(119,245,255,1)' : '';
+    } else {
+      this.dom['boss-name'].style.visibility = '';
     }
   }
   renderBanner() { this.dom.banner.hidden = this.game.bannerTimer <= 0; if (!this.dom.banner.hidden) this.dom.banner.textContent = this.game.banner; }
