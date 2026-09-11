@@ -106,8 +106,12 @@ export class Renderer {
   }
   drawMapProps(ctx, game) {
     const { art } = game.level;
-    this.drawContained(ctx, art.spawn, art.spawnPosition.x, art.spawnPosition.y, 66, 66, { anchorY: 0.54 });
-    this.drawContained(ctx, art.base, art.basePosition.x, art.basePosition.y, 76, 76, { anchorY: 0.58 });
+    const levelThree = game.level.id === 3;
+    const spawnX = levelThree ? Math.max(34, art.spawnPosition.x) : art.spawnPosition.x;
+    const spawnY = levelThree ? Math.max(36, art.spawnPosition.y) : art.spawnPosition.y;
+    const baseX = levelThree ? Math.max(40, art.basePosition.x) : art.basePosition.x;
+    this.drawContained(ctx, art.spawn, spawnX, spawnY, 66, 66, { anchorY: 0.54 });
+    this.drawContained(ctx, art.base, baseX, art.basePosition.y, 76, 76, { anchorY: 0.58 });
   }
   drawTowers(ctx, game) {
     game.towers.forEach((tower, index) => {
@@ -125,6 +129,17 @@ export class Renderer {
   }
   drawEnemies(ctx, game) {
     game.enemies.forEach(enemy => {
+      if (enemy.map?.isWeakWater?.(enemy)) {
+        const size = (enemy.radius + 12) * 2;
+        if (!this.drawContained(ctx, 'waterRing', enemy.x, enemy.y + 5, size, size, { alpha: 0.46 })) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(72,205,255,.12)';
+          ctx.strokeStyle = 'rgba(101,226,255,.78)';
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(enemy.x, enemy.y + 3, enemy.radius + 10, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          ctx.restore();
+        }
+      }
       if (enemy.statuses.slow) {
         const size = (enemy.radius + 9) * 2;
         if (!this.drawContained(ctx, 'slowMark', enemy.x, enemy.y + 1, size, size, { alpha: 0.82 })) {
@@ -190,7 +205,8 @@ export class Renderer {
     game.effects.filter(effect => ['xiangliuHealPulse', 'xiangliuEnragePulse'].includes(effect.type)).forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       const id = effect.type === 'xiangliuHealPulse' ? 'waterRing' : 'whirlpool';
-      this.drawContained(ctx, id, effect.x, effect.y + 6, 82 + progress * 34, 82 + progress * 34, {
+      const size = effect.type === 'xiangliuHealPulse' ? 108 + progress * 56 : 82 + progress * 34;
+      this.drawContained(ctx, id, effect.x, effect.y + 6, size, size, {
         alpha: Math.max(0, effect.life / effect.duration),
         rotation: effect.type === 'xiangliuEnragePulse' ? progress * Math.PI : 0,
       });
