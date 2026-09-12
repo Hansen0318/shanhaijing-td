@@ -1,6 +1,6 @@
 import { Game } from './core/Game.js?v=level4-1';
 import { Renderer } from './render/Renderer.js?v=level4-1';
-import { UIController } from './ui/UIController.js?v=level4-1';
+import { UIController } from './ui/UIController.js?v=lineup-fix-1';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level4-1';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
