@@ -1,0 +1,24 @@
+/* Level4 lineup readability over the pale illustrated panel. */
+.lineup-modal {
+  color: #1b2b4a;
+  text-shadow: none;
+}
+.lineup-modal .eyebrow {
+  color: #9a7412;
+  text-shadow: 0 1px 0 rgba(255,255,255,.85);
+}
+.lineup-modal h1 {
+  color: #182846;
+  font-weight: 900;
+  text-shadow: 0 1px 0 rgba(255,255,255,.9);
+}
+.lineup-help {
+  padding: 6px 8px;
+  border-radius: 9px;
+  background: rgba(240, 246, 255, .64);
+  color: #354564;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+  text-shadow: 0 1px 0 rgba(255,255,255,.9);
+}
