@@ -6,6 +6,7 @@ export class UIController {
   constructor(game, renderer) {
     this.game = game; this.renderer = renderer;
     this.contextKey = null;
+    this.lineupKey = null;
     this.blessingKey = null;
     this.dom = Object.fromEntries([...document.querySelectorAll('[id]')].map(el => [el.id, el]));
     this.bind(); this.render();
@@ -13,6 +14,11 @@ export class UIController {
   shouldRenderContext(key) {
     if (key === this.contextKey) return false;
     this.contextKey = key;
+    return true;
+  }
+  shouldRenderLineup(key) {
+    if (key === this.lineupKey) return false;
+    this.lineupKey = key;
     return true;
   }
   bind() {
@@ -52,6 +58,7 @@ export class UIController {
     window.scrollTo(0, 0);
     this.renderer.art.preloadDeferred(levelId);
     this.contextKey = null;
+    this.lineupKey = null;
     this.render();
     return true;
   }
@@ -95,8 +102,10 @@ export class UIController {
     const overlay = this.dom['lineup-overlay'];
     if (!overlay) return;
     overlay.hidden = this.game.state !== 'lineup';
-    if (overlay.hidden) return;
+    if (overlay.hidden) { this.lineupKey = null; return; }
     const selected = new Set(this.game.lineupSelection);
+    const key = `lineup:${[...selected].join('|')}`;
+    if (!this.shouldRenderLineup(key)) return;
     this.dom['lineup-choices'].innerHTML = ['bifang', 'fuzhu', 'yinglong', 'baize'].map(type => {
       const item = TOWER_DATA[type];
       const active = selected.has(type);
