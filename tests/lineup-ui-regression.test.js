@@ -5,9 +5,9 @@ import { UIController } from '../src/ui/UIController.js';
 
 test('lineup choices are not rebuilt when the selection signature is unchanged', () => {
   const ui = Object.create(UIController.prototype);
-  assert.equal(ui.shouldRenderLineup('lineup:bifang,fuzhu'), true);
-  assert.equal(ui.shouldRenderLineup('lineup:bifang,fuzhu'), false);
-  assert.equal(ui.shouldRenderLineup('lineup:bifang,fuzhu,baize'), true);
+  assert.equal(ui.shouldRenderLineup('lineup:bifang|fuzhu'), true);
+  assert.equal(ui.shouldRenderLineup('lineup:bifang|fuzhu'), false);
+  assert.equal(ui.shouldRenderLineup('lineup:bifang|fuzhu|baize'), true);
 });
 
 test('lineup render is keyed instead of replacing card DOM every animation frame', async () => {
@@ -18,9 +18,17 @@ test('lineup render is keyed instead of replacing card DOM every animation frame
 });
 
 test('Level4 lineup copy uses dark high-contrast text over the pale art panel', async () => {
-  const css = await readFile(new URL('../styles-fixes.css', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../styles-lineup.css', import.meta.url), 'utf8');
   assert.match(css, /\.lineup-modal\s*\{[\s\S]*color:\s*#1b2b4a/i);
   assert.match(css, /\.lineup-modal h1\s*\{[\s\S]*color:\s*#182846/i);
   assert.match(css, /\.lineup-help\s*\{[\s\S]*color:\s*#354564/i);
   assert.match(css, /\.lineup-help\s*\{[\s\S]*font-weight:\s*650/i);
+});
+
+test('Level4 lineup fix is cache-busted at the document and module boundary', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  assert.match(html, /styles-lineup\.css\?v=lineup-fix-1/);
+  assert.match(html, /src\/main\.js\?v=lineup-fix-1/);
+  assert.match(main, /UIController\.js\?v=lineup-fix-1/);
 });
