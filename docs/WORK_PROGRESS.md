@@ -43,9 +43,10 @@
 
 ### 驗證與續作
 
-- Implementation checkpoint：`e31e507`；設計：`docs/superpowers/specs/2026-09-12-level4-qingqiu-design.md`；計畫：`docs/superpowers/plans/2026-09-12-level4-qingqiu.md`。
-- 自動測試共 122 項、`npm run check`、逐檔 `node --check`、`git diff --check` 已通過；部署前會 fresh 重跑並記錄最終總數。
-- 本機 Playwright 瀏覽器下載受網路限制；390px / 390×700 實頁 smoke 改在 GitHub Pages 部署後執行。
+- Implementation checkpoint：`f3b0288`；GitHub `main` 部署提交：`0c3c365`；設計：`docs/superpowers/specs/2026-09-12-level4-qingqiu-design.md`；計畫：`docs/superpowers/plans/2026-09-12-level4-qingqiu.md`。
+- Fresh 自動測試共 122 項全數通過；`npm run check`、逐檔 `node --check`、`git diff --check` 亦通過。
+- GitHub Pages 390×700 smoke：Level4 lineup 與 Boss P3 均解除 `art-loading`，`clientWidth=scrollWidth=390`，無水平溢位；四張陣容圖皆 `complete=true`。
+- 選定畢方／夫諸／白澤後第一次點塔位，三張建造圖立即出現且皆 `complete=true`；Boss P3 於相隔 650ms 的 390px 畫面中可肉眼辨識 idle scale／bob 差異。
 - 玩家仍需實測：Level3→4 解鎖理解、4 選 3 直覺性、首次建造／Boss／VFX 載入、路徑與兩段幻霧貼圖、W1–3 與 W6–10 體感、幻影真偽辨識、五種 Boss Motion、真實手機 Safari safe-area。
 
 ## 2026-09-11 圖片資產體積與載入速度優化
