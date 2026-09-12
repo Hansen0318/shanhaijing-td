@@ -23,6 +23,10 @@ export class Tower {
       penetration: this.data.penetration,
       burnDps: modifiers.bifangBurn ?? 0,
       bossBonus: this.type === 'yinglong' ? modifiers.yinglongBoss ?? 0 : 0,
+      insightDuration: this.data.insightDuration,
+      vulnerability: this.data.vulnerability,
+      bossVulnerability: this.data.bossVulnerability,
+      defensePierce: 0,
     };
     if (this.level === 3 && this.type === 'bifang') stats.explosionRadius *= this.data.level3.explosionRadiusMultiplier;
     if (this.type === 'bifang') stats.explosionRadius *= 1 + (modifiers.bifangRadius ?? 0);
@@ -30,6 +34,11 @@ export class Tower {
     if (this.type === 'fuzhu') stats.slow = Math.min(0.75, stats.slow + (modifiers.fuzhuSlow ?? 0));
     if (this.level === 3 && this.type === 'yinglong') stats.penetration += this.data.level3.penetrationBonus;
     if (this.type === 'yinglong') stats.penetration += modifiers.yinglongPenetration ?? 0;
+    if (this.type === 'baize' && this.level >= 2) {
+      stats.insightDuration = this.data.level2.insightDuration;
+      stats.range += this.data.level2.rangeBonus;
+    }
+    if (this.type === 'baize' && this.level >= 3) stats.defensePierce = this.data.level3.defensePierce;
     return stats;
   }
 }

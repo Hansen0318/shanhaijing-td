@@ -1,7 +1,7 @@
-import { Game } from './core/Game.js?v=boss-viewport-1';
-import { Renderer } from './render/Renderer.js?v=asset-opt-1';
-import { UIController } from './ui/UIController.js?v=asset-opt-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=asset-opt-1';
+import { Game } from './core/Game.js?v=level4-1';
+import { Renderer } from './render/Renderer.js?v=level4-1';
+import { UIController } from './ui/UIController.js?v=level4-1';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level4-1';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }
@@ -25,6 +25,7 @@ function renderDevMenu() {
       <button data-dev-level="1">Level1</button>
       <button data-dev-level="2">Level2</button>
       <button data-dev-level="3">Level3</button>
+      <button data-dev-level="4">Level4</button>
     </main>`;
   document.querySelectorAll('[data-dev-level]').forEach(button => {
     button.addEventListener('click', () => {
@@ -35,7 +36,7 @@ function renderDevMenu() {
 }
 
 function drawPathDebug(renderer, game) {
-  if (params.get('devPath') !== '1' || game.levelId !== 3) return;
+  if (params.get('devPath') !== '1' || ![3, 4].includes(game.levelId)) return;
   const ctx = renderer.ctx;
   const runtime = game.map.waypoints;
   const anchors = game.level.map.waypoints;
@@ -52,6 +53,9 @@ function drawPathDebug(renderer, game) {
     ctx.arc(point.x, point.y, 2.5, 0, Math.PI * 2);
     ctx.fill();
   });
+  ctx.strokeStyle = 'rgba(184, 112, 255, .95)';
+  ctx.lineWidth = 2;
+  for (const zone of game.level.map.fogZones ?? []) ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
   ctx.strokeStyle = 'rgba(255, 80, 120, .95)';
   ctx.lineWidth = 1.5;
   game.enemies.forEach(enemy => {
@@ -65,13 +69,38 @@ function drawPathDebug(renderer, game) {
   ctx.restore();
 }
 
+function setupLevelFourDev(game, devLevel) {
+  if (devLevel !== 4) return;
+  const devWave = Number.parseInt(params.get('devWave') ?? '', 10);
+  const devBossPhase = Number.parseInt(params.get('devBossPhase') ?? '', 10);
+  const needsBattlefield = params.get('devPath') === '1' || Number.isInteger(devWave) || [1, 2, 3].includes(devBossPhase);
+  if (!needsBattlefield) return;
+  for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+  game.confirmLineup();
+  if ([1, 2, 3].includes(devBossPhase)) {
+    game.wave.waveNumber = 9;
+    game.startWaveNow();
+    game.wave.queue.length = 0;
+    game.wave.spawnedAlive = 1;
+    const boss = game.spawnEnemy('jiuweihu');
+    if (devBossPhase >= 2) { boss.hp = boss.maxHp * 0.6; game.update(0); }
+    if (devBossPhase >= 3) { boss.hp = boss.maxHp * 0.25; game.update(0); }
+    return;
+  }
+  if (devWave >= 1 && devWave <= 10) {
+    game.wave.waveNumber = devWave - 1;
+    game.startWaveNow();
+  }
+}
+
 function initializeGame() {
   resetViewport();
   const devLevel = Number.parseInt(params.get('devLevel') ?? '', 10);
-  const initialLevelId = [1, 2, 3].includes(devLevel) ? devLevel : 1;
+  const initialLevelId = [1, 2, 3, 4].includes(devLevel) ? devLevel : 1;
   const canvas = document.querySelector('#game-canvas');
   const blockingStartedAt = performance.now();
   const game = new Game(Math.random, initialLevelId);
+  setupLevelFourDev(game, devLevel);
   const art = new ArtStore(Image, initialLevelId);
   const renderer = new Renderer(canvas, art);
   document.body.dataset.level = String(game.levelId);

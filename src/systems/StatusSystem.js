@@ -1,4 +1,13 @@
 export class StatusSystem {
+  static applyInsight(enemy, { duration, vulnerability, bossVulnerability, defensePierce }) {
+    const current = enemy.statuses.insight;
+    enemy.statuses.insight = {
+      remaining: Math.max(duration, current?.remaining ?? 0),
+      vulnerability: Math.max(vulnerability ?? 0, current?.vulnerability ?? 0),
+      bossVulnerability: Math.max(bossVulnerability ?? 0, current?.bossVulnerability ?? 0),
+      defensePierce: Math.max(defensePierce ?? 0, current?.defensePierce ?? 0),
+    };
+  }
   static applySlow(enemy, amount, duration) {
     const current = enemy.statuses.slow;
     enemy.statuses.slow = { amount: Math.max(amount, current?.amount ?? 0), remaining: Math.max(duration, current?.remaining ?? 0) };
@@ -9,7 +18,10 @@ export class StatusSystem {
   }
   static speedMultiplier(enemy) {
     const slow = enemy.statuses.slow?.amount ?? 0;
-    return Math.max(0.2, 1 - slow * (enemy.data?.slowEffectiveness ?? 1));
+    const sprint = enemy.statuses.fogSprint?.amount ?? 0;
+    const bossStep = enemy.statuses.bossStep ? 0.25 : 0;
+    const slowEffectiveness = (enemy.data?.slowEffectiveness ?? 1) * (enemy.slowEffectivenessMultiplier ?? 1);
+    return Math.max(0.2, 1 - slow * slowEffectiveness) * (1 + sprint + bossStep);
   }
   static update(enemy, dt) {
     const burn = enemy.statuses.burn;
@@ -20,5 +32,20 @@ export class StatusSystem {
     }
     const slow = enemy.statuses.slow;
     if (slow) { slow.remaining -= dt; if (slow.remaining <= 0) delete enemy.statuses.slow; }
+    for (const key of ['fogSprint', 'insight']) {
+      const status = enemy.statuses[key];
+      if (!status) continue;
+      status.remaining -= dt;
+      if (status.remaining <= 0) delete enemy.statuses[key];
+    }
+    for (const key of ['bossShield', 'bossStep', 'ultimateWard']) {
+      const status = enemy.statuses[key];
+      if (!status) continue;
+      status.remaining -= dt;
+      if (status.remaining > 0) continue;
+      delete enemy.statuses[key];
+      if (key === 'bossShield') enemy.activeDefenseMultiplier = 1;
+      if (key === 'ultimateWard') enemy.slowEffectivenessMultiplier = 1;
+    }
   }
 }

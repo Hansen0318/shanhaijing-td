@@ -8,6 +8,16 @@ test('HTML exposes the complete mobile game interface', async () => {
   for (const value of ['viewport-fit=cover', 'game-canvas', 'base-hp', 'gold', 'wave', 'pause-button', 'speed-button', 'context-panel', 'blessing-overlay', 'pause-overlay', 'result-overlay', 'next-level-button', 'boss-name', 'src/main.js']) assert.match(html, new RegExp(value));
 });
 
+test('HTML exposes the level-four three-of-four lineup dialog', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  for (const value of ['lineup-overlay', 'lineup-choices', 'confirm-lineup-button']) {
+    assert.match(html, new RegExp(`id="${value}"`));
+  }
+  assert.match(html, /選擇 3 隻異獸/);
+  assert.match(html, /敵情：妖霧籠罩青丘，敵人擅長高速突進與幻術干擾/);
+  assert.match(html, /推薦職能：控制／洞察／範圍攻擊/);
+});
+
 test('preparation CTA lives in wave preview and no longer overlays battlefield', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const ui = await readFile(new URL('../src/ui/UIController.js', import.meta.url), 'utf8');
@@ -27,17 +37,27 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
   assert.doesNotMatch(html, /dev-level-menu|Level1<\/button>|Level2<\/button>|Level3<\/button>/);
   assert.match(main, /params\.get\('devMenu'\) === '1'/);
   assert.match(main, /renderDevMenu\(\)/);
-  assert.match(main, /data-dev-level="1"[\s\S]*data-dev-level="2"[\s\S]*data-dev-level="3"/);
-  assert.match(main, /\[1, 2, 3\]\.includes\(devLevel\) \? devLevel : 1/);
+  assert.match(main, /data-dev-level="1"[\s\S]*data-dev-level="2"[\s\S]*data-dev-level="3"[\s\S]*data-dev-level="4"/);
+  assert.match(main, /\[1, 2, 3, 4\]\.includes\(devLevel\) \? devLevel : 1/);
   assert.match(main, /new ArtStore\(Image, initialLevelId\)/);
   assert.match(main, /new Renderer\(canvas, art\)/);
 });
 
+test('dev menu and guarded direct controls include level four', async () => {
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  assert.match(main, /data-dev-level="4"/);
+  assert.match(main, /\[1, 2, 3, 4\]\.includes\(devLevel\)/);
+  assert.match(main, /params\.get\('devWave'\)/);
+  assert.match(main, /params\.get\('devBossPhase'\)/);
+  assert.match(main, /devLevel !== 4/);
+  assert.match(main, /game\.level\.map\.fogZones/);
+});
+
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(html, /styles\.css\?v=asset-opt-1/);
-  assert.match(html, /styles-fixes\.css\?v=asset-opt-1/);
-  assert.match(html, /src\/main\.js\?v=asset-opt-1/);
+  assert.match(html, /styles\.css\?v=level4-1/);
+  assert.match(html, /styles-fixes\.css\?v=level4-1/);
+  assert.match(html, /src\/main\.js\?v=level4-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

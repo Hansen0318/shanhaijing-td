@@ -21,6 +21,7 @@ export const TOWER_DATA = Object.freeze({
   bifang: { id: 'bifang', name: '畢方', emoji: '🔥', role: '範圍輸出', cost: 120, damage: 18, interval: 1, range: 130, projectileSpeed: 310, explosionRadius: 55, level3: { explosionRadiusMultiplier: 1.35 } },
   fuzhu: { id: 'fuzhu', name: '夫諸', emoji: '🦌', role: '緩速控場', cost: 100, damage: 8, interval: 1.2, range: 125, projectileSpeed: 360, slow: 0.25, slowDuration: 2, level3: { slowBonus: 0.15 } },
   yinglong: { id: 'yinglong', name: '應龍', emoji: '🐉', role: '高傷穿透', cost: 160, damage: 32, interval: 1.4, range: 170, projectileSpeed: 520, penetration: 2, level3: { penetrationBonus: 1 } },
+  baize: { id: 'baize', name: '白澤', emoji: '🦄', role: '洞察輔助', cost: 125, damage: 14, interval: 1.05, range: 128, projectileSpeed: 400, insightDuration: 3, vulnerability: 0.15, bossVulnerability: 0.1, level2: { insightDuration: 4, rangeBonus: 8 }, level3: { defensePierce: 0.25 } },
 });
 
 export const ENEMY_DATA = Object.freeze({
@@ -34,6 +35,9 @@ export const ENEMY_DATA = Object.freeze({
   shuixiao: { id: 'shuixiao', name: '水魈', emoji: '🌊', hp: 48, speed: 90, baseDamage: 1, reward: 11, radius: 11, weakWaterSpeedMultiplier: 1.25 },
   xuanjiashou: { id: 'xuanjiashou', name: '玄甲獸', emoji: '🐢', hp: 240, speed: 26, baseDamage: 3, reward: 24, radius: 17, slowEffectiveness: 0.5 },
   xiangliu: { id: 'xiangliu', name: '相柳', emoji: '🐍', hp: 4500, speed: 17, baseDamage: 20, reward: 0, radius: 25, isBoss: true, bossMechanic: { type: 'staged', stages: [{ threshold: 0.75, action: 'heal', healRatio: 0.06 }, { threshold: 0.5, action: 'heal', healRatio: 0.08 }, { threshold: 0.25, action: 'frenzy', speedMultiplier: 1.2 }] } },
+  meihu: { id: 'meihu', name: '魅狐', emoji: '🦊', hp: 70, speed: 92, baseDamage: 1, reward: 12, radius: 11 },
+  huanli: { id: 'huanli', name: '幻狸', emoji: '🐈', hp: 260, speed: 34, baseDamage: 3, reward: 25, radius: 17 },
+  jiuweihu: { id: 'jiuweihu', name: '九尾狐', emoji: '🦊', hp: 5200, speed: 18, baseDamage: 20, reward: 0, radius: 27, isBoss: true, bossMechanic: { type: 'jiuweihu' } },
 });
 
 const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
@@ -74,6 +78,19 @@ export const LEVEL3_WAVE_DATA = Object.freeze([
   wave([{ type: 'shuixiao', count: 22 }, { type: 'xuanjiashou', count: 9 }], 0.54, { hpMultiplier: 1.4 }),
   wave([{ type: 'shuixiao', count: 26 }, { type: 'xuanjiashou', count: 12 }], 0.5, { hpMultiplier: 1.55 }),
   wave([{ type: 'shuixiao', count: 12 }, { type: 'xuanjiashou', count: 5 }, { type: 'xiangliu', count: 1 }], 0.86, { hpMultiplier: 1.45, bossHpMultiplier: 1.5 }),
+]);
+
+export const LEVEL4_WAVE_DATA = Object.freeze([
+  wave([{ type: 'meihu', count: 6 }], 1.1),
+  wave([{ type: 'meihu', count: 8 }], 1),
+  wave([{ type: 'meihu', count: 6 }, { type: 'huanli', count: 1 }], 1.05),
+  wave([{ type: 'meihu', count: 8 }, { type: 'huanli', count: 2 }], 0.92),
+  wave([{ type: 'meihu', count: 7 }, { type: 'huanli', count: 4 }], 0.88, { hpMultiplier: 1.05 }),
+  wave([{ type: 'meihu', count: 10 }, { type: 'huanli', count: 4 }], 0.74, { hpMultiplier: 1.1 }),
+  wave([{ type: 'meihu', count: 8 }, { type: 'huanli', count: 6 }], 0.78, { hpMultiplier: 1.2 }),
+  wave([{ type: 'meihu', count: 12 }, { type: 'huanli', count: 6 }], 0.62, { hpMultiplier: 1.3 }),
+  wave([{ type: 'meihu', count: 10 }, { type: 'huanli', count: 8 }], 0.58, { hpMultiplier: 1.45 }),
+  wave([{ type: 'meihu', count: 10 }, { type: 'huanli', count: 6 }, { type: 'jiuweihu', count: 1 }], 0.82, { hpMultiplier: 1.35, bossHpMultiplier: 1 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
@@ -147,6 +164,32 @@ export const LEVEL3_MAP_DATA = Object.freeze({
   ],
 });
 
+export const LEVEL4_MAP_DATA = Object.freeze({
+  width: 390,
+  height: 610,
+  pathWidth: 54,
+  pathSmoothing: 2,
+  waypoints: [
+    { x: -20, y: 3 }, { x: 28, y: 8 }, { x: 67, y: 24 }, { x: 108, y: 45 },
+    { x: 151, y: 59 }, { x: 188, y: 74 }, { x: 211, y: 96 }, { x: 218, y: 119 },
+    { x: 207, y: 140 }, { x: 181, y: 159 }, { x: 151, y: 181 }, { x: 137, y: 203 },
+    { x: 148, y: 224 }, { x: 181, y: 239 }, { x: 226, y: 244 }, { x: 268, y: 254 },
+    { x: 290, y: 273 }, { x: 292, y: 294 }, { x: 278, y: 313 }, { x: 247, y: 327 },
+    { x: 205, y: 338 }, { x: 170, y: 353 }, { x: 152, y: 372 }, { x: 163, y: 390 },
+    { x: 197, y: 402 }, { x: 242, y: 406 }, { x: 284, y: 414 }, { x: 317, y: 431 },
+    { x: 335, y: 454 }, { x: 335, y: 479 }, { x: 321, y: 506 }, { x: 321, y: 533 },
+    { x: 338, y: 560 }, { x: 367, y: 583 }, { x: 410, y: 600 },
+  ],
+  fogZones: [
+    { id: 'upper', x: 128, y: 111, width: 116, height: 111 },
+    { id: 'lower', x: 244, y: 375, width: 137, height: 105 },
+  ],
+  slots: [
+    { x: 95, y: 91 }, { x: 123, y: 166 }, { x: 227, y: 183 }, { x: 305, y: 235 },
+    { x: 112, y: 319 }, { x: 243, y: 330 }, { x: 269, y: 451 }, { x: 367, y: 483 },
+  ],
+});
+
 const levelOne = Object.freeze({
   ...LEVEL_DATA,
   map: MAP_DATA,
@@ -186,7 +229,21 @@ const levelThree = Object.freeze({
   }),
 });
 
-export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree });
+const levelFour = Object.freeze({
+  id: 4,
+  name: '青丘妖境',
+  baseName: '青丘靈臺',
+  bossType: 'jiuweihu',
+  map: LEVEL4_MAP_DATA,
+  waves: LEVEL4_WAVE_DATA,
+  art: Object.freeze({
+    background: 'level4Background', backgroundCrop: { x: 0, y: 0, width: 390, height: 610 },
+    spawn: 'level4Spawn', spawnPosition: { x: 5, y: 8 },
+    base: 'level4Base', basePosition: { x: 378, y: 590 }, bossPanel: 'jiuweihuBossPanel',
+  }),
+});
+
+export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour });
 
 export function getLevelData(levelId) {
   return LEVELS[levelId] ?? null;

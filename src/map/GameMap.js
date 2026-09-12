@@ -58,5 +58,11 @@ export class GameMap {
       && point.y >= zone.y && point.y <= zone.y + zone.height
     ));
   }
+  fogZoneAt(point) {
+    return (this.data.fogZones ?? []).find(zone => (
+      point.x >= zone.x && point.x <= zone.x + zone.width
+      && point.y >= zone.y && point.y <= zone.y + zone.height
+    ))?.id ?? null;
+  }
   slotAt(point, radius = 30) { return this.data.slots.findIndex(slot => Math.hypot(slot.x - point.x, slot.y - point.y) <= radius); }
 }

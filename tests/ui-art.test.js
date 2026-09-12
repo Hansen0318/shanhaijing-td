@@ -37,6 +37,37 @@ test('build choices render the three packaged tower images', () => {
   assert.equal((ui.dom['context-panel'].innerHTML.match(/class="unit-art"/g) ?? []).length, 3);
 });
 
+test('level-four build choices render only the confirmed lineup', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.contextKey = null;
+  ui.game = {
+    level: LEVELS[4], levelId: 4, selectedSlot: 0, towers: [null],
+    economy: { gold: 300, canAfford: () => true }, state: 'preparation', pendingSellSlot: null,
+    blessings: { modifiers: {} }, canManageTowers: () => true,
+    availableTowerTypes: () => ['bifang', 'yinglong', 'baize'],
+  };
+  ui.dom = { 'context-panel': { innerHTML: '' } };
+  ui.renderContext();
+  assert.match(ui.dom['context-panel'].innerHTML, /tower_bifang_v1\.png/);
+  assert.match(ui.dom['context-panel'].innerHTML, /tower_yinglong_v1\.png/);
+  assert.match(ui.dom['context-panel'].innerHTML, /tower_baize_v1\.png/);
+  assert.doesNotMatch(ui.dom['context-panel'].innerHTML, /tower_fuzhu_v1\.png/);
+});
+
+test('lineup renderer marks selection and enables confirm only at exactly three', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = { state: 'lineup', lineupSelection: ['bifang', 'fuzhu', 'baize'] };
+  ui.dom = {
+    'lineup-overlay': { hidden: true }, 'lineup-choices': { innerHTML: '' },
+    'confirm-lineup-button': { disabled: true },
+  };
+  ui.renderLineup();
+  assert.equal(ui.dom['lineup-overlay'].hidden, false);
+  assert.equal(ui.dom['confirm-lineup-button'].disabled, false);
+  assert.equal((ui.dom['lineup-choices'].innerHTML.match(/aria-pressed="true"/g) ?? []).length, 3);
+  assert.match(ui.dom['lineup-choices'].innerHTML, /tower_baize_v1\.png/);
+});
+
 test('wave preview renders packaged enemy images and first-level identity', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
@@ -110,9 +141,14 @@ test('result panel exposes victory and defeat state for the matching skin', () =
 
   ui.game.levelId = 3;
   ui.renderResult();
-  assert.equal(ui.dom['next-level-button'].hidden, true);
+  assert.equal(ui.dom['next-level-button'].hidden, false);
+  assert.equal(ui.dom['next-level-button'].textContent, '前往第4關');
   assert.match(ui.dom['result-stats'].innerHTML, /新異獸解鎖：白澤/);
   assert.match(ui.dom['result-stats'].innerHTML, /unlock_baize_v1\.png/);
+
+  ui.game.levelId = 4;
+  ui.renderResult();
+  assert.equal(ui.dom['next-level-button'].hidden, true);
 
   ui.game.state = 'defeat';
   ui.renderResult();
@@ -134,4 +170,15 @@ test('wave preview and boss HUD use the active second-level identity and art', (
   assert.equal(ui.dom['boss-hp-text'].textContent, '4320 / 5400');
   assert.equal(ui.dom['boss-hud'].dataset.bossType, 'paoxiao');
   assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_paoxiao_panel_v1\.png/);
+});
+
+test('level-four wave ten preview uses the phase-one Jiuweihu art', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[4], levelId: 4, state: 'preparation', enemies: [],
+    wave: { waveNumber: 9, queue: [], getWaveGroups: () => LEVELS[4].waves[9].groups },
+  };
+  ui.dom = bossSlotDom();
+  ui.renderBossSlot();
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /boss_jiuweihu_phase1_v1\.png/);
 });

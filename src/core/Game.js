@@ -2,6 +2,7 @@ import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
 import { Enemy } from '../entities/Enemy.js';
+import { Illusion } from '../entities/Illusion.js';
 import { Tower } from '../entities/Tower.js';
 import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
@@ -9,8 +10,10 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js';
 import { WaveManager } from '../systems/WaveManager.js';
 import { BossSystem } from '../systems/BossSystem.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level3-1';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level3-1';
+import { StatusSystem } from '../systems/StatusSystem.js';
+import { LEVEL4_ROSTER, isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level4-1';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -32,9 +35,11 @@ export class Game {
     this.blessings = new BlessingSystem(BLESSING_DATA, this.random);
     this.wave = new WaveManager(level.waves);
     this.baseHp = GAME_CONFIG.baseHp;
-    this.state = 'preparation';
+    this.lineupSelection = [];
+    this.state = level.id === 4 ? 'lineup' : 'preparation';
     this.previousState = null;
     this.enemies = [];
+    this.illusions = [];
     this.towers = Array(level.map.slots.length).fill(null);
     this.projectiles = [];
     this.effects = [];
@@ -54,10 +59,36 @@ export class Game {
     if (this.state !== 'victory' || levelId !== this.levelId + 1 || !getLevelData(levelId)) return false;
     return this.resetRun(levelId);
   }
+  beginLevelFourLineup() {
+    if (this.levelId !== 4) return false;
+    this.lineupSelection = [];
+    this.state = 'lineup';
+    this.time.setPaused(true);
+    return true;
+  }
+  toggleLineup(type) {
+    if (this.levelId !== 4 || this.state !== 'lineup' || !LEVEL4_ROSTER.includes(type)) return false;
+    if (this.lineupSelection.includes(type)) {
+      this.lineupSelection = this.lineupSelection.filter(item => item !== type);
+      return true;
+    }
+    if (this.lineupSelection.length >= 3) return false;
+    this.lineupSelection = normalizeLineup([...this.lineupSelection, type]);
+    return true;
+  }
+  confirmLineup() {
+    if (this.levelId !== 4 || this.state !== 'lineup' || !isValidLineup(this.lineupSelection)) return false;
+    this.state = 'preparation';
+    this.time.setPaused(true);
+    return true;
+  }
+  availableTowerTypes() {
+    return this.levelId === 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
+  }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
   buildTower(slotIndex, type) {
     const data = TOWER_DATA[type];
-    if (!this.canManageTowers() || !data || this.towers[slotIndex] || !this.level.map.slots[slotIndex]) return { ok: false };
+    if (!this.canManageTowers() || !this.availableTowerTypes().includes(type) || !data || this.towers[slotIndex] || !this.level.map.slots[slotIndex]) return { ok: false };
     if (!this.economy.spend(data.cost)) return { ok: false, reason: 'gold' };
     this.towers[slotIndex] = new Tower(type, data, this.level.map.slots[slotIndex]);
     this.stats.built += 1;
@@ -161,8 +192,16 @@ export class Game {
     const enemyData = hpMultiplier === 1
       ? baseData
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
-    this.enemies.push(new Enemy(type, enemyData, this.map));
+    const enemy = new Enemy(type, enemyData, this.map);
+    this.enemies.push(enemy);
     if (baseData.isBoss) this.queueBanner(`Boss現身：${baseData.name}`, 1.1);
+    return enemy;
+  }
+  spawnIllusions(source, count = 2, duration = source.statuses.insight ? 0.8 : 1.6) {
+    const offsets = [{ x: -15, y: -8 }, { x: 15, y: 8 }, { x: 0, y: -18 }];
+    const created = offsets.slice(0, count).map(offset => new Illusion(source, offset, duration));
+    this.illusions.push(...created);
+    return created;
   }
   onEnemyKilled(enemy) {
     if (enemy.rewarded) return;
@@ -187,11 +226,15 @@ export class Game {
     const dt = this.time.step(realDelta);
     this.wave.update(dt, type => this.spawnEnemy(type));
     this.enemies.forEach(enemy => enemy.update(dt));
+    this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
+    this.illusions.forEach(illusion => illusion.update(dt));
     this.updateTowers(dt);
-    this.projectiles.forEach(projectile => projectile.update(dt, this.enemies));
+    this.projectiles.forEach(projectile => projectile.update(dt, [...this.enemies, ...this.illusions]));
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
+    this.illusions = this.illusions.filter(illusion => illusion.alive);
     this.enemies.forEach(enemy => {
-      for (const event of BossSystem.check(enemy)) this.handleBossEvent(enemy, event);
+      const bossContext = { inFog: Boolean(this.map.fogZoneAt(enemy)), insightActive: Boolean(enemy.statuses.insight) };
+      for (const event of BossSystem.update(enemy, dt, bossContext)) this.handleBossEvent(enemy, event);
       if (!enemy.alive && !enemy.processed) {
         enemy.processed = true;
         if (enemy.reachedBase) this.damageBase(enemy.baseDamage); else this.onEnemyKilled(enemy);
@@ -202,6 +245,27 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'bossEvolution') {
+      this.effects.push({ type: 'jiuweihuEvolution', sourceId: enemy.id, x: enemy.x, y: enemy.y, phase: event.phase, life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'bossIllusions') {
+      this.spawnIllusions(enemy, event.count, event.duration);
+      this.effects.push({ type: 'jiuweihuSkill', sourceId: enemy.id, x: enemy.x, y: enemy.y, skill: 'illusions', life: 0.65, duration: 0.65 });
+      return;
+    }
+    if (event.type === 'bossShield' || event.type === 'bossStep') {
+      this.effects.push({ type: 'jiuweihuSkill', sourceId: enemy.id, x: enemy.x, y: enemy.y, skill: event.type, life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'bossUltimateCharge') {
+      this.effects.push({ type: 'jiuweihuSkill', sourceId: enemy.id, x: enemy.x, y: enemy.y, skill: 'ultimateCharge', life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'bossUltimateRelease') {
+      this.effects.push({ type: 'jiuweihuUltimate', x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'frenzy') {
       this.queueBanner(`${enemy.data.name} 狂暴化！`, 1.4);
       const type = enemy.type === 'xiangliu' ? 'xiangliuEnragePulse' : 'qiongqiFrenzyPulse';
@@ -225,18 +289,29 @@ export class Game {
     }
   }
   updateTowers(dt) {
+    const targets = [...this.enemies, ...this.illusions];
     for (const tower of this.towers) {
       if (!tower) continue;
       tower.cooldown -= dt;
       if (tower.cooldown > 0) continue;
       const stats = tower.getStats(this.blessings.modifiers);
-      const target = CombatSystem.acquireTarget(tower, this.enemies, stats.range);
+      const target = CombatSystem.acquireTarget(tower, targets, stats.range, { preferReal: tower.type === 'baize' });
       if (!target) continue;
       tower.cooldown += stats.interval;
       const recoil = MotionSystem.recoilEffect(tower, target, this.motionEnabled);
       if (recoil) this.effects.push(recoil);
-      if (tower.type === 'yinglong') {
-        const hit = CombatSystem.penetrate(this.enemies, stats.penetration, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability, bossBonus: stats.bossBonus }, tower, stats.range);
+      if (tower.type === 'baize') {
+        CombatSystem.hit(target, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability });
+        StatusSystem.applyInsight(target, stats);
+        if (!target.isIllusion) {
+          this.illusions.filter(illusion => illusion.sourceId === target.id).forEach(illusion => {
+            illusion.life = Math.min(illusion.life, 0.8);
+            illusion.duration = Math.min(illusion.duration, 0.8);
+          });
+        }
+        this.effects.push({ type: 'baizeInsight', from: { x: tower.x, y: tower.y }, to: { x: target.x, y: target.y }, life: 0.35, duration: 0.35 });
+      } else if (tower.type === 'yinglong') {
+        const hit = CombatSystem.penetrate(targets, stats.penetration, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability, bossBonus: stats.bossBonus }, tower, stats.range);
         this.effects.push({
           type: 'beam',
           points: [{ x: tower.x, y: tower.y }, ...hit.map(item => ({ x: item.x, y: item.y }))],

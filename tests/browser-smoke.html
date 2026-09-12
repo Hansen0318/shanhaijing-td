@@ -41,6 +41,12 @@
     <button data-state="xiangliu50">相柳 50%</button>
     <button data-state="xiangliu25">相柳 25%</button>
     <button data-state="level3victory">第3關 Victory</button>
+    <button data-state="level4">第4關陣容</button>
+    <button data-state="level4wave1">第4關 Wave 1</button>
+    <button data-state="level4boss">九尾狐 P1</button>
+    <button data-state="jiuweihu2">九尾狐 P2</button>
+    <button data-state="jiuweihu3">九尾狐 P3</button>
+    <button data-state="level4victory">第4關 Victory</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -48,7 +54,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level3-1"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level4-1"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -124,6 +130,39 @@
       const queuedBoss = game.wave.queue.indexOf('xiangliu');
       if (queuedBoss >= 0) game.wave.queue.splice(queuedBoss, 1);
       game.spawnEnemy('xiangliu');
+    }
+
+    async function enterLevel4(game, confirm = false) {
+      if (game.levelId === 4) {
+        game.restart();
+        if (confirm) {
+          for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+          game.confirmLineup();
+        }
+        await twoFrames();
+        return;
+      }
+      await enterLevel3(game);
+      game.end('victory');
+      await twoFrames();
+      frame.contentDocument.querySelector('#next-level-button').click();
+      while (game.levelId !== 4 || frame.contentDocument.body.classList.contains('art-loading')) {
+        await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      if (confirm && game.state === 'lineup') {
+        for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+        game.confirmLineup();
+      }
+      await twoFrames();
+    }
+
+    async function configureLevel4Boss(game) {
+      await enterLevel4(game, true);
+      game.wave.waveNumber = 9;
+      game.startWaveNow();
+      game.wave.queue.length = 0;
+      game.wave.spawnedAlive = 1;
+      game.spawnEnemy('jiuweihu');
     }
 
     document.addEventListener('click', async event => {
@@ -240,6 +279,27 @@
       if (state === 'level3victory') {
         let boss = game.enemies.find(enemy => enemy.type === 'xiangliu');
         if (!boss) { await configureLevel3Boss(game); boss = game.enemies.find(enemy => enemy.type === 'xiangliu'); }
+        boss.takeDamage(boss.maxHp);
+        game.update(0);
+      }
+      if (state === 'level4') await enterLevel4(game, false);
+      if (state === 'level4wave1') {
+        await enterLevel4(game, true);
+        game.buildTower(0, 'baize');
+        game.buildTower(3, 'bifang');
+        game.startWaveNow();
+      }
+      if (state === 'level4boss') await configureLevel4Boss(game);
+      if (['jiuweihu2', 'jiuweihu3'].includes(state)) {
+        let boss = game.enemies.find(enemy => enemy.type === 'jiuweihu');
+        if (!boss) { await configureLevel4Boss(game); boss = game.enemies.find(enemy => enemy.type === 'jiuweihu'); }
+        boss.hp = boss.maxHp * 0.6;
+        game.update(0);
+        if (state === 'jiuweihu3') { boss.hp = boss.maxHp * 0.25; game.update(0); }
+      }
+      if (state === 'level4victory') {
+        let boss = game.enemies.find(enemy => enemy.type === 'jiuweihu');
+        if (!boss) { await configureLevel4Boss(game); boss = game.enemies.find(enemy => enemy.type === 'jiuweihu'); }
         boss.takeDamage(boss.maxHp);
         game.update(0);
       }

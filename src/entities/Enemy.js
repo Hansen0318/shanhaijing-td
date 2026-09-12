@@ -1,5 +1,5 @@
 import { StatusSystem } from '../systems/StatusSystem.js';
-import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level3-1';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level4-1';
 
 let nextEnemyId = 1;
 export class Enemy {
@@ -23,6 +23,8 @@ export class Enemy {
     this.speedMultiplier = 1;
     this.frenzied = false;
     this.triggeredBossThresholds = new Set();
+    this.enteredFogZones = new Set();
+    this.spawnedIllusions = false;
     Object.assign(this, map.positionAt(0));
   }
   update(dt) {
@@ -30,12 +32,25 @@ export class Enemy {
     StatusSystem.update(this, dt);
     if (!this.alive) return;
     this.hitFlash = Math.max(0, this.hitFlash - dt);
+    const fogZone = this.map.fogZoneAt(this);
+    if (this.type === 'meihu' && fogZone && !this.enteredFogZones.has(fogZone)) {
+      this.enteredFogZones.add(fogZone);
+      this.statuses.fogSprint = {
+        amount: this.statuses.insight ? 0.15 : 0.3,
+        remaining: 1.4,
+      };
+    }
     const terrainMultiplier = this.map.isWeakWater(this)
       ? (this.data.weakWaterSpeedMultiplier ?? 0.85)
       : 1;
     this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * dt;
     Object.assign(this, this.map.positionAt(this.pathDistance));
     if (this.pathDistance >= this.map.totalLength) { this.reachedBase = true; this.alive = false; }
+  }
+  shouldSpawnIllusions() {
+    if (this.type !== 'huanli' || this.spawnedIllusions || !this.alive || this.hp > this.maxHp * 0.6) return false;
+    this.spawnedIllusions = true;
+    return true;
   }
   updateVisual(realDelta) { this.visualHitFlash = Math.max(0, this.visualHitFlash - realDelta); }
   takeDamage(amount) {

@@ -87,6 +87,20 @@ test('renderer uses level-three map art and draws both enemies plus Xiangliu', (
   for (const id of ['shuixiao', 'xuanjiashou', 'xiangliu']) assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true);
 });
 
+test('renderer uses Qingqiu map art, Baize, illusions, and Jiuweihu phase sprites', () => {
+  const { renderer, ctx } = rendererFixture();
+  const game = emptyGame(LEVELS[4]);
+  game.visualTime = 0.2;
+  game.towers[0] = { type: 'baize', x: 95, y: 91, level: 1, getStats: () => ({ range: 128 }) };
+  const map = { totalLength: 100, positionAt: () => ({ x: 81, y: 20 }), isWeakWater: () => false };
+  game.enemies = [{ type: 'jiuweihu', bossPhase: 2, id: 4, x: 80, y: 20, radius: 27, hp: 100, maxHp: 100, isBoss: true, hitFlash: 0, visualHitFlash: 0, statuses: {}, map, pathDistance: 40 }];
+  game.illusions = [{ type: 'huanli', id: 'illusion-1', x: 100, y: 40, radius: 17, hp: 1, maxHp: 1, isBoss: false, isIllusion: true, hitFlash: 0, visualHitFlash: 0, statuses: {}, map, pathDistance: 30 }];
+  renderer.render(game);
+  for (const id of ['level4Background', 'level4Spawn', 'level4Base', 'baize', 'jiuweihuPhase2', 'huanli']) {
+    assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
+  }
+});
+
 test('renderer draws all new level-two enemy and boss art', () => {
   const { renderer, ctx } = rendererFixture();
   const map = { totalLength: 100, positionAt: () => ({ x: 80, y: 20 }) };

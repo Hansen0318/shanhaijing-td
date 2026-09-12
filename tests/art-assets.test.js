@@ -19,13 +19,13 @@ function assertCompletePngWithAlpha(bytes, id) {
   assert.equal(hasAlpha, true, `${id} must retain alpha transparency`);
 }
 
-test('art catalog exposes all 50 packaged assets and every file is deployable', async () => {
+test('art catalog exposes all 67 packaged assets and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 50);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 50);
+  assert.equal(entries.length, 67);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 67);
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.jpg');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
   assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.jpg');
@@ -36,11 +36,14 @@ test('art catalog exposes all 50 packaged assets and every file is deployable', 
   assert.equal(ART_ASSETS.shuixiao, 'assets/enemies/enemy_shuixiao_v1.png');
   assert.equal(ART_ASSETS.xuanjiashou, 'assets/enemies/enemy_xuanjiashou_v1.png');
   assert.equal(ART_ASSETS.xiangliu, 'assets/bosses/boss_xiangliu_v1.png');
+  assert.equal(ART_ASSETS.level4Background, 'assets/levels/level4/bg_qingqiu_realm_v1.jpg');
+  assert.equal(ART_ASSETS.baize, 'assets/towers/tower_baize_v1.png');
+  assert.equal(ART_ASSETS.jiuweihuPhase3, 'assets/bosses/boss_jiuweihu_phase3_v1.png');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=asset-opt-1$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level4-1$`));
   }
 });
 
@@ -60,6 +63,36 @@ test('level-three optimized art is complete and small enough for reliable deploy
   assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
   assert.deepEqual([...background.subarray(-2)], [255, 217]);
   assert.ok(background.length < 700_000);
+});
+
+test('level-four runtime art is complete, transparent where required, and mobile-sized', async () => {
+  const alphaBudgets = {
+    'assets/levels/level4/map_spawn_mist_rift_v1.png': 300_000,
+    'assets/levels/level4/map_base_qingqiu_altar_v1.png': 300_000,
+    'assets/towers/tower_baize_v1.png': 300_000,
+    'assets/enemies/enemy_meihu_v1.png': 300_000,
+    'assets/enemies/enemy_huanli_v1.png': 300_000,
+    'assets/bosses/boss_jiuweihu_phase1_v1.png': 500_000,
+    'assets/bosses/boss_jiuweihu_phase2_v1.png': 500_000,
+    'assets/bosses/boss_jiuweihu_phase3_v1.png': 500_000,
+    'assets/bosses/boss_jiuweihu_cast_v1.png': 500_000,
+    'assets/effects/fx_jiuweihu_projectile_v1.png': 300_000,
+    'assets/effects/fx_jiuweihu_burst_v1.png': 300_000,
+    'assets/effects/fx_jiuweihu_phase_aura_v1.png': 300_000,
+    'assets/effects/fx_jiuweihu_ultimate_v1.png': 300_000,
+    'assets/effects/fx_baize_insight_mark_v1.png': 300_000,
+    'assets/ui/ui_boss_jiuweihu_panel_v1.png': 500_000,
+    'assets/ui/ui_level4_lineup_panel_v1.png': 500_000,
+  };
+  for (const [path, maxBytes] of Object.entries(alphaBudgets)) {
+    const bytes = await readFile(new URL(`../${path}`, import.meta.url));
+    assertCompletePngWithAlpha(bytes, path);
+    assert.ok(bytes.length < maxBytes, `${path} exceeds ${maxBytes} bytes`);
+  }
+  const background = await readFile(new URL('../assets/levels/level4/bg_qingqiu_realm_v1.jpg', import.meta.url));
+  assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
+  assert.deepEqual([...background.subarray(-2)], [255, 217]);
+  assert.ok(background.length < 800_000);
 });
 
 test('mobile-rendered level-one and level-two art stays within source-pixel and transfer budgets', async () => {
@@ -139,6 +172,14 @@ test('UI frame preload is staged so first paint is complete without blocking lat
   assert.ok(LEVEL_DEFERRED_ART_IDS[1].includes('bossPanel'));
   assert.ok(LEVEL_DEFERRED_ART_IDS[2].includes('paoxiaoBossPanel'));
   assert.ok(LEVEL_DEFERRED_ART_IDS[3].includes('xiangliuBossPanel'));
+  assert.deepEqual(
+    LEVEL_REQUIRED_ART_IDS[4].filter(id => ['bifang', 'fuzhu', 'yinglong', 'baize'].includes(id)),
+    ['bifang', 'fuzhu', 'yinglong', 'baize'],
+  );
+  for (const id of ['jiuweihuPhase1', 'jiuweihuPhase2', 'jiuweihuPhase3', 'jiuweihuCast', 'jiuweihuUltimate']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[4].includes(id), false, `${id} must remain deferred`);
+    assert.equal(LEVEL_DEFERRED_ART_IDS[4].includes(id), true, `${id} must be deferred`);
+  }
 
   for (const id of ['bifangFireball', 'bifangExplosion', 'fuzhuFrostshot', 'slowMark', 'yinglongBeam']) {
     assert.equal(LEVEL_REQUIRED_ART_IDS[1].includes(id), false, `${id} must remain deferred`);

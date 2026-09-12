@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#101a16">
   <meta name="description" content="Shanhaijing TD 山海經 Roguelike Tower Defense Graybox Prototype">
   <title>Shanhaijing TD — V0.02</title>
-  <link rel="stylesheet" href="./styles.css?v=asset-opt-1">
-  <link rel="stylesheet" href="./styles-fixes.css?v=asset-opt-1">
+  <link rel="stylesheet" href="./styles.css?v=level4-1">
+  <link rel="stylesheet" href="./styles-fixes.css?v=level4-1">
 </head>
 <body class="art-loading">
   <div id="art-loading-overlay" class="art-loading-overlay" role="status" aria-live="polite" aria-label="山海異獸載入中">
@@ -41,6 +41,15 @@
     </section>
   </main>
 
+  <section id="lineup-overlay" class="overlay lineup-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="lineup-title">
+    <div class="modal lineup-modal">
+      <p class="eyebrow">第四關・青丘妖境</p>
+      <h1 id="lineup-title">選擇 3 隻異獸</h1>
+      <p class="lineup-help">本關可從四隻異獸中選擇三隻出戰<br>敵情：妖霧籠罩青丘，敵人擅長高速突進與幻術干擾<br>推薦職能：控制／洞察／範圍攻擊</p>
+      <div id="lineup-choices" class="lineup-choices"></div>
+      <button id="confirm-lineup-button" data-action="confirm-lineup" disabled>確認陣容 <span id="lineup-count">0 / 3</span></button>
+    </div>
+  </section>
   <section id="blessing-overlay" class="overlay" hidden aria-modal="true" role="dialog">
     <div class="modal blessing-modal"><p class="eyebrow">波次完成</p><h1>選擇山海祝福</h1><div id="blessing-choices" class="blessing-choices"></div></div>
   </section>
@@ -50,6 +59,6 @@
   <section id="result-overlay" class="overlay" hidden aria-modal="true" role="dialog">
     <div id="result-panel" class="modal compact result-panel"><p class="eyebrow">本次防守結果</p><h1 id="result-title">防守成功</h1><ul id="result-stats"></ul><button id="next-level-button" data-action="next-level" hidden>前往第2關</button><button id="retry-button" data-action="restart">再次挑戰</button></div>
   </section>
-  <script type="module" src="./src/main.js?v=asset-opt-1"></script>
+  <script type="module" src="./src/main.js?v=level4-1"></script>
 </body>
 </html>

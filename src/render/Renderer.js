@@ -1,10 +1,10 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { ArtStore } from '../config/artAssets.js?v=asset-opt-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level3-1';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level3-1';
+import { ArtStore } from '../config/artAssets.js?v=level4-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level4-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
 
-const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54] });
-const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76] });
+const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
+const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76], meihu: [40, 42], huanli: [52, 50], jiuweihu: [82, 82] });
 
 export class Renderer {
   constructor(canvas, art = new ArtStore(), { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
@@ -128,7 +128,7 @@ export class Renderer {
     });
   }
   drawEnemies(ctx, game) {
-    game.enemies.forEach(enemy => {
+    [...game.enemies, ...(game.illusions ?? [])].forEach(enemy => {
       if (enemy.map?.isWeakWater?.(enemy)) {
         const size = (enemy.radius + 12) * 2;
         if (!this.drawContained(ctx, 'waterRing', enemy.x, enemy.y + 5, size, size, { alpha: 0.46 })) {
@@ -147,11 +147,18 @@ export class Renderer {
           ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 7, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
         }
       }
+      if (enemy.statuses.insight) this.drawContained(ctx, 'baizeInsightMark', enemy.x, enemy.y, (enemy.radius + 11) * 2, (enemy.radius + 11) * 2, { alpha: 0.9 });
       const next = enemy.map.positionAt(Math.min(enemy.map.totalLength, enemy.pathDistance + 1));
-      const id = enemy.type === 'qiongqi' && enemy.frenzied ? 'qiongqiFrenzy' : enemy.type;
+      const skill = enemy.type === 'jiuweihu' ? game.effects.find(effect => effect.type === 'jiuweihuSkill' && effect.sourceId === enemy.id && effect.life > 0) : null;
+      const skillProgress = skill ? 1 - skill.life / skill.duration : -1;
+      const id = enemy.type === 'qiongqi' && enemy.frenzied
+        ? 'qiongqiFrenzy'
+        : enemy.type === 'jiuweihu'
+          ? (skillProgress >= 0.35 && skillProgress < 0.7 ? 'jiuweihuCast' : `jiuweihuPhase${enemy.bossPhase ?? 1}`)
+          : enemy.type;
       const [width, height] = ENEMY_BOXES[enemy.type];
       const motion = MotionSystem.enemyTransform(enemy, game.visualTime ?? 0, game.effects, this.motionEnabled);
-      const spriteOptions = { anchorY: 0.56, mirror: next.x < enemy.x, scale: motion.scale };
+      const spriteOptions = { anchorY: 0.56, mirror: next.x < enemy.x, scale: motion.scale, alpha: enemy.isIllusion ? 0.52 : 1 };
       const drewEnemy = this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + 3 + motion.yOffset, width, height, spriteOptions);
       if (drewEnemy && motion.flash) {
         this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + 3 + motion.yOffset, width, height, {
@@ -164,7 +171,7 @@ export class Renderer {
         ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 3, 0, Math.PI * 2); ctx.fillStyle = enemy.isBoss ? '#6b1d28' : '#39272b'; ctx.fill();
         ctx.font = `${enemy.isBoss ? 28 : 18}px system-ui`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(ENEMY_DATA[enemy.type].emoji, enemy.x, enemy.y);
       }
-      if (enemy.hitFlash > 0 && !enemy.isBoss) this.healthBar(ctx, enemy.x - 17, enemy.y - enemy.radius - 10, 34, enemy.hp / enemy.maxHp);
+      if (enemy.hitFlash > 0 && !enemy.isBoss && !enemy.isIllusion) this.healthBar(ctx, enemy.x - 17, enemy.y - enemy.radius - 10, 34, enemy.hp / enemy.maxHp);
     });
   }
   healthBar(ctx, x, y, width, ratio) { ctx.fillStyle = '#28181b'; ctx.fillRect(x, y, width, 4); ctx.fillStyle = ratio > .5 ? '#77d176' : '#e35757'; ctx.fillRect(x, y, width * Math.max(0, ratio), 4); }
@@ -180,9 +187,26 @@ export class Renderer {
     game.effects.filter(effect => effect.type === 'unitDeath' && effect.life > 0).forEach(effect => {
       const [width, height] = ENEMY_BOXES[effect.unitType];
       const motion = MotionSystem.deathTransform(effect);
-      this.drawContained(ctx, effect.unitType, effect.x, effect.y + 3, width, height, {
+      const id = effect.unitType === 'jiuweihu' ? `jiuweihuPhase${effect.bossPhase ?? 1}` : effect.unitType;
+      this.drawContained(ctx, id, effect.x, effect.y + 3, width, height, {
         anchorY: 0.56, mirror: effect.mirror, scale: motion.scale, alpha: motion.alpha,
       });
+    });
+    game.effects.filter(effect => effect.type === 'baizeInsight').forEach(effect => {
+      this.drawDirectional(ctx, 'baizeInsightMark', effect.from, effect.to, 12, effect.life / effect.duration);
+    });
+    game.effects.filter(effect => effect.type === 'jiuweihuEvolution').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'jiuweihuPhaseAura', effect.x, effect.y, 110 + progress * 45, 110 + progress * 45, { alpha: effect.life / effect.duration, rotation: progress * Math.PI });
+    });
+    game.effects.filter(effect => effect.type === 'jiuweihuSkill').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      const id = effect.skill === 'bossShield' ? 'jiuweihuPhaseAura' : effect.skill === 'bossStep' ? 'jiuweihuProjectile' : 'jiuweihuBurst';
+      this.drawContained(ctx, id, effect.x, effect.y, 86 + progress * 30, 86 + progress * 30, { alpha: Math.max(0.3, effect.life / effect.duration) });
+    });
+    game.effects.filter(effect => effect.type === 'jiuweihuUltimate').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'jiuweihuUltimate', effect.x, effect.y, 125 + progress * 40, 125 + progress * 40, { alpha: Math.min(1, effect.life) });
     });
     game.effects.filter(effect => effect.type === 'paoxiaoEnrage').forEach(effect => {
       const alpha = Math.max(0, effect.life / effect.duration);

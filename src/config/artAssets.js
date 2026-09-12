@@ -49,9 +49,26 @@ export const ART_ASSETS = Object.freeze({
   whirlpool: 'assets/effects/fx_whirlpool_v1.png',
   xiangliuBossPanel: 'assets/ui/ui_boss_xiangliu_panel_v1.png',
   baizeUnlock: 'assets/ui/unlock_baize_v1.png',
+  level4Background: 'assets/levels/level4/bg_qingqiu_realm_v1.jpg',
+  level4Spawn: 'assets/levels/level4/map_spawn_mist_rift_v1.png',
+  level4Base: 'assets/levels/level4/map_base_qingqiu_altar_v1.png',
+  baize: 'assets/towers/tower_baize_v1.png',
+  meihu: 'assets/enemies/enemy_meihu_v1.png',
+  huanli: 'assets/enemies/enemy_huanli_v1.png',
+  jiuweihuPhase1: 'assets/bosses/boss_jiuweihu_phase1_v1.png',
+  jiuweihuPhase2: 'assets/bosses/boss_jiuweihu_phase2_v1.png',
+  jiuweihuPhase3: 'assets/bosses/boss_jiuweihu_phase3_v1.png',
+  jiuweihuCast: 'assets/bosses/boss_jiuweihu_cast_v1.png',
+  jiuweihuProjectile: 'assets/effects/fx_jiuweihu_projectile_v1.png',
+  jiuweihuBurst: 'assets/effects/fx_jiuweihu_burst_v1.png',
+  jiuweihuPhaseAura: 'assets/effects/fx_jiuweihu_phase_aura_v1.png',
+  jiuweihuUltimate: 'assets/effects/fx_jiuweihu_ultimate_v1.png',
+  baizeInsightMark: 'assets/effects/fx_baize_insight_mark_v1.png',
+  jiuweihuBossPanel: 'assets/ui/ui_boss_jiuweihu_panel_v1.png',
+  level4LineupPanel: 'assets/ui/ui_level4_lineup_panel_v1.png',
 });
 
-const ASSET_CACHE_VERSION = 'asset-opt-1';
+const ASSET_CACHE_VERSION = 'level4-1';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
@@ -74,18 +91,21 @@ export const LEVEL_ART_IDS = Object.freeze({
   1: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'background', 'spawnRift', 'baseSeal', 'qiongqi', 'qiongqiFrenzy', 'bossPanel']),
   2: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'level2Background', 'level2Spawn', 'level2Base', 'chiyu', 'yanjia', 'paoxiao', 'paoxiaoProjectile', 'paoxiaoExplosion', 'paoxiaoEnrage', 'paoxiaoGroundslam', 'paoxiaoBossPanel']),
   3: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao', 'xuanjiashou', 'xiangliu', 'waterSplash', 'waterProjectile', 'waterRing', 'whirlpool', 'xiangliuBossPanel', 'baizeUnlock']),
+  4: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'level4Background', 'level4Spawn', 'level4Base', 'baize', 'meihu', 'huanli', 'jiuweihuPhase1', 'jiuweihuPhase2', 'jiuweihuPhase3', 'jiuweihuCast', 'jiuweihuProjectile', 'jiuweihuBurst', 'jiuweihuPhaseAura', 'jiuweihuUltimate', 'baizeInsightMark', 'jiuweihuBossPanel', 'level4LineupPanel']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
   1: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
   2: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
   3: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
+  4: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level4Background', 'level4Spawn', 'level4Base', 'meihu', 'level4LineupPanel']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
   1: Object.freeze(LEVEL_ART_IDS[1].filter(id => !LEVEL_REQUIRED_ART_IDS[1].includes(id))),
   2: Object.freeze(LEVEL_ART_IDS[2].filter(id => !LEVEL_REQUIRED_ART_IDS[2].includes(id))),
   3: Object.freeze(LEVEL_ART_IDS[3].filter(id => !LEVEL_REQUIRED_ART_IDS[3].includes(id))),
+  4: Object.freeze(LEVEL_ART_IDS[4].filter(id => !LEVEL_REQUIRED_ART_IDS[4].includes(id))),
 });
 
 export function assetUrl(id) {

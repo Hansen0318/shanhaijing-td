@@ -63,7 +63,7 @@ test('level three water speed and waves one to three are eased again while wave 
   assert.deepEqual(waves[3], { groups: [{ type: 'xuanjiashou', count: 7 }], interval: 1.02, hpMultiplier: 1.05 });
 });
 
-test('level two victory enters a clean level three and level three victory records Baize unlock', () => {
+test('level two victory enters a clean level three and level three victory unlocks the level-four lineup', () => {
   const game = new Game(() => 0.2);
   game.end('victory');
   assert.equal(game.enterLevel(2), true);
@@ -86,7 +86,9 @@ test('level two victory enters a clean level three and level three victory recor
   assert.equal(game.unlockedBeasts.has('baize'), true);
   game.restart();
   assert.equal(game.unlockedBeasts.has('baize'), true, 'unlock record must survive a retry reset');
-  assert.equal(game.enterLevel(4), false);
+  game.end('victory');
+  assert.equal(game.enterLevel(4), true);
+  assert.equal(game.state, 'lineup');
 });
 
 test('weak water modifies actual movement without changing path or render coordinates', () => {

@@ -1,14 +1,16 @@
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level3-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level4-1';
 
 const TAU = Math.PI * 2;
 
 export class MotionSystem {
   static enemyTransform(enemy, visualTime, effects = [], enabled = ENABLE_UNIT_MOTION) {
     if (!enabled) return { xOffset: 0, yOffset: 0, scale: 1, flash: false };
-    const config = UNIT_MOTION_CONFIG.enemies[enemy.type];
+    const baseConfig = UNIT_MOTION_CONFIG.enemies[enemy.type];
+    const config = baseConfig?.phases ? { ...baseConfig, ...baseConfig.phases[enemy.bossPhase ?? 1] } : baseConfig;
     if (!config) return { xOffset: 0, yOffset: 0, scale: 1, flash: false };
 
-    const yOffset = config.bobPixels ? Math.sin(visualTime * TAU * config.bobHz) * config.bobPixels : 0;
+    let xOffset = 0;
+    let yOffset = config.bobPixels ? Math.sin(visualTime * TAU * config.bobHz) * config.bobPixels : 0;
     let scale = config.idleScale
       ? 1 + config.idleScale * (0.5 + Math.sin(visualTime * TAU * config.idleHz) * 0.5)
       : 1;
@@ -25,7 +27,40 @@ export class MotionSystem {
       }
     }
 
-    return { xOffset: 0, yOffset, scale, flash: enemy.visualHitFlash > 0 };
+    if (enemy.visualHitFlash > 0 && config.hitRecoilPixels) {
+      const hitProgress = 1 - enemy.visualHitFlash / UNIT_MOTION_CONFIG.hitFlashSeconds;
+      xOffset -= Math.sin(Math.PI * Math.max(0, Math.min(1, hitProgress))) * config.hitRecoilPixels;
+    }
+
+    const matchingEffect = type => effects.find(effect => (
+      effect.type === type && effect.life > 0
+      && (effect.sourceId === enemy.id || (effect.sourceId == null && effect.x === enemy.x && effect.y === enemy.y))
+    ));
+    const skill = matchingEffect('jiuweihuSkill');
+    if (skill && config.skillScale) {
+      const progress = Math.max(0, Math.min(1, 1 - skill.life / skill.duration));
+      if (progress < 0.35) scale = Math.max(scale, 1 + config.skillScale * progress / 0.35);
+      else if (progress < 0.7) {
+        const action = (progress - 0.35) / 0.35;
+        scale = Math.max(scale, 1 + config.skillScale * (1 - action * 0.25));
+        xOffset += 4 + Math.sin(action * Math.PI) * 3;
+        yOffset -= 3;
+      } else {
+        const rebound = (progress - 0.7) / 0.3;
+        scale = Math.max(scale, 1 + config.skillScale * 0.5 * (1 - rebound));
+        xOffset -= Math.sin(rebound * Math.PI) * 3;
+      }
+    }
+
+    const evolution = matchingEffect('jiuweihuEvolution');
+    if (evolution && config.evolutionScale) {
+      const progress = Math.max(0, Math.min(1, 1 - evolution.life / evolution.duration));
+      const pulse = Math.sin(Math.PI * progress);
+      scale = Math.max(scale, 1 + config.evolutionScale * pulse);
+      yOffset -= 6 * pulse;
+    }
+
+    return { xOffset, yOffset, scale, flash: enemy.visualHitFlash > 0 };
   }
 
   static towerTransform(tower, visualTime, effects = [], enabled = ENABLE_UNIT_MOTION) {
@@ -68,6 +103,7 @@ export class MotionSystem {
       : { x: enemy.x, y: enemy.y };
     return {
       type: 'unitDeath', unitType: enemy.type, x: enemy.x, y: enemy.y,
+      bossPhase: enemy.bossPhase,
       mirror: next.x < enemy.x,
       life: config.deathSeconds, duration: config.deathSeconds,
     };

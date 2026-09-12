@@ -1,5 +1,53 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-12 Level4・青丘妖境
+
+### 已完成
+
+- 新增第4關「青丘妖境」與「青丘靈臺」：10 Waves、8 塔位、2 段幻霧、Level3 勝利後解鎖白澤並可進入第4關。
+- 新增 4 選 3 空陣容畫面；必須恰選三隻才可確認，第4關勝敗重試都回到空陣容。
+- 新增白澤：Lv1/2/3 洞察秒數、射程與 Lv3 25% 防禦削減；普通敵人 +15%、Boss +10% 易傷，刷新但不疊加，優先辨識同進度真身。
+- 新增魅狐幻霧首次加速與洞察減半；新增幻狸 60% HP 觸發一次的兩個幻影，幻影一擊消失且不計 Wave、擊殺、獎勵或 Base 傷害。
+- 幻影會維持相對真身的可辨識偏移並在真身死亡時清除；白澤標記真身後，現存與後續幻影都縮短壽命。
+- 新增九尾狐 P1/P2/P3：護盾、狐步、幻影、0.6 秒終極蓄力與 4 秒緩速效力降低；60% / 25% 進化只觸發一次且不顯示中央階段 Banner。
+- Motion V2 以 390px 肉眼可辨下限實作：P1/P2/P3 idle scale 2.5% / 3.5% / 4.5%，P3 bob 3px，Hit 4px，Skill action 至少 4px，Evolution 峰值 16%，Death 0.45 秒。
+- 新增 `?devLevel=4`、`?devLevel=4&devPath=1`、`?devLevel=4&devWave=10`、`?devLevel=4&devBossPhase=1|2|3`，dev menu 加入 Level4。
+- Level4 required preload 包含首屏、陣容、四塔、背景、Spawn/Base 與魅狐；Boss、後期敵人與大型 VFX 維持 deferred。
+- 無作弊自動模擬以畢方／夫諸／白澤陣容完成 W1–10：Victory、Base HP 14、擊殺 117。
+
+### Level4 素材（17 張）
+
+- Source 合計 6,925,377 bytes（6.60 MiB）→ runtime 合計 3,444,294 bytes（3.28 MiB）。
+- 所有 sprite / Boss / VFX / UI runtime 圖均為含 alpha PNG；背景為 390×610 JPEG。
+- 深色與淺色 contact sheet 已檢查，未見白底矩形、黑邊、毛髮／尾巴裁切或發光邊緣破壞。
+
+| 圖片 | 原尺寸 | 新尺寸 | 前 KB | 後 KB |
+|---|---:|---:|---:|---:|
+| `bg_qingqiu_realm_source.jpg` | 982x1536 | 390x610 | 544.2 | 65.7 |
+| `map_spawn_mist_rift_source.jpg` | 1254x1254 | 256x256 | 397.9 | 120.7 |
+| `map_base_qingqiu_altar_source.jpg` | 1254x1254 | 256x256 | 480.0 | 138.4 |
+| `tower_baize_source.jpg` | 1254x1254 | 256x256 | 349.0 | 111.6 |
+| `enemy_meihu_source.jpg` | 1254x1254 | 256x256 | 232.3 | 74.1 |
+| `enemy_huanli_source.jpg` | 1254x1254 | 256x256 | 170.4 | 67.0 |
+| `boss_jiuweihu_phase1_source.jpg` | 1254x1254 | 512x512 | 287.6 | 285.2 |
+| `boss_jiuweihu_phase2_source.jpg` | 1254x1254 | 512x512 | 413.9 | 399.2 |
+| `boss_jiuweihu_phase3_source.jpg` | 1254x1254 | 512x512 | 483.2 | 454.7 |
+| `boss_jiuweihu_cast_source.jpg` | 1254x1254 | 512x512 | 434.2 | 429.2 |
+| `fx_jiuweihu_projectile_source.png` | 1254x1254 | 192x192 | 610.7 | 33.6 |
+| `fx_jiuweihu_burst_source.jpg` | 1254x1254 | 256x256 | 261.2 | 103.3 |
+| `fx_jiuweihu_phase_aura_source.jpg` | 1254x1254 | 384x384 | 255.0 | 190.2 |
+| `fx_jiuweihu_ultimate_source.jpg` | 1254x1254 | 384x384 | 450.7 | 269.9 |
+| `fx_baize_insight_mark_source.png` | 1254x1254 | 256x256 | 986.7 | 90.4 |
+| `ui_boss_jiuweihu_panel_source.jpg` | 1536x512 | 768x256 | 181.9 | 232.5 |
+| `ui_level4_lineup_panel_source.jpg` | 1536x512 | 768x256 | 224.1 | 298.0 |
+
+### 驗證與續作
+
+- Implementation checkpoint：`e31e507`；設計：`docs/superpowers/specs/2026-09-12-level4-qingqiu-design.md`；計畫：`docs/superpowers/plans/2026-09-12-level4-qingqiu.md`。
+- 自動測試共 122 項、`npm run check`、逐檔 `node --check`、`git diff --check` 已通過；部署前會 fresh 重跑並記錄最終總數。
+- 本機 Playwright 瀏覽器下載受網路限制；390px / 390×700 實頁 smoke 改在 GitHub Pages 部署後執行。
+- 玩家仍需實測：Level3→4 解鎖理解、4 選 3 直覺性、首次建造／Boss／VFX 載入、路徑與兩段幻霧貼圖、W1–3 與 W6–10 體感、幻影真偽辨識、五種 Boss Motion、真實手機 Safari safe-area。
+
 ## 2026-09-11 圖片資產體積與載入速度優化
 
 ### Scope / 顯示尺寸盤點
