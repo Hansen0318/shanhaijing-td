@@ -19,7 +19,7 @@ export const ART_ASSETS = Object.freeze({
   resourcePanel: 'assets/ui/ui_resource_panel_v1.png',
   hudButton: 'assets/ui/ui_hud_button_v1.png',
   wavePreviewPanel: 'assets/ui/ui_wave_preview_panel_v1.png',
-  bossPanel: 'assets/ui/ui_boss_panel_v1.png',
+  bossPanel: 'assets/ui/ui_boss_qiongqi_panel_v2.png',
   contextPanel: 'assets/ui/ui_context_panel_v1.png',
   buildCard: 'assets/ui/ui_build_card_v1.png',
   actionButton: 'assets/ui/ui_action_button_v1.png',
@@ -36,7 +36,7 @@ export const ART_ASSETS = Object.freeze({
   paoxiaoExplosion: 'assets/effects/fx_paoxiao_explosion_v1.png',
   paoxiaoEnrage: 'assets/effects/fx_paoxiao_enrage_v1.png',
   paoxiaoGroundslam: 'assets/effects/fx_paoxiao_groundslam_v1.png',
-  paoxiaoBossPanel: 'assets/ui/ui_boss_paoxiao_panel_v1.png',
+  paoxiaoBossPanel: 'assets/ui/ui_boss_paoxiao_panel_v2.png',
   level3Background: 'assets/levels/level3/bg_ruoshui_valley_v1.jpg',
   level3Spawn: 'assets/levels/level3/map_spawn_ruoshui_rift_v1.png',
   level3Base: 'assets/levels/level3/map_base_xuanwater_altar_v1.png',
@@ -47,7 +47,7 @@ export const ART_ASSETS = Object.freeze({
   waterProjectile: 'assets/effects/fx_water_projectile_v1.png',
   waterRing: 'assets/effects/fx_water_ring_v1.png',
   whirlpool: 'assets/effects/fx_whirlpool_v1.png',
-  xiangliuBossPanel: 'assets/ui/ui_boss_xiangliu_panel_v1.png',
+  xiangliuBossPanel: 'assets/ui/ui_boss_xiangliu_panel_v2.png',
   baizeUnlock: 'assets/ui/unlock_baize_v1.png',
   level4Background: 'assets/levels/level4/bg_qingqiu_realm_v1.jpg',
   level4Spawn: 'assets/levels/level4/map_spawn_mist_rift_v1.png',
@@ -66,6 +66,15 @@ export const ART_ASSETS = Object.freeze({
   baizeInsightMark: 'assets/effects/fx_baize_insight_mark_v1.png',
   jiuweihuBossPanel: 'assets/ui/ui_boss_jiuweihu_panel_v2.png',
   level4LineupPanel: 'assets/ui/ui_level4_lineup_panel_v1.png',
+});
+
+// Inner channel geometry measured from each source panel, normalized after the
+// 768x256 runtime resize and the shared 70px nine-slice render.
+export const BOSS_HUD_GEOMETRY = Object.freeze({
+  qiongqi: Object.freeze({ left: '1.5%', top: '55%', width: '97%', height: '14.4%' }),
+  paoxiao: Object.freeze({ left: '3.9%', top: '55.6%', width: '92.1%', height: '10.3%' }),
+  xiangliu: Object.freeze({ left: '0.9%', top: '55.3%', width: '98.1%', height: '10.4%' }),
+  jiuweihu: Object.freeze({ left: '15.3%', top: '61.6%', width: '78.7%', height: '11%' }),
 });
 
 const ASSET_CACHE_VERSION = 'level4-1';

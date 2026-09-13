@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=blessing-fix-1';
-import { assetUrl } from '../config/artAssets.js?v=bossbar-2';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=boss-hud-1';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {
@@ -171,6 +171,12 @@ export class UIController {
       this.dom['boss-name'].textContent = boss.data.name;
       this.dom['boss-name'].style.visibility = '';
       this.dom['boss-hud'].style.borderImageSource = `url('${assetUrl(this.game.level.art.bossPanel)}')`;
+      const trackRect = BOSS_HUD_GEOMETRY[boss.type];
+      if (trackRect) {
+        for (const key of ['left', 'top', 'width', 'height']) {
+          this.dom['boss-hud'].style.setProperty(`--boss-track-${key}`, trackRect[key]);
+        }
+      }
       this.dom['boss-hp-fill'].style.width = `${boss.hp / boss.maxHp * 100}%`;
       const healEffect = boss.type === 'xiangliu'
         ? this.game.effects.find(effect => effect.type === 'bossHealText' && effect.life > 0)

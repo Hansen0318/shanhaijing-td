@@ -4,9 +4,12 @@ import { UIController } from '../src/ui/UIController.js';
 import { LEVELS } from '../src/config/gameData.js';
 
 function bossSlotDom() {
+  const bossHudStyle = {
+    setProperty(name, value) { this[name] = value; },
+  };
   return {
     'wave-preview': { hidden: true },
-    'boss-hud': { hidden: true, dataset: {}, style: {} },
+    'boss-hud': { hidden: true, dataset: {}, style: bossHudStyle },
     'boss-name': { hidden: true, textContent: '', style: {} },
     'wave-preview-title': { textContent: '' },
     'wave-preview-enemies': { innerHTML: '' },
@@ -169,7 +172,7 @@ test('wave preview and boss HUD use the active second-level identity and art', (
   assert.equal(ui.dom['boss-name'].textContent, '狍鴞');
   assert.equal(ui.dom['boss-hp-text'].textContent, '4320 / 5400');
   assert.equal(ui.dom['boss-hud'].dataset.bossType, 'paoxiao');
-  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_paoxiao_panel_v1\.png/);
+  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_paoxiao_panel_v2\.png/);
 });
 
 test('level-four wave ten preview uses the phase-one Jiuweihu art', () => {
@@ -183,19 +186,35 @@ test('level-four wave ten preview uses the phase-one Jiuweihu art', () => {
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /boss_jiuweihu_phase1_v1\.png/);
 });
 
-test('Jiuweihu HP fill follows 100, 50 and 25 percent health', () => {
-  const boss = { isBoss: true, type: 'jiuweihu', hp: 4000, maxHp: 4000, data: { name: '九尾狐' } };
-  const ui = Object.create(UIController.prototype);
-  ui.game = {
-    level: LEVELS[4], levelId: 4, state: 'combat', enemies: [boss], effects: [],
-    wave: { waveNumber: 10, queue: [], getWaveGroups: () => [] },
-  };
-  ui.dom = bossSlotDom();
+test('each Boss HUD applies its measured track geometry and follows 100, 50 and 25 percent health', () => {
+  const cases = [
+    { levelId: 1, type: 'qiongqi', name: '窮奇', panel: /ui_boss_qiongqi_panel_v2\.png/, rect: ['1.5%', '55%', '97%', '14.4%'] },
+    { levelId: 2, type: 'paoxiao', name: '狍鴞', panel: /ui_boss_paoxiao_panel_v2\.png/, rect: ['3.9%', '55.6%', '92.1%', '10.3%'] },
+    { levelId: 3, type: 'xiangliu', name: '相柳', panel: /ui_boss_xiangliu_panel_v2\.png/, rect: ['0.9%', '55.3%', '98.1%', '10.4%'] },
+    { levelId: 4, type: 'jiuweihu', name: '九尾狐', panel: /ui_boss_jiuweihu_panel_v2\.png/, rect: ['15.3%', '61.6%', '78.7%', '11%'] },
+  ];
 
-  for (const [hp, width] of [[4000, '100%'], [2000, '50%'], [1000, '25%']]) {
-    boss.hp = hp;
-    ui.renderBossSlot();
-    assert.equal(ui.dom['boss-hp-fill'].style.width, width);
+  for (const { levelId, type, name, panel, rect } of cases) {
+    const boss = { isBoss: true, type, hp: 4000, maxHp: 4000, data: { name } };
+    const ui = Object.create(UIController.prototype);
+    ui.game = {
+      level: LEVELS[levelId], levelId, state: 'combat', enemies: [boss], effects: [],
+      wave: { waveNumber: 10, queue: [], getWaveGroups: () => [] },
+    };
+    ui.dom = bossSlotDom();
+
+    for (const [hp, width] of [[4000, '100%'], [2000, '50%'], [1000, '25%']]) {
+      boss.hp = hp;
+      ui.renderBossSlot();
+      assert.equal(ui.dom['boss-hp-fill'].style.width, width);
+    }
+    assert.equal(ui.dom['boss-name'].textContent, name);
+    assert.match(ui.dom['boss-hud'].style.borderImageSource, panel);
+    assert.deepEqual([
+      ui.dom['boss-hud'].style['--boss-track-left'],
+      ui.dom['boss-hud'].style['--boss-track-top'],
+      ui.dom['boss-hud'].style['--boss-track-width'],
+      ui.dom['boss-hud'].style['--boss-track-height'],
+    ], rect);
   }
-  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_jiuweihu_panel_v2\.png/);
 });

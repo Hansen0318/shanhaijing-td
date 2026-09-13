@@ -25,10 +25,10 @@ test('Level4 lineup copy uses dark high-contrast text over the pale art panel', 
   assert.match(css, /\.lineup-help\s*\{[\s\S]*font-weight:\s*650/i);
 });
 
-test('Level4 lineup fix is cache-busted at the document and module boundary', async () => {
+test('Level4 lineup styling remains covered by the current document and module cache bust', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
-  assert.match(html, /styles-lineup\.css\?v=lineup-fix-1/);
-  assert.match(html, /src\/main\.js\?v=lineup-fix-1/);
-  assert.match(main, /UIController\.js\?v=lineup-fix-1/);
+  assert.match(html, /styles-lineup\.css\?v=boss-hud-1/);
+  assert.match(html, /src\/main\.js\?v=boss-hud-1/);
+  assert.match(main, /UIController\.js\?v=boss-hud-1/);
 });

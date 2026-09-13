@@ -39,6 +39,9 @@ test('art catalog exposes all 67 packaged assets and every file is deployable', 
   assert.equal(ART_ASSETS.level4Background, 'assets/levels/level4/bg_qingqiu_realm_v1.jpg');
   assert.equal(ART_ASSETS.baize, 'assets/towers/tower_baize_v1.png');
   assert.equal(ART_ASSETS.jiuweihuPhase3, 'assets/bosses/boss_jiuweihu_phase3_v1.png');
+  assert.equal(ART_ASSETS.bossPanel, 'assets/ui/ui_boss_qiongqi_panel_v2.png');
+  assert.equal(ART_ASSETS.paoxiaoBossPanel, 'assets/ui/ui_boss_paoxiao_panel_v2.png');
+  assert.equal(ART_ASSETS.xiangliuBossPanel, 'assets/ui/ui_boss_xiangliu_panel_v2.png');
   assert.equal(ART_ASSETS.jiuweihuBossPanel, 'assets/ui/ui_boss_jiuweihu_panel_v2.png');
 
   for (const [id, path] of entries) {
@@ -94,6 +97,16 @@ test('level-four runtime art is complete, transparent where required, and mobile
   assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
   assert.deepEqual([...background.subarray(-2)], [255, 217]);
   assert.ok(background.length < 800_000);
+});
+
+test('all four Boss HUD panels are optimized transparent empty-channel assets', async () => {
+  const { ART_ASSETS } = await import(moduleUrl);
+  for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel']) {
+    const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
+    assertCompletePngWithAlpha(bytes, id);
+    assert.deepEqual(pngDimensions(bytes), { width: 768, height: 256 }, `${id} must match the optimized HUD runtime size`);
+    assert.ok(bytes.length < 500_000, `${id} is ${bytes.length} bytes; expected under 500000`);
+  }
 });
 
 test('mobile-rendered level-one and level-two art stays within source-pixel and transfer budgets', async () => {

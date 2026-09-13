@@ -55,10 +55,10 @@ test('dev menu and guarded direct controls include level four', async () => {
 
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(html, /styles\.css\?v=level4-1/);
-  assert.match(html, /styles-fixes\.css\?v=level4-1/);
-  assert.match(html, /styles-lineup\.css\?v=blessing-fix-1/);
-  assert.match(html, /src\/main\.js\?v=bossbar-2/);
+  assert.match(html, /styles\.css\?v=boss-hud-1/);
+  assert.match(html, /styles-fixes\.css\?v=boss-hud-1/);
+  assert.match(html, /styles-lineup\.css\?v=boss-hud-1/);
+  assert.match(html, /src\/main\.js\?v=boss-hud-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
@@ -68,7 +68,7 @@ test('context panel is not rebuilt when its state signature is unchanged', () =>
   assert.equal(ui.shouldRenderContext('slot-0-gold-180'), true);
 });
 
-test('boss names stay programmatic, Xiangliu art title is masked, and heal feedback is explicit', async () => {
+test('boss names stay programmatic, Boss art masks are absent, and heal feedback is explicit', async () => {
   const ui = await readFile(new URL('../src/ui/UIController.js', import.meta.url), 'utf8');
   const fixes = await readFile(new URL('../styles-fixes.css', import.meta.url), 'utf8');
   const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
@@ -76,8 +76,8 @@ test('boss names stay programmatic, Xiangliu art title is masked, and heal feedb
   assert.match(ui, /boss-name'\]\.textContent = boss\.data\.name/);
   assert.match(ui, /boss-hud'\]\.dataset\.bossType = boss\.type/);
   assert.match(ui, /回血 \+\$\{healEffect\.amount\} HP/);
-  assert.match(fixes, /body\[data-level="3"\] \.boss-hud\[data-boss-type="xiangliu"\]::before/);
-  assert.match(fixes, /\.boss-hud\[data-boss-type="xiangliu"\] > \*/);
+  assert.doesNotMatch(fixes, /boss-hud\[data-boss-type="xiangliu"\]::before/);
+  assert.doesNotMatch(fixes, /\.boss-hud\[data-boss-type="xiangliu"\] > \*/);
   assert.match(game, /xiangliuHealPulse'[\s\S]*life: 1\.2, duration: 1\.2/);
   assert.match(game, /bossHealText'[\s\S]*amount: event\.healAmount[\s\S]*life: 1\.2, duration: 1\.2/);
 });

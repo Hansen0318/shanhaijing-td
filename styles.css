@@ -17,11 +17,11 @@ button:active:not(:disabled) { transform: scale(.98); }
 .wave-preview-enemies { min-width: 0; display: flex; justify-content: flex-end; gap: 8px; overflow: hidden; font-size: 11px; white-space: nowrap; }
 .wave-preview-enemies span { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 2px; }
 .preview-art { width: 20px; height: 20px; object-fit: contain; }
-.boss-hud { width: 100%; height: 100%; padding: 2px 8px; border: 6px solid transparent; border-radius: 10px; border-image: url('./assets/ui/ui_boss_panel_v1.png?v=asset-opt-1') 70 fill / 6px / 0 stretch; background: #2a0b0f; text-align: center; }
-.boss-hud strong { display: block; color: #ffcfad; }
-.boss-track { height: 8px; margin: 3px 0; overflow: hidden; border-radius: 99px; background: #2e1518; }
-.boss-track span { display: block; height: 100%; background: #d84b4b; transition: width .1s linear; }
-.boss-hud small { color: #e6b9b9; }
+.boss-hud { position: relative; isolation: isolate; width: 100%; height: 100%; padding: 2px 8px; border: 6px solid transparent; border-radius: 10px; border-image: url('./assets/ui/ui_boss_qiongqi_panel_v2.png?v=boss-hud-1') 70 fill / 6px / 0 stretch; background: transparent; text-align: center; }
+.boss-hud strong { position: relative; z-index: 3; display: block; color: #ffcfad; line-height: 18px; text-shadow: 0 1px 2px #000; }
+.boss-track { position: absolute; z-index: 2; left: var(--boss-track-left); top: var(--boss-track-top); width: var(--boss-track-width); height: var(--boss-track-height); margin: 0; overflow: hidden; border-radius: 99px; background: transparent; box-shadow: none; }
+.boss-track span { display: block; height: 100%; border-radius: inherit; background: #d84b4b; box-shadow: inset 0 1px 1px rgba(255,255,255,.28); transition: width .1s linear; }
+.boss-hud small { position: absolute; z-index: 3; top: calc(var(--boss-track-top) - 1px); right: calc(100% - var(--boss-track-left) - var(--boss-track-width) + 3px); color: #f4dede; font-size: 7px; line-height: 1; text-shadow: 0 1px 2px #000; }
 .battlefield { position: relative; width: 100%; min-height: 0; flex: 1 1 auto; border: 1px solid #385343; border-radius: 13px; overflow: hidden; background: #17231d; }
 #game-canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 .wave-control { position: absolute; top: 9px; left: 50%; width: min(calc(100% - 16px), 360px); display: flex; align-items: center; justify-content: space-between; gap: 7px; transform: translateX(-50%); padding: 5px 6px 5px 10px; border: 1px solid #536c59; border-radius: 12px; background: rgba(10,18,14,.92); font-size: 12px; }

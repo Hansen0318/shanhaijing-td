@@ -24,6 +24,7 @@
     <button data-state="wave8">Wave 8</button>
     <button data-state="wave10">Wave 10</button>
     <button data-state="frenzy">Boss 50%</button>
+    <button data-state="qiongqi25">窮奇 25%</button>
     <button data-state="nextbanner">下一段提示</button>
     <button data-state="victory">擊敗 Boss</button>
     <button data-state="blessing">Blessing</button>
@@ -31,6 +32,8 @@
     <button data-state="level2">第2關</button>
     <button data-state="level2wave8">第2關 Wave 8</button>
     <button data-state="level2wave10">第2關 Wave 10</button>
+    <button data-state="paoxiao50">狍鴞 50%</button>
+    <button data-state="paoxiao25">狍鴞 25%</button>
     <button data-state="consume70">吞噬 70%</button>
     <button data-state="consume40">吞噬 40%</button>
     <button data-state="level2victory">第2關 Victory</button>
@@ -55,7 +58,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level4-1"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=boss-hud-1"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -212,6 +215,17 @@
         const boss = game.enemies.find(enemy => enemy.isBoss);
         if (boss) { boss.hp = boss.maxHp * 0.5; game.update(0); }
       }
+      if (state === 'qiongqi25') {
+        let boss = game.enemies.find(enemy => enemy.type === 'qiongqi');
+        if (!boss) {
+          game.restart(); game.wave.waveNumber = 9; game.startWaveNow();
+          const queuedBoss = game.wave.queue.indexOf('qiongqi');
+          if (queuedBoss >= 0) game.wave.queue.splice(queuedBoss, 1);
+          game.spawnEnemy('qiongqi'); boss = game.enemies.at(-1);
+        }
+        boss.hp = boss.maxHp * 0.25;
+        game.update(0);
+      }
       if (state === 'nextbanner') game.advanceBanner(game.bannerTimer + 0.01);
       if (state === 'victory') {
         const boss = game.enemies.find(enemy => enemy.isBoss);
@@ -233,6 +247,12 @@
         });
       }
       if (state === 'level2wave10') await configureLevel2Boss(game);
+      if (['paoxiao50', 'paoxiao25'].includes(state)) {
+        let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
+        if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }
+        boss.hp = boss.maxHp * (Number(state.replace('paoxiao', '')) / 100);
+        game.update(0);
+      }
       if (state === 'consume70') {
         let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
         if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }

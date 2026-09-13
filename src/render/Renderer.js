@@ -1,5 +1,5 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { ArtStore } from '../config/artAssets.js?v=bossbar-2';
+import { ArtStore } from '../config/artAssets.js?v=boss-hud-1';
 import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level4-1';
 import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
 
