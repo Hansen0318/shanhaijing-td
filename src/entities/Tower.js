@@ -27,6 +27,7 @@ export class Tower {
       vulnerability: this.data.vulnerability,
       bossVulnerability: this.data.bossVulnerability,
       defensePierce: 0,
+      illusionRevealDuration: 0.8,
     };
     if (this.level === 3 && this.type === 'bifang') stats.explosionRadius *= this.data.level3.explosionRadiusMultiplier;
     if (this.type === 'bifang') stats.explosionRadius *= 1 + (modifiers.bifangRadius ?? 0);
@@ -37,6 +38,14 @@ export class Tower {
     if (this.type === 'baize' && this.level >= 2) {
       stats.insightDuration = this.data.level2.insightDuration;
       stats.range += this.data.level2.rangeBonus;
+    }
+    if (this.type === 'baize') {
+      stats.insightDuration += modifiers.baizeInsightDuration ?? 0;
+      stats.vulnerability += modifiers.baizeVulnerability ?? 0;
+      stats.bossVulnerability += modifiers.baizeVulnerability ?? 0;
+      const sightStacks = modifiers.baizeSight ?? 0;
+      stats.range *= 1 + (0.15 * sightStacks);
+      stats.illusionRevealDuration = Math.max(0.4, 0.8 - (0.2 * sightStacks));
     }
     if (this.type === 'baize' && this.level >= 3) stats.defensePierce = this.data.level3.defensePierce;
     return stats;
