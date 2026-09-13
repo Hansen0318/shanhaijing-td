@@ -35,25 +35,46 @@
   text-shadow: 0 1px 2px #000;
 }
 
-/* Reuse the red strip painted in the Jiuwweihu frame as the single visible HP track. */
+/* Level4 Jiuwweihu: hide the red HP strip baked into the current frame art.
+   The only visible HP value is the code-driven .boss-hp-fill above this mask. */
 body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] {
   position: relative;
   isolation: isolate;
   padding: 2px 8px;
 }
+body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"]::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 4.2%;
+  right: 4.2%;
+  top: 23px;
+  height: 12px;
+  border-radius: 999px;
+  background: #202638;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,.72), 0 0 2px rgba(96,185,255,.5);
+  pointer-events: none;
+}
 body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] .boss-track {
   position: absolute;
   z-index: 2;
-  left: 5.5%;
-  right: 5.5%;
+  left: 5.2%;
+  right: 5.2%;
   top: 25px;
-  height: 7px;
+  height: 8px;
   margin: 0;
-  border-radius: 99px;
-  background: rgba(42, 11, 15, .96);
-  box-shadow: 0 0 2px rgba(0, 0, 0, .8);
+  overflow: hidden;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
 }
-body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] .boss-track span { background: #e34658; }
+body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] .boss-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #e34658;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.28);
+}
 body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] #boss-name {
   position: relative;
   z-index: 3;
