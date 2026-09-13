@@ -4,11 +4,12 @@ import { Renderer } from '../src/render/Renderer.js';
 import { LEVELS, MAP_DATA } from '../src/config/gameData.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [] };
+  const calls = { drawImage: [], rotate: [], scale: [], fillRect: [], clip: 0, arc: [] };
   return {
     calls,
-    setTransform() {}, clearRect() {}, fillRect() {}, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
+    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
     setLineDash() {}, arc() {}, fill() {}, fillText() {}, strokeText() {}, save() {}, restore() {}, translate() {},
+    quadraticCurveTo() {}, closePath() {}, clip() { calls.clip += 1; }, bezierCurveTo() {},
     drawImage(...args) { calls.drawImage.push(args); },
     rotate(value) { calls.rotate.push(value); },
     scale(x, y) { calls.scale.push([x, y]); },
@@ -99,6 +100,41 @@ test('renderer uses Qingqiu map art, Baize, illusions, and Jiuweihu phase sprite
   for (const id of ['level4Background', 'level4Spawn', 'level4Base', 'baize', 'jiuweihuPhase2', 'huanli']) {
     assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
   }
+});
+
+test('only Level4 renders the two configured animated fog regions beneath units', () => {
+  const levelFour = rendererFixture();
+  const game = emptyGame(LEVELS[4]);
+  game.visualTime = 1.25;
+  levelFour.renderer.render(game);
+  assert.deepEqual(levelFour.ctx.calls.fillRect.slice(0, 2), [
+    [128, 111, 116, 111],
+    [244, 375, 137, 105],
+  ]);
+  assert.equal(levelFour.ctx.calls.clip, 2);
+
+  for (const levelId of [1, 2, 3]) {
+    const otherLevel = rendererFixture();
+    otherLevel.renderer.render(emptyGame(LEVELS[levelId]));
+    assert.equal(otherLevel.ctx.calls.fillRect.length, 0, `Level${levelId} must not render fog regions`);
+    assert.equal(otherLevel.ctx.calls.clip, 0, `Level${levelId} must not clip fog regions`);
+  }
+});
+
+test('fog entry draws two bright Meihu echoes, while insight draws one weaker echo', () => {
+  const normal = rendererFixture();
+  normal.renderer.drawEffects(normal.ctx, { effects: [{
+    type: 'fogEntry', unitType: 'meihu', x: 150, y: 160,
+    weakened: false, life: 0.3, duration: 0.4,
+  }] });
+  assert.equal(normal.ctx.calls.drawImage.filter(args => args[0].id === 'meihu').length, 2);
+
+  const insight = rendererFixture();
+  insight.renderer.drawEffects(insight.ctx, { effects: [{
+    type: 'fogEntry', unitType: 'meihu', x: 150, y: 160,
+    weakened: true, life: 0.3, duration: 0.4,
+  }] });
+  assert.equal(insight.ctx.calls.drawImage.filter(args => args[0].id === 'meihu').length, 1);
 });
 
 test('renderer draws all new level-two enemy and boss art', () => {

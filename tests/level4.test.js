@@ -20,6 +20,10 @@ test('level four defines Qingqiu, ten waves, eight slots and two fog zones', () 
   assert.equal(level.waves.length, 10);
   assert.equal(level.map.slots.length, 8);
   assert.equal(level.map.fogZones.length, 2);
+  assert.deepEqual(level.map.fogZones, [
+    { id: 'upper', x: 128, y: 111, width: 116, height: 111 },
+    { id: 'lower', x: 244, y: 375, width: 137, height: 105 },
+  ]);
   assert.deepEqual(level.waves[9].groups, [
     { type: 'meihu', count: 10 },
     { type: 'huanli', count: 6 },
@@ -67,17 +71,53 @@ test('Meihu triggers each fog zone once and insight halves the boost', () => {
     ],
   });
   const enemy = new Enemy('meihu', ENEMY_DATA.meihu, map);
-  enemy.update(0.1);
+  assert.deepEqual(enemy.update(0.1), {
+    type: 'fogEntry', zoneId: 'upper', x: 0, y: 20, weakened: false,
+  });
   assert.equal(enemy.statuses.fogSprint.amount, 0.3);
   assert.equal(enemy.enteredFogZones.size, 1);
-  enemy.update(0.1);
+  assert.equal(enemy.update(0.1), null);
   assert.equal(enemy.enteredFogZones.size, 1);
   enemy.statuses.insight = { remaining: 3 };
   enemy.pathDistance = 160;
   Object.assign(enemy, map.positionAt(enemy.pathDistance));
-  enemy.update(0.01);
+  assert.deepEqual(enemy.update(0.01), {
+    type: 'fogEntry', zoneId: 'lower', x: 160, y: 20, weakened: true,
+  });
   assert.equal(enemy.statuses.fogSprint.amount, 0.15);
   assert.equal(enemy.enteredFogZones.size, 2);
+  assert.equal(enemy.update(0.01), null);
+  assert.equal(enemy.enteredFogZones.size, 2);
+});
+
+test('Game emits one short fog-entry visual for each fog zone a Meihu enters', () => {
+  const game = new Game(() => 0.2, 4);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  const enemy = game.spawnEnemy('meihu');
+  Object.assign(enemy, { x: 140, y: 125 });
+
+  game.update(0);
+  assert.deepEqual(game.effects.find(effect => effect.type === 'fogEntry'), {
+    type: 'fogEntry', sourceId: enemy.id, unitType: 'meihu', zoneId: 'upper',
+    x: 140, y: 125, weakened: false, life: 0.4, duration: 0.4,
+  });
+  game.update(0);
+  assert.equal(game.effects.filter(effect => effect.type === 'fogEntry').length, 1);
+
+  enemy.statuses.insight = { remaining: 3 };
+  enemy.pathDistance = 936;
+  Object.assign(enemy, game.map.positionAt(enemy.pathDistance));
+  game.update(0);
+  assert.deepEqual(
+    game.effects.filter(effect => effect.type === 'fogEntry').map(({ zoneId, weakened, life, duration }) => ({ zoneId, weakened, life, duration })),
+    [
+      { zoneId: 'upper', weakened: false, life: 0.4, duration: 0.4 },
+      { zoneId: 'lower', weakened: true, life: 0.4, duration: 0.4 },
+    ],
+  );
+  game.update(0);
+  assert.equal(game.effects.filter(effect => effect.type === 'fogEntry').length, 2);
 });
 
 test('Huanli creates two one-hit non-wave illusions once below sixty percent', () => {

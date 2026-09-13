@@ -28,17 +28,20 @@ export class Enemy {
     Object.assign(this, map.positionAt(0));
   }
   update(dt) {
-    if (!this.alive) return;
+    if (!this.alive) return null;
     StatusSystem.update(this, dt);
-    if (!this.alive) return;
+    if (!this.alive) return null;
     this.hitFlash = Math.max(0, this.hitFlash - dt);
     const fogZone = this.map.fogZoneAt(this);
+    let fogEntry = null;
     if (this.type === 'meihu' && fogZone && !this.enteredFogZones.has(fogZone)) {
       this.enteredFogZones.add(fogZone);
+      const weakened = Boolean(this.statuses.insight);
       this.statuses.fogSprint = {
-        amount: this.statuses.insight ? 0.15 : 0.3,
+        amount: weakened ? 0.15 : 0.3,
         remaining: 1.4,
       };
+      fogEntry = { type: 'fogEntry', zoneId: fogZone, x: this.x, y: this.y, weakened };
     }
     const terrainMultiplier = this.map.isWeakWater(this)
       ? (this.data.weakWaterSpeedMultiplier ?? 0.85)
@@ -46,6 +49,7 @@ export class Enemy {
     this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * dt;
     Object.assign(this, this.map.positionAt(this.pathDistance));
     if (this.pathDistance >= this.map.totalLength) { this.reachedBase = true; this.alive = false; }
+    return fogEntry;
   }
   shouldSpawnIllusions() {
     if (this.type !== 'huanli' || this.spawnedIllusions || !this.alive || this.hp > this.maxHp * 0.6) return false;

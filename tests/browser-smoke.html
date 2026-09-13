@@ -46,6 +46,8 @@
     <button data-state="level3victory">第3關 Victory</button>
     <button data-state="level4">第4關陣容</button>
     <button data-state="level4wave1">第4關 Wave 1</button>
+    <button data-state="fogUpper">魅狐進 upper 霧</button>
+    <button data-state="fogLowerInsight">洞察魅狐進 lower 霧</button>
     <button data-state="level4boss">九尾狐 P1</button>
     <button data-state="jiuweihu50">九尾狐 50%</button>
     <button data-state="jiuweihu2">九尾狐 P2</button>
@@ -311,6 +313,16 @@
         game.buildTower(0, 'baize');
         game.buildTower(3, 'bifang');
         game.startWaveNow();
+      }
+      if (['fogUpper', 'fogLowerInsight'].includes(state)) {
+        await enterLevel4(game, true);
+        game.state = 'combat';
+        game.time.setPaused(false);
+        const enemy = game.spawnEnemy('meihu');
+        enemy.pathDistance = state === 'fogUpper' ? 345 : 936;
+        Object.assign(enemy, game.map.positionAt(enemy.pathDistance));
+        if (state === 'fogLowerInsight') enemy.statuses.insight = { remaining: 3 };
+        game.update(0);
       }
       if (state === 'level4boss') await configureLevel4Boss(game);
       if (state === 'jiuweihu50') {

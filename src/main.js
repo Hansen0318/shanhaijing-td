@@ -1,5 +1,5 @@
-import { Game } from './core/Game.js?v=blessing-fix-1';
-import { Renderer } from './render/Renderer.js?v=boss-hud-2';
+import { Game } from './core/Game.js?v=blessing-fix-1&fog=1';
+import { Renderer } from './render/Renderer.js?v=boss-hud-2&fog=1';
 import { UIController } from './ui/UIController.js?v=boss-hud-2';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=boss-hud-2';
 

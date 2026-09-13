@@ -2,7 +2,7 @@ import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
-import { Enemy } from '../entities/Enemy.js';
+import { Enemy } from '../entities/Enemy.js?v=fog-visual-1';
 import { Illusion } from '../entities/Illusion.js';
 import { Tower } from '../entities/Tower.js?v=blessing-fix-1';
 import { Projectile } from '../entities/Projectile.js';
@@ -227,7 +227,18 @@ export class Game {
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
     this.wave.update(dt, type => this.spawnEnemy(type));
-    this.enemies.forEach(enemy => enemy.update(dt));
+    this.enemies.forEach(enemy => {
+      const event = enemy.update(dt);
+      if (event?.type === 'fogEntry') {
+        this.effects.push({
+          ...event,
+          sourceId: enemy.id,
+          unitType: enemy.type,
+          life: 0.4,
+          duration: 0.4,
+        });
+      }
+    });
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
     this.updateTowers(dt);

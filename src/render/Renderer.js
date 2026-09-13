@@ -6,6 +6,20 @@ import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
 const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76], meihu: [40, 42], huanli: [52, 50], jiuweihu: [82, 82] });
 
+function roundedRectPath(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + width - r, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+  ctx.lineTo(x + width, y + height - r);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+  ctx.lineTo(x + r, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
 export class Renderer {
   constructor(canvas, art = new ArtStore(), { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
     this.canvas = canvas;
@@ -31,6 +45,7 @@ export class Renderer {
     const map = game.level.map;
     ctx.clearRect(0, 0, map.width, map.height);
     this.drawBackground(ctx, game);
+    this.drawFogZones(ctx, game);
     this.drawSlots(ctx, game);
     this.drawMapProps(ctx, game);
     this.drawTowers(ctx, game);
@@ -50,6 +65,41 @@ export class Renderer {
     ctx.fillStyle = '#17231d'; ctx.fillRect(0, 0, map.width, map.height);
     this.drawGrid(ctx, map);
     this.drawPath(ctx, map);
+  }
+  drawFogZones(ctx, game) {
+    if (game.level.id !== 4) return;
+    const zones = game.level.map.fogZones ?? [];
+    const time = game.visualTime ?? 0;
+    zones.forEach((zone, index) => {
+      const breathe = (Math.sin(time * 0.9 + index * 1.7) + 1) / 2;
+      ctx.save();
+      ctx.beginPath();
+      roundedRectPath(ctx, zone.x, zone.y, zone.width, zone.height, 20);
+      ctx.clip();
+      ctx.globalCompositeOperation = 'screen';
+      ctx.fillStyle = `rgba(79, 103, 176, ${0.085 + breathe * 0.025})`;
+      ctx.fillRect(zone.x, zone.y, zone.width, zone.height);
+      for (let layer = 0; layer < 3; layer += 1) {
+        const drift = (time * (7 + layer * 1.5) + index * 29 + layer * 43) % (zone.width + 70) - 35;
+        const y = zone.y + zone.height * (0.24 + layer * 0.27) + Math.sin(time * 0.65 + layer) * 4;
+        ctx.beginPath();
+        ctx.moveTo(zone.x + drift - 32, y + 4);
+        ctx.bezierCurveTo(zone.x + drift, y - 9, zone.x + drift + 34, y + 10, zone.x + drift + 72, y - 2);
+        ctx.strokeStyle = layer % 2
+          ? `rgba(105, 218, 232, ${0.12 + breathe * 0.035})`
+          : `rgba(176, 119, 238, ${0.13 + breathe * 0.04})`;
+        ctx.lineWidth = 12 + layer * 2;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.beginPath();
+      roundedRectPath(ctx, zone.x + 1, zone.y + 1, zone.width - 2, zone.height - 2, 19);
+      ctx.strokeStyle = `rgba(158, 194, 242, ${0.19 + breathe * 0.04})`;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.restore();
+    });
   }
   drawContained(ctx, id, x, y, boxWidth, boxHeight, { anchorY = 0.5, mirror = false, rotation = 0, alpha = 1, scale: visualScale = 1, filter = 'none' } = {}) {
     const image = this.art.get(id);
@@ -184,6 +234,31 @@ export class Renderer {
     });
   }
   drawEffects(ctx, game) {
+    game.effects.filter(effect => effect.type === 'fogEntry').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      const fade = Math.max(0, effect.life / effect.duration);
+      const echoCount = effect.weakened ? 1 : 2;
+      for (let index = echoCount; index >= 1; index -= 1) {
+        const offset = (6 + progress * 10) * index;
+        this.drawContained(ctx, effect.unitType, effect.x - offset, effect.y + index * 2, 40, 42, {
+          anchorY: 0.56,
+          alpha: fade * (effect.weakened ? 0.16 : 0.24) / index,
+          filter: effect.weakened
+            ? 'brightness(1.15) saturate(1.2) hue-rotate(18deg)'
+            : 'brightness(1.45) saturate(1.55) hue-rotate(35deg)',
+        });
+      }
+      ctx.save();
+      ctx.globalAlpha = fade * (effect.weakened ? 0.42 : 0.78);
+      ctx.fillStyle = effect.weakened ? 'rgba(91, 204, 222, .08)' : 'rgba(161, 100, 235, .13)';
+      ctx.strokeStyle = effect.weakened ? '#76cbd8' : '#c58aff';
+      ctx.lineWidth = effect.weakened ? 1.6 : 2.8;
+      ctx.beginPath();
+      ctx.arc(effect.x, effect.y + 3, 14 + progress * (effect.weakened ? 10 : 18), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    });
     game.effects.filter(effect => effect.type === 'unitDeath' && effect.life > 0).forEach(effect => {
       const [width, height] = ENEMY_BOXES[effect.unitType];
       const motion = MotionSystem.deathTransform(effect);
