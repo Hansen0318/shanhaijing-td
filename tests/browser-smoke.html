@@ -18,6 +18,8 @@
     <button data-state="reset">重設</button>
     <button data-state="empty">空塔位</button>
     <button data-state="tower">塔資訊</button>
+    <button data-state="towerFacingLeft">三塔朝左</button>
+    <button data-state="towerFacingRight">三塔朝右</button>
     <button data-state="upgrade">升級／出售</button>
     <button data-state="wave1">Wave 1</button>
     <button data-state="wave8preview">Wave 8 預告</button>
@@ -194,6 +196,11 @@
       if (state === 'reset') game.restart();
       if (state === 'empty') { game.restart(); game.selectedSlot = 0; }
       if (state === 'tower') { game.restart(); game.buildTower(0, 'bifang'); game.selectedSlot = 0; }
+      if (state === 'towerFacingLeft' || state === 'towerFacingRight') {
+        configureMixedWave(game);
+        const offset = state === 'towerFacingLeft' ? -40 : 40;
+        game.towers.filter(Boolean).forEach(tower => tower.faceTarget(tower.x + offset));
+      }
       if (state === 'upgrade') { game.restart(); game.economy.add(500); game.buildTower(0, 'bifang'); game.upgradeTower(0); game.sellTower(0); game.selectedSlot = 0; }
       if (state === 'wave1') { game.restart(); game.buildTower(0, 'bifang'); game.buildTower(4, 'fuzhu'); game.startWaveNow(); }
       if (state === 'wave8preview') configureMixedWave(game);

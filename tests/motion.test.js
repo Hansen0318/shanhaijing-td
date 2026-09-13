@@ -3,20 +3,22 @@ import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { Renderer } from '../src/render/Renderer.js';
 import { Enemy } from '../src/entities/Enemy.js';
-import { ENEMY_DATA, LEVELS } from '../src/config/gameData.js';
+import { Tower } from '../src/entities/Tower.js';
+import { ENEMY_DATA, LEVELS, TOWER_DATA } from '../src/config/gameData.js';
 import { GameMap } from '../src/map/GameMap.js';
 import { MotionSystem } from '../src/systems/MotionSystem.js?v=motion-lite-2';
 import { UNIT_MOTION_CONFIG } from '../src/config/motionData.js?v=motion-lite-2';
 
 function fakeContext() {
-  const calls = { drawImage: [], translate: [], scale: [], filters: [] };
+  const calls = { drawImage: [], translate: [], scale: [], rotate: [], filters: [] };
   let filter = 'none';
   return {
     calls,
     set filter(value) { filter = value; calls.filters.push(value); },
     get filter() { return filter; },
     setTransform() {}, clearRect() {}, fillRect() {}, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
-    setLineDash() {}, arc() {}, fill() {}, fillText() {}, strokeText() {}, save() {}, restore() {}, rotate() {},
+    setLineDash() {}, arc() {}, fill() {}, fillText() {}, strokeText() {}, save() {}, restore() {},
+    rotate(angle) { calls.rotate.push(angle); },
     translate(x, y) { calls.translate.push([x, y]); },
     scale(x, y) { calls.scale.push([x, y]); },
     drawImage(...args) { calls.drawImage.push(args); },
@@ -153,6 +155,66 @@ test('tower recoil is visual-only and projectile or beam origins stay on gamepla
   projectileGame.updateTowers(0);
   assert.deepEqual({ x: projectileGame.projectiles[0].x, y: projectileGame.projectiles[0].y }, { x: bifang.x, y: bifang.y });
   assert.deepEqual({ x: bifang.x, y: bifang.y }, { x: LEVELS[2].map.slots[0].x, y: LEVELS[2].map.slots[0].y });
+});
+
+test('all deployable towers face acquired targets and retain the last facing without a target', () => {
+  for (const type of ['bifang', 'fuzhu', 'yinglong', 'baize']) {
+    const game = new Game(() => 0, 1);
+    const slot = LEVELS[1].map.slots[0];
+    const tower = new Tower(type, TOWER_DATA[type], slot);
+    game.towers[0] = tower;
+
+    assert.equal(tower.facing, 1, `${type} starts facing right`);
+    assert.equal(tower.lastTargetX, null, `${type} starts without a target position`);
+
+    game.spawnEnemy('qiongqi');
+    const target = game.enemies[0];
+    target.x = tower.x - 40;
+    target.y = tower.y;
+    target.pathDistance = 40;
+    game.updateTowers(0);
+    assert.equal(tower.facing, -1, `${type} mirrors for a target on the left`);
+    assert.equal(tower.lastTargetX, tower.x - 40);
+
+    game.enemies.length = 0;
+    game.illusions.length = 0;
+    tower.cooldown = 0;
+    game.updateTowers(0);
+    assert.equal(tower.facing, -1, `${type} retains its last facing without a target`);
+    assert.equal(tower.lastTargetX, tower.x - 40);
+
+    game.spawnEnemy('qiongqi');
+    const rightTarget = game.enemies[0];
+    rightTarget.x = tower.x + 40;
+    rightTarget.y = tower.y;
+    rightTarget.pathDistance = 40;
+    tower.cooldown = 0;
+    game.updateTowers(0);
+    assert.equal(tower.facing, 1, `${type} uses normal orientation for a target on the right`);
+    assert.equal(tower.lastTargetX, tower.x + 40);
+  }
+});
+
+test('tower renderer mirrors only the sprite while preserving idle and recoil transforms', () => {
+  for (const [facing, expectedSign] of [[-1, -1], [1, 1]]) {
+    const { renderer, ctx } = rendererFixture({ motionEnabled: true });
+    const tower = {
+      type: 'bifang', x: 120, y: 140, level: 1, facing,
+      getStats: () => ({ range: 130 }),
+    };
+    const game = {
+      visualTime: 0.125, enemies: [], towers: [tower], selectedSlot: null,
+      effects: [{ type: 'towerRecoil', towerType: 'bifang', x: 120, y: 140, dx: 1, dy: 0, life: 0.09, duration: 0.09 }],
+      blessings: { modifiers: {} },
+    };
+
+    renderer.drawTowers(ctx, game);
+
+    assert.equal(Math.sign(ctx.calls.scale[0][0]), expectedSign);
+    assert.ok(ctx.calls.scale[0][1] > 1, 'idle scale remains active');
+    assert.ok(ctx.calls.translate[0][0] < tower.x, 'recoil offset remains active');
+    assert.deepEqual(ctx.calls.rotate, [], 'tower sprite is never rotated');
+  }
 });
 
 test('paoxiao consume scale is visual-only and preserves HP and threshold results', () => {

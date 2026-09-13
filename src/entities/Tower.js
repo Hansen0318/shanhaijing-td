@@ -7,6 +7,13 @@ export class Tower {
     this.level = 1;
     this.cooldown = 0;
     this.invested = data.cost;
+    this.facing = 1;
+    this.lastTargetX = null;
+  }
+  faceTarget(targetX) {
+    this.lastTargetX = targetX;
+    if (targetX < this.x) this.facing = -1;
+    else if (targetX > this.x) this.facing = 1;
   }
   getStats(modifiers = {}) {
     const levelDamageMultiplier = this.level >= 3 ? 1.5 : this.level >= 2 ? 1.3 : 1;

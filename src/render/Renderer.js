@@ -158,7 +158,11 @@ export class Renderer {
       if (index === game.selectedSlot) { const range = tower.getStats(game.blessings.modifiers).range; ctx.beginPath(); ctx.arc(tower.x, tower.y, range, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,205,103,.09)'; ctx.fill(); ctx.strokeStyle = 'rgba(241,205,103,.65)'; ctx.lineWidth = 1.5; ctx.stroke(); }
       const [width, height] = TOWER_BOXES[tower.type];
       const motion = MotionSystem.towerTransform(tower, game.visualTime ?? 0, game.effects, this.motionEnabled);
-      const drewTower = this.drawContained(ctx, tower.type, tower.x + motion.xOffset, tower.y + 4 + motion.yOffset, width, height, { anchorY: 0.58, scale: motion.scale });
+      const drewTower = this.drawContained(ctx, tower.type, tower.x + motion.xOffset, tower.y + 4 + motion.yOffset, width, height, {
+        anchorY: 0.58,
+        mirror: tower.facing === -1,
+        scale: motion.scale,
+      });
       if (!drewTower) {
         ctx.beginPath(); ctx.arc(tower.x, tower.y, 22, 0, Math.PI * 2); ctx.fillStyle = '#102d25'; ctx.fill(); ctx.strokeStyle = '#e5c15a'; ctx.lineWidth = 3; ctx.stroke();
         ctx.font = '24px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(TOWER_DATA[tower.type].emoji, tower.x, tower.y);

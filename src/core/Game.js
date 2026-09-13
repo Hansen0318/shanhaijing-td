@@ -4,7 +4,7 @@ import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
 import { Enemy } from '../entities/Enemy.js?v=fog-visual-1';
 import { Illusion } from '../entities/Illusion.js';
-import { Tower } from '../entities/Tower.js?v=blessing-fix-1';
+import { Tower } from '../entities/Tower.js?v=blessing-fix-1&tower-facing=1';
 import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
@@ -310,6 +310,7 @@ export class Game {
       const stats = tower.getStats(this.blessings.modifiers);
       const target = CombatSystem.acquireTarget(tower, targets, stats.range, { preferReal: tower.type === 'baize' });
       if (!target) continue;
+      tower.faceTarget(target.x);
       tower.cooldown += stats.interval;
       const recoil = MotionSystem.recoilEffect(tower, target, this.motionEnabled);
       if (recoil) this.effects.push(recoil);
