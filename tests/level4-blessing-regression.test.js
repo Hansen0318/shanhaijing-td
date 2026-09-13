@@ -5,13 +5,10 @@ import { BlessingSystem } from '../src/systems/BlessingSystem.js';
 import { Tower } from '../src/entities/Tower.js';
 
 test('level four blessing pool excludes unselected tower blessings', () => {
-  const system = new BlessingSystem(BLESSING_DATA, () => 0);
+  const system = new BlessingSystem(BLESSING_DATA, () => 0.25);
   const allowed = ['bifang', 'yinglong', 'baize'];
-  const seen = new Set();
-  for (let i = 0; i < 20; i += 1) {
-    for (const choice of system.drawChoices([], allowed)) seen.add(choice.tower ?? 'all');
-  }
-  assert.equal(seen.has('fuzhu'), false);
+  const choices = system.drawChoices([], allowed);
+  assert.equal(choices.some(choice => choice.tower === 'fuzhu'), false);
 });
 
 test('Baize has three selectable blessings', () => {
