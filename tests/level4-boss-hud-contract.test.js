@@ -19,6 +19,7 @@ test('all Boss HUDs use one variable-positioned code-driven fill without image m
   assert.match(base, /top:\s*var\(--boss-track-top\)/);
   assert.match(base, /width:\s*var\(--boss-track-width\)/);
   assert.match(base, /height:\s*var\(--boss-track-height\)/);
+  assert.match(base, /\.boss-hud strong\s*\{[^}]*position:\s*absolute[^}]*line-height:\s*14px/);
   assert.match(base, /\.boss-track\s*\{[\s\S]*?background:\s*transparent/);
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /boss-hud\[data-boss-type="(?:qiongqi|paoxiao|xiangliu|jiuweihu)"\]::before/);
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /background:\s*#202638/);

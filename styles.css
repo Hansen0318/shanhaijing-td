@@ -18,7 +18,7 @@ button:active:not(:disabled) { transform: scale(.98); }
 .wave-preview-enemies span { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 2px; }
 .preview-art { width: 20px; height: 20px; object-fit: contain; }
 .boss-hud { position: relative; isolation: isolate; width: 100%; height: 100%; padding: 2px 8px; border: 6px solid transparent; border-radius: 10px; border-image: url('./assets/ui/ui_boss_qiongqi_panel_v2.png?v=boss-hud-1') 70 fill / 6px / 0 stretch; background: transparent; text-align: center; }
-.boss-hud strong { position: relative; z-index: 3; display: block; color: #ffcfad; line-height: 18px; text-shadow: 0 1px 2px #000; }
+.boss-hud strong { position: absolute; z-index: 3; top: 2px; left: 20%; width: 60%; display: block; color: #ffcfad; font-size: 13px; line-height: 14px; text-shadow: 0 1px 2px #000; }
 .boss-track { position: absolute; z-index: 2; left: var(--boss-track-left); top: var(--boss-track-top); width: var(--boss-track-width); height: var(--boss-track-height); margin: 0; overflow: hidden; border-radius: 99px; background: transparent; box-shadow: none; }
 .boss-track span { display: block; height: 100%; border-radius: inherit; background: #d84b4b; box-shadow: inset 0 1px 1px rgba(255,255,255,.28); transition: width .1s linear; }
 .boss-hud small { position: absolute; z-index: 3; top: calc(var(--boss-track-top) - 1px); right: calc(100% - var(--boss-track-left) - var(--boss-track-width) + 3px); color: #f4dede; font-size: 7px; line-height: 1; text-shadow: 0 1px 2px #000; }
