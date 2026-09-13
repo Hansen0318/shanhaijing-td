@@ -1,13 +1,14 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=blessing-fix-1';
+import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
 import { Enemy } from '../entities/Enemy.js';
 import { Illusion } from '../entities/Illusion.js';
-import { Tower } from '../entities/Tower.js';
+import { Tower } from '../entities/Tower.js?v=blessing-fix-1';
 import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
-import { BlessingSystem } from '../systems/BlessingSystem.js';
+import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
 import { WaveManager } from '../systems/WaveManager.js';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
@@ -32,7 +33,8 @@ export class Game {
     this.time = new GameTime();
     this.map = new GameMap(level.map);
     this.economy = new Economy(GAME_CONFIG.initialGold);
-    this.blessings = new BlessingSystem(BLESSING_DATA, this.random);
+    const blessingData = level.id === 4 ? [...BLESSING_DATA, ...LEVEL4_BAIZE_BLESSINGS] : BLESSING_DATA;
+    this.blessings = new BlessingSystem(blessingData, this.random);
     this.wave = new WaveManager(level.waves);
     this.baseHp = GAME_CONFIG.baseHp;
     this.lineupSelection = [];
@@ -305,8 +307,8 @@ export class Game {
         StatusSystem.applyInsight(target, stats);
         if (!target.isIllusion) {
           this.illusions.filter(illusion => illusion.sourceId === target.id).forEach(illusion => {
-            illusion.life = Math.min(illusion.life, 0.8);
-            illusion.duration = Math.min(illusion.duration, 0.8);
+            illusion.life = Math.min(illusion.life, stats.illusionRevealDuration);
+            illusion.duration = Math.min(illusion.duration, stats.illusionRevealDuration);
           });
         }
         this.effects.push({ type: 'baizeInsight', from: { x: tower.x, y: tower.y }, to: { x: target.x, y: target.y }, life: 0.35, duration: 0.35 });
@@ -326,7 +328,9 @@ export class Game {
     const number = this.wave.waveNumber;
     if (number >= this.level.waves.length) return;
     this.wave.finish();
-    this.currentChoices = this.blessings.drawChoices([...new Set(this.towers.filter(Boolean).map(tower => tower.type))]);
+    const deployedTypes = [...new Set(this.towers.filter(Boolean).map(tower => tower.type))];
+    const allowedTowerTypes = this.levelId === 4 ? this.lineupSelection : null;
+    this.currentChoices = this.blessings.drawChoices(deployedTypes, allowedTowerTypes);
     this.state = 'blessing';
     this.time.setPaused(true);
   }
