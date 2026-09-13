@@ -39,6 +39,7 @@ test('art catalog exposes all 67 packaged assets and every file is deployable', 
   assert.equal(ART_ASSETS.level4Background, 'assets/levels/level4/bg_qingqiu_realm_v1.jpg');
   assert.equal(ART_ASSETS.baize, 'assets/towers/tower_baize_v1.png');
   assert.equal(ART_ASSETS.jiuweihuPhase3, 'assets/bosses/boss_jiuweihu_phase3_v1.png');
+  assert.equal(ART_ASSETS.jiuweihuBossPanel, 'assets/ui/ui_boss_jiuweihu_panel_v2.png');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
@@ -81,7 +82,7 @@ test('level-four runtime art is complete, transparent where required, and mobile
     'assets/effects/fx_jiuweihu_phase_aura_v1.png': 300_000,
     'assets/effects/fx_jiuweihu_ultimate_v1.png': 300_000,
     'assets/effects/fx_baize_insight_mark_v1.png': 300_000,
-    'assets/ui/ui_boss_jiuweihu_panel_v1.png': 500_000,
+    'assets/ui/ui_boss_jiuweihu_panel_v2.png': 500_000,
     'assets/ui/ui_level4_lineup_panel_v1.png': 500_000,
   };
   for (const [path, maxBytes] of Object.entries(alphaBudgets)) {

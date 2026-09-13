@@ -35,33 +35,19 @@
   text-shadow: 0 1px 2px #000;
 }
 
-/* Level4 Jiuwweihu: hide the red HP strip baked into the current frame art.
-   The only visible HP value is the code-driven .boss-hp-fill above this mask. */
+/* Level4 Jiuweihu: the v2 art contains an empty channel; only the DOM fill is red. */
 body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] {
   position: relative;
   isolation: isolate;
   padding: 2px 8px;
 }
-body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"]::before {
-  content: '';
-  position: absolute;
-  z-index: 1;
-  left: 4.2%;
-  right: 4.2%;
-  top: 23px;
-  height: 12px;
-  border-radius: 999px;
-  background: #202638;
-  box-shadow: inset 0 1px 4px rgba(0,0,0,.72), 0 0 2px rgba(96,185,255,.5);
-  pointer-events: none;
-}
 body[data-level="4"] .boss-hud[data-boss-type="jiuweihu"] .boss-track {
   position: absolute;
   z-index: 2;
-  left: 5.2%;
-  right: 5.2%;
-  top: 25px;
-  height: 8px;
+  left: 15%;
+  right: 4%;
+  top: 27px;
+  height: 7px;
   margin: 0;
   overflow: hidden;
   border-radius: 999px;

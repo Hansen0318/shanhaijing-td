@@ -182,3 +182,20 @@ test('level-four wave ten preview uses the phase-one Jiuweihu art', () => {
   ui.renderBossSlot();
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /boss_jiuweihu_phase1_v1\.png/);
 });
+
+test('Jiuweihu HP fill follows 100, 50 and 25 percent health', () => {
+  const boss = { isBoss: true, type: 'jiuweihu', hp: 4000, maxHp: 4000, data: { name: '九尾狐' } };
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[4], levelId: 4, state: 'combat', enemies: [boss], effects: [],
+    wave: { waveNumber: 10, queue: [], getWaveGroups: () => [] },
+  };
+  ui.dom = bossSlotDom();
+
+  for (const [hp, width] of [[4000, '100%'], [2000, '50%'], [1000, '25%']]) {
+    boss.hp = hp;
+    ui.renderBossSlot();
+    assert.equal(ui.dom['boss-hp-fill'].style.width, width);
+  }
+  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_jiuweihu_panel_v2\.png/);
+});

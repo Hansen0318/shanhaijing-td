@@ -58,7 +58,7 @@ test('entry and style cache versions are fresh for this release', async () => {
   assert.match(html, /styles\.css\?v=level4-1/);
   assert.match(html, /styles-fixes\.css\?v=level4-1/);
   assert.match(html, /styles-lineup\.css\?v=blessing-fix-1/);
-  assert.match(html, /src\/main\.js\?v=blessing-fix-1/);
+  assert.match(html, /src\/main\.js\?v=bossbar-2/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

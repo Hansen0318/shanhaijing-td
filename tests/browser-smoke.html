@@ -44,6 +44,7 @@
     <button data-state="level4">第4關陣容</button>
     <button data-state="level4wave1">第4關 Wave 1</button>
     <button data-state="level4boss">九尾狐 P1</button>
+    <button data-state="jiuweihu50">九尾狐 50%</button>
     <button data-state="jiuweihu2">九尾狐 P2</button>
     <button data-state="jiuweihu3">九尾狐 P3</button>
     <button data-state="level4victory">第4關 Victory</button>
@@ -290,6 +291,12 @@
         game.startWaveNow();
       }
       if (state === 'level4boss') await configureLevel4Boss(game);
+      if (state === 'jiuweihu50') {
+        let boss = game.enemies.find(enemy => enemy.type === 'jiuweihu');
+        if (!boss) { await configureLevel4Boss(game); boss = game.enemies.find(enemy => enemy.type === 'jiuweihu'); }
+        boss.hp = boss.maxHp * 0.5;
+        game.update(0);
+      }
       if (['jiuweihu2', 'jiuweihu3'].includes(state)) {
         let boss = game.enemies.find(enemy => enemy.type === 'jiuweihu');
         if (!boss) { await configureLevel4Boss(game); boss = game.enemies.find(enemy => enemy.type === 'jiuweihu'); }

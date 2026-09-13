@@ -64,7 +64,7 @@ export const ART_ASSETS = Object.freeze({
   jiuweihuPhaseAura: 'assets/effects/fx_jiuweihu_phase_aura_v1.png',
   jiuweihuUltimate: 'assets/effects/fx_jiuweihu_ultimate_v1.png',
   baizeInsightMark: 'assets/effects/fx_baize_insight_mark_v1.png',
-  jiuweihuBossPanel: 'assets/ui/ui_boss_jiuweihu_panel_v1.png',
+  jiuweihuBossPanel: 'assets/ui/ui_boss_jiuweihu_panel_v2.png',
   level4LineupPanel: 'assets/ui/ui_level4_lineup_panel_v1.png',
 });
 
