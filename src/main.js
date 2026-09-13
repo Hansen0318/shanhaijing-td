@@ -1,7 +1,7 @@
 import { Game } from './core/Game.js?v=blessing-fix-1';
-import { Renderer } from './render/Renderer.js?v=boss-hud-1';
-import { UIController } from './ui/UIController.js?v=boss-hud-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=boss-hud-1';
+import { Renderer } from './render/Renderer.js?v=boss-hud-2';
+import { UIController } from './ui/UIController.js?v=boss-hud-2';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=boss-hud-2';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }

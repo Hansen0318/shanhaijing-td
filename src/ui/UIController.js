@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=blessing-fix-1';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=boss-hud-1';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=boss-hud-2';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {
