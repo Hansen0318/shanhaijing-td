@@ -1,4 +1,4 @@
-import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
+import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=blessing-fix-1';
 import { assetUrl } from '../config/artAssets.js?v=level4-1';
 import { Economy } from '../systems/Economy.js';
 
@@ -118,7 +118,13 @@ export class UIController {
     const overlay = this.dom['blessing-overlay']; overlay.hidden = this.game.state !== 'blessing';
     if (!overlay.hidden) {
       const key = this.game.currentChoices.map(choice => choice.id).join('|');
-      if (key !== this.blessingKey) { this.blessingKey = key; this.dom['blessing-choices'].innerHTML = this.game.currentChoices.map(choice => `<button class="blessing-card" data-action="blessing" data-id="${choice.id}"><strong>${choice.name}</strong><span>${choice.description}</span><small>可重複取得</small></button>`).join(''); }
+      if (key !== this.blessingKey) {
+        this.blessingKey = key;
+        this.dom['blessing-choices'].innerHTML = this.game.currentChoices.map(choice => {
+          const source = choice.tower ? (TOWER_DATA[choice.tower]?.name ?? '異獸') : '全隊';
+          return `<button class="blessing-card" data-action="blessing" data-id="${choice.id}"><em class="blessing-source">【${source}】</em><strong>${choice.name}</strong><span>${choice.description}</span><small>可重複取得</small></button>`;
+        }).join('');
+      }
     } else this.blessingKey = null;
   }
   renderPause() { this.dom['pause-overlay'].hidden = this.game.state !== 'paused'; }
