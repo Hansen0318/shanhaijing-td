@@ -250,6 +250,8 @@
       if (['paoxiao50', 'paoxiao25'].includes(state)) {
         let boss = game.enemies.find(enemy => enemy.type === 'paoxiao');
         if (!boss) { await configureLevel2Boss(game); boss = game.enemies.find(enemy => enemy.type === 'paoxiao'); }
+        boss.triggeredBossThresholds.add(0.7);
+        boss.triggeredBossThresholds.add(0.4);
         boss.hp = boss.maxHp * (Number(state.replace('paoxiao', '')) / 100);
         game.update(0);
       }
@@ -294,7 +296,7 @@
         const ratio = Number(state.replace('xiangliu', '')) / 100;
         boss.hp = boss.maxHp * ratio;
         if (ratio <= 0.5) boss.triggeredBossThresholds.add(0.75);
-        if (ratio <= 0.25) boss.triggeredBossThresholds.add(0.5);
+        if (ratio <= 0.5) boss.triggeredBossThresholds.add(0.5);
         game.update(0);
       }
       if (state === 'level3victory') {
