@@ -5,20 +5,10 @@ import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
 const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76], meihu: [40, 42], huanli: [52, 50], jiuweihu: [82, 82] });
-
-function roundedRectPath(ctx, x, y, width, height, radius) {
-  const r = Math.min(radius, width / 2, height / 2);
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + width - r, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + r);
-  ctx.lineTo(x + width, y + height - r);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
-  ctx.lineTo(x + r, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
+const FOG_VISUAL_PATHS = Object.freeze({
+  upper: { start: [218, 116], c1: [214, 140], c2: [137, 181], end: [140, 214], normal: [-0.78, -0.62] },
+  lower: { start: [245, 406], c1: [277, 407], c2: [335, 438], end: [335, 467], normal: [-0.56, 0.83] },
+});
 
 export class Renderer {
   constructor(canvas, art = new ArtStore(), { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
@@ -71,33 +61,32 @@ export class Renderer {
     const zones = game.level.map.fogZones ?? [];
     const time = game.visualTime ?? 0;
     zones.forEach((zone, index) => {
+      const path = FOG_VISUAL_PATHS[zone.id];
+      if (!path) return;
       const breathe = (Math.sin(time * 0.9 + index * 1.7) + 1) / 2;
       ctx.save();
-      ctx.beginPath();
-      roundedRectPath(ctx, zone.x, zone.y, zone.width, zone.height, 20);
-      ctx.clip();
       ctx.globalCompositeOperation = 'screen';
-      ctx.fillStyle = `rgba(79, 103, 176, ${0.085 + breathe * 0.025})`;
-      ctx.fillRect(zone.x, zone.y, zone.width, zone.height);
       for (let layer = 0; layer < 3; layer += 1) {
-        const drift = (time * (7 + layer * 1.5) + index * 29 + layer * 43) % (zone.width + 70) - 35;
-        const y = zone.y + zone.height * (0.24 + layer * 0.27) + Math.sin(time * 0.65 + layer) * 4;
+        const spread = (layer - 1) * 7;
+        const drift = Math.sin(time * (0.55 + layer * 0.08) + (layer - 1) * 1.2) * 3;
+        const dx = path.normal[0] * (spread + drift);
+        const dy = path.normal[1] * (spread + drift);
         ctx.beginPath();
-        ctx.moveTo(zone.x + drift - 32, y + 4);
-        ctx.bezierCurveTo(zone.x + drift, y - 9, zone.x + drift + 34, y + 10, zone.x + drift + 72, y - 2);
+        ctx.moveTo(path.start[0] + dx, path.start[1] + dy);
+        ctx.bezierCurveTo(
+          path.c1[0] + dx, path.c1[1] + dy,
+          path.c2[0] + dx, path.c2[1] + dy,
+          path.end[0] + dx, path.end[1] + dy,
+        );
         ctx.strokeStyle = layer % 2
-          ? `rgba(105, 218, 232, ${0.12 + breathe * 0.035})`
-          : `rgba(176, 119, 238, ${0.13 + breathe * 0.04})`;
-        ctx.lineWidth = 12 + layer * 2;
+          ? `rgba(105, 218, 232, ${0.09 + breathe * 0.03})`
+          : `rgba(176, 119, 238, ${0.1 + breathe * 0.035})`;
+        ctx.lineWidth = 24 - layer * 7;
         ctx.lineCap = 'round';
+        ctx.shadowColor = layer % 2 ? 'rgba(105, 218, 232, .24)' : 'rgba(176, 119, 238, .25)';
+        ctx.shadowBlur = 12 + layer * 3;
         ctx.stroke();
       }
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.beginPath();
-      roundedRectPath(ctx, zone.x + 1, zone.y + 1, zone.width - 2, zone.height - 2, 19);
-      ctx.strokeStyle = `rgba(158, 194, 242, ${0.19 + breathe * 0.04})`;
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
       ctx.restore();
     });
   }

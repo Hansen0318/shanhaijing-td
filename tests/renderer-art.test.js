@@ -4,12 +4,12 @@ import { Renderer } from '../src/render/Renderer.js';
 import { LEVELS, MAP_DATA } from '../src/config/gameData.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [], fillRect: [], clip: 0, arc: [] };
+  const calls = { drawImage: [], rotate: [], scale: [], fillRect: [], moveTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
   return {
     calls,
-    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
+    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo() {}, stroke() {},
     setLineDash() {}, arc() {}, fill() {}, fillText() {}, strokeText() {}, save() {}, restore() {}, translate() {},
-    quadraticCurveTo() {}, closePath() {}, clip() { calls.clip += 1; }, bezierCurveTo() {},
+    quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); },
     drawImage(...args) { calls.drawImage.push(args); },
     rotate(value) { calls.rotate.push(value); },
     scale(x, y) { calls.scale.push([x, y]); },
@@ -102,16 +102,19 @@ test('renderer uses Qingqiu map art, Baize, illusions, and Jiuweihu phase sprite
   }
 });
 
-test('only Level4 renders the two configured animated fog regions beneath units', () => {
+test('only Level4 renders soft curved fog without rectangular fills, clips, or borders', () => {
   const levelFour = rendererFixture();
   const game = emptyGame(LEVELS[4]);
-  game.visualTime = 1.25;
-  levelFour.renderer.render(game);
-  assert.deepEqual(levelFour.ctx.calls.fillRect.slice(0, 2), [
-    [128, 111, 116, 111],
-    [244, 375, 137, 105],
-  ]);
-  assert.equal(levelFour.ctx.calls.clip, 2);
+  game.visualTime = 0;
+  levelFour.renderer.drawFogZones(levelFour.ctx, game);
+  assert.equal(levelFour.ctx.calls.bezierCurveTo.length, 6);
+  assert.deepEqual(levelFour.ctx.calls.moveTo[1], [218, 116]);
+  assert.deepEqual(levelFour.ctx.calls.bezierCurveTo[1], [214, 140, 137, 181, 140, 214]);
+  assert.deepEqual(levelFour.ctx.calls.moveTo[4], [245, 406]);
+  assert.deepEqual(levelFour.ctx.calls.bezierCurveTo[4], [277, 407, 335, 438, 335, 467]);
+  assert.equal(levelFour.ctx.calls.fillRect.length, 0);
+  assert.equal(levelFour.ctx.calls.clip, 0);
+  assert.equal(levelFour.ctx.calls.closePath, 0);
 
   for (const levelId of [1, 2, 3]) {
     const otherLevel = rendererFixture();
