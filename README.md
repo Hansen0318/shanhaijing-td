@@ -38,6 +38,10 @@ npm run check
 
 正式分享網址預期為：`https://Hansen0318.github.io/shanhaijing-td/`。
 
+## 開發規範
+
+涉及新增、替換、壓縮、去背、定位或 preload 的圖片任務，先讀 [`docs/ASSET_INTEGRATION_GUIDE.md`](docs/ASSET_INTEGRATION_GUIDE.md)。Work / Chat prompt 只寫本輪差異，不重複 Guide 內容，以節省 token。
+
 ## 調整數值
 
 主要平衡數值集中在 [`src/config/gameData.js`](src/config/gameData.js)：
