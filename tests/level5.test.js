@@ -210,6 +210,10 @@ test('tower stun pauses only attack cooldown progression', () => {
   assert.equal(tower.cooldown, 0.5);
   game.updateTowers(0.1);
   assert.equal(tower.cooldown, 0.4);
+  tower.stunRemaining = 0.05;
+  game.updateTowers(0.1);
+  assert.equal(tower.stunRemaining, 0);
+  assert.ok(Math.abs(tower.cooldown - 0.35) < 1e-12);
   assert.equal(game.upgradeTower(0).ok, true);
   assert.equal(game.sellTower(0).confirm, true);
 });

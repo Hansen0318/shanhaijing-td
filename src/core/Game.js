@@ -13,8 +13,8 @@ import { WaveManager } from '../systems/WaveManager.js';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { LEVEL4_ROSTER, isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level4-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level5-1';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -50,6 +50,7 @@ export class Game {
     this.pendingSellSlot = null;
     this.selectedSlot = null;
     this.banner = '';
+    this.bannerArtId = '';
     this.bannerTimer = 0;
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
@@ -124,7 +125,7 @@ export class Game {
     if (this.state !== 'preparation') return false;
     const next = this.wave.waveNumber + 1;
     if (next > this.level.waves.length) return false;
-    if (next === 10) this.queueBanner('BOSS 警告', GAME_CONFIG.bossBannerSeconds);
+    if (next === 10) this.queueBanner('BOSS 警告', GAME_CONFIG.bossBannerSeconds, this.levelId === 5 ? 'level5BossWarning' : '');
     this.wave.start(next);
     this.state = 'combat';
     this.time.setPaused(false);
@@ -161,27 +162,30 @@ export class Game {
     this.time.setPaused(true);
     this.pendingSellSlot = null;
   }
-  queueBanner(text, duration) {
+  queueBanner(text, duration, artId = '') {
     if (this.bannerTimer <= 0) {
       this.banner = text;
+      this.bannerArtId = artId;
       this.bannerTimer = duration;
       return;
     }
-    this.bannerQueue.push({ text, duration });
+    this.bannerQueue.push({ text, duration, artId });
   }
   advanceBanner(realDelta) {
     let remaining = realDelta;
     while (this.bannerTimer > 0 && remaining >= this.bannerTimer) {
       remaining -= this.bannerTimer;
       const next = this.bannerQueue.shift();
-      if (!next) { this.banner = ''; this.bannerTimer = 0; return; }
+      if (!next) { this.banner = ''; this.bannerArtId = ''; this.bannerTimer = 0; return; }
       this.banner = next.text;
+      this.bannerArtId = next.artId ?? '';
       this.bannerTimer = next.duration;
     }
     this.bannerTimer = Math.max(0, this.bannerTimer - remaining);
     if (this.bannerTimer <= 0 && this.bannerQueue.length) {
       const next = this.bannerQueue.shift();
       this.banner = next.text;
+      this.bannerArtId = next.artId ?? '';
       this.bannerTimer = next.duration;
     }
   }
@@ -339,11 +343,14 @@ export class Game {
     const targets = [...this.enemies, ...this.illusions];
     for (const tower of this.towers) {
       if (!tower) continue;
+      let activeDt = dt;
       if (tower.stunRemaining > 0) {
-        tower.stunRemaining = Math.max(0, tower.stunRemaining - dt);
-        continue;
+        const pausedDt = Math.min(activeDt, tower.stunRemaining);
+        tower.stunRemaining -= pausedDt;
+        activeDt -= pausedDt;
+        if (activeDt <= 0) continue;
       }
-      tower.cooldown -= dt;
+      tower.cooldown -= activeDt;
       if (tower.cooldown > 0) continue;
       const stats = tower.getStats(this.blessings.modifiers);
       const target = CombatSystem.acquireTarget(tower, targets, stats.range, { preferReal: tower.type === 'baize' });

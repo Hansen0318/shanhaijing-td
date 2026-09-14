@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=blessing-fix-1';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=boss-hud-2';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level5-1';
 import { Economy } from '../systems/Economy.js';
 
 export class UIController {
@@ -104,6 +104,20 @@ export class UIController {
     overlay.hidden = this.game.state !== 'lineup';
     if (overlay.hidden) { this.lineupKey = null; return; }
     const selected = new Set(this.game.lineupSelection);
+    const levelFive = this.game.levelId === 5;
+    if (this.dom['lineup-eyebrow']) this.dom['lineup-eyebrow'].textContent = levelFive ? '第五關・不周山墟' : '第四關・青丘妖境';
+    if (this.dom['lineup-banner']) {
+      this.dom['lineup-banner'].hidden = !levelFive;
+      this.dom['lineup-banner'].src = levelFive ? assetUrl('level5Banner') : '';
+    }
+    if (this.dom['lineup-preview']) {
+      this.dom['lineup-preview'].hidden = !levelFive;
+      this.dom['lineup-preview'].src = levelFive ? assetUrl('level5Preview') : '';
+    }
+    if (this.dom['lineup-title']) this.dom['lineup-title'].textContent = levelFive ? '第5關・不周山墟' : '選擇 3 隻異獸';
+    if (this.dom['lineup-help']) this.dom['lineup-help'].innerHTML = levelFive
+      ? '本關可從四隻異獸中選擇三隻出戰<br>敵情：朱厭與狸力突破不周山道，刑天鎮守天柱核心<br>推薦職能：控制／洞察／單擊高傷'
+      : '本關可從四隻異獸中選擇三隻出戰<br>敵情：妖霧籠罩青丘，敵人擅長高速突進與幻術干擾<br>推薦職能：控制／洞察／範圍攻擊';
     const key = `lineup:${[...selected].join('|')}`;
     if (!this.shouldRenderLineup(key)) return;
     this.dom['lineup-choices'].innerHTML = ['bifang', 'fuzhu', 'yinglong', 'baize'].map(type => {
@@ -139,7 +153,7 @@ export class UIController {
       : '';
     this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>${unlock}` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
     this.dom['retry-button'].textContent = this.game.state === 'victory' ? '再次挑戰' : '重新挑戰';
-    this.dom['next-level-button'].hidden = !(this.game.state === 'victory' && this.game.levelId < 4);
+    this.dom['next-level-button'].hidden = !(this.game.state === 'victory' && this.game.levelId < 5);
     if (!this.dom['next-level-button'].hidden) this.dom['next-level-button'].textContent = `前往第${this.game.levelId + 1}關`;
   }
   renderBossSlot() {
@@ -160,7 +174,7 @@ export class UIController {
       }
       this.dom['wave-preview-enemies'].innerHTML = groups.map(group => {
         const enemy = ENEMY_DATA[group.type];
-        const artId = group.type === 'jiuweihu' ? 'jiuweihuPhase1' : group.type;
+        const artId = group.type === 'jiuweihu' ? 'jiuweihuPhase1' : group.type === 'xingtian' ? 'xingtianPhase1' : group.type;
         return `<span><img class="preview-art" src="${assetUrl(artId)}" alt="">${enemy.name} ×${counts[group.type]}</span>`;
       }).join('');
     }
@@ -194,5 +208,12 @@ export class UIController {
       this.dom['boss-hp-fill'].style.background = '';
     }
   }
-  renderBanner() { this.dom.banner.hidden = this.game.bannerTimer <= 0; if (!this.dom.banner.hidden) this.dom.banner.textContent = this.game.banner; }
+  renderBanner() {
+    const banner = this.dom.banner;
+    banner.hidden = this.game.bannerTimer <= 0;
+    if (banner.hidden) return;
+    banner.textContent = this.game.banner;
+    banner.dataset.hasArt = this.game.bannerArtId ? 'true' : 'false';
+    banner.style.backgroundImage = this.game.bannerArtId ? `url('${assetUrl(this.game.bannerArtId)}')` : '';
+  }
 }

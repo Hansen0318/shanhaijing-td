@@ -71,6 +71,26 @@ test('lineup renderer marks selection and enables confirm only at exactly three'
   assert.match(ui.dom['lineup-choices'].innerHTML, /tower_baize_v1\.png/);
 });
 
+test('level-five lineup uses its supplied banner and preview inside the existing overlay', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = { levelId: 5, state: 'lineup', lineupSelection: [] };
+  ui.dom = {
+    'lineup-overlay': { hidden: true }, 'lineup-choices': { innerHTML: '' },
+    'confirm-lineup-button': { disabled: true }, 'lineup-count': { textContent: '' },
+    'lineup-eyebrow': { textContent: '' },
+    'lineup-title': { textContent: '' }, 'lineup-help': { innerHTML: '' },
+    'lineup-banner': { hidden: true, src: '' }, 'lineup-preview': { hidden: true, src: '' },
+  };
+  ui.renderLineup();
+  assert.equal(ui.dom['lineup-banner'].hidden, false);
+  assert.match(ui.dom['lineup-banner'].src, /ui_level5_banner_v1\.png/);
+  assert.equal(ui.dom['lineup-preview'].hidden, false);
+  assert.match(ui.dom['lineup-preview'].src, /ui_level5_preview_v1\.jpg/);
+  assert.equal(ui.dom['lineup-title'].textContent, '第5關・不周山墟');
+  assert.equal(ui.dom['lineup-eyebrow'].textContent, '第五關・不周山墟');
+  assert.match(ui.dom['lineup-help'].innerHTML, /朱厭與狸力/);
+});
+
 test('wave preview renders packaged enemy images and first-level identity', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
@@ -151,6 +171,11 @@ test('result panel exposes victory and defeat state for the matching skin', () =
 
   ui.game.levelId = 4;
   ui.renderResult();
+  assert.equal(ui.dom['next-level-button'].hidden, false);
+  assert.equal(ui.dom['next-level-button'].textContent, '前往第5關');
+
+  ui.game.levelId = 5;
+  ui.renderResult();
   assert.equal(ui.dom['next-level-button'].hidden, true);
 
   ui.game.state = 'defeat';
@@ -186,12 +211,35 @@ test('level-four wave ten preview uses the phase-one Jiuweihu art', () => {
   assert.match(ui.dom['wave-preview-enemies'].innerHTML, /boss_jiuweihu_phase1_v1\.png/);
 });
 
+test('level-five preview and warning use supplied art while Boss HUD remains programmatic', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[5], levelId: 5, state: 'preparation', enemies: [], effects: [],
+    wave: { waveNumber: 9, queue: [], getWaveGroups: () => LEVELS[5].waves[9].groups },
+    banner: 'BOSS 警告', bannerTimer: 1, bannerArtId: 'level5BossWarning',
+  };
+  ui.dom = { ...bossSlotDom(), banner: { hidden: true, textContent: '', dataset: {}, style: {} } };
+  ui.renderBossSlot();
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /enemy_zhuyan_v1\.png/);
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /enemy_lili_v1\.png/);
+  assert.match(ui.dom['wave-preview-enemies'].innerHTML, /boss_xingtian_phase1_v1\.png/);
+  ui.renderBanner();
+  assert.match(ui.dom.banner.style.backgroundImage, /ui_level5_boss_warning_v1\.png/);
+
+  const boss = { isBoss: true, type: 'xingtian', hp: 3335, maxHp: 6670, data: { name: '刑天' } };
+  ui.game.enemies = [boss];
+  ui.renderBossSlot();
+  assert.equal(ui.dom['boss-name'].textContent, '刑天');
+  assert.equal(ui.dom['boss-hp-text'].textContent, '3335 / 6670');
+});
+
 test('each Boss HUD applies its measured track geometry and follows 100, 50 and 25 percent health', () => {
   const cases = [
     { levelId: 1, type: 'qiongqi', name: '窮奇', panel: /ui_boss_qiongqi_panel_v2\.png/, rect: ['1.5%', '55%', '97%', '14.4%'] },
     { levelId: 2, type: 'paoxiao', name: '狍鴞', panel: /ui_boss_paoxiao_panel_v2\.png/, rect: ['3.9%', '55.6%', '92.1%', '10.3%'] },
     { levelId: 3, type: 'xiangliu', name: '相柳', panel: /ui_boss_xiangliu_panel_v2\.png/, rect: ['0.9%', '55.3%', '98.1%', '10.4%'] },
     { levelId: 4, type: 'jiuweihu', name: '九尾狐', panel: /ui_boss_jiuweihu_panel_v2\.png/, rect: ['15.3%', '61.6%', '78.7%', '11%'] },
+    { levelId: 5, type: 'xingtian', name: '刑天', panel: /ui_boss_xingtian_panel_v1\.png/, rect: ['15.4%', '50%', '68.2%', '15.2%'] },
   ];
 
   for (const { levelId, type, name, panel, rect } of cases) {

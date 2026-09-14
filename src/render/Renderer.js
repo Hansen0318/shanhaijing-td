@@ -1,10 +1,10 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js';
-import { ArtStore } from '../config/artAssets.js?v=boss-hud-2';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level4-1';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level4-1';
+import { ArtStore } from '../config/artAssets.js?v=level5-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level5-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
-const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76], meihu: [40, 42], huanli: [52, 50], jiuweihu: [82, 82] });
+const ENEMY_BOXES = Object.freeze({ minion: [36, 38], swift: [36, 36], giant: [48, 48], qiongqi: [68, 68], chiyu: [38, 42], yanjia: [50, 50], paoxiao: [72, 72], shuixiao: [40, 42], xuanjiashou: [52, 50], xiangliu: [76, 76], meihu: [40, 42], huanli: [52, 50], jiuweihu: [82, 82], zhuyan: [42, 44], lili: [54, 52], xingtian: [84, 84] });
 const FOG_VISUAL_PATHS = Object.freeze({
   upper: { start: [218, 116], c1: [214, 140], c2: [137, 181], end: [140, 214], normal: [-0.78, -0.62] },
   lower: { start: [245, 406], c1: [277, 407], c2: [335, 438], end: [335, 467], normal: [-0.56, 0.83] },
@@ -198,6 +198,8 @@ export class Renderer {
         ? 'qiongqiFrenzy'
         : enemy.type === 'jiuweihu'
           ? (skillProgress >= 0.35 && skillProgress < 0.7 ? 'jiuweihuCast' : `jiuweihuPhase${enemy.bossPhase ?? 1}`)
+          : enemy.type === 'xingtian'
+            ? `xingtianPhase${enemy.bossPhase ?? 1}`
           : enemy.type;
       const [width, height] = ENEMY_BOXES[enemy.type];
       const motion = MotionSystem.enemyTransform(enemy, game.visualTime ?? 0, game.effects, this.motionEnabled);
@@ -255,13 +257,45 @@ export class Renderer {
     game.effects.filter(effect => effect.type === 'unitDeath' && effect.life > 0).forEach(effect => {
       const [width, height] = ENEMY_BOXES[effect.unitType];
       const motion = MotionSystem.deathTransform(effect);
-      const id = effect.unitType === 'jiuweihu' ? `jiuweihuPhase${effect.bossPhase ?? 1}` : effect.unitType;
+      const id = effect.unitType === 'jiuweihu'
+        ? `jiuweihuPhase${effect.bossPhase ?? 1}`
+        : effect.unitType === 'xingtian'
+          ? `xingtianPhase${effect.bossPhase ?? 1}`
+          : effect.unitType;
       this.drawContained(ctx, id, effect.x, effect.y + 3, width, height, {
         anchorY: 0.56, mirror: effect.mirror, scale: motion.scale, alpha: motion.alpha,
       });
     });
     game.effects.filter(effect => effect.type === 'baizeInsight').forEach(effect => {
       this.drawDirectional(ctx, 'baizeInsightMark', effect.from, effect.to, 12, effect.life / effect.duration);
+    });
+    game.effects.filter(effect => effect.type === 'zhuyanCharge').forEach(effect => {
+      const source = game.enemies.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'zhuyanCharge', point.x, point.y + 2, 66 + progress * 24, 66 + progress * 24, {
+        alpha: effect.stage === 'telegraph' ? 0.55 : Math.max(0.35, effect.life / effect.duration),
+      });
+    });
+    game.effects.filter(effect => effect.type === 'liliArmorBreak').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'liliArmorBreak', effect.x, effect.y, 76 + progress * 34, 76 + progress * 34, { alpha: effect.life / effect.duration });
+    });
+    game.effects.filter(effect => effect.type === 'xingtianShield').forEach(effect => {
+      const source = game.enemies.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      this.drawContained(ctx, 'xingtianShield', point.x, point.y, 112, 112, { alpha: Math.max(0.35, effect.life / effect.duration) });
+    });
+    game.effects.filter(effect => effect.type === 'xingtianEvolution').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'xingtianEvolution', effect.x, effect.y, 116 + progress * 42, 116 + progress * 42, { alpha: effect.life / effect.duration });
+    });
+    game.effects.filter(effect => ['xingtianEarthquakeWindup', 'xingtianEarthquake'].includes(effect.type)).forEach(effect => {
+      const source = game.enemies.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      const diameter = effect.type === 'xingtianEarthquake' ? effect.radius * 2.15 : 72 + progress * 34;
+      this.drawContained(ctx, 'xingtianEarthquake', point.x, point.y + 10, diameter, diameter, { alpha: Math.max(0.3, effect.life / effect.duration) });
     });
     game.effects.filter(effect => effect.type === 'jiuweihuEvolution').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
