@@ -249,3 +249,34 @@
 ## 狀態
 
 ENGINEERING IMPLEMENTED / TARGETED PLAYER SMOKE PENDING
+
+---
+
+## 2026-09-14：Level5「第5關・不周山墟」
+
+### 已完成
+
+- 新增 Level5 正式資料、10 波敵軍、不周山背景量測路徑、8 塔位、熔岩 Spawn、天柱核心 Base 與朱厭 charge corridor。
+- 新增朱厭一次性蓄力衝鋒、狸力一次性土甲破甲判定、刑天 P1 護盾／P2 地震與單塔暈眩；W10 勝利需同時滿足波次清空與刑天死亡。
+- Level4 勝利可進入 Level5 四選三編隊；重試會清空陣容；Blessing 只保留所選異獸的專屬項目。
+- ZIP 內 16 張 Level5 素材全部經去背、裁邊、縮放及壓縮後接入 runtime；來源合計 6,684,496 bytes，runtime 合計 2,487,992 bytes（約減少 62.8%）。
+- 刑天 Boss HUD 使用空槽框，名稱與 HP fill 由程式動態渲染；Banner、Boss Warning、Preview 沿用既有 UI 架構。
+- 新增 `?devLevel=5`、`devPath=1`、`devWave=1..10`、`devBossPhase=1|2` 測試入口，以及 390×700 responsive fixtures。
+- Level4 既有 `0.15000000000000002` 浮點測試只改成容差斷言，未修改 Level1–4 production gameplay。
+
+### 驗證狀態
+
+- 聚焦 Level5／共享 Renderer／HUD／asset pipeline：59/59 PASS。
+- 完整 `npm test`：155/155 PASS。
+- `npm run check`、必要 JS syntax、`git diff --check`：PASS。
+- Browser smoke：雲端瀏覽器禁止 localhost；公開唯讀 checkpoint 頁另有第三方確認警告且未取得授權；本機 Playwright 有套件但無瀏覽器執行檔，下載亦逾時。因此 390／390×700 真實 browser smoke 尚未完成，不得標記 PASS。
+
+### Safe-push checkpoints
+
+- design/TDD：`43adb1627bf52b4e6e2df2bf25fe42a7e9f3d854`
+- 核心 gameplay：`baeebf18359282df65deb98537a7cfe0252e3f60`
+- 素材／Renderer／HUD／UI：`c9d18a994facac5c285d2aadc6b3a2dad296b66a`
+
+### 狀態
+
+ENGINEERING COMPLETE / 390 BROWSER SMOKE BLOCKED
