@@ -33,12 +33,12 @@ export class Game {
     this.time = new GameTime();
     this.map = new GameMap(level.map);
     this.economy = new Economy(GAME_CONFIG.initialGold);
-    const blessingData = level.id === 4 ? [...BLESSING_DATA, ...LEVEL4_BAIZE_BLESSINGS] : BLESSING_DATA;
+    const blessingData = level.id >= 4 ? [...BLESSING_DATA, ...LEVEL4_BAIZE_BLESSINGS] : BLESSING_DATA;
     this.blessings = new BlessingSystem(blessingData, this.random);
     this.wave = new WaveManager(level.waves);
     this.baseHp = GAME_CONFIG.baseHp;
     this.lineupSelection = [];
-    this.state = level.id === 4 ? 'lineup' : 'preparation';
+    this.state = level.id >= 4 ? 'lineup' : 'preparation';
     this.previousState = null;
     this.enemies = [];
     this.illusions = [];
@@ -53,6 +53,7 @@ export class Game {
     this.bannerTimer = 0;
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
+    this.levelBossDefeated = false;
     this.time.setPaused(true);
     return true;
   }
@@ -69,7 +70,7 @@ export class Game {
     return true;
   }
   toggleLineup(type) {
-    if (this.levelId !== 4 || this.state !== 'lineup' || !LEVEL4_ROSTER.includes(type)) return false;
+    if (this.levelId < 4 || this.state !== 'lineup' || !LEVEL4_ROSTER.includes(type)) return false;
     if (this.lineupSelection.includes(type)) {
       this.lineupSelection = this.lineupSelection.filter(item => item !== type);
       return true;
@@ -79,13 +80,13 @@ export class Game {
     return true;
   }
   confirmLineup() {
-    if (this.levelId !== 4 || this.state !== 'lineup' || !isValidLineup(this.lineupSelection)) return false;
+    if (this.levelId < 4 || this.state !== 'lineup' || !isValidLineup(this.lineupSelection)) return false;
     this.state = 'preparation';
     this.time.setPaused(true);
     return true;
   }
   availableTowerTypes() {
-    return this.levelId === 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
+    return this.levelId >= 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
   }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
   buildTower(slotIndex, type) {
@@ -213,7 +214,10 @@ export class Game {
     this.stats.kills += 1;
     const reward = this.economy.reward(enemy.reward, 1 + (this.blessings.modifiers.goldReward ?? 0));
     if (reward > 0) this.effects.push({ type: 'gold', x: enemy.x, y: enemy.y, amount: reward, life: 0.9, duration: 0.9 });
-    if (enemy.isBoss || enemy.type === this.level.bossType) this.end('victory');
+    if (enemy.isBoss || enemy.type === this.level.bossType) {
+      if (this.levelId === 5 && enemy.type === 'xingtian') this.levelBossDefeated = true;
+      else this.end('victory');
+    }
   }
   update(realDelta) {
     this.advanceBanner(realDelta);
@@ -238,11 +242,22 @@ export class Game {
           duration: 0.4,
         });
       }
+      if (event?.type === 'zhuyanChargeTelegraph' || event?.type === 'zhuyanChargeStart') {
+        this.effects.push({
+          type: 'zhuyanCharge', sourceId: enemy.id, x: event.x, y: event.y,
+          stage: event.type === 'zhuyanChargeStart' ? 'charge' : 'telegraph',
+          life: event.duration, duration: event.duration,
+        });
+      }
     });
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
     this.updateTowers(dt);
     this.projectiles.forEach(projectile => projectile.update(dt, [...this.enemies, ...this.illusions]));
+    this.enemies.filter(enemy => enemy.armorBreakEffectPending).forEach(enemy => {
+      enemy.armorBreakEffectPending = false;
+      this.effects.push({ type: 'liliArmorBreak', x: enemy.x, y: enemy.y, life: 0.45, duration: 0.45 });
+    });
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
     this.illusions = this.illusions.filter(illusion => illusion.alive);
     this.enemies.forEach(enemy => {
@@ -258,6 +273,25 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'xingtianEvolution') {
+      this.effects.push({ type: 'xingtianEvolution', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: 0.7, duration: 0.7 });
+      return;
+    }
+    if (event.type === 'xingtianShield') {
+      this.effects.push({ type: 'xingtianShield', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'xingtianEarthquakeCharge') {
+      this.effects.push({ type: 'xingtianEarthquakeWindup', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'xingtianEarthquakeRelease') {
+      const towers = this.towers.filter(Boolean).filter(tower => Math.hypot(tower.x - enemy.x, tower.y - enemy.y) <= event.radius);
+      towers.sort((a, b) => Math.hypot(a.x - enemy.x, a.y - enemy.y) - Math.hypot(b.x - enemy.x, b.y - enemy.y));
+      if (towers[0]) towers[0].stunRemaining = Math.max(towers[0].stunRemaining, event.stunDuration);
+      this.effects.push({ type: 'xingtianEarthquake', sourceId: enemy.id, x: enemy.x, y: enemy.y, radius: event.radius, life: 0.65, duration: 0.65 });
+      return;
+    }
     if (event.type === 'bossEvolution') {
       this.effects.push({ type: 'jiuweihuEvolution', sourceId: enemy.id, x: enemy.x, y: enemy.y, phase: event.phase, life: event.duration, duration: event.duration });
       return;
@@ -305,6 +339,10 @@ export class Game {
     const targets = [...this.enemies, ...this.illusions];
     for (const tower of this.towers) {
       if (!tower) continue;
+      if (tower.stunRemaining > 0) {
+        tower.stunRemaining = Math.max(0, tower.stunRemaining - dt);
+        continue;
+      }
       tower.cooldown -= dt;
       if (tower.cooldown > 0) continue;
       const stats = tower.getStats(this.blessings.modifiers);
@@ -338,10 +376,13 @@ export class Game {
   }
   completeWave() {
     const number = this.wave.waveNumber;
-    if (number >= this.level.waves.length) return;
+    if (number >= this.level.waves.length) {
+      if (this.levelId === 5 && this.levelBossDefeated && this.wave.isComplete()) this.end('victory');
+      return;
+    }
     this.wave.finish();
     const deployedTypes = [...new Set(this.towers.filter(Boolean).map(tower => tower.type))];
-    const allowedTowerTypes = this.levelId === 4 ? this.lineupSelection : null;
+    const allowedTowerTypes = this.levelId >= 4 ? this.lineupSelection : null;
     this.currentChoices = this.blessings.drawChoices(deployedTypes, allowedTowerTypes);
     this.state = 'blessing';
     this.time.setPaused(true);

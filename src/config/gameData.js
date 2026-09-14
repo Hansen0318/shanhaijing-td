@@ -38,6 +38,9 @@ export const ENEMY_DATA = Object.freeze({
   meihu: { id: 'meihu', name: '魅狐', emoji: '🦊', hp: 70, speed: 92, baseDamage: 1, reward: 12, radius: 11 },
   huanli: { id: 'huanli', name: '幻狸', emoji: '🐈', hp: 260, speed: 34, baseDamage: 3, reward: 25, radius: 17 },
   jiuweihu: { id: 'jiuweihu', name: '九尾狐', emoji: '🦊', hp: 5200, speed: 18, baseDamage: 20, reward: 0, radius: 27, isBoss: true, bossMechanic: { type: 'jiuweihu' } },
+  zhuyan: { id: 'zhuyan', name: '朱厭', emoji: '🐒', hp: 85, speed: 84, baseDamage: 1, reward: 13, radius: 12 },
+  lili: { id: 'lili', name: '狸力', emoji: '🐗', hp: 320, speed: 27, baseDamage: 3, reward: 27, radius: 18, earthArmorLayers: 1 },
+  xingtian: { id: 'xingtian', name: '刑天', emoji: '🪓', hp: 5800, speed: 16, baseDamage: 20, reward: 0, radius: 29, isBoss: true, bossMechanic: { type: 'xingtian' } },
 });
 
 const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
@@ -91,6 +94,19 @@ export const LEVEL4_WAVE_DATA = Object.freeze([
   wave([{ type: 'meihu', count: 12 }, { type: 'huanli', count: 6 }], 0.62, { hpMultiplier: 1.3 }),
   wave([{ type: 'meihu', count: 10 }, { type: 'huanli', count: 8 }], 0.58, { hpMultiplier: 1.45 }),
   wave([{ type: 'meihu', count: 10 }, { type: 'huanli', count: 6 }, { type: 'jiuweihu', count: 1 }], 0.82, { hpMultiplier: 1.35, bossHpMultiplier: 1 }),
+]);
+
+export const LEVEL5_WAVE_DATA = Object.freeze([
+  wave([{ type: 'zhuyan', count: 6 }], 1.1),
+  wave([{ type: 'zhuyan', count: 8 }], 1),
+  wave([{ type: 'zhuyan', count: 6 }, { type: 'lili', count: 2 }], 1),
+  wave([{ type: 'lili', count: 4 }], 1.05),
+  wave([{ type: 'zhuyan', count: 10 }, { type: 'lili', count: 3 }], 0.9, { hpMultiplier: 1.05 }),
+  wave([{ type: 'zhuyan', count: 14 }, { type: 'lili', count: 4 }], 0.78, { hpMultiplier: 1.1 }),
+  wave([{ type: 'zhuyan', count: 8 }, { type: 'lili', count: 7 }], 0.82, { hpMultiplier: 1.15 }),
+  wave([{ type: 'zhuyan', count: 16 }, { type: 'lili', count: 6 }], 0.68, { hpMultiplier: 1.25 }),
+  wave([{ type: 'zhuyan', count: 18 }, { type: 'lili', count: 8 }], 0.62, { hpMultiplier: 1.35 }),
+  wave([{ type: 'zhuyan', count: 8 }, { type: 'lili', count: 4 }, { type: 'xingtian', count: 1 }], 0.82, { hpMultiplier: 1.2, bossHpMultiplier: 1.15 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
@@ -190,6 +206,32 @@ export const LEVEL4_MAP_DATA = Object.freeze({
   ],
 });
 
+export const LEVEL5_MAP_DATA = Object.freeze({
+  width: 390,
+  height: 610,
+  pathWidth: 54,
+  pathSmoothing: 2,
+  waypoints: [
+    { x: -20, y: 18 }, { x: 15, y: 20 }, { x: 35, y: 32 }, { x: 48, y: 48 },
+    { x: 54, y: 65 }, { x: 67, y: 80 }, { x: 90, y: 91 }, { x: 120, y: 97 },
+    { x: 155, y: 101 }, { x: 190, y: 106 }, { x: 225, y: 111 }, { x: 258, y: 120 },
+    { x: 288, y: 134 }, { x: 310, y: 150 }, { x: 323, y: 170 }, { x: 325, y: 192 },
+    { x: 318, y: 213 }, { x: 303, y: 231 }, { x: 281, y: 244 }, { x: 253, y: 255 },
+    { x: 221, y: 263 }, { x: 186, y: 269 }, { x: 153, y: 278 }, { x: 122, y: 290 },
+    { x: 98, y: 305 }, { x: 83, y: 323 }, { x: 80, y: 342 }, { x: 89, y: 357 },
+    { x: 107, y: 370 }, { x: 132, y: 379 }, { x: 162, y: 384 }, { x: 195, y: 389 },
+    { x: 229, y: 397 }, { x: 261, y: 405 }, { x: 287, y: 418 }, { x: 305, y: 435 },
+    { x: 315, y: 455 }, { x: 313, y: 475 }, { x: 305, y: 492 }, { x: 290, y: 508 },
+    { x: 275, y: 523 }, { x: 269, y: 540 }, { x: 273, y: 555 }, { x: 286, y: 570 },
+    { x: 307, y: 582 }, { x: 334, y: 587 }, { x: 365, y: 584 }, { x: 410, y: 570 },
+  ],
+  chargeCorridor: { x: 100, y: 360, width: 195, height: 66 },
+  slots: [
+    { x: 119, y: 68 }, { x: 99, y: 119 }, { x: 265, y: 150 }, { x: 315, y: 198 },
+    { x: 105, y: 280 }, { x: 146, y: 305 }, { x: 271, y: 421 }, { x: 229, y: 518 },
+  ],
+});
+
 const levelOne = Object.freeze({
   ...LEVEL_DATA,
   map: MAP_DATA,
@@ -243,7 +285,21 @@ const levelFour = Object.freeze({
   }),
 });
 
-export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour });
+const levelFive = Object.freeze({
+  id: 5,
+  name: '不周山墟',
+  baseName: '天柱核心',
+  bossType: 'xingtian',
+  map: LEVEL5_MAP_DATA,
+  waves: LEVEL5_WAVE_DATA,
+  art: Object.freeze({
+    background: 'level5Background', backgroundCrop: { x: 0, y: 0, width: 390, height: 610 },
+    spawn: 'level5Spawn', spawnPosition: { x: 18, y: 20 },
+    base: 'level5Base', basePosition: { x: 360, y: 574 }, bossPanel: 'xingtianBossPanel',
+  }),
+});
+
+export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive });
 
 export function getLevelData(levelId) {
   return LEVELS[levelId] ?? null;

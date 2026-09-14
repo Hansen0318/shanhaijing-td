@@ -25,6 +25,10 @@ export class Enemy {
     this.triggeredBossThresholds = new Set();
     this.enteredFogZones = new Set();
     this.spawnedIllusions = false;
+    this.earthArmorLayers = data.earthArmorLayers ?? 0;
+    this.chargeConsumed = false;
+    this.chargeTelegraphRemaining = 0;
+    this.chargeRemaining = 0;
     Object.assign(this, map.positionAt(0));
   }
   update(dt) {
@@ -32,6 +36,12 @@ export class Enemy {
     StatusSystem.update(this, dt);
     if (!this.alive) return null;
     this.hitFlash = Math.max(0, this.hitFlash - dt);
+    let chargeEvent = null;
+    if (this.type === 'zhuyan' && !this.chargeConsumed && this.map.chargeCorridorAt(this)) {
+      this.chargeConsumed = true;
+      this.chargeTelegraphRemaining = 0.2;
+      chargeEvent = { type: 'zhuyanChargeTelegraph', x: this.x, y: this.y, duration: 0.2 };
+    }
     const fogZone = this.map.fogZoneAt(this);
     let fogEntry = null;
     if (this.type === 'meihu' && fogZone && !this.enteredFogZones.has(fogZone)) {
@@ -46,10 +56,20 @@ export class Enemy {
     const terrainMultiplier = this.map.isWeakWater(this)
       ? (this.data.weakWaterSpeedMultiplier ?? 0.85)
       : 1;
-    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * dt;
+    const chargeMultiplier = this.chargeRemaining > 0 ? 1.65 : 1;
+    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * chargeMultiplier * dt;
     Object.assign(this, this.map.positionAt(this.pathDistance));
+    if (this.chargeTelegraphRemaining > 0) {
+      this.chargeTelegraphRemaining = Math.max(0, this.chargeTelegraphRemaining - dt);
+      if (this.chargeTelegraphRemaining === 0) {
+        this.chargeRemaining = 0.6;
+        chargeEvent = { type: 'zhuyanChargeStart', x: this.x, y: this.y, duration: 0.6 };
+      }
+    } else if (this.chargeRemaining > 0) {
+      this.chargeRemaining = Math.max(0, this.chargeRemaining - dt);
+    }
     if (this.pathDistance >= this.map.totalLength) { this.reachedBase = true; this.alive = false; }
-    return fogEntry;
+    return chargeEvent ?? fogEntry;
   }
   shouldSpawnIllusions() {
     if (this.type !== 'huanli' || this.spawnedIllusions || !this.alive || this.hp > this.maxHp * 0.6) return false;
