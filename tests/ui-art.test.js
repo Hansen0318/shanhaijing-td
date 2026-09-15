@@ -89,6 +89,8 @@ test('level-five lineup uses its supplied banner and preview inside the existing
   assert.equal(ui.dom['lineup-title'].textContent, '第5關・不周山墟');
   assert.equal(ui.dom['lineup-eyebrow'].textContent, '第五關・不周山墟');
   assert.match(ui.dom['lineup-help'].innerHTML, /朱厭與狸力/);
+  for (const name of ['畢方', '夫諸', '應龍', '白澤']) assert.match(ui.dom['lineup-choices'].innerHTML, new RegExp(name));
+  assert.equal((ui.dom['lineup-choices'].innerHTML.match(/data-action="toggle-lineup"/g) ?? []).length, 4);
 });
 
 test('wave preview renders packaged enemy images and first-level identity', () => {
@@ -156,6 +158,7 @@ test('result panel exposes victory and defeat state for the matching skin', () =
   ui.renderResult();
   assert.equal(ui.dom['result-panel'].dataset.result, 'victory');
   assert.equal(ui.dom['next-level-button'].hidden, false);
+  assert.equal(ui.dom['next-level-button'].textContent, '前往第2關');
 
   ui.game.levelId = 2;
   ui.renderResult();
@@ -173,6 +176,7 @@ test('result panel exposes victory and defeat state for the matching skin', () =
   ui.renderResult();
   assert.equal(ui.dom['next-level-button'].hidden, false);
   assert.equal(ui.dom['next-level-button'].textContent, '前往第5關');
+  assert.doesNotMatch(ui.dom['result-stats'].innerHTML, /新異獸解鎖：白澤/);
 
   ui.game.levelId = 5;
   ui.renderResult();
