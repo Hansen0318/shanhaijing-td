@@ -1,7 +1,7 @@
-import { Game } from './core/Game.js?v=level5-1';
-import { Renderer } from './render/Renderer.js?v=level5-1';
-import { UIController } from './ui/UIController.js?v=level5-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level5-1';
+import { Game } from './core/Game.js?v=geometry-1';
+import { Renderer } from './render/Renderer.js?v=geometry-1';
+import { UIController } from './ui/UIController.js?v=geometry-1';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=geometry-1';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }
