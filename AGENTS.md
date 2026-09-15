@@ -35,13 +35,16 @@ If token/session limits are approaching or the execution environment may stop:
 
 Do not postpone the first push until all smoke tests are complete.
 
-## 3. If final verification is incomplete
+## 3. Engineering verification vs player smoke
 
-If implementation is complete but browser smoke or another final check is still pending:
+Do not treat a player-owned manual smoke step as an engineering failure.
 
-- push the feature branch anyway as a safety checkpoint;
-- report the status as incomplete / FAIL, not PASS;
-- do not merge/deploy to `main` until the required verification is fresh and complete.
+- If the task explicitly requires Work to run a browser/runtime smoke and that smoke cannot be completed, report the Work task as incomplete / FAIL for that required item.
+- If browser access is environment-limited **and** the prompt/Guide allows the player to perform the final phone smoke, then successful implementation plus all required automated/targeted checks may be reported as **ENGINEERING PASS / PLAYER SMOKE PENDING** (or equivalent wording), not FAIL.
+- Player smoke is acceptance evidence owned by the player when explicitly delegated. Its absence does not retroactively fail completed engineering work.
+- Never claim **PLAYER VERIFIED / FINAL VISUAL PASS** until the player actually confirms the deployed build on device.
+- If player smoke is pending, push the feature branch/checkpoint and clearly list only the specific player checks still needed.
+- Merge/deploy rules are task-specific: do not block a requested merge solely because player smoke is delegated, unless the user explicitly required smoke before merge.
 
 ## 4. Recovery in a new Work session
 
@@ -69,7 +72,14 @@ If the environment becomes unavailable before a local checkpoint can be pushed:
 
 A safe checkpoint push does not equal completion.
 
-Only report PASS after the task's required fresh tests/checks/smoke have actually run successfully. Keep feature-branch safety pushes separate from final merge/deployment decisions.
+Use precise status labels:
+
+- **ENGINEERING PASS**: all engineering checks required by the task that Work can execute have fresh successful evidence.
+- **ENGINEERING PASS / PLAYER SMOKE PENDING**: engineering checks pass and only an explicitly delegated player/device smoke remains.
+- **PASS / PLAYER VERIFIED** (or equivalent): player-required smoke has also been confirmed when that confirmation is part of acceptance.
+- **FAIL / INCOMPLETE**: a required engineering check failed or a required Work-owned verification step could not be completed.
+
+Do not label a task FAIL merely because an optional or explicitly player-owned smoke has not happened yet. Keep engineering status, player acceptance, safe-push status, and merge/deployment status separate.
 
 ## 7. Post-Level4 lineup / progression is permanent
 
