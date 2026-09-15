@@ -81,4 +81,3 @@ Renderer 新增朱厭、狸力、刑天兩階段與四種 VFX 的既有 Canvas d
 素材測試覆蓋 16 個引用、decode、alpha、尺寸與容量；UI／Renderer 測試覆蓋 preview、Banner、Warning、Boss HUD geometry、P1/P2 sprite 與 VFX。Level 4 浮點失敗只把嚴格相等改為容差斷言，不改 production gameplay。
 
 Fresh verification：`npm test`、`npm run check`、JS syntax、`git diff --check`，以及本機瀏覽器 390px 與 390×700 Level 5 smoke。若共用 Renderer／HUD／asset pipeline 有改動，只補受影響的 Level 1–4 targeted smoke，不完整重跑每關十波。
-

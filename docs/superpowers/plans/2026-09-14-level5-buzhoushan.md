@@ -107,4 +107,3 @@
 - [ ] Run local 390px and 390×700 Level 5 browser smoke for lineup, map/path/corridor, first build, W10 P1/P2, warning, four VFX, HUD at 100/50/25%, safe-area and overflow.
 - [ ] Run targeted Level 1–4 smoke only for shared Renderer/HUD/preload/lineup surfaces touched.
 - [ ] Update `docs/WORK_PROGRESS.md` with exact tests, smoke, asset totals and latest SHA; commit and push.
-
