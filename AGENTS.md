@@ -44,7 +44,7 @@ Do not treat a player-owned manual smoke step as an engineering failure.
 - Player smoke is acceptance evidence owned by the player when explicitly delegated. Its absence does not retroactively fail completed engineering work.
 - Never claim **PLAYER VERIFIED / FINAL VISUAL PASS** until the player actually confirms the deployed build on device.
 - If player smoke is pending, push the feature branch/checkpoint and clearly list only the specific player checks still needed.
-- Merge/deploy rules are task-specific: do not block a requested merge solely because player smoke is delegated, unless the user explicitly required smoke before merge.
+- Merge/deploy rules are task-specific only when the prompt explicitly overrides the repository default delivery flow in Section 8.
 
 ## 4. Recovery in a new Work session
 
@@ -97,3 +97,25 @@ Starting with Level4, every playable level must use the persistent roster-select
 - When adding a new level, add targeted progression regression covering previous-level victory → next-level lineup, lineup roster contents, exactly-3 confirmation, retry → empty lineup, and no-next-level behavior for the current final level.
 
 This progression rule is gameplay architecture, not optional UI polish. Future Work prompts and asset-integration packages should assume it unless the user explicitly changes the rule.
+
+## 8. Default delivery flow: verified work continues through main deployment
+
+Unless the user explicitly says **feature branch only**, **do not merge**, **do not deploy**, or otherwise asks for a review checkpoint before release, the default completion flow for this repository is:
+
+1. implement on a safe feature branch;
+2. run the task-required targeted and regression checks;
+3. if engineering verification passes, push the feature branch checkpoint;
+4. safely merge the verified change into `main`;
+5. push `main` so GitHub Pages can deploy the build;
+6. report **ENGINEERING PASS / PLAYER SMOKE PENDING** when the remaining visual/device acceptance is explicitly delegated to the player.
+
+Do **not** stop merely because player phone smoke has not happened yet when that smoke requires the deployed Pages build. In that case, deployment is a prerequisite for the player's acceptance test, not a reason to withhold deployment.
+
+Stop before merge/deploy only when one of these is true:
+
+- a required engineering test/check fails;
+- the change has an unresolved known defect that makes deployment unsafe;
+- the user explicitly requested a pre-merge review/checkpoint or feature-branch-only delivery;
+- merge would overwrite or conflict with newer `main` work and requires reconciliation first.
+
+Do not invent a feature-branch-only restriction that the user did not ask for. For routine fixes intended for immediate player testing, engineering PASS should normally produce a deployable Pages build in the same Work task.
