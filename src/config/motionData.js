@@ -29,6 +29,16 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
       evolutionScale: 0.16,
       deathSeconds: 0.45,
     }),
+    zhuyan: Object.freeze({ bobPixels: 2.6, bobHz: 2.2, deathSeconds: 0.2 }),
+    lili: Object.freeze({ bobPixels: 1.2, bobHz: 0.95, deathSeconds: 0.24 }),
+    xingtian: Object.freeze({
+      phases: Object.freeze({
+        1: Object.freeze({ idleScale: 0.018, idleHz: 0.68, bobPixels: 1.2, bobHz: 0.72 }),
+        2: Object.freeze({ idleScale: 0.03, idleHz: 0.82, bobPixels: 2.2, bobHz: 0.9 }),
+      }),
+      hitRecoilPixels: 4,
+      deathSeconds: 0.45,
+    }),
   }),
   towers: Object.freeze({
     bifang: Object.freeze({ idleScale: 0.01, idleHz: 1.15, recoilPixels: 2.5, recoilSeconds: 0.09 }),

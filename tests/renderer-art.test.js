@@ -102,6 +102,30 @@ test('renderer uses Qingqiu map art, Baize, illusions, and Jiuweihu phase sprite
   }
 });
 
+test('renderer uses Buzhoushan map art, Xingtian phases, and all level-five mechanic VFX', () => {
+  const { renderer, ctx } = rendererFixture();
+  const game = emptyGame(LEVELS[5]);
+  game.visualTime = 0.2;
+  game.illusions = [];
+  const map = { totalLength: 100, positionAt: () => ({ x: 81, y: 20 }), isWeakWater: () => false };
+  game.enemies = [
+    { type: 'zhuyan', id: 1, x: 100, y: 370, radius: 12, hp: 85, maxHp: 85, isBoss: false, visualHitFlash: 0, statuses: {}, map, pathDistance: 40 },
+    { type: 'lili', id: 2, x: 180, y: 390, radius: 18, hp: 320, maxHp: 320, isBoss: false, visualHitFlash: 0, statuses: {}, map, pathDistance: 30 },
+    { type: 'xingtian', id: 3, bossPhase: 2, x: 260, y: 405, radius: 29, hp: 3000, maxHp: 6670, isBoss: true, visualHitFlash: 0, statuses: {}, map, pathDistance: 20 },
+  ];
+  game.effects = [
+    { type: 'zhuyanCharge', sourceId: 1, x: 100, y: 370, stage: 'charge', life: 0.4, duration: 0.6 },
+    { type: 'liliArmorBreak', x: 180, y: 390, life: 0.3, duration: 0.45 },
+    { type: 'xingtianShield', sourceId: 3, x: 260, y: 405, life: 1, duration: 1.2 },
+    { type: 'xingtianEvolution', sourceId: 3, x: 260, y: 405, life: 0.5, duration: 0.7 },
+    { type: 'xingtianEarthquake', sourceId: 3, x: 260, y: 405, radius: 95, life: 0.5, duration: 0.65 },
+  ];
+  renderer.render(game);
+  for (const id of ['level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'lili', 'xingtianPhase2', 'zhuyanCharge', 'liliArmorBreak', 'xingtianShield', 'xingtianEvolution', 'xingtianEarthquake']) {
+    assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
+  }
+});
+
 test('only Level4 renders soft curved fog without rectangular fills, clips, or borders', () => {
   const levelFour = rendererFixture();
   const game = emptyGame(LEVELS[4]);

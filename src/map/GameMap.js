@@ -64,5 +64,11 @@ export class GameMap {
       && point.y >= zone.y && point.y <= zone.y + zone.height
     ))?.id ?? null;
   }
+  chargeCorridorAt(point) {
+    const zone = this.data.chargeCorridor;
+    return Boolean(zone
+      && point.x >= zone.x && point.x <= zone.x + zone.width
+      && point.y >= zone.y && point.y <= zone.y + zone.height);
+  }
   slotAt(point, radius = 30) { return this.data.slots.findIndex(slot => Math.hypot(slot.x - point.x, slot.y - point.y) <= radius); }
 }

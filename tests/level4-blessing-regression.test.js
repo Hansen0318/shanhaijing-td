@@ -23,7 +23,7 @@ test('Baize blessings change insight duration, vulnerability, range and illusion
   const stats = tower.getStats({ baizeInsightDuration: 1, baizeVulnerability: 0.05, baizeSight: 1 });
   assert.equal(stats.insightDuration, 4);
   assert.equal(stats.vulnerability, 0.2);
-  assert.equal(stats.bossVulnerability, 0.15);
+  assert.ok(Math.abs(stats.bossVulnerability - 0.15) < 1e-12);
   assert.equal(Math.round(stats.range * 100) / 100, 147.2);
-  assert.equal(stats.illusionRevealDuration, 0.6);
+  assert.ok(Math.abs(stats.illusionRevealDuration - 0.6) < 1e-12);
 });

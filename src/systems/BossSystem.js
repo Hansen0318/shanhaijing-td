@@ -1,6 +1,8 @@
 export class BossSystem {
   static update(enemy, dt, context = {}) {
-    if (!enemy.alive || enemy.type !== 'jiuweihu') return this.check(enemy);
+    if (!enemy.alive) return [];
+    if (enemy.type === 'xingtian') return this.updateXingtian(enemy, dt);
+    if (enemy.type !== 'jiuweihu') return this.check(enemy);
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
       enemy.bossTimers = { shield: 8, step: 10 };
@@ -57,6 +59,48 @@ export class BossSystem {
         timers.ultimateRelease = 0.6;
         events.push({ type: 'bossUltimateCharge', duration: 0.6 });
       }
+    }
+    return events;
+  }
+  static updateXingtian(enemy, dt) {
+    if (!enemy.bossPhase) {
+      enemy.bossPhase = 1;
+      enemy.bossTimers = { shield: 5.5 };
+    }
+    if (enemy.bossPhase === 1 && enemy.hp / enemy.maxHp <= 0.5) {
+      enemy.bossPhase = 2;
+      enemy.speedMultiplier = 1.15;
+      enemy.bossTimers = { earthquake: 4.8 };
+      delete enemy.statuses.bossShield;
+      enemy.activeDefenseMultiplier = 1;
+      return [{ type: 'xingtianEvolution', phase: 2 }];
+    }
+
+    const events = [];
+    const timers = enemy.bossTimers;
+    if (enemy.bossPhase === 1) {
+      timers.shield -= dt;
+      if (timers.shield <= 1e-9) {
+        timers.shield += 5.5;
+        enemy.activeDefenseMultiplier = 0.65;
+        enemy.statuses.bossShield = { remaining: 1.2 };
+        events.push({ type: 'xingtianShield', duration: 1.2 });
+      }
+      return events;
+    }
+
+    if (timers.earthquakeRelease != null) {
+      timers.earthquakeRelease -= dt;
+      if (timers.earthquakeRelease <= 1e-9) {
+        delete timers.earthquakeRelease;
+        events.push({ type: 'xingtianEarthquakeRelease', radius: 95, stunDuration: 1 });
+      }
+    }
+    timers.earthquake -= dt;
+    if (timers.earthquake <= 1e-9) {
+      timers.earthquake += 4.8;
+      timers.earthquakeRelease = 0.45;
+      events.push({ type: 'xingtianEarthquakeCharge', duration: 0.45 });
     }
     return events;
   }

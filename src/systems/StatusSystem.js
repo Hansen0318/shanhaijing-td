@@ -1,3 +1,5 @@
+import { CombatSystem } from './CombatSystem.js';
+
 export class StatusSystem {
   static applyInsight(enemy, { duration, vulnerability, bossVulnerability, defensePierce }) {
     const current = enemy.statuses.insight;
@@ -26,7 +28,7 @@ export class StatusSystem {
   static update(enemy, dt) {
     const burn = enemy.statuses.burn;
     if (burn) {
-      enemy.takeDamage(burn.dps * Math.min(dt, burn.remaining));
+      CombatSystem.hit(enemy, burn.dps * Math.min(dt, burn.remaining), { damageKind: 'dot' });
       burn.remaining -= dt;
       if (burn.remaining <= 0) delete enemy.statuses.burn;
     }

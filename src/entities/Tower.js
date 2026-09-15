@@ -9,6 +9,7 @@ export class Tower {
     this.invested = data.cost;
     this.facing = 1;
     this.lastTargetX = null;
+    this.stunRemaining = 0;
   }
   faceTarget(targetX) {
     this.lastTargetX = targetX;

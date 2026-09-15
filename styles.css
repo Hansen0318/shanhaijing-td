@@ -28,6 +28,7 @@ button:active:not(:disabled) { transform: scale(.98); }
 .wave-control span { min-width: 0; white-space: normal; line-height: 1.25; }
 .wave-control button { flex: 0 0 auto; min-height: 44px; padding: 5px 10px; font-size: 12px; }
 .banner { position: absolute; top: 42%; left: 50%; min-width: 190px; transform: translate(-50%, -50%); padding: 14px 18px; border: 2px solid #d5b85c; border-radius: 12px; background: rgba(35,17,13,.93); color: #ffe190; text-align: center; white-space: pre-line; font-size: 23px; font-weight: 900; box-shadow: 0 7px 24px rgba(0,0,0,.45); }
+.banner[data-has-art="true"] { width: 340px; height: 112px; min-width: 0; padding: 0; border: 0; border-radius: 0; background-color: transparent; background-position: center; background-repeat: no-repeat; background-size: contain; color: transparent; box-shadow: none; }
 .context-panel { min-height: 142px; flex: 0 0 142px; padding: 7px 10px; overflow: hidden; border: 8px solid transparent; border-radius: 12px; border-image: url('./assets/ui/ui_context_panel_v1.png?v=asset-opt-1') 80 fill / 8px / 0 stretch; background: #14231c; }
 .panel-hint { height: 100%; margin: 0; display: grid; place-items: center; color: #9fb1a5; text-align: center; font-size: 14px; }
 .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
@@ -46,6 +47,8 @@ button:active:not(:disabled) { transform: scale(.98); }
 .lineup-card.selected { border-color: #8ce8ff; background: rgba(31, 75, 101, .98); box-shadow: inset 0 0 14px rgba(83, 225, 255, .45), 0 0 10px rgba(83, 225, 255, .35); }
 .lineup-card img { width: 64px; height: 64px; object-fit: contain; }.lineup-card small { color: #cbd8e5; font-size: 11px; }.lineup-card b { color: #ffe292; font-size: 12px; }
 #confirm-lineup-button { width: 100%; }
+.lineup-banner { display: block; width: min(100%, 300px); height: 52px; margin: -8px auto 2px; object-fit: contain; }
+.lineup-preview { float: right; width: 64px; height: 86px; margin: 0 0 4px 8px; border-radius: 8px; object-fit: cover; box-shadow: 0 3px 10px rgba(25, 8, 8, .35); }
 .compact { display: grid; gap: 9px; text-align: center; }.compact h1 { margin-bottom: 8px; }.compact .secondary { background: #2b3630; }.compact ul { margin: 0 0 10px; padding: 0; list-style: none; color: #d8e2da; line-height: 1.8; }
 .result-panel { border: 16px solid transparent; background: #14231c; }
 .result-panel[data-result="victory"] { border-image: url('./assets/ui/ui_victory_overlay_v1.png?v=asset-opt-1') 150 fill / 16px / 0 stretch; }
