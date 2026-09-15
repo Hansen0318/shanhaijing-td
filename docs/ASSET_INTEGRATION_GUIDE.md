@@ -90,13 +90,15 @@
 - 滿血／約 50%／約 25% fill 均完全落槽。
 
 ## 12. 驗證基準
-- 以 iPhone 直式 390px 與 390×700 作主要 smoke。
+- 以 iPhone 直式 390px 與 390×700 作主要視覺 smoke 基準。
 - 涉及共用 UI / Renderer 時，補受影響關卡 regression。
 - Boss HUD 要至少驗證滿血／約 50%／約 25% 三種比例。
 - 路徑要以 debug overlay + 實際背景檢查，並抽查小型、大型、Boss sprite 全程道路對位。
 - 圖片位置與動態 overlay 必須實機可讀且不遮蔽。
 - 若雲端 browser smoke 受環境限制，不要反覆下載 Chromium 浪費大量時間；先完成 targeted 自動檢查並由玩家手機補實機 smoke。
-- 沒有 fresh test / smoke 證據，不得宣稱 PASS。
+- 若玩家手機 smoke 已明確委派給玩家，Work 在必要自動測試／targeted geometry checks 全部通過後，可回報 `ENGINEERING PASS / PLAYER SMOKE PENDING`；不得僅因玩家尚未實測而標記 FAIL。
+- 只有當 prompt 明確要求 Work 自己完成 browser smoke，而 Work 未完成時，該項才算 Work 驗證未完成。
+- 玩家未實測前，不得宣稱 `PLAYER VERIFIED` 或最終視覺驗收完成。
 
 ## 13. Work / Chat 任務引用方式（省 token）
 任務若涉及圖片，只需在 prompt 開頭寫：
