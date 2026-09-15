@@ -70,3 +70,20 @@ If the environment becomes unavailable before a local checkpoint can be pushed:
 A safe checkpoint push does not equal completion.
 
 Only report PASS after the task's required fresh tests/checks/smoke have actually run successfully. Keep feature-branch safety pushes separate from final merge/deployment decisions.
+
+## 7. Post-Level4 lineup / progression is permanent
+
+Starting with Level4, every playable level must use the persistent roster-selection flow before combat.
+
+- The player owns a roster of unlocked deployable beasts.
+- For Level4 and every later playable level, entering the level must first open a lineup screen instead of starting combat immediately.
+- The lineup screen must show **all currently owned / unlocked deployable beasts** that are eligible for that level.
+- The player selects exactly **3** beasts from that owned roster, then confirms before entering preparation/combat.
+- Do not hard-code future levels to only the original Level4 four-beast roster. As new beasts are unlocked in later progression, subsequent levels must include them in the selectable owned roster unless a level-specific design explicitly restricts them.
+- Retry on Level4+ returns to an empty lineup and requires choosing 3 again.
+- Victory progression must preserve the existing next-level flow: if a next playable level exists, show the next-level button and transition into that next level's lineup screen.
+- A level with no implemented next level must not show a next-level button.
+- Unlock presentation is level-specific (for example Level3 victory unlocks 白澤) and must not be duplicated on unrelated victories.
+- When adding a new level, add targeted progression regression covering previous-level victory → next-level lineup, lineup roster contents, exactly-3 confirmation, retry → empty lineup, and no-next-level behavior for the current final level.
+
+This progression rule is gameplay architecture, not optional UI polish. Future Work prompts and asset-integration packages should assume it unless the user explicitly changes the rule.
