@@ -91,7 +91,7 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   paoxiao: Object.freeze({ left: '3.9%', top: '55.6%', width: '92.1%', height: '10.3%' }),
   xiangliu: Object.freeze({ left: '0.9%', top: '55.3%', width: '98.1%', height: '10.4%' }),
   jiuweihu: Object.freeze({ left: '15.3%', top: '61.6%', width: '78.7%', height: '11%' }),
-  xingtian: Object.freeze({ left: '15.4%', top: '50%', width: '68.2%', height: '15.2%' }),
+  xingtian: Object.freeze({ left: '9.7%', top: '52.3%', width: '80.8%', height: '17%' }),
 });
 
 const ASSET_CACHE_VERSION = 'level5-1';

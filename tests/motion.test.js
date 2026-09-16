@@ -70,7 +70,7 @@ test('disabled Motion Lite preserves the original static sprite transforms', () 
   renderer.drawEnemies(ctx, game);
   renderer.drawTowers(ctx, game);
 
-  assert.deepEqual(ctx.calls.translate, [[70, 93], [120, 144]]);
+  assert.deepEqual(ctx.calls.translate, [[70, 90], [120, 144]]);
   assert.deepEqual(ctx.calls.scale, []);
 });
 
@@ -82,8 +82,8 @@ test('enemy bob is render-only and gives chiyu a lighter motion than yanjia', ()
 
   renderer.drawEnemies(ctx, { visualTime: 0.125, enemies: [chiyu, yanjia], effects: [] });
 
-  const chiyuOffset = ctx.calls.translate[0][1] - 93;
-  const yanjiaOffset = ctx.calls.translate[1][1] - 133;
+  const chiyuOffset = ctx.calls.translate[0][1] - 90;
+  const yanjiaOffset = ctx.calls.translate[1][1] - 130;
   assert.ok(Math.abs(chiyuOffset) > Math.abs(yanjiaOffset));
   assert.ok(Math.abs(chiyuOffset) <= 3 && Math.abs(yanjiaOffset) <= 2);
   assert.deepEqual([[chiyu.x, chiyu.y, chiyu.pathDistance], [yanjia.x, yanjia.y, yanjia.pathDistance]], original);

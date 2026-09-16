@@ -10,6 +10,18 @@ import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
 import { isValidLineup, normalizeLineup } from '../src/systems/LineupSystem.js';
 
+function distanceToSegment(point, from, to) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const lengthSquared = dx * dx + dy * dy;
+  const t = lengthSquared ? Math.max(0, Math.min(1, ((point.x - from.x) * dx + (point.y - from.y) * dy) / lengthSquared)) : 0;
+  return Math.hypot(point.x - (from.x + dx * t), point.y - (from.y + dy * t));
+}
+
+function distanceToPath(point, waypoints) {
+  return Math.min(...waypoints.slice(1).map((to, index) => distanceToSegment(point, waypoints[index], to)));
+}
+
 test('level four defines Qingqiu, ten waves, eight slots and two fog zones', () => {
   const level = getLevelData(4);
   assert.equal(level, LEVELS[4]);
@@ -29,6 +41,21 @@ test('level four defines Qingqiu, ten waves, eight slots and two fog zones', () 
     { type: 'huanli', count: 6 },
     { type: 'jiuweihu', count: 1 },
   ]);
+});
+
+test('level-four runtime path follows measured centers of the Qingqiu road', () => {
+  const runtimePath = new GameMap(LEVELS[4].map).waypoints;
+  const paintedRoadCenters = [
+    { x: 39, y: 10 }, { x: 124, y: 70 }, { x: 200, y: 120 }, { x: 169, y: 180 },
+    { x: 168, y: 220 }, { x: 245, y: 242 }, { x: 276, y: 270 }, { x: 228, y: 300 },
+    { x: 184, y: 320 }, { x: 174, y: 350 }, { x: 181, y: 380 }, { x: 223, y: 390 },
+    { x: 290, y: 410 }, { x: 321, y: 440 }, { x: 316, y: 480 }, { x: 315, y: 510 },
+    { x: 341, y: 540 }, { x: 370, y: 583 },
+  ];
+
+  paintedRoadCenters.forEach(point => {
+    assert.ok(distanceToPath(point, runtimePath) <= 10, `path misses painted road center near ${point.x},${point.y}`);
+  });
 });
 
 test('level four requires exactly three unique lineup members', () => {
@@ -106,7 +133,7 @@ test('Game emits one short fog-entry visual for each fog zone a Meihu enters', (
   assert.equal(game.effects.filter(effect => effect.type === 'fogEntry').length, 1);
 
   enemy.statuses.insight = { remaining: 3 };
-  enemy.pathDistance = 936;
+  enemy.pathDistance = 760;
   Object.assign(enemy, game.map.positionAt(enemy.pathDistance));
   game.update(0);
   assert.deepEqual(

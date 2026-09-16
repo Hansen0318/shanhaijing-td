@@ -8,6 +8,18 @@ import { CombatSystem } from '../src/systems/CombatSystem.js';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
 
+function distanceToSegment(point, from, to) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const lengthSquared = dx * dx + dy * dy;
+  const t = lengthSquared ? Math.max(0, Math.min(1, ((point.x - from.x) * dx + (point.y - from.y) * dy) / lengthSquared)) : 0;
+  return Math.hypot(point.x - (from.x + dx * t), point.y - (from.y + dy * t));
+}
+
+function distanceToPath(point, waypoints) {
+  return Math.min(...waypoints.slice(1).map((to, index) => distanceToSegment(point, waypoints[index], to)));
+}
+
 test('level five defines Buzhoushan identity, exact waves, measured geometry, and enemy stats', () => {
   const level = getLevelData(5);
   assert.equal(level, LEVELS[5]);
@@ -44,6 +56,22 @@ test('level five defines Buzhoushan identity, exact waves, measured geometry, an
       xingtian: { id: 'xingtian', name: '刑天', emoji: '🪓', hp: 5800, speed: 16, baseDamage: 20, reward: 0, radius: 29, isBoss: true, bossMechanic: { type: 'xingtian' } },
     },
   );
+});
+
+test('level-five runtime path follows measured centers of the Buzhoushan road', () => {
+  const runtimePath = new GameMap(LEVELS[5].map).waypoints;
+  const paintedRoadCenters = [
+    { x: 35, y: 32 }, { x: 100, y: 90 }, { x: 178, y: 110 }, { x: 302, y: 140 },
+    { x: 305, y: 170 }, { x: 280, y: 190 }, { x: 250, y: 205 }, { x: 220, y: 220 },
+    { x: 180, y: 230 }, { x: 140, y: 240 }, { x: 82, y: 250 }, { x: 60, y: 280 },
+    { x: 81, y: 310 }, { x: 140, y: 334 }, { x: 185, y: 360 }, { x: 250, y: 380 },
+    { x: 302, y: 400 }, { x: 326, y: 425 }, { x: 316, y: 455 }, { x: 280, y: 485 },
+    { x: 290, y: 512 }, { x: 338, y: 532 }, { x: 365, y: 545 }, { x: 410, y: 565 },
+  ];
+
+  paintedRoadCenters.forEach(point => {
+    assert.ok(distanceToPath(point, runtimePath) <= 10, `path misses painted road center near ${point.x},${point.y}`);
+  });
 });
 
 test('level four victory enters an empty level five lineup and retry clears it', () => {
