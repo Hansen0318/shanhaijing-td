@@ -143,3 +143,17 @@ Any future level-development ZIP, integration TXT, or Work handoff prepared in C
 4. after Work finishes its required engineering segment, use the default delivery flow in Section 8 unless the user explicitly requested a checkpoint-only handoff.
 
 The purpose of this rule is to preserve Work token/session budget for execution capabilities that are genuinely unavailable or unreliable in Chat.
+
+## 10. Enemy spacing is a global visual-readability rule
+
+The player screenshot from Level3 is an example of the problem, not a Level3-only exception. Enemy spacing/readability applies to **Level1–5 and every future level**.
+
+- Audit every level for cases where consecutive enemies visually overlap, touch, or read as one continuous sprite mass during normal movement.
+- Keep enough on-path separation for individual enemy silhouettes to remain readable on a phone, including large enemies and mixed-size packs.
+- Fix spacing through spawn timing / path-distance spacing logic or another non-balance presentation-safe mechanism. Do **not** change enemy HP, damage, speed, Wave composition/counts, rewards, Boss stats, or tower balance merely to create visual separation.
+- Different sprite sizes may require different minimum visual gaps; do not assume one fixed pixel gap is correct for all enemy types.
+- Dense waves may still look intentionally busy, but sprites must not appear accidentally fused into a single chain because spawn spacing is too small.
+- When adding a new enemy, Wave, or level, include spacing/readability in the same path/anchor audit before release.
+- Future level ZIPs and integration TXT files must treat this as an inherited global requirement rather than a one-off Level3 fix.
+
+This rule concerns visual readability and spawn presentation. It must preserve the designed combat balance unless the user explicitly requests a balance change.
