@@ -2,15 +2,9 @@ import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=geomet
 import { ArtStore } from '../config/artAssets.js?v=geometry-1';
 import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level5-1';
 import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=spacing-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
-const ENEMY_VISUALS = Object.freeze({
-  minion: [36, 38, 123 / 247], swift: [36, 36, 116.5 / 235], giant: [48, 48, 122.5 / 247], qiongqi: [68, 68, 186 / 373],
-  chiyu: [38, 42, 127.5 / 256], yanjia: [50, 50, 128.5 / 256], paoxiao: [72, 72, 190 / 384],
-  shuixiao: [40, 42, 194.5 / 384], xuanjiashou: [52, 50, 194 / 384], xiangliu: [76, 76, 251.5 / 512],
-  meihu: [40, 42, 127.5 / 256], huanli: [52, 50, 127.5 / 256], jiuweihu: [82, 82, 255 / 512],
-  zhuyan: [42, 44, 127.5 / 256], lili: [54, 52, 127.5 / 256], xingtian: [84, 84, 191.5 / 384],
-});
 const FOG_VISUAL_PATHS = Object.freeze({
   upper: { start: [218, 116], c1: [214, 140], c2: [137, 181], end: [140, 214], normal: [-0.78, -0.62] },
   lower: { start: [245, 406], c1: [277, 407], c2: [335, 438], end: [335, 467], normal: [-0.56, 0.83] },
@@ -207,7 +201,7 @@ export class Renderer {
           : enemy.type === 'xingtian'
             ? `xingtianPhase${enemy.bossPhase ?? 1}`
           : enemy.type;
-      const [width, height, visualAnchorY] = ENEMY_VISUALS[enemy.type];
+      const { width, height, anchorY: visualAnchorY } = ENEMY_VISUALS[enemy.type];
       const motion = MotionSystem.enemyTransform(enemy, game.visualTime ?? 0, game.effects, this.motionEnabled);
       const spriteOptions = { anchorY: visualAnchorY, mirror: next.x < enemy.x, scale: motion.scale, alpha: enemy.isIllusion ? 0.52 : 1 };
       const drewEnemy = this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + motion.yOffset, width, height, spriteOptions);
@@ -261,7 +255,7 @@ export class Renderer {
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'unitDeath' && effect.life > 0).forEach(effect => {
-      const [width, height, visualAnchorY] = ENEMY_VISUALS[effect.unitType];
+      const { width, height, anchorY: visualAnchorY } = ENEMY_VISUALS[effect.unitType];
       const motion = MotionSystem.deathTransform(effect);
       const id = effect.unitType === 'jiuweihu'
         ? `jiuweihuPhase${effect.bossPhase ?? 1}`

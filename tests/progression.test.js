@@ -50,6 +50,27 @@ test('wave manager expands fixed queues without overlap', () => {
   assert.equal(manager.isComplete(), true);
 });
 
+test('wave manager keeps the next enemy queued until the spacing gate opens', () => {
+  const manager = new WaveManager([{ groups: [{ type: 'giant', count: 2 }], interval: 0.5 }]);
+  const spawned = [];
+  let spacingReady = true;
+  manager.start(1);
+
+  manager.update(0, type => spawned.push(type), () => spacingReady);
+  spacingReady = false;
+  manager.update(0.5, type => spawned.push(type), () => spacingReady);
+
+  assert.deepEqual(spawned, ['giant']);
+  assert.deepEqual(manager.queue, ['giant']);
+  assert.equal(manager.spawnedAlive, 1);
+
+  spacingReady = true;
+  manager.update(0, type => spawned.push(type), () => spacingReady);
+  assert.deepEqual(spawned, ['giant', 'giant']);
+  assert.deepEqual(manager.queue, []);
+  assert.equal(manager.spawnedAlive, 2);
+});
+
 test('wave preview returns the configured groups without duplicating UI wave data', () => {
   const manager = new WaveManager(WAVE_DATA);
   assert.deepEqual(manager.getWaveGroups(8), [

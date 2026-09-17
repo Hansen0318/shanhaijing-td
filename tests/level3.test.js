@@ -6,6 +6,7 @@ import { Enemy } from '../src/entities/Enemy.js';
 import { GameMap } from '../src/map/GameMap.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
+import { WaveManager } from '../src/systems/WaveManager.js';
 
 function distanceToSegment(point, from, to) {
   const dx = to.x - from.x;
@@ -50,6 +51,42 @@ test('level three uses weaker smoothing over denser manual road anchors', () => 
   for (const waypoint of game.level.map.waypoints) {
     assert.ok(game.map.waypoints.some(point => Math.hypot(point.x - waypoint.x, point.y - waypoint.y) <= 0.01));
   }
+});
+
+test('level-three runtime curve remains centered on independently measured Ruoshui road samples', () => {
+  const runtimePath = new GameMap(LEVELS[3].map).waypoints;
+  const paintedRoadCenters = [
+    { x: 20, y: 40 }, { x: 80, y: 78 }, { x: 150, y: 148 }, { x: 240, y: 176 },
+    { x: 278, y: 215 }, { x: 270, y: 245 }, { x: 200, y: 264 }, { x: 145, y: 284 },
+    { x: 133, y: 310 }, { x: 165, y: 340 }, { x: 245, y: 362 }, { x: 280, y: 395 },
+    { x: 288, y: 440 }, { x: 260, y: 472 }, { x: 190, y: 493 }, { x: 110, y: 514 },
+    { x: 45, y: 552 },
+  ];
+
+  for (const point of paintedRoadCenters) {
+    assert.ok(distanceToPath(point, runtimePath) <= 10, `path misses painted road center near ${point.x},${point.y}`);
+  }
+});
+
+test('level-three large enemies wait at spawn until their silhouettes have a visible gap', () => {
+  const game = new Game(() => 0.2, 3);
+  game.wave = new WaveManager([{ groups: [{ type: 'xuanjiashou', count: 2 }], interval: 0.5 }]);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.wave.start(1);
+
+  game.update(0);
+  for (let step = 0; step < 5; step += 1) game.update(0.1);
+
+  assert.equal(game.enemies.length, 1, 'fixed interval alone must not fuse two 52px enemy silhouettes');
+  assert.deepEqual(game.wave.queue, ['xuanjiashou']);
+
+  for (let step = 0; step < 19; step += 1) game.update(0.1);
+  assert.equal(game.enemies.length, 2);
+  assert.ok(
+    game.enemies[0].pathDistance - game.enemies[1].pathDistance >= 58,
+    '52px silhouettes need a 6px visible gap before the next spawn',
+  );
 });
 
 test('level three water speed and waves one to three are eased again while wave four stays unchanged', () => {
