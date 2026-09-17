@@ -7,6 +7,7 @@ import { GameMap } from '../src/map/GameMap.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { WaveManager } from '../src/systems/WaveManager.js';
+import { minimumEnemyPathSpacing } from '../src/config/enemyVisuals.js';
 
 function distanceToSegment(point, from, to) {
   const dx = to.x - from.x;
@@ -83,9 +84,10 @@ test('level-three large enemies wait at spawn until their silhouettes have a vis
 
   for (let step = 0; step < 19; step += 1) game.update(0.1);
   assert.equal(game.enemies.length, 2);
+  const required = minimumEnemyPathSpacing('xuanjiashou', 'xuanjiashou');
   assert.ok(
-    game.enemies[0].pathDistance - game.enemies[1].pathDistance >= 58,
-    '52px silhouettes need a 6px visible gap before the next spawn',
+    game.enemies[0].pathDistance - game.enemies[1].pathDistance >= required,
+    'rendered silhouettes need a 6px visible gap before the next spawn',
   );
 });
 

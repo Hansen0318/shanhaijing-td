@@ -9,7 +9,7 @@ import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
-import { WaveManager } from '../systems/WaveManager.js';
+import { WaveManager } from '../systems/WaveManager.js?v=spacing-1';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { LEVEL4_ROSTER, isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
@@ -210,7 +210,7 @@ export class Game {
       .filter(enemy => enemy.alive)
       .reduce((candidate, enemy) => (
         !candidate || enemy.pathDistance < candidate.pathDistance ? enemy : candidate
-      ), null);
+    ), null);
     if (!nearest) return true;
     return nearest.pathDistance >= minimumEnemyPathSpacing(nearest.type, type);
   }

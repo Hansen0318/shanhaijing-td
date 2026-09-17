@@ -24,7 +24,7 @@ export class WaveManager {
       if (!canSpawn(this.queue[0])) break;
       spawn(this.queue.shift());
       this.spawnedAlive += 1;
-      this.spawnTimer += this.interval;
+      this.spawnTimer = this.interval;
     }
   }
   enemyRemoved() { this.spawnedAlive = Math.max(0, this.spawnedAlive - 1); }
