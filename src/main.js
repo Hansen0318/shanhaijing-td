@@ -1,5 +1,5 @@
-import { Game } from './core/Game.js?v=geometry-1';
-import { Renderer } from './render/Renderer.js?v=geometry-1';
+import { Game } from './core/Game.js?v=spacing-1';
+import { Renderer } from './render/Renderer.js?v=spacing-1';
 import { UIController } from './ui/UIController.js?v=geometry-1';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=geometry-1';
 

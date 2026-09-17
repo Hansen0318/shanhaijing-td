@@ -9,12 +9,13 @@ import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
-import { WaveManager } from '../systems/WaveManager.js';
+import { WaveManager } from '../systems/WaveManager.js?v=spacing-1';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { LEVEL4_ROSTER, isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
 import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
 import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level5-1';
+import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=spacing-1';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -204,6 +205,15 @@ export class Game {
     if (baseData.isBoss) this.queueBanner(`Boss現身：${baseData.name}`, 1.1);
     return enemy;
   }
+  canSpawnEnemy(type) {
+    const nearest = this.enemies
+      .filter(enemy => enemy.alive)
+      .reduce((candidate, enemy) => (
+        !candidate || enemy.pathDistance < candidate.pathDistance ? enemy : candidate
+    ), null);
+    if (!nearest) return true;
+    return nearest.pathDistance >= minimumEnemyPathSpacing(nearest.type, type);
+  }
   spawnIllusions(source, count = 2, duration = source.statuses.insight ? 0.8 : 1.6) {
     const offsets = [{ x: -15, y: -8 }, { x: 15, y: 8 }, { x: 0, y: -18 }];
     const created = offsets.slice(0, count).map(offset => new Illusion(source, offset, duration));
@@ -234,7 +244,7 @@ export class Game {
     if (this.state === 'preparation') return;
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
-    this.wave.update(dt, type => this.spawnEnemy(type));
+    this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
     this.enemies.forEach(enemy => {
       const event = enemy.update(dt);
       if (event?.type === 'fogEntry') {

@@ -17,13 +17,14 @@ export class WaveManager {
     this.active = true;
     return true;
   }
-  update(dt, spawn) {
+  update(dt, spawn, canSpawn = () => true) {
     if (!this.active || !this.queue.length) return;
     this.spawnTimer -= dt;
     while (this.queue.length && this.spawnTimer <= 0) {
+      if (!canSpawn(this.queue[0])) break;
       spawn(this.queue.shift());
       this.spawnedAlive += 1;
-      this.spawnTimer += this.interval;
+      this.spawnTimer = this.interval;
     }
   }
   enemyRemoved() { this.spawnedAlive = Math.max(0, this.spawnedAlive - 1); }

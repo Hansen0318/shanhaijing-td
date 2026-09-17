@@ -65,10 +65,12 @@ test('dev menu and guarded direct controls include level five path, wave, and Bo
 
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
   assert.match(html, /styles\.css\?v=level5-1/);
   assert.match(html, /styles-fixes\.css\?v=level5-1/);
   assert.match(html, /styles-lineup\.css\?v=level5-1/);
-  assert.match(html, /src\/main\.js\?v=geometry-1/);
+  assert.match(html, /src\/main\.js\?v=spacing-1/);
+  assert.match(game, /WaveManager\.js\?v=spacing-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

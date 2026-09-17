@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ENEMY_DATA, LEVELS, MAP_DATA, getLevelData } from '../src/config/gameData.js';
+import { ENEMY_DATA, LEVELS, getLevelData } from '../src/config/gameData.js';
 import { Game } from '../src/core/Game.js';
 import { Enemy } from '../src/entities/Enemy.js';
 import { GameMap } from '../src/map/GameMap.js';
@@ -71,6 +71,7 @@ function distanceToPath(point, waypoints) {
 }
 
 test('level-two gameplay path stays near sampled centers of the painted Chishui road', () => {
+  const runtimePath = new GameMap(LEVELS[2].map).waypoints;
   const paintedRoadCenters = [
     { x: 25, y: 88 }, { x: 75, y: 137 }, { x: 165, y: 145 }, { x: 213, y: 190 },
     { x: 285, y: 215 }, { x: 378, y: 248 }, { x: 330, y: 282 }, { x: 220, y: 265 },
@@ -79,11 +80,12 @@ test('level-two gameplay path stays near sampled centers of the painted Chishui 
   ];
 
   paintedRoadCenters.forEach(point => {
-    assert.ok(distanceToPath(point, LEVELS[2].map.waypoints) <= 12, `path misses painted road center near ${point.x},${point.y}`);
+    assert.ok(distanceToPath(point, runtimePath) <= 12, `path misses painted road center near ${point.x},${point.y}`);
   });
 });
 
 test('level-one gameplay path remains near sampled centers of the painted Kunlun road', () => {
+  const runtimePath = new GameMap(LEVELS[1].map).waypoints;
   const paintedRoadCenters = [
     { x: 20, y: 70 }, { x: 150, y: 70 }, { x: 280, y: 70 }, { x: 310, y: 170 },
     { x: 250, y: 204 }, { x: 100, y: 236 }, { x: 68, y: 300 }, { x: 65, y: 370 },
@@ -91,7 +93,7 @@ test('level-one gameplay path remains near sampled centers of the painted Kunlun
   ];
 
   paintedRoadCenters.forEach(point => {
-    assert.ok(distanceToPath(point, MAP_DATA.waypoints) <= 12, `path misses painted road center near ${point.x},${point.y}`);
+    assert.ok(distanceToPath(point, runtimePath) <= 12, `path misses painted road center near ${point.x},${point.y}`);
   });
 });
 

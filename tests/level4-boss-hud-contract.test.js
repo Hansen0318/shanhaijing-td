@@ -28,8 +28,8 @@ test('all five Boss HUDs use one variable-positioned code-driven fill without im
   assert.match(html, /styles\.css\?v=level5-1/);
   assert.match(html, /styles-fixes\.css\?v=level5-1/);
   assert.match(html, /styles-lineup\.css\?v=level5-1/);
-  assert.match(html, /src\/main\.js\?v=geometry-1/);
-  assert.match(main, /Renderer\.js\?v=geometry-1/);
+  assert.match(html, /src\/main\.js\?v=spacing-1/);
+  assert.match(main, /Renderer\.js\?v=spacing-1/);
   assert.match(main, /UIController\.js\?v=geometry-1/);
   assert.match(main, /artAssets\.js\?v=geometry-1/);
   assert.match(ui, /artAssets\.js\?v=geometry-1/);
