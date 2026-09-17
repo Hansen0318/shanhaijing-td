@@ -159,3 +159,16 @@ The player screenshot from Level3 is an example of the problem, not a Level3-onl
 - Future level ZIPs and integration TXT files must treat this as an inherited global requirement rather than a one-off Level3 fix.
 
 This rule concerns visual readability and spawn presentation. It must preserve the designed combat balance unless the user explicitly requests a balance change.
+
+## 11. Future level development pipeline: Chat prepares first, Work receives only the irreducible delta
+
+For every new level (Level6 and later), preserve dependency order but minimize Work usage.
+
+- Chat first completes all work that can be done safely **without blocking or invalidating later implementation**: level specification, progression requirements, roster/unlock rules, asset list and naming, package manifest, geometry planning/measurements that can be established statically, integration notes, acceptance criteria, test scope planning, and any bounded repository/document changes Chat can verify independently.
+- Chat must not perform a step early if doing so would be invalidated by later Work implementation or if correct execution genuinely depends on the full runtime/repository environment. In that case, leave that step to Work.
+- Only after the Chat-owned preparation is complete should Chat build the development ZIP. The ZIP must package the finished reference assets/specs plus a **short TXT containing only the remaining Work-only implementation and verification tasks**.
+- The TXT should reference `AGENTS.md` and relevant Guides for permanent rules instead of repeating them, and should state only the current level's delta, unresolved technical work, and required executable checks.
+- Work must not redo completed Chat-owned planning, measurements, inventory, or documentation unless runtime evidence proves them wrong.
+- When Work finishes the irreducible engineering segment, Chat resumes ownership of any safe remaining integration/review/deploy tasks according to Sections 8 and 9.
+
+This is the default new-level workflow unless the user explicitly requests a different division of labor.
