@@ -125,6 +125,7 @@ Do not invent a feature-branch-only restriction that the user did not ask for. F
 Token efficiency is the default project policy. Before sending any task to Work/Codex, first determine whether Chat can complete it safely with the available GitHub, file, image, analysis, and deployment tools.
 
 - **Chat-first is mandatory.** If Chat can complete a task reliably, do it in Chat instead of delegating it to Work merely because Work is convenient.
+- When Chat-owned and Work-only steps are independent or can be safely sequenced, **Chat must finish its part first** before creating the Work handoff. Do not send unfinished Chat-owned analysis/planning into Work when completing it first would reduce Work scope.
 - Delegate only the smallest necessary engineering segment to Work. Do not hand Work an entire workflow when only one step requires its environment.
 - Typical Chat-owned work includes: requirements/specification, GitHub inspection, root-cause narrowing, documentation/hard-rule updates, compact Work prompts, asset inventory and package planning, image/static inspection, small bounded repository edits when independently verifiable, PR/merge/main integration, GitHub Pages deployment checks, and interpreting Work/test results.
 - Work is appropriate when the task materially requires capabilities Chat cannot reliably reproduce, such as a full checked-out repository with iterative multi-file implementation, executable TDD/debug loops, `npm test` / `npm run check` / syntax or diff verification after substantial code changes, browser/runtime/devtools smoke, or long-running asset transformation/integration that must be verified in the development environment.
@@ -137,10 +138,11 @@ Token efficiency is the default project policy. Before sending any task to Work/
 
 Any future level-development ZIP, integration TXT, or Work handoff prepared in Chat must follow this delegation policy:
 
-1. include only the implementation/verification tasks that actually require Work;
-2. keep Chat-owned planning, asset inventory, geometry/spec preparation, and known decisions out of Work's scope once already completed;
-3. tell Work to read `AGENTS.md` and relevant repo Guides instead of duplicating permanent rules in the TXT;
-4. after Work finishes its required engineering segment, use the default delivery flow in Section 8 unless the user explicitly requested a checkpoint-only handoff.
+1. **Before building the ZIP, Chat completes every safe, order-independent Chat-owned step first.**
+2. The ZIP and its TXT contain only the smallest unresolved implementation/verification delta that genuinely requires Work.
+3. Keep Chat-owned planning, asset inventory, geometry/spec preparation, root-cause findings, and known decisions out of Work's active scope once already completed; include them only as concise reference evidence when Work needs them to implement correctly.
+4. Tell Work to read `AGENTS.md` and relevant repo Guides instead of duplicating permanent rules in the TXT.
+5. After Work finishes its required engineering segment, use the default delivery flow in Section 8 unless the user explicitly requested a checkpoint-only handoff.
 
 The purpose of this rule is to preserve Work token/session budget for execution capabilities that are genuinely unavailable or unreliable in Chat.
 
