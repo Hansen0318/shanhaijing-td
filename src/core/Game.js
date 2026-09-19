@@ -240,7 +240,7 @@ export class Game {
     const reward = this.economy.reward(enemy.reward, 1 + (this.blessings.modifiers.goldReward ?? 0));
     if (reward > 0) this.effects.push({ type: 'gold', x: enemy.x, y: enemy.y, amount: reward, life: 0.9, duration: 0.9 });
     if (enemy.isBoss || enemy.type === this.level.bossType) {
-      if (this.levelId === 5 && enemy.type === 'xingtian') this.levelBossDefeated = true;
+      if (this.level.bossVictoryRequiresWaveClear) this.levelBossDefeated = true;
       else this.end('victory');
     }
   }
@@ -304,6 +304,11 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'jinwuPhase2') {
+      this.sunlight.phase2 = true;
+      this.effects.push({ type: 'jinwuPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'xingtianEvolution') {
       this.effects.push({ type: 'xingtianEvolution', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: 0.7, duration: 0.7 });
       return;
@@ -411,7 +416,7 @@ export class Game {
   completeWave() {
     const number = this.wave.waveNumber;
     if (number >= this.level.waves.length) {
-      if (this.levelId === 5 && this.levelBossDefeated && this.wave.isComplete()) this.end('victory');
+      if (this.level.bossVictoryRequiresWaveClear && this.levelBossDefeated && this.wave.isComplete()) this.end('victory');
       return;
     }
     this.wave.finish();

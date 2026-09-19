@@ -6,6 +6,7 @@ import { Enemy } from '../src/entities/Enemy.js';
 import { GameMap } from '../src/map/GameMap.js';
 import { CombatSystem } from '../src/systems/CombatSystem.js';
 import { SunlightSystem } from '../src/systems/SunlightSystem.js';
+import { BossSystem } from '../src/systems/BossSystem.js';
 
 const GEOMETRY_V4 = [
   [57,55],[60,72],[78,91],[111,101],[150,105],[190,105],[229,109],[264,119],[296,137],[323,162],
@@ -151,4 +152,54 @@ test('sunlight armor and shield reduce damage only while active and armor remova
   assert.equal(armor.sunlightArmorBreakPending, false, 'armor break is not emitted repeatedly while inactive');
   assert.equal(CombatSystem.hit(armor, 100).damage, 100);
   assert.equal(CombatSystem.hit(shield, 100).damage, 100);
+});
+
+test('Jinwu enters P2 once at 50 percent without healing', () => {
+  const boss = new Enemy('jinwu', ENEMY_DATA.jinwu, new GameMap(LEVELS[6].map));
+  boss.hp = boss.maxHp * 0.5;
+  assert.deepEqual(BossSystem.update(boss, 0, {}), [{ type: 'jinwuPhase2', phase: 2, duration: 0.8 }]);
+  assert.equal(boss.hp, boss.maxHp * 0.5);
+  assert.equal(boss.speedMultiplier, 1.12);
+  assert.deepEqual(BossSystem.update(boss, 0, {}), []);
+});
+
+test('Jinwu P2 activates both sunlight zones and emits one presentation effect', () => {
+  const game = new Game(() => 0.2, 6);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  const boss = game.spawnEnemy('jinwu');
+  boss.hp = boss.maxHp * 0.5;
+
+  game.update(0);
+  assert.equal(game.sunlight.phase2, true);
+  assert.deepEqual(SunlightSystem.activeZoneIds(game), ['A', 'B']);
+  assert.equal(game.effects.filter(effect => effect.type === 'jinwuPhase2').length, 1);
+  game.update(0);
+  assert.equal(game.effects.filter(effect => effect.type === 'jinwuPhase2').length, 1);
+});
+
+test('Level6 victory waits for empty queue, resolved normals, and Jinwu defeat', () => {
+  const game = new Game(() => 0.2, 6);
+  for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+  game.confirmLineup();
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.wave.waveNumber = 10;
+  game.wave.active = true;
+  game.wave.queue.length = 0;
+  game.wave.spawnedAlive = 2;
+  const ordinary = game.spawnEnemy('yangyu');
+  const boss = game.spawnEnemy('jinwu');
+
+  game.completeWave();
+  assert.equal(game.state, 'combat', 'an empty queue cannot win while Jinwu is alive');
+
+  boss.takeDamage(boss.maxHp);
+  game.update(0);
+  assert.equal(game.state, 'combat', 'Jinwu death cannot win while a normal enemy remains');
+  assert.equal(game.levelBossDefeated, true);
+
+  ordinary.takeDamage(ordinary.maxHp);
+  game.update(0);
+  assert.equal(game.state, 'victory');
 });

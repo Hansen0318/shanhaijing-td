@@ -349,6 +349,7 @@ const levelFive = Object.freeze({
   name: '不周山墟',
   baseName: '天柱核心',
   bossType: 'xingtian',
+  bossVictoryRequiresWaveClear: true,
   map: LEVEL5_MAP_DATA,
   waves: LEVEL5_WAVE_DATA,
   art: Object.freeze({
@@ -368,6 +369,7 @@ const levelSix = Object.freeze({
   name: '扶桑神域',
   baseName: '扶桑靈核',
   bossType: 'jinwu',
+  bossVictoryRequiresWaveClear: true,
   map: LEVEL6_MAP_DATA,
   waves: LEVEL6_WAVE_DATA,
   art: Object.freeze({

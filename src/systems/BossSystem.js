@@ -2,6 +2,7 @@ export class BossSystem {
   static update(enemy, dt, context = {}) {
     if (!enemy.alive) return [];
     if (enemy.type === 'xingtian') return this.updateXingtian(enemy, dt);
+    if (enemy.type === 'jinwu') return this.updateJinwu(enemy);
     if (enemy.type !== 'jiuweihu') return this.check(enemy);
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
@@ -61,6 +62,15 @@ export class BossSystem {
       }
     }
     return events;
+  }
+  static updateJinwu(enemy) {
+    enemy.bossPhase ??= 1;
+    if (enemy.bossPhase === 1 && enemy.hp / enemy.maxHp <= 0.5) {
+      enemy.bossPhase = 2;
+      enemy.speedMultiplier = 1.12;
+      return [{ type: 'jinwuPhase2', phase: 2, duration: 0.8 }];
+    }
+    return [];
   }
   static updateXingtian(enemy, dt) {
     if (!enemy.bossPhase) {
