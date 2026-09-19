@@ -254,6 +254,17 @@ test('first-level enemies have distinct render-only weight and speed motion', ()
   assert.ok(samples.every(([, transform]) => transform.yOffset !== 0));
 });
 
+test('Level6 units use shared Motion Lite with distinct light, heavy, and Boss profiles', () => {
+  const { yangyu, fusangjiashou, jinwu } = UNIT_MOTION_CONFIG.enemies;
+  assert.ok(yangyu.bobPixels > fusangjiashou.bobPixels);
+  assert.ok(yangyu.bobHz > fusangjiashou.bobHz);
+  assert.equal(yangyu.deathSeconds, 0.18);
+  assert.equal(fusangjiashou.deathSeconds, 0.24);
+  assert.deepEqual(Object.keys(jinwu.phases), ['1', '2']);
+  assert.ok(jinwu.phases[2].idleScale > jinwu.phases[1].idleScale);
+  assert.equal(jinwu.deathSeconds, 0.45);
+});
+
 test('first-level enemy hit and death visuals use configured durations', () => {
   const game = new Game(() => 0, 1);
   for (const [type, expectedDeath] of [['minion', 0.18], ['swift', 0.16], ['giant', 0.22]]) {
