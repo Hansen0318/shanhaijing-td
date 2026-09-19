@@ -1,5 +1,5 @@
-import { Game } from './core/Game.js?v=level6-1';
-import { Renderer } from './render/Renderer.js?v=level6-readability-1';
+import { Game } from './core/Game.js?v=level6-readability-2';
+import { Renderer } from './render/Renderer.js?v=level6-readability-2';
 import { UIController } from './ui/UIController.js?v=level6-1';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level6-readability-1';
 
