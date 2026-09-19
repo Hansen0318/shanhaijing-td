@@ -1,7 +1,7 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level6-1';
 import { ArtStore } from '../config/artAssets.js?v=level6-readability-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-1';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level6-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-readability-2';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level6-readability-2';
 import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level6-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
@@ -359,7 +359,36 @@ export class Renderer {
       });
     });
     game.effects.filter(effect => effect.type === 'baizeInsight').forEach(effect => {
-      this.drawDirectional(ctx, 'baizeInsightMark', effect.from, effect.to, 12, effect.life / effect.duration);
+      const alpha = Math.max(0, effect.life / effect.duration);
+      const dx = effect.to.x - effect.from.x;
+      const dy = effect.to.y - effect.from.y;
+      const length = Math.hypot(dx, dy) || 1;
+      const nx = -dy / length;
+      const ny = dx / length;
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.shadowColor = 'rgba(160,245,255,.9)';
+      ctx.shadowBlur = 8;
+      ctx.strokeStyle = `rgba(194,252,255,${0.35 + alpha * 0.55})`;
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(effect.from.x, effect.from.y);
+      ctx.lineTo(effect.to.x, effect.to.y);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = `rgba(255,255,224,${0.55 + alpha * 0.4})`;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(effect.from.x + nx * 2, effect.from.y + ny * 2);
+      ctx.lineTo(effect.to.x + nx * 2, effect.to.y + ny * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 30, 30, {
+        alpha: Math.min(1, 0.45 + alpha * 0.55),
+        scale: 1 + (1 - alpha) * 0.12,
+        filter: 'brightness(1.35) saturate(1.15)',
+      });
     });
     game.effects.filter(effect => effect.type === 'zhuyanCharge').forEach(effect => {
       const source = game.enemies.find(enemy => enemy.id === effect.sourceId);
