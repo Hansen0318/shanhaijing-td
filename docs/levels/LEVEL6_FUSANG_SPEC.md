@@ -122,6 +122,14 @@ These values came from the current background overlay and remain subject to the 
 
 Do not promote these candidate slots/zones to runtime-final until they are checked against the exact final background source supplied before implementation.
 
+### Tower-slot geometry status
+
+- The eight candidate slot coordinates were placed on the same current 390×610 Level6 background/geometry overlay as the path. The player's later V4 correction changed the lower-left enemy route, not these slot centers.
+- Therefore the current program-coordinate candidates are visually aligned to the intended map locations and should be carried forward unchanged into the final-source audit rather than re-guessed.
+- They are still **not RUNTIME-VERIFIED** until the exact final background/source package is supplied and the slot platform + hit area + tower range are checked in the runtime build.
+- Coverage audit focus for runtime smoke: T1/T2 versus Sunlight A, T5/T8 versus Sunlight B, and the high repeated-path coverage around T6/T7 created by the lower-left hairpin.
+- Do not change existing tower range/damage because of Level6 slot geometry. If runtime evidence shows a new Level6 slot is too dominant, prefer a narrow Level6 slot-position adjustment.
+
 ## 4. Level mechanic — sunlight
 
 The Level6 shared mechanic is **日照區**.
