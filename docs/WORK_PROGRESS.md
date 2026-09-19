@@ -8,6 +8,8 @@
 
 ### Chat-owned implementation completed
 
+- Player smoke follow-up: 白澤攻擊原本有傷害/洞察事件但視覺不明顯；Chat 已改為程序化青白光束 + 既有洞察命中標記，不新增素材、不改傷害/攻速。扶桑甲獸原本只有 1.2px slow bob，手機上近似靜態平移；已加強為 render-only bob + stride + breathing scale + hit recoil，不改 speed/path/facing/spacing。對應 renderer/motion tests 與 cache-bust 已補。
+
 - Branch: `feat/level6-readability-20260919`.
 - No gameplay/balance changes.
 - Sunlight A/B are now always visible as faint landmarks; active zone receives a brighter pulse and `日照A・啟動` / `日照B・啟動` label.
