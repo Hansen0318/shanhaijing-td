@@ -4,6 +4,8 @@
 
 ### 已完成
 
+- Chat 已完成 Level6 static asset audit：final background 與 390×610 canonical transform 相符、12 張 source 全部建立 optimized runtime candidates（約 5.38 MiB → 1.12 MiB）、量測陽羽/扶桑甲獸/金烏 visible bounds/anchor/footprint、完成金烏 HUD source empty-channel audit。另確認日隙/扶桑靈核已 baked 進背景，不需要額外 Spawn/Base PNG；未來由 generic optional map-prop contract 處理，Level1–5 不變。
+
 - 玩家已分兩批提供 Level6 最終 source images，共 12/12 齊全；新增 `docs/levels/LEVEL6_ASSET_MANIFEST.md`，逐張記錄 source 尺寸/格式、runtime 檔名、alpha 要求與最佳化狀態。僅背景可維持 JPG/WebP；敵人/Boss/VFX/句芒 unlock/Boss HUD 正式 runtime 需透明 alpha。
 
 - Level6 gameplay implementation-prep baseline 已記錄：陽羽/扶桑甲獸/金烏 base stats、A/B 日照切換與效果、W1–W10、金烏 P1/P2、Victory condition、Blessing scope、tower-slot runtime smoke focus。
