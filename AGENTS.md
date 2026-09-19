@@ -98,27 +98,43 @@ Starting with Level4, every playable level must use the persistent roster-select
 
 This progression rule is gameplay architecture, not optional UI polish. Future Work prompts and asset-integration packages should assume it unless the user explicitly changes the rule.
 
-## 8. Default delivery flow: verified work continues through main deployment
+## 8. Default delivery flow: Work completion means released to main + Pages
 
-Unless the user explicitly says **feature branch only**, **do not merge**, **do not deploy**, or otherwise asks for a review checkpoint before release, the default completion flow for this repository is:
+Unless the user explicitly says **feature branch only**, **do not merge**, **do not deploy**, or otherwise asks for a review checkpoint before release, a substantial Work/Codex implementation is **not complete at feature-branch PASS**.
+
+The default end-to-end completion flow is:
 
 1. implement on a safe feature branch;
 2. run the task-required targeted and regression checks;
-3. if engineering verification passes, push the feature branch checkpoint;
-4. safely merge the verified change into `main`;
-5. push `main` so GitHub Pages can deploy the build;
-6. report **ENGINEERING PASS / PLAYER SMOKE PENDING** when the remaining visual/device acceptance is explicitly delegated to the player.
+3. push safe feature-branch checkpoints during development;
+4. after fresh engineering verification passes, perform the final whole-branch review;
+5. safely merge the verified branch into `main`;
+6. ensure the merged `main` commit is the release source used by GitHub Pages;
+7. verify the public Pages deployment has picked up that `main` release;
+8. verify the deployed **dev/test entry** for the changed scope (for a new level, `?devMenu=1` must expose it);
+9. verify the deployed **normal production flow** reaches the changed scope (for a new level, previous-level victory/progression must expose the new level);
+10. only then report the engineering task as delivered, with any remaining player-owned visual/device smoke listed separately.
 
-Do **not** stop merely because player phone smoke has not happened yet when that smoke requires the deployed Pages build. In that case, deployment is a prerequisite for the player's acceptance test, not a reason to withhold deployment.
+A new level/fix is therefore expected to be testable on the public test/dev URL and usable on the normal public game URL when Work says the development task is finished.
+
+Do **not** stop merely because player phone smoke has not happened yet. When player smoke requires a deployed build, deployment is a prerequisite for that smoke.
+
+If Work cannot merge or verify Pages because of permissions/environment/tooling, it must:
+
+- push the latest verified feature branch;
+- record the exact blocking reason and latest SHA;
+- report **ENGINEERING PASS / RELEASE BLOCKED**, not "complete";
+- hand off only the blocked release step for immediate completion by Chat or another authorized executor.
 
 Stop before merge/deploy only when one of these is true:
 
 - a required engineering test/check fails;
-- the change has an unresolved known defect that makes deployment unsafe;
+- an unresolved known defect makes deployment unsafe;
 - the user explicitly requested a pre-merge review/checkpoint or feature-branch-only delivery;
-- merge would overwrite or conflict with newer `main` work and requires reconciliation first.
+- merge would conflict with newer `main` and requires reconciliation;
+- repository permissions/tooling genuinely prevent the release action.
 
-Do not invent a feature-branch-only restriction that the user did not ask for. For routine fixes intended for immediate player testing, engineering PASS should normally produce a deployable Pages build in the same Work task.
+A handoff TXT/ZIP must **never add a feature-branch-only restriction on its own**. That restriction is valid only when the user explicitly requested it.
 
 ## 9. Chat-first delegation: use Work only for capabilities Chat cannot reliably provide
 
@@ -127,12 +143,12 @@ Token efficiency is the default project policy. Before sending any task to Work/
 - **Chat-first is mandatory.** If Chat can complete a task reliably, do it in Chat instead of delegating it to Work merely because Work is convenient.
 - When Chat-owned and Work-only steps are independent or can be safely sequenced, **Chat must finish its part first** before creating the Work handoff. Do not send unfinished Chat-owned analysis/planning into Work when completing it first would reduce Work scope.
 - Delegate only the smallest necessary engineering segment to Work. Do not hand Work an entire workflow when only one step requires its environment.
-- Typical Chat-owned work includes: requirements/specification, GitHub inspection, root-cause narrowing, documentation/hard-rule updates, compact Work prompts, asset inventory and package planning, image/static inspection, small bounded repository edits when independently verifiable, PR/merge/main integration, GitHub Pages deployment checks, and interpreting Work/test results.
+- Typical Chat-owned work includes: requirements/specification, GitHub inspection, root-cause narrowing, documentation/hard-rule updates, compact Work prompts, asset inventory and package planning, image/static inspection, small bounded repository edits when independently verifiable, release recovery when Work is blocked, and interpreting Work/test results.
 - Work is appropriate when the task materially requires capabilities Chat cannot reliably reproduce, such as a full checked-out repository with iterative multi-file implementation, executable TDD/debug loops, `npm test` / `npm run check` / syntax or diff verification after substantial code changes, browser/runtime/devtools smoke, or long-running asset transformation/integration that must be verified in the development environment.
 - If a task mixes Chat-owned and Work-only steps, Chat should complete its portion first, then send Work only the unresolved engineering delta with existing repo rules referenced instead of repeated.
-- After Work completes the Work-only segment, Chat should resume ownership of any remaining steps it can perform, including result review, safe PR/merge, deployment verification, and preparing the player's phone smoke checklist.
+- When Work is the implementation executor, Work normally continues through the Section 8 release closure itself. Chat resumes only for player-smoke interpretation, post-release follow-up, or a release step that Work explicitly reports as blocked.
 - Player phone/device smoke is player-owned when explicitly delegated and should not consume Work token unless Work itself was specifically asked to perform runtime/browser verification.
-- Do not send Work back to repeat analysis, documentation, merge/deploy, or other tasks already completed or safely executable by Chat.
+- Do not send Work back to repeat analysis or documentation already completed by Chat. However, merge/deploy is part of Work's default completion boundary once Work owns a substantial implementation, unless the user explicitly requested checkpoint-only delivery.
 
 ### Asset / level ZIP handoff rule
 
@@ -142,7 +158,7 @@ Any future level-development ZIP, integration TXT, or Work handoff prepared in C
 2. The ZIP and its TXT contain only the smallest unresolved implementation/verification delta that genuinely requires Work.
 3. Keep Chat-owned planning, asset inventory, geometry/spec preparation, root-cause findings, and known decisions out of Work's active scope once already completed; include them only as concise reference evidence when Work needs them to implement correctly.
 4. Tell Work to read `AGENTS.md` and relevant repo Guides instead of duplicating permanent rules in the TXT.
-5. After Work finishes its required engineering segment, use the default delivery flow in Section 8 unless the user explicitly requested a checkpoint-only handoff.
+5. The TXT must inherit Section 8: after implementation/tests/review, Work continues through merge + Pages release + deployed dev/production verification unless the user explicitly requested a checkpoint-only handoff.
 
 The purpose of this rule is to preserve Work token/session budget for execution capabilities that are genuinely unavailable or unreliable in Chat.
 
@@ -169,7 +185,7 @@ For every new level (Level6 and later), preserve dependency order but minimize W
 - Only after the Chat-owned preparation is complete should Chat build the development ZIP. The ZIP must package the finished reference assets/specs plus a **short TXT containing only the remaining Work-only implementation and verification tasks**.
 - The TXT should reference `AGENTS.md` and relevant Guides for permanent rules instead of repeating them, and should state only the current level's delta, unresolved technical work, and required executable checks.
 - Work must not redo completed Chat-owned planning, measurements, inventory, or documentation unless runtime evidence proves them wrong.
-- When Work finishes the irreducible engineering segment, Chat resumes ownership of any safe remaining integration/review/deploy tasks according to Sections 8 and 9.
+- When Work owns the implementation, the same Work task should finish the Section 8 release closure. Chat only takes over a release step if Work records a concrete blocker, or if the user explicitly requested a checkpoint before release.
 
 This is the default new-level workflow unless the user explicitly requests a different division of labor.
 ## 12. Completed-level compatibility and shared unit behavior are permanent
