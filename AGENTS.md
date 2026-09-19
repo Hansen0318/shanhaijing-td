@@ -172,3 +172,38 @@ For every new level (Level6 and later), preserve dependency order but minimize W
 - When Work finishes the irreducible engineering segment, Chat resumes ownership of any safe remaining integration/review/deploy tasks according to Sections 8 and 9.
 
 This is the default new-level workflow unless the user explicitly requests a different division of labor.
+## 12. Completed-level compatibility and shared unit behavior are permanent
+
+Future-level development is **additive by default**. Existing playable levels are frozen unless the player explicitly asks to change them.
+
+- Do not change completed levels' gameplay, Wave composition, balance, path geometry, tower slots, unit sizing, Motion Lite behavior, facing behavior, UI behavior, or approved art merely because a new level is being added.
+- If a shared-system change is genuinely required for a new level, preserve the observable behavior of all completed levels and add targeted regression for every affected shared contract.
+- Reuse shared movement / rendering systems instead of creating level-specific duplicates when the shared system already provides the behavior.
+- **Motion Lite is inherited by all future units.** New enemies / Bosses must use the existing subtle idle/bob/hit/death motion architecture; future deployable beasts must use the existing idle/recoil architecture unless the level design explicitly documents a justified exception.
+- **Enemy path-facing is inherited.** Moving enemies / Bosses use the shared path-direction facing logic and mirror when their travel direction changes. Do not create a second per-level facing system.
+- **Tower target-facing is inherited.** Deployable beasts face their attack target through the shared facing mechanism and retain the resulting facing after the attack. New future towers must join the same contract.
+- Unit motion / facing are presentation rules only. Do not alter damage, interval, range, speed, targeting, pathDistance, or timing merely to make animation look better.
+- Runtime visual scale should remain consistent with established same-class units unless a documented gameplay/readability reason requires an exception. An exception must be narrow and must not silently rescale older levels.
+
+## 13. Player-approved artifacts and geometry are canonical
+
+When the player approves a geometry, asset choice, UI contract, or level specification and it is recorded in the repository or handoff package, that approved artifact becomes the canonical source.
+
+- A later Chat / Work / Codex session must not re-measure, reinterpret, regenerate, restyle, or replace an approved artifact merely because the session changed.
+- Rework is allowed only when the player explicitly requests it or runtime evidence proves the approved artifact is invalid.
+- Player screenshots may identify a mismatch, but canonical coordinates must come from the approved runtime geometry / source background, not from browser chrome or phone-screen pixel guessing.
+- For maps, keep background version/crop, logical coordinate system, ordered waypoints, Spawn, Base, slots, and special zones as one geometry contract. Changing one requires re-validating the whole affected contract.
+- Work must use the approved geometry supplied in the level spec / package; it must not redraw a path from the background by eye.
+- Approval state must be reported precisely: design/player approval is not the same as runtime verification or phone smoke.
+
+## 14. Pre-handoff asset gate for future levels
+
+Before Chat creates a new-level ZIP for Work:
+
+1. the player supplies the final chosen source images that are intended for implementation;
+2. Chat audits the complete required asset inventory, filenames, formats, alpha/background requirements, and approved variants;
+3. Chat finishes every safe static task it can complete, including canonical geometry/specs, asset naming, UI contracts, runtime-size targets, manifests, and acceptance criteria;
+4. source art and runtime deployment assets remain distinct; oversized source art is not considered ready for deployment;
+5. the ZIP contains the approved reference assets/specs and only the smallest unresolved implementation/verification delta that genuinely requires Work.
+
+This gate supplements Sections 9 and 11. The purpose is to prevent Work from spending tokens rediscovering decisions, inventing missing art rules, or redoing tasks Chat can safely complete.
