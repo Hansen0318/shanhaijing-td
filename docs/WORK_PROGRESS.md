@@ -4,6 +4,8 @@
 
 ### 已完成
 
+- 確認 Level6 8 個 tower slot 候選座標與目前 390×610 地圖 overlay 對應；V4 修正的是 enemy path，不是 slot center。新增通用 tower-slot geometry/coverage hard rule；最終仍需 final source + runtime hit-area/range smoke 才能標 RUNTIME-VERIFIED。
+
 - 追加永久規則：Level4+ roster／lineup／Blessing／unlock／next-level UI 必須 data-driven；禁止以 `LEVEL6_ROSTER`、`levelId < N` 或逐關分支持續擴充。Level6 spec 已加入對應 progression acceptance。
 
 - 補強 `AGENTS.md`：完成關卡預設 frozen、共用 Motion Lite、enemy path-facing mirror、tower target-facing、既有行為 regression、player-approved canonical artifact、pre-handoff asset gate。
