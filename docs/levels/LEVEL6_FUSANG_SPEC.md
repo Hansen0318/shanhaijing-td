@@ -395,3 +395,29 @@ Player runtime feedback showed that Level6 mechanics existed but were not visual
 - During W1–W4, the player must be able to visually identify 陽羽 acceleration and 扶桑甲獸 armor while those states are active.
 - During W10, 日輪護體 and Phase2 must remain recognizable while the Boss is moving and under attack.
 - Verify the added labels do not obscure HP bars, Boss HUD, towers, or create horizontal overflow.
+
+## 17. Baize attack visibility and Fusang armored-beast Motion Lite
+
+Player phone smoke identified two additional presentation gaps. These are readability-only corrections; gameplay remains unchanged.
+
+### Baize attack visibility
+
+- Baize already applies direct damage + Insight in gameplay, but the previous render path stretched the Insight-mark image into a thin directional strip that was not reliably readable as an attack.
+- Keep the same attack timing, damage, targeting, Insight duration/vulnerability, tower facing, recoil, and target selection.
+- Render each `baizeInsight` event as a short luminous cyan-white beam from tower → target plus a bright Insight impact mark on the target.
+- No new image asset is required; reuse the existing `baizeInsightMark` only for the impact mark and render the connecting beam procedurally.
+
+### 扶桑甲獸 movement readability
+
+- Keep its gameplay speed/path/facing/spacing unchanged.
+- Strengthen only the shared render-only Motion Lite for `fusangjiashou`: visible vertical bob, subtle horizontal stride/sway, slight breathing scale, and hit recoil.
+- Motion offsets must never mutate `enemy.x`, `enemy.y`, or `pathDistance`.
+- The result should read as a heavy creature walking rather than a static sprite sliding along the path, without becoming exaggerated or cartoon-bouncy.
+
+### Regression / runtime acceptance
+
+- Baize attack line must visibly originate at the deployed Baize and reach the selected enemy at 390px.
+- The existing Insight target mark remains visible after hit according to normal status rendering.
+- 扶桑甲獸 motion must be visibly distinguishable across successive frames while its logical path center stays unchanged.
+- Preserve enemy path-facing mirror and tower target-facing behavior.
+- No Level1–5 balance/gameplay changes.
