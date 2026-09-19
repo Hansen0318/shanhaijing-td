@@ -157,12 +157,12 @@ export class Renderer {
     const { art } = game.level;
     if (!art.spawnPosition && !art.basePosition) return;
     const levelThree = game.level.id === 3;
-    if (art.spawnPosition) {
+    if (art.spawn && art.spawnPosition) {
       const spawnX = levelThree ? Math.max(34, art.spawnPosition.x) : art.spawnPosition.x;
       const spawnY = levelThree ? Math.max(36, art.spawnPosition.y) : art.spawnPosition.y;
       this.drawContained(ctx, art.spawn, spawnX, spawnY, 66, 66, { anchorY: 0.54 });
     }
-    if (art.basePosition) {
+    if (art.base && art.basePosition) {
       const baseX = levelThree ? Math.max(40, art.basePosition.x) : art.basePosition.x;
       this.drawContained(ctx, art.base, baseX, art.basePosition.y, 76, 76, { anchorY: 0.58 });
     }

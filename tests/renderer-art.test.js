@@ -198,6 +198,14 @@ test('optional map props draw for Levels 1-5 and are omitted for Level6', () => 
   const levelSix = rendererFixture();
   levelSix.renderer.drawMapProps(levelSix.ctx, emptyGame(LEVELS[6]));
   assert.equal(levelSix.ctx.calls.drawImage.length, 0, 'Level6 baked Spawn/Base must not request undefined art');
+
+  const partial = rendererFixture();
+  const incomplete = emptyGame({
+    ...LEVELS[6],
+    art: { ...LEVELS[6].art, spawnPosition: { x: 10, y: 10 }, basePosition: { x: 20, y: 20 } },
+  });
+  partial.renderer.drawMapProps(partial.ctx, incomplete);
+  assert.equal(partial.ctx.calls.drawImage.length, 0, 'positions without matching art ids stay optional');
 });
 
 test('only Level4 renders soft curved fog without rectangular fills, clips, or borders', () => {

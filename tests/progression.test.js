@@ -35,6 +35,14 @@ test('Level5 victory enters an empty Level6 four-beast lineup', () => {
   assert.deepEqual(game.lineupSelection, []);
 });
 
+test('lineup eligibility reads the persistent owned roster instead of inferring unlocks from level number', () => {
+  const game = new Game(() => 0.2, 6);
+  game.unlockedBeasts.delete('baize');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong']);
+  game.unlockedBeasts.add('baize');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize']);
+});
+
 test('Level6 victory unlocks Jumang once and has no Level7 action', () => {
   const game = new Game(() => 0.2, 6);
   game.end('victory');

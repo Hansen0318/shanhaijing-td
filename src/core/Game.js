@@ -66,7 +66,7 @@ export class Game {
   restart() { return this.resetRun(this.levelId); }
   nextLevelId() { return nextPlayableLevelId(this.levelId); }
   lineupRoster() {
-    return ownedRosterThrough(this.levelId - 1).filter(type => Boolean(TOWER_DATA[type]));
+    return [...this.unlockedBeasts].filter(type => Boolean(TOWER_DATA[type]));
   }
   enterLevel(levelId) {
     if (this.state !== 'victory' || levelId !== this.nextLevelId() || !getLevelData(levelId)) return false;

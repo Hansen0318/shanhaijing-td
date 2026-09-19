@@ -1,5 +1,31 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-19：Level6・扶桑神域工程完成
+
+### 已完成
+
+- 新增第6關「扶桑神域」：Geometry V4、8 塔位、10 Waves、陽羽／扶桑甲獸／金烏、A/B 日照區與金烏 P2 雙區常亮。
+- Level5 勝利以共用 progression 進入 Level6 空陣容；畢方／夫諸／應龍／白澤 4 選 3。Level6 Retry 回空陣容，勝利解鎖句芒且因尚無 Level7 不顯示下一關。
+- 日照機制、甲獸減傷／破甲、金烏日盾與 P2 均接入共用 combat/event pipeline；未修改 Level1–5 gameplay、數值或 Wave。
+- 12 張最終 runtime assets 已按 handoff checksum 原樣整合並分 required/deferred preload；Level6 baked 入口／終點透過共用 optional map-prop contract，不請求不存在素材。
+- Level6 敵人沿用共用 visual-anchor、footprint spacing、path-facing、Motion Lite 與 death pipeline；Renderer 已加入日照區、加速、護甲、護盾、破甲及進化 VFX。
+- 金烏 Boss panel 依實際 `70px slice / 6px border / stretch` 的 414×44 九宮格輸出與 CSS 402×32 padding-box 定位容器量測；空槽約 `x=21–393, y=20–27`，trackRect 為 `3.7% / 43.8% / 92.5% / 21.9%`，100%／50%／25% fill regression 全通過。
+- Dev Menu 新增 Level6；支援 `?devLevel=6&devPath=1`、`devWave=1..10`、`devBossPhase=1|2`、`devSunlight=A|B|both`。Path debug 同時標示 runtime path、waypoints、8 slot centers 與 sunlight rectangles。
+- Browser smoke 面板新增 Level5→6、Level6 lineup/Wave 1、A/B 日照敵人、金烏 P1/P2/25%、Victory 與 Retry 快捷狀態。
+
+### 驗證
+
+- Targeted progression／Level3–6／renderer／Boss HUD／UI：89/89 PASS。
+- 完整 `npm test`：188/188 PASS；`npm run check`、所有 `src/tests` JavaScript syntax、`git diff --check origin/main..HEAD`：PASS。
+- 雲端 Chrome 阻擋 localhost，執行環境亦無本機 Chromium：`ENGINEERING PASS / PLAYER SMOKE PENDING`。
+- 玩家手機需補測：390px／390×700 無水平溢位、Level5 勝利→Level6 4 選 3、首次素材載入、Geometry V4/path/slots/日照 overlay、1×/2× spacing、陽羽/甲獸狀態、金烏 P1/P2 與 HUD 100%/50%/25%、勝利句芒解鎖、Retry 空陣容、無 Level7 按鈕。
+
+### 發布邊界
+
+- 本輪只推 `feat/level6-fusang` feature branch；不 merge `main`、不觸發 GitHub Pages。最終 merge／Pages deploy 由後續 review 工作接手。
+
+---
+
 ## 2026-09-19：Level6 前置規則與規格固化
 
 ### 已完成
