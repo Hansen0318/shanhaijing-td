@@ -9,13 +9,14 @@ function percent(value) {
   return Number.parseFloat(value) / 100;
 }
 
-test('all five Boss HP fills match their measured rendered empty channels at 100, 50 and 25 percent', () => {
+test('all six Boss HP fills match their measured rendered empty channels at 100, 50 and 25 percent', () => {
   const measuredChannels = {
     qiongqi: { left: 6, top: 24, width: 402, height: 7 },
     paoxiao: { left: 16, top: 24.5, width: 382, height: 4.5 },
     xiangliu: { left: 4, top: 24, width: 406, height: 5 },
     jiuweihu: { left: 63, top: 27, width: 326, height: 5 },
     xingtian: { left: 40, top: 23, width: 335, height: 7.5 },
+    jinwu: { left: 21, top: 20, width: 372, height: 7 },
   };
 
   for (const [type, channel] of Object.entries(measuredChannels)) {

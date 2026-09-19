@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-test('all five Boss HUDs use one variable-positioned code-driven fill without image masks', async () => {
+test('all six Boss HUDs use one variable-positioned code-driven fill without image masks', async () => {
   const base = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const fixes = await readFile(new URL('../styles-fixes.css', import.meta.url), 'utf8');
   const css = await readFile(new URL('../styles-lineup.css', import.meta.url), 'utf8');
@@ -16,23 +16,24 @@ test('all five Boss HUDs use one variable-positioned code-driven fill without im
   assert.match(art, /xiangliuBossPanel:\s*'assets\/ui\/ui_boss_xiangliu_panel_v2\.png'/);
   assert.match(art, /jiuweihuBossPanel:\s*'assets\/ui\/ui_boss_jiuweihu_panel_v2\.png'/);
   assert.match(art, /xingtianBossPanel:\s*'assets\/ui\/ui_boss_xingtian_panel_v1\.png'/);
+  assert.match(art, /jinwuBossPanel:\s*'assets\/ui\/ui_boss_jinwu_panel_v1\.png'/);
   assert.match(base, /left:\s*var\(--boss-track-left\)/);
   assert.match(base, /top:\s*var\(--boss-track-top\)/);
   assert.match(base, /width:\s*var\(--boss-track-width\)/);
   assert.match(base, /height:\s*var\(--boss-track-height\)/);
   assert.match(base, /\.boss-hud strong\s*\{[^}]*position:\s*absolute[^}]*line-height:\s*14px/);
   assert.match(base, /\.boss-track\s*\{[\s\S]*?background:\s*transparent/);
-  assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /boss-hud\[data-boss-type="(?:qiongqi|paoxiao|xiangliu|jiuweihu|xingtian)"\]::before/);
+  assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /boss-hud\[data-boss-type="(?:qiongqi|paoxiao|xiangliu|jiuweihu|xingtian|jinwu)"\]::before/);
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /background:\s*#202638/);
   assert.equal((html.match(/id="boss-hp-fill"/g) ?? []).length, 1);
-  assert.match(html, /styles\.css\?v=level5-1/);
-  assert.match(html, /styles-fixes\.css\?v=level5-1/);
-  assert.match(html, /styles-lineup\.css\?v=level5-1/);
-  assert.match(html, /src\/main\.js\?v=spacing-1/);
-  assert.match(main, /Renderer\.js\?v=spacing-1/);
-  assert.match(main, /UIController\.js\?v=geometry-1/);
-  assert.match(main, /artAssets\.js\?v=geometry-1/);
-  assert.match(ui, /artAssets\.js\?v=geometry-1/);
-  assert.match(renderer, /artAssets\.js\?v=geometry-1/);
+  assert.match(html, /styles\.css\?v=level6-1/);
+  assert.match(html, /styles-fixes\.css\?v=level6-1/);
+  assert.match(html, /styles-lineup\.css\?v=level6-1/);
+  assert.match(html, /src\/main\.js\?v=level6-1/);
+  assert.match(main, /Renderer\.js\?v=level6-1/);
+  assert.match(main, /UIController\.js\?v=level6-1/);
+  assert.match(main, /artAssets\.js\?v=level6-1/);
+  assert.match(ui, /artAssets\.js\?v=level6-1/);
+  assert.match(renderer, /artAssets\.js\?v=level6-1/);
   assert.match(ui, /boss-hp-fill'\]\.style\.width = `\$\{boss\.hp \/ boss\.maxHp \* 100\}%`/);
 });

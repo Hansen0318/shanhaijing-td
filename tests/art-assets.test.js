@@ -208,9 +208,9 @@ test('level-five art catalog stages first-paint assets and defers Boss combat ar
   }
 });
 
-test('all five Boss HUD panels are optimized transparent empty-channel assets', async () => {
+test('all six Boss HUD panels are optimized transparent empty-channel assets', async () => {
   const { ART_ASSETS } = await import(moduleUrl);
-  for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel', 'xingtianBossPanel']) {
+  for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel', 'xingtianBossPanel', 'jinwuBossPanel']) {
     const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
     assertCompletePngWithAlpha(bytes, id);
     assert.deepEqual(pngDimensions(bytes), { width: 768, height: 256 }, `${id} must match the optimized HUD runtime size`);

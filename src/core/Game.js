@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=geometry-1';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level6-1';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
@@ -9,14 +9,14 @@ import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
-import { WaveManager } from '../systems/WaveManager.js?v=spacing-1';
+import { WaveManager } from '../systems/WaveManager.js?v=level6-1';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
 import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level5-1';
-import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=spacing-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level6-1';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level6-1';
+import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level6-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
@@ -59,7 +59,7 @@ export class Game {
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
     this.levelBossDefeated = false;
-    this.sunlight = { elapsed: 0, phase2: false };
+    this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     this.time.setPaused(true);
     return true;
   }

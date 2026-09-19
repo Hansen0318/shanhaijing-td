@@ -10,9 +10,10 @@ export class SunlightSystem {
 
   static update(game, dt) {
     if (!(game.map?.data.sunlightZones?.length)) return [];
-    game.sunlight ??= { elapsed: 0, phase2: false };
+    game.sunlight ??= { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     game.sunlight.elapsed += Math.max(0, dt);
     const active = new Set(this.activeZoneIds(game));
+    game.sunlight.activeZoneIds = [...active];
 
     for (const enemy of game.enemies) {
       const zoneId = game.map.sunlightZoneAt(enemy);

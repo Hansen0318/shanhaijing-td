@@ -1,8 +1,8 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=geometry-1';
-import { ArtStore } from '../config/artAssets.js?v=geometry-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level5-1';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
-import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=spacing-1';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level6-1';
+import { ArtStore } from '../config/artAssets.js?v=level6-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level6-1';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level6-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
 const FOG_VISUAL_PATHS = Object.freeze({
@@ -36,6 +36,7 @@ export class Renderer {
     ctx.clearRect(0, 0, map.width, map.height);
     this.drawBackground(ctx, game);
     this.drawFogZones(ctx, game);
+    this.drawSunlightZones(ctx, game);
     this.drawSlots(ctx, game);
     this.drawMapProps(ctx, game);
     this.drawTowers(ctx, game);
@@ -43,6 +44,15 @@ export class Renderer {
     this.drawProjectiles(ctx, game);
     this.drawEffects(ctx, game);
     this.drawLabels(ctx, game);
+  }
+  drawSunlightZones(ctx, game) {
+    const active = new Set(game.sunlight?.activeZoneIds ?? []);
+    game.level.map.sunlightZones?.forEach(zone => {
+      if (!active.has(zone.id)) return;
+      const pulse = 0.72 + Math.sin((game.visualTime ?? 0) * 1.35) * 0.08;
+      this.drawContained(ctx, 'sunlightZone', zone.x + zone.width / 2, zone.y + zone.height / 2,
+        zone.width, zone.height, { alpha: pulse });
+    });
   }
   drawBackground(ctx, game) {
     const { map, art } = game.level;
@@ -145,12 +155,17 @@ export class Renderer {
   }
   drawMapProps(ctx, game) {
     const { art } = game.level;
+    if (!art.spawnPosition && !art.basePosition) return;
     const levelThree = game.level.id === 3;
-    const spawnX = levelThree ? Math.max(34, art.spawnPosition.x) : art.spawnPosition.x;
-    const spawnY = levelThree ? Math.max(36, art.spawnPosition.y) : art.spawnPosition.y;
-    const baseX = levelThree ? Math.max(40, art.basePosition.x) : art.basePosition.x;
-    this.drawContained(ctx, art.spawn, spawnX, spawnY, 66, 66, { anchorY: 0.54 });
-    this.drawContained(ctx, art.base, baseX, art.basePosition.y, 76, 76, { anchorY: 0.58 });
+    if (art.spawnPosition) {
+      const spawnX = levelThree ? Math.max(34, art.spawnPosition.x) : art.spawnPosition.x;
+      const spawnY = levelThree ? Math.max(36, art.spawnPosition.y) : art.spawnPosition.y;
+      this.drawContained(ctx, art.spawn, spawnX, spawnY, 66, 66, { anchorY: 0.54 });
+    }
+    if (art.basePosition) {
+      const baseX = levelThree ? Math.max(40, art.basePosition.x) : art.basePosition.x;
+      this.drawContained(ctx, art.base, baseX, art.basePosition.y, 76, 76, { anchorY: 0.58 });
+    }
   }
   drawTowers(ctx, game) {
     game.towers.forEach((tower, index) => {
@@ -191,6 +206,9 @@ export class Renderer {
         }
       }
       if (enemy.statuses.insight) this.drawContained(ctx, 'baizeInsightMark', enemy.x, enemy.y, (enemy.radius + 11) * 2, (enemy.radius + 11) * 2, { alpha: 0.9 });
+      if (enemy.type === 'yangyu' && enemy.inSunlight) this.drawContained(ctx, 'yangyuSunboost', enemy.x, enemy.y + 2, 58, 38, { alpha: 0.9 });
+      if (enemy.yangmuArmorActive) this.drawContained(ctx, 'yangmuArmorOn', enemy.x, enemy.y, 72, 72, { alpha: 0.9 });
+      if (enemy.sunShieldActive) this.drawContained(ctx, 'jinwuSunshield', enemy.x, enemy.y, 112, 112, { alpha: 0.88 });
       const next = enemy.map.positionAt(Math.min(enemy.map.totalLength, enemy.pathDistance + 1));
       const skill = enemy.type === 'jiuweihu' ? game.effects.find(effect => effect.type === 'jiuweihuSkill' && effect.sourceId === enemy.id && effect.life > 0) : null;
       const skillProgress = skill ? 1 - skill.life / skill.duration : -1;
@@ -280,6 +298,18 @@ export class Renderer {
     game.effects.filter(effect => effect.type === 'liliArmorBreak').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       this.drawContained(ctx, 'liliArmorBreak', effect.x, effect.y, 76 + progress * 34, 76 + progress * 34, { alpha: effect.life / effect.duration });
+    });
+    game.effects.filter(effect => effect.type === 'yangmuArmorBreak').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'yangmuArmorBreak', effect.x, effect.y, 78 + progress * 28, 78 + progress * 28, { alpha: effect.life / effect.duration });
+    });
+    game.effects.filter(effect => effect.type === 'jinwuPhase2').forEach(effect => {
+      const source = game.enemies.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      this.drawContained(ctx, 'jinwuPhase2', point.x, point.y, 126 + progress * 36, 126 + progress * 36, {
+        alpha: Math.max(0.3, effect.life / effect.duration), rotation: progress * Math.PI * 0.35,
+      });
     });
     game.effects.filter(effect => effect.type === 'xingtianShield').forEach(effect => {
       const source = game.enemies.find(enemy => enemy.id === effect.sourceId);

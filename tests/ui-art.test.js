@@ -263,6 +263,7 @@ test('each Boss HUD applies its measured track geometry and follows 100, 50 and 
     { levelId: 3, type: 'xiangliu', name: '相柳', panel: /ui_boss_xiangliu_panel_v2\.png/, rect: ['0.9%', '55.3%', '98.1%', '10.4%'] },
     { levelId: 4, type: 'jiuweihu', name: '九尾狐', panel: /ui_boss_jiuweihu_panel_v2\.png/, rect: ['15.3%', '61.6%', '78.7%', '11%'] },
     { levelId: 5, type: 'xingtian', name: '刑天', panel: /ui_boss_xingtian_panel_v1\.png/, rect: ['9.7%', '52.3%', '80.8%', '17%'] },
+    { levelId: 6, type: 'jinwu', name: '金烏', panel: /ui_boss_jinwu_panel_v1\.png/, rect: ['5.1%', '45.5%', '89.9%', '15.9%'] },
   ];
 
   for (const { levelId, type, name, panel, rect } of cases) {
