@@ -141,7 +141,7 @@ export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
   3: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
   4: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level4Background', 'level4Spawn', 'level4Base', 'meihu', 'level4LineupPanel']),
   5: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'level5Banner', 'level5Preview']),
-  6: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level6Background', 'yangyu']),
+  6: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level6Background', 'yangyu', 'sunlightZone']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
