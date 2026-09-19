@@ -86,3 +86,13 @@ Still pending before the Work ZIP:
 - final package naming and source/runtime separation.
 
 Work should receive only the remaining implementation/executable-verification delta after these Chat-owned tasks are finished.
+
+
+## 7. Spawn / Base are intentionally background-baked
+
+The final Level6 background already contains the visual **日隙** and **扶桑靈核** at the intended route start/end. They are not missing assets.
+
+- Do not request or generate separate Level6 Spawn/Base PNGs.
+- Level6 should use the baked background visuals and keep logical Spawn/Base coordinates in map/level data.
+- Production code must skip separate map-prop drawing for Level6 through a generic optional-art contract, not a one-off Level6 branch.
+- Level1–5 separate Spawn/Base assets and visuals remain unchanged.
