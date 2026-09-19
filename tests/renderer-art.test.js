@@ -4,10 +4,10 @@ import { Renderer } from '../src/render/Renderer.js';
 import { LEVELS, MAP_DATA } from '../src/config/gameData.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], fillText: [], strokeText: [], moveTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
+  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
   return {
     calls,
-    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo() {}, stroke() {},
+    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo(...args) { calls.lineTo.push(args); }, stroke() {},
     setLineDash() {}, arc() {}, fill() {}, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
     quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); },
     drawImage(...args) { calls.drawImage.push(args); },
@@ -243,6 +243,21 @@ test('only Level4 renders soft curved fog without rectangular fills, clips, or b
     assert.equal(otherLevel.ctx.calls.fillRect.length, 0, `Level${levelId} must not render fog regions`);
     assert.equal(otherLevel.ctx.calls.clip, 0, `Level${levelId} must not clip fog regions`);
   }
+});
+
+test('Baize insight attack draws a visible beam plus impact mark without changing gameplay', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.drawEffects(ctx, { effects: [{
+    type: 'baizeInsight',
+    from: { x: 40, y: 80 },
+    to: { x: 150, y: 120 },
+    life: 0.25,
+    duration: 0.35,
+  }] });
+
+  assert.ok(ctx.calls.moveTo.some(([x, y]) => x === 40 && y === 80), 'Baize beam must start at the tower');
+  assert.ok(ctx.calls.lineTo.some(([x, y]) => x === 150 && y === 120), 'Baize beam must reach the target');
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'baizeInsightMark'), true, 'Baize impact mark must render on target');
 });
 
 test('fog entry draws two bright Meihu echoes, while insight draws one weaker echo', () => {
