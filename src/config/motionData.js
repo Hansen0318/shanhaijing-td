@@ -40,7 +40,7 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
       deathSeconds: 0.45,
     }),
     yangyu: Object.freeze({ bobPixels: 2.6, bobHz: 2.5, deathSeconds: 0.18 }),
-    fusangjiashou: Object.freeze({ bobPixels: 1.2, bobHz: 0.9, deathSeconds: 0.24 }),
+    fusangjiashou: Object.freeze({ bobPixels: 2.1, bobHz: 1.08, stridePixels: 0.9, strideHz: 1.08, idleScale: 0.018, idleHz: 1.08, hitRecoilPixels: 2.5, deathSeconds: 0.24 }),
     jinwu: Object.freeze({
       phases: Object.freeze({
         1: Object.freeze({ idleScale: 0.02, idleHz: 0.7, bobPixels: 1.4, bobHz: 0.75 }),
