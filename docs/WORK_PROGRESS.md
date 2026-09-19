@@ -1,5 +1,33 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-19：Release flow correction
+
+### Root cause
+
+- Repository `AGENTS.md` Section 8 already defined merge + Pages as the default delivery flow.
+- The Level6 handoff package incorrectly overrode that default with “feature branch only / do not merge / do not deploy” even though the player never requested a checkpoint-only delivery.
+- Work therefore correctly stopped on `feat/level6-fusang`, while the public Pages site still served the old `main`; this made Work's PASS look like a completed release when the player could not yet test Level6 publicly.
+
+### Permanent correction
+
+- A substantial Work implementation is not considered delivered at feature-branch PASS.
+- Default Work completion now requires: feature implementation → fresh tests → final whole-branch review → merge to `main` → Pages release → deployed dev/test entry check → deployed normal production-flow check.
+- For a new level, `?devMenu=1` must show the new level and normal previous-level victory/progression must reach the new level before the release is called delivered.
+- If Work lacks permission/tooling to merge/deploy/verify Pages, status must be **ENGINEERING PASS / RELEASE BLOCKED**, with the exact SHA/blocker; it must not claim completion.
+- Future ZIP/TXT handoffs must never invent “feature branch only” for token savings. Only an explicit player request may stop before release.
+- Chat-first remains unchanged: Chat still completes all safe pre-handoff work first. The correction only changes the end boundary after Work owns substantial implementation.
+
+### Level6 incident recovery
+
+- Level6 feature branch head: `18fe2ac343f833576a4a5ab60e103dc5559866bc`.
+- Chat subsequently merged PR #9 to `main` at `2e03c9d0d0f46b3059ede796a20b2dc2709e5b21`.
+- Player-facing Pages smoke remains the release acceptance step after Pages refresh.
+
+### 狀態
+
+PROCESS RULE CORRECTED / LEVEL6 MAIN MERGED / PAGES PLAYER SMOKE PENDING
+
+---
 ## 2026-09-19：Level6・扶桑神域工程完成
 
 ### 已完成
