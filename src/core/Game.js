@@ -17,6 +17,7 @@ import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../con
 import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
 import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level5-1';
 import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=spacing-1';
+import { SunlightSystem } from '../systems/SunlightSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -58,6 +59,7 @@ export class Game {
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
     this.levelBossDefeated = false;
+    this.sunlight = { elapsed: 0, phase2: false };
     this.time.setPaused(true);
     return true;
   }
@@ -254,6 +256,7 @@ export class Game {
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
+    SunlightSystem.update(this, dt);
     this.enemies.forEach(enemy => {
       const event = enemy.update(dt);
       if (event?.type === 'fogEntry') {
@@ -273,6 +276,7 @@ export class Game {
         });
       }
     });
+    SunlightSystem.update(this, 0);
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
     this.updateTowers(dt);
@@ -280,6 +284,10 @@ export class Game {
     this.enemies.filter(enemy => enemy.armorBreakEffectPending).forEach(enemy => {
       enemy.armorBreakEffectPending = false;
       this.effects.push({ type: 'liliArmorBreak', x: enemy.x, y: enemy.y, life: 0.45, duration: 0.45 });
+    });
+    this.enemies.filter(enemy => enemy.sunlightArmorBreakPending).forEach(enemy => {
+      enemy.sunlightArmorBreakPending = false;
+      this.effects.push({ type: 'yangmuArmorBreak', x: enemy.x, y: enemy.y, life: 0.45, duration: 0.45 });
     });
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
     this.illusions = this.illusions.filter(illusion => illusion.alive);

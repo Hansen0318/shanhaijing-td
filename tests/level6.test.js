@@ -2,6 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ENEMY_DATA, LEVELS, getLevelData } from '../src/config/gameData.js';
 import { Game } from '../src/core/Game.js';
+import { Enemy } from '../src/entities/Enemy.js';
+import { GameMap } from '../src/map/GameMap.js';
+import { CombatSystem } from '../src/systems/CombatSystem.js';
+import { SunlightSystem } from '../src/systems/SunlightSystem.js';
 
 const GEOMETRY_V4 = [
   [57,55],[60,72],[78,91],[111,101],[150,105],[190,105],[229,109],[264,119],[296,137],[323,162],
@@ -75,4 +79,76 @@ test('Level6 wave ten applies the approved 6820 HP Boss multiplier', () => {
   const boss = game.spawnEnemy('jinwu');
   assert.equal(boss.maxHp, 6820);
   assert.equal(boss.hp, 6820);
+});
+
+test('sunlight zones use logical coordinates and alternate A/B every six seconds', () => {
+  const game = new Game(() => 0.2, 6);
+  const inA = game.spawnEnemy('yangyu');
+  const inB = game.spawnEnemy('fusangjiashou');
+  Object.assign(inA, { x: 150, y: 100 });
+  Object.assign(inB, { x: 320, y: 380 });
+
+  assert.equal(game.map.sunlightZoneAt(inA), 'A');
+  assert.equal(game.map.sunlightZoneAt(inB), 'B');
+  assert.equal(game.map.sunlightZoneAt({ x: 20, y: 20 }), null);
+
+  SunlightSystem.update(game, 0);
+  assert.deepEqual(SunlightSystem.activeZoneIds(game), ['A']);
+  assert.equal(inA.inSunlight, true);
+  assert.equal(inB.inSunlight, false);
+
+  SunlightSystem.update(game, 5.99);
+  assert.deepEqual(SunlightSystem.activeZoneIds(game), ['A']);
+  SunlightSystem.update(game, 0.01);
+  assert.deepEqual(SunlightSystem.activeZoneIds(game), ['B']);
+  assert.equal(inA.inSunlight, false);
+  assert.equal(inB.inSunlight, true);
+
+  game.sunlight.phase2 = true;
+  SunlightSystem.update(game, 0);
+  assert.deepEqual(SunlightSystem.activeZoneIds(game), ['A', 'B']);
+  assert.equal(inA.inSunlight, true);
+  assert.equal(inB.inSunlight, true);
+});
+
+test('Yangyu receives exactly 1.28 movement speed only in active sunlight', () => {
+  const map = new GameMap({
+    width: 390, height: 610, pathWidth: 54, slots: [],
+    waypoints: [{ x: 0, y: 0 }, { x: 300, y: 0 }],
+  });
+  const boosted = new Enemy('yangyu', ENEMY_DATA.yangyu, map);
+  boosted.inSunlight = true;
+  boosted.update(0.1);
+  assert.ok(Math.abs(boosted.pathDistance - 86 * 1.28 * 0.1) < 1e-9);
+
+  const normal = new Enemy('yangyu', ENEMY_DATA.yangyu, map);
+  normal.inSunlight = false;
+  normal.update(0.1);
+  assert.ok(Math.abs(normal.pathDistance - 86 * 0.1) < 1e-9);
+});
+
+test('sunlight armor and shield reduce damage only while active and armor removal fires once', () => {
+  const game = new Game(() => 0.2, 6);
+  const armor = game.spawnEnemy('fusangjiashou');
+  const shield = game.spawnEnemy('jinwu');
+  Object.assign(armor, { x: 150, y: 100 });
+  Object.assign(shield, { x: 160, y: 105 });
+
+  SunlightSystem.update(game, 0);
+  assert.equal(armor.yangmuArmorActive, true);
+  assert.equal(shield.sunShieldActive, true);
+  assert.equal(CombatSystem.hit(armor, 100).damage, 75);
+  assert.equal(CombatSystem.hit(shield, 100).damage, 80);
+
+  Object.assign(armor, { x: 20, y: 20 });
+  Object.assign(shield, { x: 20, y: 20 });
+  SunlightSystem.update(game, 0);
+  assert.equal(armor.yangmuArmorActive, false);
+  assert.equal(shield.sunShieldActive, false);
+  assert.equal(armor.sunlightArmorBreakPending, true);
+  armor.sunlightArmorBreakPending = false;
+  SunlightSystem.update(game, 0);
+  assert.equal(armor.sunlightArmorBreakPending, false, 'armor break is not emitted repeatedly while inactive');
+  assert.equal(CombatSystem.hit(armor, 100).damage, 100);
+  assert.equal(CombatSystem.hit(shield, 100).damage, 100);
 });
