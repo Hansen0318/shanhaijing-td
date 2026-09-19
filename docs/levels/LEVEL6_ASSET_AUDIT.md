@@ -221,4 +221,4 @@ Local package verification completed:
 - total packaged runtime asset bytes: **1,179,288**;
 - no original 1000–2000px source art is included, because Work does not need to repeat Chat-owned image processing.
 
-The Work prompt is explicitly feature-branch-only for token savings: Work stops after implementation, executable verification, and feature-branch push. Chat then owns branch review, merge, Pages deployment, and player-smoke preparation.
+The original Level6 handoff incorrectly added a feature-branch-only stop even though the user had not requested one. That packaging decision is now superseded by `AGENTS.md` Section 8. Future handoffs must not stop at the feature branch by default: after implementation/tests/final review, Work continues through merge to `main`, Pages release verification, dev/test entry verification, and normal production-flow verification. Only an explicit user request may make the handoff checkpoint-only.
