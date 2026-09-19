@@ -46,13 +46,58 @@ export class Renderer {
     this.drawLabels(ctx, game);
   }
   drawSunlightZones(ctx, game) {
+    const zones = game.level.map.sunlightZones ?? [];
+    if (!zones.length) return;
     const active = new Set(game.sunlight?.activeZoneIds ?? []);
-    game.level.map.sunlightZones?.forEach(zone => {
-      if (!active.has(zone.id)) return;
-      const pulse = 0.72 + Math.sin((game.visualTime ?? 0) * 1.35) * 0.08;
-      this.drawContained(ctx, 'sunlightZone', zone.x + zone.width / 2, zone.y + zone.height / 2,
-        zone.width, zone.height, { alpha: pulse });
+    const time = game.visualTime ?? 0;
+
+    zones.forEach(zone => {
+      const isActive = active.has(zone.id);
+      const pulse = 0.86 + Math.sin(time * 2.1 + (zone.id === 'B' ? 1.2 : 0)) * 0.08;
+      const centerX = zone.x + zone.width / 2;
+      const centerY = zone.y + zone.height / 2;
+
+      // Always leave a faint landmark so players can learn where sunlight can appear.
+      this.drawContained(ctx, 'sunlightZone', centerX, centerY, zone.width * 1.08, zone.height * 1.22, {
+        alpha: isActive ? 0.24 : 0.11,
+        filter: isActive ? 'brightness(1.35) saturate(1.18) blur(1px)' : 'brightness(0.82) saturate(0.75)',
+      });
+
+      if (isActive) {
+        this.drawContained(ctx, 'sunlightZone', centerX, centerY, zone.width, zone.height, {
+          alpha: pulse,
+          filter: 'brightness(1.3) saturate(1.2)',
+        });
+      }
+
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.font = 'bold 10px system-ui';
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(45,30,8,.88)';
+      ctx.fillStyle = isActive ? '#fff1a8' : 'rgba(255,231,151,.62)';
+      const label = isActive ? `日照${zone.id}・啟動` : `日照${zone.id}`;
+      ctx.strokeText(label, centerX, zone.y - 3);
+      ctx.fillText(label, centerX, zone.y - 3);
+      ctx.restore();
     });
+  }
+  drawStateTag(ctx, text, x, y, { fill = '#fff1a8', background = 'rgba(34,23,8,.78)' } = {}) {
+    const width = 14 + text.length * 11;
+    const height = 16;
+    ctx.save();
+    ctx.fillStyle = background;
+    ctx.fillRect(x - width / 2, y - height + 2, width, height);
+    ctx.font = 'bold 10px system-ui';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(24,16,5,.92)';
+    ctx.fillStyle = fill;
+    ctx.strokeText(text, x, y - 6);
+    ctx.fillText(text, x, y - 6);
+    ctx.restore();
   }
   drawBackground(ctx, game) {
     const { map, art } = game.level;
@@ -206,9 +251,32 @@ export class Renderer {
         }
       }
       if (enemy.statuses.insight) this.drawContained(ctx, 'baizeInsightMark', enemy.x, enemy.y, (enemy.radius + 11) * 2, (enemy.radius + 11) * 2, { alpha: 0.9 });
-      if (enemy.type === 'yangyu' && enemy.inSunlight) this.drawContained(ctx, 'yangyuSunboost', enemy.x, enemy.y + 2, 58, 38, { alpha: 0.9 });
-      if (enemy.yangmuArmorActive) this.drawContained(ctx, 'yangmuArmorOn', enemy.x, enemy.y, 72, 72, { alpha: 0.9 });
-      if (enemy.sunShieldActive) this.drawContained(ctx, 'jinwuSunshield', enemy.x, enemy.y, 112, 112, { alpha: 0.88 });
+      const sunlightPulse = 0.9 + Math.sin((game.visualTime ?? 0) * 4 + enemy.pathDistance * 0.03) * 0.08;
+      if (enemy.type === 'jinwu' && (enemy.bossPhase ?? 1) >= 2) {
+        this.drawContained(ctx, 'jinwuPhase2', enemy.x, enemy.y, 124, 124, {
+          alpha: 0.24 + Math.sin((game.visualTime ?? 0) * 1.6) * 0.04,
+          rotation: (game.visualTime ?? 0) * 0.16,
+          filter: 'brightness(1.1) saturate(1.15)',
+        });
+      }
+      if (enemy.type === 'yangyu' && enemy.inSunlight) {
+        this.drawContained(ctx, 'yangyuSunboost', enemy.x, enemy.y + 2, 68, 44, {
+          alpha: sunlightPulse,
+          filter: 'brightness(1.25) saturate(1.25)',
+        });
+      }
+      if (enemy.yangmuArmorActive) {
+        this.drawContained(ctx, 'yangmuArmorOn', enemy.x, enemy.y, 82, 82, {
+          alpha: sunlightPulse,
+          filter: 'brightness(1.16) saturate(1.12)',
+        });
+      }
+      if (enemy.sunShieldActive) {
+        this.drawContained(ctx, 'jinwuSunshield', enemy.x, enemy.y, 124, 124, {
+          alpha: 0.92,
+          filter: 'brightness(1.2) saturate(1.15)',
+        });
+      }
       const next = enemy.map.positionAt(Math.min(enemy.map.totalLength, enemy.pathDistance + 1));
       const skill = enemy.type === 'jiuweihu' ? game.effects.find(effect => effect.type === 'jiuweihuSkill' && effect.sourceId === enemy.id && effect.life > 0) : null;
       const skillProgress = skill ? 1 - skill.life / skill.duration : -1;
@@ -233,6 +301,12 @@ export class Renderer {
       if (!drewEnemy) {
         ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 3, 0, Math.PI * 2); ctx.fillStyle = enemy.isBoss ? '#6b1d28' : '#39272b'; ctx.fill();
         ctx.font = `${enemy.isBoss ? 28 : 18}px system-ui`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(ENEMY_DATA[enemy.type].emoji, enemy.x, enemy.y);
+      }
+      if (!enemy.isIllusion) {
+        const tagY = enemy.y - enemy.radius - 9;
+        if (enemy.type === 'yangyu' && enemy.inSunlight) this.drawStateTag(ctx, '加速', enemy.x, tagY);
+        if (enemy.yangmuArmorActive) this.drawStateTag(ctx, '陽木甲', enemy.x, tagY, { fill: '#ffe58a', background: 'rgba(58,40,15,.82)' });
+        if (enemy.sunShieldActive) this.drawStateTag(ctx, '日輪護體', enemy.x, tagY, { fill: '#fff3b0', background: 'rgba(83,46,4,.84)' });
       }
       if (enemy.hitFlash > 0 && !enemy.isBoss && !enemy.isIllusion) this.healthBar(ctx, enemy.x - 17, enemy.y - enemy.radius - 10, 34, enemy.hp / enemy.maxHp);
     });
