@@ -1,5 +1,29 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-19：Level6 前置規則與規格固化
+
+### 已完成
+
+- 補強 `AGENTS.md`：完成關卡預設 frozen、共用 Motion Lite、enemy path-facing mirror、tower target-facing、既有行為 regression、player-approved canonical artifact、pre-handoff asset gate。
+- 補強 `docs/ASSET_INTEGRATION_GUIDE.md`：美術風格／手機可讀性、格式矩陣、runtime scale、VFX 尺度、UI program-contract-first、Boss HUD 共用邏輯、Map Geometry Contract、截圖非座標來源、final source→runtime 最佳化與 asset manifest。
+- 已確認既有 Chat-first / Work-only token 節省規則本來就存在於 `AGENTS.md` Sections 9 / 11，並新增 Section 14 將『玩家先提供最終 source images → Chat 完整 audit → 只把不可由 Chat 完成的 delta 打包給 Work』設為正式 handoff gate。
+- 新增 `docs/levels/LEVEL6_FUSANG_SPEC.md`，記錄第6關・扶桑神域目前 canonical 設計、Geometry V4 ordered waypoints、progression、asset inventory、Boss HUD contract、句芒 unlock 與 pending runtime audit 項目。
+- Geometry V4 明確標記為 player-approved；V1/V2/V3 obsolete。Tower slots / Sunlight bounds 保留為 final-source audit 前的 candidate，避免把尚未 runtime 驗證的數值誤標成 final。
+- 正式部署前，高解析 source art 不得直接上線；必須依實際顯示尺寸/DPR 做 trim、resize、format/compression、alpha/fringe/anchor 檢查與 preload 分組。
+
+### 下一步 gate
+
+- 玩家在正式開發／部署前重新提供最終選定並下載保存的全部 Level6 圖片。
+- Chat 先核對完整 asset inventory、檔名、格式、alpha、版本與 source/runtime 對應，完成可安全完成的 geometry / anchor / HUD / manifest 規格。
+- 只有剩餘工作確實需要完整 repo 執行環境、TDD、`npm test` / `npm run check`、browser/runtime 驗證時，才建立最小 Work ZIP。
+- 在此 gate 完成前不開始 Level6 production implementation。
+
+### 狀態
+
+PRE-IMPLEMENTATION RULES / SPEC CHECKPOINT
+
+---
+
 ## 2026-09-12 Level4・青丘妖境
 
 ### 已完成
