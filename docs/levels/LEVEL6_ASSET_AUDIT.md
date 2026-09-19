@@ -196,3 +196,29 @@ The eventual Work package must include:
 - one short integration TXT that references repository hard rules and lists only unresolved implementation + executable verification work.
 
 No Work ZIP should be generated until the remaining Chat-owned package checks are finished.
+
+
+## 10. Minimal Work package self-check
+
+Chat assembled and locally verified the minimal Work package after all safe Chat-owned asset work was complete.
+
+Package:
+- `shanhaijing_td_level6_minimal_handoff.zip`
+- ZIP size: about **1.2 MiB**
+- ZIP SHA-256: `3227dc7400be47cf7d60c8ee9de47d05c9f7fba6718f1881e10618f6be0a74cc`
+
+Contents:
+- the 12 prepared runtime assets only, already arranged under intended repo asset subdirectories;
+- `WORK_INTEGRATION_PROMPT.txt` (~2.9 KB), referencing repo hard rules/specs instead of duplicating them;
+- `ASSET_SHA256SUMS.txt`;
+- a short package README.
+
+Local package verification completed:
+- all 12 asset checksums pass after unzip;
+- all images decode successfully;
+- all non-background runtime assets are RGBA;
+- background is 390×610 RGB JPEG;
+- total packaged runtime asset bytes: **1,179,288**;
+- no original 1000–2000px source art is included, because Work does not need to repeat Chat-owned image processing.
+
+The Work prompt is explicitly feature-branch-only for token savings: Work stops after implementation, executable verification, and feature-branch push. Chat then owns branch review, merge, Pages deployment, and player-smoke preparation.
