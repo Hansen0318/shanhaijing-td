@@ -160,3 +160,12 @@ VFX 尺度以受影響物件／區域為基準：
 - 透明 sprite / VFX 最佳化後仍需檢查 alpha、白黑 fringe、裁切、glow、visible bounds 與 anchor；背景壓縮後要檢查 path / UI 可讀性。
 - blocking / deferred 仍依第 9 節：只有首屏必要圖 blocking，其餘在第一次使用前完成 preload，避免頁面初次載入被大型 Boss/VFX 拖慢。
 - Approved source、optimized runtime、runtime-verified、player-verified 是不同狀態；不要把「圖片已選定」寫成「已完成實機驗收」。
+
+## 19. Tower slot geometry / coverage validation
+- Tower slots are part of the same canonical 390×610 Map Geometry Contract as the background, path, Spawn, Base, and special zones. Slot coordinates must be measured/approved against the same runtime background transform; do not place slots by looking for empty screen space only.
+- Before a new map's slots are frozen, check each slot against: nearby path segments, special gameplay zones, UI overlays/hit areas, edge clipping, and the established tower range classes.
+- Slot quality is intentionally non-uniform: some positions may be stronger than others. However, avoid a single slot trivially covering every important special zone or most of the full route unless that dominance is an explicit level-design decision.
+- When a hairpin or folded route creates unusually high repeated path coverage, record that slot as a targeted runtime/balance smoke point instead of immediately nerfing existing tower range/damage.
+- If runtime evidence shows one new-map slot is excessively dominant, prefer a narrow new-level slot-position adjustment before changing shared tower stats or previously completed levels.
+- A path correction does not automatically justify moving approved tower slots. Re-check whether the slot itself is visually or mechanically wrong before changing it.
+- Debug/acceptance should confirm that the rendered slot platform, pointer hit area, and logical slot center all refer to the same intended map position.
