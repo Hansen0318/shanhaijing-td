@@ -248,7 +248,8 @@ Current state:
 - Level name/theme: **PLAYER-APPROVED**
 - Geometry V4 path: **PLAYER-APPROVED**
 - Character/VFX source choices: chosen in Chat, but final file manifest awaits player re-supply before ZIP
-- Tower slots / sunlight-zone bounds: **DRAFT / FINAL SOURCE AUDIT PENDING**
+- Tower slots: **MAP-ALIGNED CANDIDATE / FINAL SOURCE + RUNTIME AUDIT PENDING**
+- Sunlight-zone bounds: **DESIGN BASELINE / FINAL SOURCE + RUNTIME AUDIT PENDING**
 - Runtime anchors / footprints: **PENDING FINAL ASSET AUDIT**
 - Jinwu Boss HUD trackRect: **PENDING RUNTIME MEASUREMENT**
 - Level6 implementation: **NOT STARTED**
@@ -270,3 +271,79 @@ Level6 implementation must use the shared data-driven progression contract; it m
 - While Level7 is absent from playable level data, Level6 victory shows no next-level action.
 - When Level7 is later added, Level6 victory should expose it through the same generic next-level lookup, and the Level7 lineup should automatically include 句芒 if eligible.
 - The lineup UI must render from roster/progression data and remain usable at 390px / 390×700 when the owned roster grows from four to five beasts.
+
+## 14. Level6 gameplay balance / sunlight / Boss design — implementation-prep baseline
+
+These values are the current agreed design baseline for implementation preparation. They may still be tuned after executable simulation/runtime evidence, but Work must not invent different mechanics or numbers without recording the reason.
+
+### Enemy base data
+
+- 陽羽: HP **90**, Speed **86**, Base Damage **1**, Reward **13**.
+- 扶桑甲獸: HP **350**, Speed **26**, Base Damage **3**, Reward **28**.
+- 金烏: Base HP **6200**, Speed **17**, Base Damage **20**, Reward **0**; Boss.
+
+### Sunlight zones / activation
+
+- Sunlight A candidate gameplay bounds: `x=137, y=90, width=85, height=34`.
+- Sunlight B candidate gameplay bounds: `x=302, y=365, width=61, height=49`.
+- W1–W9: A/B alternate every **6 seconds**, with exactly one gameplay-active zone at a time.
+- Gameplay state switches immediately; presentation may cross-fade for about **0.25s** without extending gameplay state.
+- Enemy sunlight membership is determined from the enemy logical/path position, not sprite alpha-bounds overlap.
+- Active-zone VFX should be clearly visible but not obscure units; inactive zones may remain as a very faint landmark.
+
+### Sunlight effects
+
+- 陽羽 inside active sunlight: Speed × **1.28**; leaving the active zone removes the boost immediately; no lingering buff.
+- 扶桑甲獸 inside active sunlight: **陽木甲**, damage taken × **0.75**. Leaving the active zone or zone deactivation removes the armor immediately and triggers the armor-break presentation once.
+- 陽木甲 break VFX is a state-removal presentation, not a separate damage-threshold armor-break mechanic.
+- 金烏 inside active sunlight: **日輪護體**, damage taken × **0.80**. Outside active sunlight the shield is off.
+
+### Wave 1–10 baseline
+
+| Wave | Composition | interval | hpMultiplier | bossHpMultiplier |
+|---|---|---:|---:|---:|
+| W1 | 陽羽 ×6 | 1.10 | 1.00 | — |
+| W2 | 陽羽 ×8 | 1.00 | 1.00 | — |
+| W3 | 陽羽 ×6 + 扶桑甲獸 ×2 | 1.00 | 1.00 | — |
+| W4 | 扶桑甲獸 ×4 | 1.05 | 1.00 | — |
+| W5 | 陽羽 ×10 + 扶桑甲獸 ×3 | 0.90 | 1.05 | — |
+| W6 | 陽羽 ×14 + 扶桑甲獸 ×4 | 0.78 | 1.10 | — |
+| W7 | 陽羽 ×8 + 扶桑甲獸 ×7 | 0.82 | 1.15 | — |
+| W8 | 陽羽 ×16 + 扶桑甲獸 ×6 | 0.68 | 1.25 | — |
+| W9 | 陽羽 ×18 + 扶桑甲獸 ×8 | 0.62 | 1.35 | — |
+| W10 | 陽羽 ×8 + 扶桑甲獸 ×4 + 金烏 ×1 | 0.82 | 1.20 | 1.10 |
+
+- W10 boss runtime HP baseline: `6200 × 1.10 = 6820`.
+- W10 should interleave Boss pressure with remaining minions instead of waiting for every minion to finish before Boss appearance. Preserve global visual spacing when ordering the queue.
+
+### 金烏 P1 / P2
+
+- P1: follows normal A/B 6-second alternating sunlight. No extra periodic heal, invulnerability, summon, or tower-stun mechanic.
+- Phase 2 triggers once at **50% HP**.
+- Phase 2 / **十日凌空**: A and B become simultaneously active for the rest of the Boss battle.
+- Phase 2 speed multiplier: × **1.12** (17 → ~19.0).
+- 日輪護體 remains location-bound in P2; 金烏 only receives the ×0.80 damage-taken multiplier while logically inside A or B.
+- Phase transition is presentation, not a gameplay pause. Suggested transition VFX duration ~**0.8s**.
+- HP is continuous across the phase transition; P2 does not refill or create a second health bar.
+
+### Victory condition
+
+Level6 victory requires all of the following:
+
+1. Wave 10 spawn queue is empty.
+2. All normal enemies are resolved.
+3. 金烏 is defeated.
+
+Boss death alone must not end the level if normal enemies remain; Wave completion alone must not end the level while 金烏 is alive.
+
+### Blessing scope
+
+- Do not add Level6-only Blessings merely for the sunlight mechanic.
+- Reuse the shared Blessing system and filter tower-specific choices by the selected lineup as defined by `AGENTS.md` Section 15.
+
+### Runtime verification focus
+
+- Confirm the sunlight speed/armor/shield states are visibly readable at 390px.
+- Confirm T1/T2 interaction with A and T5/T8 interaction with B.
+- Smoke T6/T7 because the lower-left hairpin creates repeated path coverage; do not pre-nerf shared tower stats.
+- Balance tuning after simulation may adjust Level6-only enemy/Wave numbers, but it must not change completed Level1–5 gameplay.
