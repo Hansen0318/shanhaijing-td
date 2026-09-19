@@ -51,6 +51,6 @@ test('lineup styling remains covered by the current document and module cache bu
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
   assert.match(html, /styles-lineup\.css\?v=level6-1/);
-  assert.match(html, /src\/main\.js\?v=level6-readability-1/);
+  assert.match(html, /src\/main\.js\?v=level6-readability-2/);
   assert.match(main, /UIController\.js\?v=level6-1/);
 });

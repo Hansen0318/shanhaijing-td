@@ -87,7 +87,7 @@ test('entry and style cache versions are fresh for this release', async () => {
   assert.match(html, /styles\.css\?v=level6-1/);
   assert.match(html, /styles-fixes\.css\?v=level6-1/);
   assert.match(html, /styles-lineup\.css\?v=level6-1/);
-  assert.match(html, /src\/main\.js\?v=level6-readability-1/);
+  assert.match(html, /src\/main\.js\?v=level6-readability-2/);
   assert.match(game, /WaveManager\.js\?v=level6-1/);
 });
 
