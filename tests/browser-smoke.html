@@ -55,6 +55,16 @@
     <button data-state="jiuweihu2">九尾狐 P2</button>
     <button data-state="jiuweihu3">九尾狐 P3</button>
     <button data-state="level4victory">第4關 Victory</button>
+    <button data-state="level5">第5關陣容</button>
+    <button data-state="level6">第6關陣容</button>
+    <button data-state="level6wave1">第6關 Wave 1</button>
+    <button data-state="sunlightA">日照 A＋陽羽</button>
+    <button data-state="sunlightB">日照 B＋甲獸</button>
+    <button data-state="jinwu1">金烏 P1</button>
+    <button data-state="jinwu2">金烏 P2</button>
+    <button data-state="jinwu25">金烏 25%</button>
+    <button data-state="level6victory">第6關 Victory</button>
+    <button data-state="level6retry">第6關 Retry</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -62,7 +72,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=boss-hud-2"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level6-1"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -171,6 +181,59 @@
       game.wave.queue.length = 0;
       game.wave.spawnedAlive = 1;
       game.spawnEnemy('jiuweihu');
+    }
+
+    async function enterLevel5(game, confirm = false) {
+      if (game.levelId === 5) {
+        game.restart();
+      } else {
+        await enterLevel4(game, true);
+        game.end('victory');
+        await twoFrames();
+        frame.contentDocument.querySelector('#next-level-button').click();
+        while (game.levelId !== 5 || frame.contentDocument.body.classList.contains('art-loading')) await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      if (confirm && game.state === 'lineup') {
+        for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+        game.confirmLineup();
+      }
+      await twoFrames();
+    }
+
+    async function enterLevel6(game, confirm = false) {
+      if (game.levelId === 6) {
+        game.restart();
+      } else {
+        await enterLevel5(game, true);
+        game.end('victory');
+        await twoFrames();
+        frame.contentDocument.querySelector('#next-level-button').click();
+        while (game.levelId !== 6 || frame.contentDocument.body.classList.contains('art-loading')) await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      if (confirm && game.state === 'lineup') {
+        for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+        game.confirmLineup();
+      }
+      await twoFrames();
+    }
+
+    async function configureLevel6Boss(game) {
+      await enterLevel6(game, true);
+      game.wave.waveNumber = 9;
+      game.startWaveNow();
+      game.wave.queue.length = 0;
+      game.wave.spawnedAlive = 1;
+      game.spawnEnemy('jinwu');
+    }
+
+    function placeInSunlight(game, enemy, zoneId) {
+      for (let distance = 0; distance <= game.map.totalLength; distance += 1) {
+        const point = game.map.positionAt(distance);
+        if (game.map.sunlightZoneAt(point) !== zoneId) continue;
+        enemy.pathDistance = distance;
+        Object.assign(enemy, point);
+        return;
+      }
     }
 
     document.addEventListener('click', async event => {
@@ -350,6 +413,34 @@
         if (!boss) { await configureLevel4Boss(game); boss = game.enemies.find(enemy => enemy.type === 'jiuweihu'); }
         boss.takeDamage(boss.maxHp);
         game.update(0);
+      }
+      if (state === 'level5') await enterLevel5(game, false);
+      if (state === 'level6') await enterLevel6(game, false);
+      if (state === 'level6wave1') {
+        await enterLevel6(game, true);
+        game.startWaveNow();
+      }
+      if (['sunlightA', 'sunlightB'].includes(state)) {
+        await enterLevel6(game, true);
+        game.state = 'combat';
+        game.time.setPaused(false);
+        game.sunlight.elapsed = state === 'sunlightA' ? 0 : 6;
+        const enemy = game.spawnEnemy(state === 'sunlightA' ? 'yangyu' : 'fusangjiashou');
+        placeInSunlight(game, enemy, state === 'sunlightA' ? 'A' : 'B');
+        game.update(0);
+      }
+      if (['jinwu1', 'jinwu2', 'jinwu25'].includes(state)) {
+        let boss = game.enemies.find(enemy => enemy.type === 'jinwu');
+        if (!boss) { await configureLevel6Boss(game); boss = game.enemies.find(enemy => enemy.type === 'jinwu'); }
+        if (state !== 'jinwu1') { boss.hp = boss.maxHp * (state === 'jinwu2' ? 0.5 : 0.25); game.update(0); }
+      }
+      if (state === 'level6victory') {
+        await enterLevel6(game, true);
+        game.end('victory');
+      }
+      if (state === 'level6retry') {
+        await enterLevel6(game, true);
+        game.restart();
       }
       requestAnimationFrame(() => requestAnimationFrame(() => snapshot(button.textContent)));
     });

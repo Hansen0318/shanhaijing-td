@@ -31,6 +31,9 @@ test('spacing footprints match drawContained scale and measured visible alpha bo
     const expected = Math.max(visual.visibleWidth * scale, visual.visibleHeight * scale);
     assert.equal(visual.footprint, expected, `${type} footprint must match its rendered visible pixels`);
   }
+  assert.equal(ENEMY_VISUALS.yangyu.footprint, Math.max(244 * (40 / 256), 235 * (40 / 249)));
+  assert.equal(ENEMY_VISUALS.fusangjiashou.anchorY, 0.5);
+  assert.equal(ENEMY_VISUALS.jinwu.footprint, 84);
 });
 
 test('the shared spawn gate applies size-aware path spacing in every playable level', () => {
@@ -40,6 +43,7 @@ test('the shared spawn gate applies size-aware path spacing in every playable le
     { levelId: 3, type: 'xuanjiashou' },
     { levelId: 4, type: 'huanli' },
     { levelId: 5, type: 'lili' },
+    { levelId: 6, type: 'fusangjiashou' },
   ];
 
   for (const { levelId, type } of cases) {
@@ -67,6 +71,7 @@ test('mixed-type followers use both rendered footprints at the spawn gate', () =
     { levelId: 3, leader: 'xuanjiashou', follower: 'shuixiao' },
     { levelId: 4, leader: 'huanli', follower: 'meihu' },
     { levelId: 5, leader: 'lili', follower: 'zhuyan' },
+    { levelId: 6, leader: 'jinwu', follower: 'yangyu' },
   ];
 
   for (const { levelId, leader, follower } of cases) {

@@ -6,6 +6,52 @@ import { WaveManager } from '../src/systems/WaveManager.js';
 import { Enemy } from '../src/entities/Enemy.js';
 import { ENEMY_DATA, MAP_DATA } from '../src/config/gameData.js';
 import { GameMap } from '../src/map/GameMap.js';
+import { Game } from '../src/core/Game.js';
+import {
+  PLAYABLE_LEVEL_IDS,
+  UNLOCK_BY_LEVEL,
+  baseOwnedRoster,
+  nextPlayableLevelId,
+  ownedRosterThrough,
+} from '../src/config/progressionData.js';
+
+test('campaign progression is derived from playable levels and unlock data', () => {
+  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6]);
+  assert.deepEqual(UNLOCK_BY_LEVEL, { 3: 'baize', 6: 'jumang' });
+  assert.deepEqual(baseOwnedRoster(), ['bifang', 'fuzhu', 'yinglong']);
+  assert.deepEqual(ownedRosterThrough(3), ['bifang', 'fuzhu', 'yinglong', 'baize']);
+  assert.deepEqual(ownedRosterThrough(6), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
+  assert.equal(nextPlayableLevelId(5), 6);
+  assert.equal(nextPlayableLevelId(6), null);
+});
+
+test('Level5 victory enters an empty Level6 four-beast lineup', () => {
+  const game = new Game(() => 0.2, 5);
+  game.end('victory');
+  assert.equal(game.nextLevelId(), 6);
+  assert.equal(game.enterLevel(6), true);
+  assert.equal(game.state, 'lineup');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize']);
+  assert.deepEqual(game.lineupSelection, []);
+});
+
+test('lineup eligibility reads the persistent owned roster instead of inferring unlocks from level number', () => {
+  const game = new Game(() => 0.2, 6);
+  game.unlockedBeasts.delete('baize');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong']);
+  game.unlockedBeasts.add('baize');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize']);
+});
+
+test('Level6 victory unlocks Jumang once and has no Level7 action', () => {
+  const game = new Game(() => 0.2, 6);
+  game.end('victory');
+  assert.equal(game.unlockedBeasts.has('jumang'), true);
+  assert.equal(game.pendingUnlock, 'jumang');
+  assert.equal(game.nextLevelId(), null);
+  game.end('victory');
+  assert.equal(game.pendingUnlock, null, 'the unlock presentation is emitted only once');
+});
 
 test('blessing draw returns three distinct choices and weights deployed towers', () => {
   const blessings = new BlessingSystem(BLESSING_DATA, () => 0.2);

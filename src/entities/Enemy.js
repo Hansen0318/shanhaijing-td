@@ -1,5 +1,5 @@
 import { StatusSystem } from '../systems/StatusSystem.js';
-import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level5-1';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-1';
 
 let nextEnemyId = 1;
 export class Enemy {
@@ -57,7 +57,8 @@ export class Enemy {
       ? (this.data.weakWaterSpeedMultiplier ?? 0.85)
       : 1;
     const chargeMultiplier = this.chargeRemaining > 0 ? 1.65 : 1;
-    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * chargeMultiplier * dt;
+    const sunlightMultiplier = this.type === 'yangyu' && this.inSunlight ? 1.28 : 1;
+    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * chargeMultiplier * sunlightMultiplier * dt;
     Object.assign(this, this.map.positionAt(this.pathDistance));
     if (this.chargeTelegraphRemaining > 0) {
       this.chargeTelegraphRemaining = Math.max(0, this.chargeTelegraphRemaining - dt);

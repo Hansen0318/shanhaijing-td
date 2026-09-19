@@ -1,7 +1,7 @@
-import { Game } from './core/Game.js?v=spacing-1';
-import { Renderer } from './render/Renderer.js?v=spacing-1';
-import { UIController } from './ui/UIController.js?v=geometry-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=geometry-1';
+import { Game } from './core/Game.js?v=level6-1';
+import { Renderer } from './render/Renderer.js?v=level6-1';
+import { UIController } from './ui/UIController.js?v=level6-1';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level6-1';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }
@@ -27,6 +27,7 @@ function renderDevMenu() {
       <button data-dev-level="3">Level3</button>
       <button data-dev-level="4">Level4</button>
       <button data-dev-level="5">Level5</button>
+      <button data-dev-level="6">Level6</button>
     </main>`;
   document.querySelectorAll('[data-dev-level]').forEach(button => {
     button.addEventListener('click', () => {
@@ -37,7 +38,7 @@ function renderDevMenu() {
 }
 
 function drawPathDebug(renderer, game) {
-  if (params.get('devPath') !== '1' || ![3, 4, 5].includes(game.levelId)) return;
+  if (params.get('devPath') !== '1' || ![3, 4, 5, 6].includes(game.levelId)) return;
   const ctx = renderer.ctx;
   const runtime = game.map.waypoints;
   const anchors = game.level.map.waypoints;
@@ -54,6 +55,13 @@ function drawPathDebug(renderer, game) {
     ctx.arc(point.x, point.y, 2.5, 0, Math.PI * 2);
     ctx.fill();
   });
+  ctx.strokeStyle = 'rgba(255, 170, 55, .95)';
+  ctx.lineWidth = 1.5;
+  for (const slot of game.level.map.slots) {
+    ctx.beginPath();
+    ctx.arc(slot.x, slot.y, 7, 0, Math.PI * 2);
+    ctx.stroke();
+  }
   ctx.strokeStyle = 'rgba(184, 112, 255, .95)';
   ctx.lineWidth = 2;
   for (const zone of game.level.map.fogZones ?? []) ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
@@ -61,6 +69,12 @@ function drawPathDebug(renderer, game) {
   if (chargeCorridor) {
     ctx.strokeStyle = 'rgba(255, 225, 70, .95)';
     ctx.strokeRect(chargeCorridor.x, chargeCorridor.y, chargeCorridor.width, chargeCorridor.height);
+  }
+  for (const zone of game.level.map.sunlightZones ?? []) {
+    const active = game.sunlight.activeZoneIds.includes(zone.id);
+    ctx.strokeStyle = active ? 'rgba(255, 235, 70, .98)' : 'rgba(255, 145, 45, .78)';
+    ctx.lineWidth = active ? 3 : 1.5;
+    ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
   }
   ctx.strokeStyle = 'rgba(255, 80, 120, .95)';
   ctx.lineWidth = 1.5;
@@ -73,6 +87,34 @@ function drawPathDebug(renderer, game) {
     ctx.stroke();
   });
   ctx.restore();
+}
+
+function setupLevelSixDev(game, devLevel) {
+  if (devLevel !== 6) return;
+  const devWave = Number.parseInt(params.get('devWave') ?? '', 10);
+  const devBossPhase = Number.parseInt(params.get('devBossPhase') ?? '', 10);
+  const devSunlight = params.get('devSunlight');
+  const needsBattlefield = params.get('devPath') === '1' || Number.isInteger(devWave)
+    || [1, 2].includes(devBossPhase) || ['A', 'B', 'both'].includes(devSunlight);
+  if (!needsBattlefield) return;
+  for (const type of ['bifang', 'fuzhu', 'baize']) game.toggleLineup(type);
+  game.confirmLineup();
+  if (devSunlight === 'B') game.sunlight.elapsed = 6;
+  if (devSunlight === 'both') game.sunlight.phase2 = true;
+  if ([1, 2].includes(devBossPhase)) {
+    game.wave.waveNumber = 9;
+    game.startWaveNow();
+    game.wave.queue.length = 0;
+    game.wave.spawnedAlive = 1;
+    const boss = game.spawnEnemy('jinwu');
+    if (devBossPhase === 2) { boss.hp = boss.maxHp * 0.5; game.update(0); }
+    return;
+  }
+  if (devWave >= 1 && devWave <= 10) {
+    game.wave.waveNumber = devWave - 1;
+    game.startWaveNow();
+  }
+  game.update(0);
 }
 
 function setupLevelFiveDev(game, devLevel) {
@@ -125,12 +167,13 @@ function setupLevelFourDev(game, devLevel) {
 function initializeGame() {
   resetViewport();
   const devLevel = Number.parseInt(params.get('devLevel') ?? '', 10);
-  const initialLevelId = [1, 2, 3, 4, 5].includes(devLevel) ? devLevel : 1;
+  const initialLevelId = [1, 2, 3, 4, 5, 6].includes(devLevel) ? devLevel : 1;
   const canvas = document.querySelector('#game-canvas');
   const blockingStartedAt = performance.now();
   const game = new Game(Math.random, initialLevelId);
   setupLevelFourDev(game, devLevel);
   setupLevelFiveDev(game, devLevel);
+  setupLevelSixDev(game, devLevel);
   const art = new ArtStore(Image, initialLevelId);
   const renderer = new Renderer(canvas, art);
   document.body.dataset.level = String(game.levelId);

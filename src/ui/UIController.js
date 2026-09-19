@@ -1,6 +1,7 @@
-import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=geometry-1';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=geometry-1';
+import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level6-1';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level6-1';
 import { Economy } from '../systems/Economy.js';
+import { BEAST_NAMES } from '../config/progressionData.js';
 
 export class UIController {
   constructor(game, renderer) {
@@ -47,7 +48,7 @@ export class UIController {
     if (action === 'confirm-lineup') this.game.confirmLineup();
     if (action === 'continue') this.game.togglePause();
     if (action === 'restart') this.game.restart();
-    if (action === 'next-level') { this.transitionToLevel(this.game.levelId + 1); return; }
+    if (action === 'next-level') { this.transitionToLevel(this.game.nextLevelId()); return; }
     this.render();
   }
   async transitionToLevel(levelId) {
@@ -104,23 +105,22 @@ export class UIController {
     overlay.hidden = this.game.state !== 'lineup';
     if (overlay.hidden) { this.lineupKey = null; return; }
     const selected = new Set(this.game.lineupSelection);
-    const levelFive = this.game.levelId === 5;
-    if (this.dom['lineup-eyebrow']) this.dom['lineup-eyebrow'].textContent = levelFive ? '第五關・不周山墟' : '第四關・青丘妖境';
+    const lineup = this.game.level.lineup ?? {};
+    if (this.dom['lineup-eyebrow']) this.dom['lineup-eyebrow'].textContent = lineup.eyebrow ?? `第${this.game.levelId}關・${this.game.level.name}`;
     if (this.dom['lineup-banner']) {
-      this.dom['lineup-banner'].hidden = !levelFive;
-      this.dom['lineup-banner'].src = levelFive ? assetUrl('level5Banner') : '';
+      this.dom['lineup-banner'].hidden = !lineup.banner;
+      this.dom['lineup-banner'].src = lineup.banner ? assetUrl(lineup.banner) : '';
     }
     if (this.dom['lineup-preview']) {
-      this.dom['lineup-preview'].hidden = !levelFive;
-      this.dom['lineup-preview'].src = levelFive ? assetUrl('level5Preview') : '';
+      this.dom['lineup-preview'].hidden = !lineup.preview;
+      this.dom['lineup-preview'].src = lineup.preview ? assetUrl(lineup.preview) : '';
     }
-    if (this.dom['lineup-title']) this.dom['lineup-title'].textContent = levelFive ? '第5關・不周山墟' : '選擇 3 隻異獸';
-    if (this.dom['lineup-help']) this.dom['lineup-help'].innerHTML = levelFive
-      ? '本關可從四隻異獸中選擇三隻出戰<br>敵情：朱厭與狸力突破不周山道，刑天鎮守天柱核心<br>推薦職能：控制／洞察／單擊高傷'
-      : '本關可從四隻異獸中選擇三隻出戰<br>敵情：妖霧籠罩青丘，敵人擅長高速突進與幻術干擾<br>推薦職能：控制／洞察／範圍攻擊';
-    const key = `lineup:${[...selected].join('|')}`;
+    if (this.dom['lineup-title']) this.dom['lineup-title'].textContent = lineup.title ?? '選擇 3 隻異獸';
+    if (this.dom['lineup-help']) this.dom['lineup-help'].innerHTML = lineup.help ?? '';
+    const roster = this.game.lineupRoster();
+    const key = `lineup:${this.game.levelId}:${roster.join('|')}:${[...selected].join('|')}`;
     if (!this.shouldRenderLineup(key)) return;
-    this.dom['lineup-choices'].innerHTML = ['bifang', 'fuzhu', 'yinglong', 'baize'].map(type => {
+    this.dom['lineup-choices'].innerHTML = roster.map(type => {
       const item = TOWER_DATA[type];
       const active = selected.has(type);
       return `<button class="lineup-card${active ? ' selected' : ''}" data-action="toggle-lineup" data-type="${type}" aria-pressed="${active}"><img src="${assetUrl(type)}" alt=""><strong>${item.name}</strong><small>${item.role}</small><b>${item.cost} G</b></button>`;
@@ -148,13 +148,16 @@ export class UIController {
     if (!ended) return;
     this.dom['result-panel'].dataset.result = this.game.state;
     this.dom['result-title'].textContent = this.game.state === 'victory' ? '防守成功' : '防守失敗';
-    const unlock = this.game.state === 'victory' && this.game.levelId === 3
-      ? `<li class="unlock-result"><img src="${assetUrl('baizeUnlock')}" alt="白澤">新異獸解鎖：白澤</li>`
+    const unlockedType = this.game.state === 'victory' ? this.game.pendingUnlock : null;
+    const unlockedName = unlockedType ? BEAST_NAMES[unlockedType] : '';
+    const unlock = unlockedType
+      ? `<li class="unlock-result"><img src="${assetUrl(`${unlockedType}Unlock`)}" alt="${unlockedName}">新異獸解鎖：${unlockedName}</li>`
       : '';
     this.dom['result-stats'].innerHTML = this.game.state === 'victory' ? `<li>剩餘 Base HP：${this.game.baseHp}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>${unlock}` : `<li>抵達 Wave：${this.game.wave.waveNumber}</li><li>擊敗敵人數：${this.game.stats.kills}</li><li>建造異獸數：${this.game.stats.built}</li>`;
     this.dom['retry-button'].textContent = this.game.state === 'victory' ? '再次挑戰' : '重新挑戰';
-    this.dom['next-level-button'].hidden = !(this.game.state === 'victory' && this.game.levelId < 5);
-    if (!this.dom['next-level-button'].hidden) this.dom['next-level-button'].textContent = `前往第${this.game.levelId + 1}關`;
+    const nextLevelId = this.game.state === 'victory' ? this.game.nextLevelId() : null;
+    this.dom['next-level-button'].hidden = nextLevelId == null;
+    if (!this.dom['next-level-button'].hidden) this.dom['next-level-button'].textContent = `前往第${nextLevelId}關`;
   }
   renderBossSlot() {
     const boss = this.game.enemies.find(enemy => enemy.isBoss);

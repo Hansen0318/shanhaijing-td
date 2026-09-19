@@ -160,6 +160,54 @@ test('renderer uses Buzhoushan map art, Xingtian phases, and all level-five mech
   }
 });
 
+test('Level6 renders baked map props, sunlight, units, states, phase, death and facing through shared paths', () => {
+  const { renderer, ctx } = rendererFixture({ motionEnabled: false });
+  const game = emptyGame(LEVELS[6]);
+  game.visualTime = 0.2;
+  game.illusions = [];
+  game.sunlight = { activeZoneIds: ['A', 'B'] };
+  const map = { totalLength: 100, positionAt: () => ({ x: 40, y: 20 }), isWeakWater: () => false };
+  game.enemies = [
+    { type: 'yangyu', id: 1, x: 50, y: 20, radius: 11, hp: 90, maxHp: 90, isBoss: false, inSunlight: true, visualHitFlash: 0, hitFlash: 0, statuses: {}, map, pathDistance: 40 },
+    { type: 'fusangjiashou', id: 2, x: 100, y: 40, radius: 18, hp: 350, maxHp: 350, isBoss: false, yangmuArmorActive: true, visualHitFlash: 0, hitFlash: 0, statuses: {}, map, pathDistance: 30 },
+    { type: 'jinwu', id: 3, bossPhase: 2, x: 150, y: 60, radius: 29, hp: 3100, maxHp: 6200, isBoss: true, sunShieldActive: true, visualHitFlash: 0, hitFlash: 0, statuses: {}, map, pathDistance: 20 },
+  ];
+  game.effects = [
+    { type: 'yangmuArmorBreak', x: 100, y: 40, life: 0.3, duration: 0.45 },
+    { type: 'jinwuPhase2', sourceId: 3, x: 150, y: 60, life: 0.6, duration: 0.8 },
+    { type: 'unitDeath', unitType: 'jinwu', x: 180, y: 80, life: 0.3, duration: 0.45, mirror: true, bossPhase: 2 },
+  ];
+
+  renderer.render(game);
+
+  assert.equal(ctx.calls.drawImage[0][0].id, 'level6Background');
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === undefined), false);
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'sunlightZone'), true);
+  for (const id of ['yangyu', 'fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'jinwuSunshield', 'yangmuArmorBreak', 'jinwuPhase2']) {
+    assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
+  }
+  assert.ok(ctx.calls.scale.some(([x, y]) => x < 0 && y > 0), 'Level6 enemies and death art keep shared path-facing');
+});
+
+test('optional map props draw for Levels 1-5 and are omitted for Level6', () => {
+  for (const levelId of [1, 2, 3, 4, 5]) {
+    const { renderer, ctx } = rendererFixture();
+    renderer.drawMapProps(ctx, emptyGame(LEVELS[levelId]));
+    assert.equal(ctx.calls.drawImage.length, 2, `Level${levelId} must retain Spawn/Base overlays`);
+  }
+  const levelSix = rendererFixture();
+  levelSix.renderer.drawMapProps(levelSix.ctx, emptyGame(LEVELS[6]));
+  assert.equal(levelSix.ctx.calls.drawImage.length, 0, 'Level6 baked Spawn/Base must not request undefined art');
+
+  const partial = rendererFixture();
+  const incomplete = emptyGame({
+    ...LEVELS[6],
+    art: { ...LEVELS[6].art, spawnPosition: { x: 10, y: 10 }, basePosition: { x: 20, y: 20 } },
+  });
+  partial.renderer.drawMapProps(partial.ctx, incomplete);
+  assert.equal(partial.ctx.calls.drawImage.length, 0, 'positions without matching art ids stay optional');
+});
+
 test('only Level4 renders soft curved fog without rectangular fills, clips, or borders', () => {
   const levelFour = rendererFixture();
   const game = emptyGame(LEVELS[4]);

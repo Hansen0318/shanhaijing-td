@@ -19,6 +19,7 @@ export class CombatSystem {
       const reduction = (1 - enemy.activeDefenseMultiplier) * (1 - defensePierce);
       damage *= 1 - reduction;
     }
+    damage *= enemy.sunlightDamageMultiplier ?? 1;
     if (damage > 0) damage = Math.max(enemy.data?.minimumNormalDamage ?? 0, damage);
     return Number(damage.toFixed(3));
   }

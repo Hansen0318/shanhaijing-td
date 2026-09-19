@@ -19,13 +19,13 @@ function assertCompletePngWithAlpha(bytes, id) {
   assert.equal(hasAlpha, true, `${id} must retain alpha transparency`);
 }
 
-test('art catalog exposes all 83 packaged assets and every file is deployable', async () => {
+test('art catalog exposes all 95 packaged assets and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 83);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 83);
+  assert.equal(entries.length, 95);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 95);
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.jpg');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
   assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.jpg');
@@ -44,11 +44,45 @@ test('art catalog exposes all 83 packaged assets and every file is deployable', 
   assert.equal(ART_ASSETS.xiangliuBossPanel, 'assets/ui/ui_boss_xiangliu_panel_v2.png');
   assert.equal(ART_ASSETS.jiuweihuBossPanel, 'assets/ui/ui_boss_jiuweihu_panel_v2.png');
   assert.equal(ART_ASSETS.xingtianBossPanel, 'assets/ui/ui_boss_xingtian_panel_v1.png');
+  assert.equal(ART_ASSETS.level6Background, 'assets/levels/level6/bg_fusang_realm_v1.jpg');
+  assert.equal(ART_ASSETS.yangyu, 'assets/enemies/enemy_yangyu_v1.png');
+  assert.equal(ART_ASSETS.fusangjiashou, 'assets/enemies/enemy_fusangjiashou_v1.png');
+  assert.equal(ART_ASSETS.jinwu, 'assets/bosses/boss_jinwu_v1.png');
+  assert.equal(ART_ASSETS.jinwuBossPanel, 'assets/ui/ui_boss_jinwu_panel_v1.png');
+  assert.equal(ART_ASSETS.jumangUnlock, 'assets/ui/unlock_jumang_v1.png');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level5-1$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level6-1$`));
+  }
+});
+
+test('level-six runtime art is complete, alpha-safe, mobile-sized, and staged', async () => {
+  const { ART_ASSETS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
+  const alphaBudgets = {
+    yangyu: [256, 249, 300_000], fusangjiashou: [256, 229, 300_000], jinwu: [384, 384, 500_000],
+    yangyuSunboost: [192, 88, 300_000], yangmuArmorOn: [256, 247, 300_000],
+    yangmuArmorBreak: [229, 256, 300_000], jinwuSunshield: [256, 256, 300_000],
+    jinwuPhase2: [384, 384, 300_000], sunlightZone: [384, 73, 300_000],
+    jinwuBossPanel: [768, 256, 500_000], jumangUnlock: [307, 384, 300_000],
+  };
+  for (const [id, [width, height, maxBytes]] of Object.entries(alphaBudgets)) {
+    const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
+    assertCompletePngWithAlpha(bytes, id);
+    assert.deepEqual(pngDimensions(bytes), { width, height });
+    assert.ok(bytes.length < maxBytes, `${id} exceeds ${maxBytes} bytes`);
+  }
+  const background = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS.level6Background}`, moduleUrl)));
+  assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
+  assert.deepEqual([...background.subarray(-2)], [255, 217]);
+  assert.ok(background.length < 800_000);
+
+  for (const id of ['slotPlatform', 'level6Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'yangyu']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[6].includes(id), true, `${id} must be ready for Level6 first paint`);
+  }
+  for (const id of ['fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'sunlightZone', 'jinwuBossPanel', 'jumangUnlock']) {
+    assert.equal(LEVEL_DEFERRED_ART_IDS[6].includes(id), true, `${id} must remain deferred`);
   }
 });
 
@@ -174,9 +208,9 @@ test('level-five art catalog stages first-paint assets and defers Boss combat ar
   }
 });
 
-test('all five Boss HUD panels are optimized transparent empty-channel assets', async () => {
+test('all six Boss HUD panels are optimized transparent empty-channel assets', async () => {
   const { ART_ASSETS } = await import(moduleUrl);
-  for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel', 'xingtianBossPanel']) {
+  for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel', 'xingtianBossPanel', 'jinwuBossPanel']) {
     const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
     assertCompletePngWithAlpha(bytes, id);
     assert.deepEqual(pngDimensions(bytes), { width: 768, height: 256 }, `${id} must match the optimized HUD runtime size`);

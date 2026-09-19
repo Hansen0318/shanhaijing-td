@@ -1,10 +1,9 @@
-export const LINEUP_ROSTER = Object.freeze(['bifang', 'fuzhu', 'yinglong', 'baize']);
-export const LEVEL4_ROSTER = LINEUP_ROSTER;
+import { ownedRosterThrough } from '../config/progressionData.js';
 
-export function normalizeLineup(types = []) {
-  return [...new Set(types)].filter(type => LINEUP_ROSTER.includes(type));
+export function normalizeLineup(types = [], eligibleRoster = ownedRosterThrough(Infinity)) {
+  return [...new Set(types)].filter(type => eligibleRoster.includes(type));
 }
 
-export function isValidLineup(types = []) {
-  return types.length === 3 && normalizeLineup(types).length === 3;
+export function isValidLineup(types = [], eligibleRoster = ownedRosterThrough(Infinity)) {
+  return types.length === 3 && normalizeLineup(types, eligibleRoster).length === 3;
 }
