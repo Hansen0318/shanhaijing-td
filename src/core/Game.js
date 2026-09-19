@@ -12,7 +12,8 @@ import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
 import { WaveManager } from '../systems/WaveManager.js?v=spacing-1';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
-import { LEVEL4_ROSTER, isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
+import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
+import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js';
 import { MotionSystem } from '../systems/MotionSystem.js?v=level5-1';
 import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level5-1';
 import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=spacing-1';
@@ -23,7 +24,7 @@ export class Game {
   constructor(random = Math.random, initialLevelId = 1, { motionEnabled = ENABLE_UNIT_MOTION } = {}) {
     this.random = random;
     this.motionEnabled = motionEnabled;
-    this.unlockedBeasts = new Set();
+    this.unlockedBeasts = new Set(ownedRosterThrough(initialLevelId - 1));
     this.resetRun(initialLevelId);
   }
   resetRun(levelId = this.levelId ?? 1) {
@@ -39,6 +40,7 @@ export class Game {
     this.wave = new WaveManager(level.waves);
     this.baseHp = GAME_CONFIG.baseHp;
     this.lineupSelection = [];
+    this.pendingUnlock = null;
     this.state = level.id >= 4 ? 'lineup' : 'preparation';
     this.previousState = null;
     this.enemies = [];
@@ -60,8 +62,12 @@ export class Game {
     return true;
   }
   restart() { return this.resetRun(this.levelId); }
+  nextLevelId() { return nextPlayableLevelId(this.levelId); }
+  lineupRoster() {
+    return ownedRosterThrough(this.levelId - 1).filter(type => Boolean(TOWER_DATA[type]));
+  }
   enterLevel(levelId) {
-    if (this.state !== 'victory' || levelId !== this.levelId + 1 || !getLevelData(levelId)) return false;
+    if (this.state !== 'victory' || levelId !== this.nextLevelId() || !getLevelData(levelId)) return false;
     return this.resetRun(levelId);
   }
   beginLevelFourLineup() {
@@ -72,17 +78,18 @@ export class Game {
     return true;
   }
   toggleLineup(type) {
-    if (this.levelId < 4 || this.state !== 'lineup' || !LEVEL4_ROSTER.includes(type)) return false;
+    const roster = this.lineupRoster();
+    if (this.levelId < 4 || this.state !== 'lineup' || !roster.includes(type)) return false;
     if (this.lineupSelection.includes(type)) {
       this.lineupSelection = this.lineupSelection.filter(item => item !== type);
       return true;
     }
     if (this.lineupSelection.length >= 3) return false;
-    this.lineupSelection = normalizeLineup([...this.lineupSelection, type]);
+    this.lineupSelection = normalizeLineup([...this.lineupSelection, type], roster);
     return true;
   }
   confirmLineup() {
-    if (this.levelId < 4 || this.state !== 'lineup' || !isValidLineup(this.lineupSelection)) return false;
+    if (this.levelId < 4 || this.state !== 'lineup' || !isValidLineup(this.lineupSelection, this.lineupRoster())) return false;
     this.state = 'preparation';
     this.time.setPaused(true);
     return true;
@@ -159,7 +166,9 @@ export class Game {
   }
   end(state) {
     this.state = state;
-    if (state === 'victory' && this.levelId === 3) this.unlockedBeasts.add('baize');
+    const unlock = state === 'victory' ? UNLOCK_BY_LEVEL[this.levelId] : null;
+    this.pendingUnlock = unlock && !this.unlockedBeasts.has(unlock) ? unlock : null;
+    if (this.pendingUnlock) this.unlockedBeasts.add(this.pendingUnlock);
     this.time.setPaused(true);
     this.pendingSellSlot = null;
   }

@@ -41,6 +41,9 @@ export const ENEMY_DATA = Object.freeze({
   zhuyan: { id: 'zhuyan', name: '朱厭', emoji: '🐒', hp: 85, speed: 84, baseDamage: 1, reward: 13, radius: 12 },
   lili: { id: 'lili', name: '狸力', emoji: '🐗', hp: 320, speed: 27, baseDamage: 3, reward: 27, radius: 18, earthArmorLayers: 1 },
   xingtian: { id: 'xingtian', name: '刑天', emoji: '🪓', hp: 5800, speed: 16, baseDamage: 20, reward: 0, radius: 29, isBoss: true, bossMechanic: { type: 'xingtian' } },
+  yangyu: { id: 'yangyu', name: '陽羽', emoji: '☀️', hp: 90, speed: 86, baseDamage: 1, reward: 13, radius: 11 },
+  fusangjiashou: { id: 'fusangjiashou', name: '扶桑甲獸', emoji: '🪲', hp: 350, speed: 26, baseDamage: 3, reward: 28, radius: 18 },
+  jinwu: { id: 'jinwu', name: '金烏', emoji: '🐦', hp: 6200, speed: 17, baseDamage: 20, reward: 0, radius: 29, isBoss: true, bossMechanic: { type: 'jinwu' } },
 });
 
 const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
@@ -107,6 +110,19 @@ export const LEVEL5_WAVE_DATA = Object.freeze([
   wave([{ type: 'zhuyan', count: 16 }, { type: 'lili', count: 6 }], 0.68, { hpMultiplier: 1.25 }),
   wave([{ type: 'zhuyan', count: 18 }, { type: 'lili', count: 8 }], 0.62, { hpMultiplier: 1.35 }),
   wave([{ type: 'zhuyan', count: 8 }, { type: 'lili', count: 4 }, { type: 'xingtian', count: 1 }], 0.82, { hpMultiplier: 1.2, bossHpMultiplier: 1.15 }),
+]);
+
+export const LEVEL6_WAVE_DATA = Object.freeze([
+  wave([{ type: 'yangyu', count: 6 }], 1.1),
+  wave([{ type: 'yangyu', count: 8 }], 1),
+  wave([{ type: 'yangyu', count: 6 }, { type: 'fusangjiashou', count: 2 }], 1),
+  wave([{ type: 'fusangjiashou', count: 4 }], 1.05),
+  wave([{ type: 'yangyu', count: 10 }, { type: 'fusangjiashou', count: 3 }], 0.9, { hpMultiplier: 1.05 }),
+  wave([{ type: 'yangyu', count: 14 }, { type: 'fusangjiashou', count: 4 }], 0.78, { hpMultiplier: 1.1 }),
+  wave([{ type: 'yangyu', count: 8 }, { type: 'fusangjiashou', count: 7 }], 0.82, { hpMultiplier: 1.15 }),
+  wave([{ type: 'yangyu', count: 16 }, { type: 'fusangjiashou', count: 6 }], 0.68, { hpMultiplier: 1.25 }),
+  wave([{ type: 'yangyu', count: 18 }, { type: 'fusangjiashou', count: 8 }], 0.62, { hpMultiplier: 1.35 }),
+  wave([{ type: 'yangyu', count: 8 }, { type: 'fusangjiashou', count: 4 }, { type: 'jinwu', count: 1 }], 0.82, { hpMultiplier: 1.2, bossHpMultiplier: 1.1 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
@@ -237,6 +253,40 @@ export const LEVEL5_MAP_DATA = Object.freeze({
   ],
 });
 
+export const LEVEL6_MAP_DATA = Object.freeze({
+  width: 390,
+  height: 610,
+  pathWidth: 54,
+  pathSmoothing: 2,
+  waypoints: [
+    { x: 57, y: 55 }, { x: 60, y: 72 }, { x: 78, y: 91 }, { x: 111, y: 101 },
+    { x: 150, y: 105 }, { x: 190, y: 105 }, { x: 229, y: 109 }, { x: 264, y: 119 },
+    { x: 296, y: 137 }, { x: 323, y: 162 }, { x: 342, y: 193 }, { x: 354, y: 230 },
+    { x: 360, y: 271 }, { x: 360, y: 311 }, { x: 354, y: 347 }, { x: 341, y: 381 },
+    { x: 321, y: 408 }, { x: 295, y: 427 }, { x: 266, y: 434 }, { x: 262, y: 429 },
+    { x: 253, y: 428 }, { x: 244, y: 428 }, { x: 235, y: 428 }, { x: 226, y: 428 },
+    { x: 217, y: 428 }, { x: 208, y: 428 }, { x: 199, y: 428 }, { x: 190, y: 428 },
+    { x: 181, y: 428 }, { x: 173, y: 426 }, { x: 165, y: 423 }, { x: 159, y: 417 },
+    { x: 152, y: 411 }, { x: 147, y: 404 }, { x: 142, y: 397 }, { x: 141, y: 389 },
+    { x: 139, y: 380 }, { x: 134, y: 373 }, { x: 129, y: 366 }, { x: 121, y: 362 },
+    { x: 112, y: 361 }, { x: 103, y: 361 }, { x: 94, y: 362 }, { x: 87, y: 366 },
+    { x: 79, y: 370 }, { x: 76, y: 378 }, { x: 73, y: 386 }, { x: 68, y: 393 },
+    { x: 63, y: 400 }, { x: 60, y: 408 }, { x: 59, y: 417 }, { x: 58, y: 426 },
+    { x: 59, y: 435 }, { x: 64, y: 445 }, { x: 73, y: 453 }, { x: 85, y: 459 },
+    { x: 99, y: 464 }, { x: 114, y: 466 }, { x: 130, y: 466 }, { x: 146, y: 463 },
+    { x: 162, y: 458 }, { x: 178, y: 452 }, { x: 190, y: 449 }, { x: 194, y: 452 },
+    { x: 194, y: 475 },
+  ],
+  sunlightZones: [
+    { id: 'A', x: 137, y: 90, width: 85, height: 34 },
+    { id: 'B', x: 302, y: 365, width: 61, height: 49 },
+  ],
+  slots: [
+    { x: 98, y: 138 }, { x: 285, y: 94 }, { x: 285, y: 203 }, { x: 96, y: 269 },
+    { x: 307, y: 312 }, { x: 195, y: 382 }, { x: 107, y: 417 }, { x: 309, y: 461 },
+  ],
+});
+
 const levelOne = Object.freeze({
   ...LEVEL_DATA,
   map: MAP_DATA,
@@ -288,6 +338,10 @@ const levelFour = Object.freeze({
     spawn: 'level4Spawn', spawnPosition: { x: 5, y: 8 },
     base: 'level4Base', basePosition: { x: 378, y: 590 }, bossPanel: 'jiuweihuBossPanel',
   }),
+  lineup: Object.freeze({
+    eyebrow: '第四關・青丘妖境', title: '選擇 3 隻異獸',
+    help: '本關可從四隻異獸中選擇三隻出戰<br>敵情：妖霧籠罩青丘，敵人擅長高速突進與幻術干擾<br>推薦職能：控制／洞察／範圍攻擊',
+  }),
 });
 
 const levelFive = Object.freeze({
@@ -302,9 +356,31 @@ const levelFive = Object.freeze({
     spawn: 'level5Spawn', spawnPosition: { x: 18, y: 20 },
     base: 'level5Base', basePosition: { x: 360, y: 574 }, bossPanel: 'xingtianBossPanel',
   }),
+  lineup: Object.freeze({
+    eyebrow: '第五關・不周山墟', title: '第5關・不周山墟',
+    help: '本關可從四隻異獸中選擇三隻出戰<br>敵情：朱厭與狸力突破不周山道，刑天鎮守天柱核心<br>推薦職能：控制／洞察／單擊高傷',
+    banner: 'level5Banner', preview: 'level5Preview',
+  }),
 });
 
-export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive });
+const levelSix = Object.freeze({
+  id: 6,
+  name: '扶桑神域',
+  baseName: '扶桑靈核',
+  bossType: 'jinwu',
+  map: LEVEL6_MAP_DATA,
+  waves: LEVEL6_WAVE_DATA,
+  art: Object.freeze({
+    background: 'level6Background', backgroundCrop: { x: 0, y: 0, width: 390, height: 610 },
+    bossPanel: 'jinwuBossPanel',
+  }),
+  lineup: Object.freeze({
+    eyebrow: '第六關・扶桑神域', title: '第6關・扶桑神域',
+    help: '本關可從四隻異獸中選擇三隻出戰<br>敵情：陽羽與扶桑甲獸借烈日突進，金烏鎮守扶桑靈核<br>推薦職能：控制／洞察／範圍攻擊',
+  }),
+});
+
+export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive, 6: levelSix });
 
 export function getLevelData(levelId) {
   return LEVELS[levelId] ?? null;

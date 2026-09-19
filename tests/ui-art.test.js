@@ -59,7 +59,10 @@ test('level-four build choices render only the confirmed lineup', () => {
 
 test('lineup renderer marks selection and enables confirm only at exactly three', () => {
   const ui = Object.create(UIController.prototype);
-  ui.game = { state: 'lineup', lineupSelection: ['bifang', 'fuzhu', 'baize'] };
+  ui.game = {
+    level: LEVELS[4], levelId: 4, state: 'lineup', lineupSelection: ['bifang', 'fuzhu', 'baize'],
+    lineupRoster: () => ['bifang', 'fuzhu', 'yinglong', 'baize'],
+  };
   ui.dom = {
     'lineup-overlay': { hidden: true }, 'lineup-choices': { innerHTML: '' },
     'confirm-lineup-button': { disabled: true },
@@ -73,7 +76,10 @@ test('lineup renderer marks selection and enables confirm only at exactly three'
 
 test('level-five lineup uses its supplied banner and preview inside the existing overlay', () => {
   const ui = Object.create(UIController.prototype);
-  ui.game = { levelId: 5, state: 'lineup', lineupSelection: [] };
+  ui.game = {
+    level: LEVELS[5], levelId: 5, state: 'lineup', lineupSelection: [],
+    lineupRoster: () => ['bifang', 'fuzhu', 'yinglong', 'baize'],
+  };
   ui.dom = {
     'lineup-overlay': { hidden: true }, 'lineup-choices': { innerHTML: '' },
     'confirm-lineup-button': { disabled: true }, 'lineup-count': { textContent: '' },
@@ -148,7 +154,11 @@ test('combat enemy counts decrease when enemies leave play', () => {
 
 test('result panel exposes victory and defeat state for the matching skin', () => {
   const ui = Object.create(UIController.prototype);
-  ui.game = { state: 'victory', levelId: 1, baseHp: 12, wave: { waveNumber: 10 }, stats: { kills: 99, built: 8 } };
+  ui.game = {
+    state: 'victory', levelId: 1, baseHp: 12, pendingUnlock: null,
+    wave: { waveNumber: 10 }, stats: { kills: 99, built: 8 },
+    nextLevelId() { return this.levelId < 6 ? this.levelId + 1 : null; },
+  };
   ui.dom = {
     'result-overlay': { hidden: true }, 'result-panel': { dataset: {} },
     'result-title': { textContent: '' }, 'result-stats': { innerHTML: '' }, 'retry-button': { textContent: '' },
@@ -166,6 +176,7 @@ test('result panel exposes victory and defeat state for the matching skin', () =
   assert.equal(ui.dom['next-level-button'].textContent, '前往第3關');
 
   ui.game.levelId = 3;
+  ui.game.pendingUnlock = 'baize';
   ui.renderResult();
   assert.equal(ui.dom['next-level-button'].hidden, false);
   assert.equal(ui.dom['next-level-button'].textContent, '前往第4關');
@@ -173,6 +184,7 @@ test('result panel exposes victory and defeat state for the matching skin', () =
   assert.match(ui.dom['result-stats'].innerHTML, /unlock_baize_v1\.png/);
 
   ui.game.levelId = 4;
+  ui.game.pendingUnlock = null;
   ui.renderResult();
   assert.equal(ui.dom['next-level-button'].hidden, false);
   assert.equal(ui.dom['next-level-button'].textContent, '前往第5關');
@@ -180,7 +192,14 @@ test('result panel exposes victory and defeat state for the matching skin', () =
 
   ui.game.levelId = 5;
   ui.renderResult();
+  assert.equal(ui.dom['next-level-button'].hidden, false);
+  assert.equal(ui.dom['next-level-button'].textContent, '前往第6關');
+
+  ui.game.levelId = 6;
+  ui.game.pendingUnlock = 'jumang';
+  ui.renderResult();
   assert.equal(ui.dom['next-level-button'].hidden, true);
+  assert.match(ui.dom['result-stats'].innerHTML, /新異獸解鎖：句芒/);
 
   ui.game.state = 'defeat';
   ui.renderResult();

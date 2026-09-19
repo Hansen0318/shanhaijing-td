@@ -31,6 +31,9 @@ export const ENEMY_VISUALS = Object.freeze({
   zhuyan: visual(42, 44, 127.5 / 256, 256, 256, 236, 234),
   lili: visual(54, 52, 127.5 / 256, 256, 256, 236, 208),
   xingtian: visual(84, 84, 191.5 / 384, 384, 384, 360, 354),
+  yangyu: visual(40, 40, 0.496, 256, 249, 244, 235),
+  fusangjiashou: visual(54, 52, 0.5, 256, 229, 252, 213),
+  jinwu: visual(84, 84, 0.5, 384, 384, 372, 384),
 });
 
 export function minimumEnemyPathSpacing(leaderType, followerType) {
