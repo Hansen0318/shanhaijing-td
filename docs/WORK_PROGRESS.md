@@ -1,5 +1,36 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-19：Level6 readability polish
+
+### Player feedback
+
+- Level6 enemy abilities and sunlight zones were functionally present but not visually obvious enough on the public game.
+
+### Chat-owned implementation completed
+
+- Player smoke follow-up: 白澤攻擊原本有傷害/洞察事件但視覺不明顯；Chat 已改為程序化青白光束 + 既有洞察命中標記，不新增素材、不改傷害/攻速。扶桑甲獸原本只有 1.2px slow bob，手機上近似靜態平移；已加強為 render-only bob + stride + breathing scale + hit recoil，不改 speed/path/facing/spacing。對應 renderer/motion tests 與 cache-bust 已補。
+
+- Branch: `feat/level6-readability-20260919`.
+- No gameplay/balance changes.
+- Sunlight A/B are now always visible as faint landmarks; active zone receives a brighter pulse and `日照A・啟動` / `日照B・啟動` label.
+- `sunlightZone` moved into Level6 first-paint required assets (+~23 KB) so the map mechanic is visible immediately.
+- 陽羽 sunboost, 扶桑甲獸陽木甲, 金烏日輪護體 VFX were enlarged/brightened; active state tags added.
+- 金烏 Phase2 now retains a faint persistent solar aura after the transition VFX, with no phase/balance changes.
+- Cache-bust updated for `main.js`, `Renderer.js`, and the changed art catalog module so Pages/Safari will not silently reuse the previous presentation code.
+- Targeted tests were updated to cover inactive/active sunlight landmarks, labels/state tags, and the first-paint preload contract.
+
+### Remaining Work-only closure
+
+- Run fresh targeted tests + full `npm test` + `npm run check` + syntax/diff checks on this branch.
+- Run browser/runtime smoke at 390px / 390×700 for A/B visibility, enemy state readability, Jinwu P2 persistent aura, no overlap/overflow, and Level1–5 regression.
+- If clean, follow `AGENTS.md` Section 8 through merge to `main`, Pages deployment, deployed `?devMenu=1` Level6 smoke, and normal Level5→Level6 production-flow smoke.
+- Do not alter Level6 balance or regenerate assets unless executable evidence identifies a real defect.
+
+### Status
+
+CHAT IMPLEMENTED / EXECUTABLE VERIFICATION + RELEASE PENDING
+
+---
 ## 2026-09-19：Release flow correction
 
 ### Root cause

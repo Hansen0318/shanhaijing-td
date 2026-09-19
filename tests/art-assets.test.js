@@ -78,10 +78,10 @@ test('level-six runtime art is complete, alpha-safe, mobile-sized, and staged', 
   assert.deepEqual([...background.subarray(-2)], [255, 217]);
   assert.ok(background.length < 800_000);
 
-  for (const id of ['slotPlatform', 'level6Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'yangyu']) {
+  for (const id of ['slotPlatform', 'level6Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'yangyu', 'sunlightZone']) {
     assert.equal(LEVEL_REQUIRED_ART_IDS[6].includes(id), true, `${id} must be ready for Level6 first paint`);
   }
-  for (const id of ['fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'sunlightZone', 'jinwuBossPanel', 'jumangUnlock']) {
+  for (const id of ['fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'jinwuBossPanel', 'jumangUnlock']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[6].includes(id), true, `${id} must remain deferred`);
   }
 });

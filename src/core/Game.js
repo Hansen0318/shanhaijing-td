@@ -14,8 +14,8 @@ import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
 import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level6-1';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level6-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level6-readability-2';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level6-readability-2';
 import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level6-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 

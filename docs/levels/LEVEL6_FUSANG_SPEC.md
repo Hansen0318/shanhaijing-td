@@ -367,3 +367,57 @@ Important:
 - enemy/Boss sprites, VFX, unlock art, and Boss HUD require transparent-alpha runtime assets;
 - JPEG source art with white background is accepted only as source/reference and must be background-removed before deployment;
 - source collection is complete, but runtime optimization / alpha cleanup / anchor measurement / HUD audit are still pending.
+
+## 16. Level6 ability / sunlight readability acceptance
+
+Player runtime feedback showed that Level6 mechanics existed but were not visually legible enough. This section locks presentation-only readability improvements; gameplay numbers/balance remain unchanged.
+
+### Sunlight zones
+
+- Both A and B must remain visibly identifiable even while inactive through a faint sunlight landmark.
+- The active zone must be materially brighter than the inactive zone, with a slow pulse/glow rather than rapid flashing.
+- Canvas labels must distinguish the zones: inactive `日照A` / `日照B`; active `日照A・啟動` / `日照B・啟動`.
+- `sunlightZone` is a Level6 first-paint required asset so the mechanic landmark does not appear late after combat starts.
+- P1 still has one active zone at a time; P2 still activates A+B together. No timing or gameplay geometry changes are introduced by this polish.
+
+### Enemy state readability
+
+- 陽羽 under active sunlight keeps the same ×1.28 speed gameplay, but the existing sunboost VFX is enlarged/brightened and shows a compact `加速` state tag.
+- 扶桑甲獸 keeps the same 陽木甲 ×0.75 damage-taken gameplay, but the armor VFX is enlarged/brightened and shows a compact `陽木甲` state tag.
+- 金烏 keeps the same 日輪護體 ×0.80 damage-taken gameplay, but the shield is enlarged/brightened and shows a compact `日輪護體` state tag.
+- 金烏 Phase2 keeps the same 50% threshold / ×1.12 speed / A+B gameplay; a faint persistent Phase2 sun aura is added after transformation so P2 remains visually distinct after the one-shot transition VFX ends.
+- State labels/VFX are presentation only; they must not change HP, speed multipliers, defense multipliers, path, timing, targeting, Wave data, or Level1–5 behavior.
+
+### Runtime smoke
+
+- At 390px / 390×700, a player must be able to point out A/B before an enemy enters them.
+- Active and inactive sunlight zones must be distinguishable without dev overlays.
+- During W1–W4, the player must be able to visually identify 陽羽 acceleration and 扶桑甲獸 armor while those states are active.
+- During W10, 日輪護體 and Phase2 must remain recognizable while the Boss is moving and under attack.
+- Verify the added labels do not obscure HP bars, Boss HUD, towers, or create horizontal overflow.
+
+## 17. Baize attack visibility and Fusang armored-beast Motion Lite
+
+Player phone smoke identified two additional presentation gaps. These are readability-only corrections; gameplay remains unchanged.
+
+### Baize attack visibility
+
+- Baize already applies direct damage + Insight in gameplay, but the previous render path stretched the Insight-mark image into a thin directional strip that was not reliably readable as an attack.
+- Keep the same attack timing, damage, targeting, Insight duration/vulnerability, tower facing, recoil, and target selection.
+- Render each `baizeInsight` event as a short luminous cyan-white beam from tower → target plus a bright Insight impact mark on the target.
+- No new image asset is required; reuse the existing `baizeInsightMark` only for the impact mark and render the connecting beam procedurally.
+
+### 扶桑甲獸 movement readability
+
+- Keep its gameplay speed/path/facing/spacing unchanged.
+- Strengthen only the shared render-only Motion Lite for `fusangjiashou`: visible vertical bob, subtle horizontal stride/sway, slight breathing scale, and hit recoil.
+- Motion offsets must never mutate `enemy.x`, `enemy.y`, or `pathDistance`.
+- The result should read as a heavy creature walking rather than a static sprite sliding along the path, without becoming exaggerated or cartoon-bouncy.
+
+### Regression / runtime acceptance
+
+- Baize attack line must visibly originate at the deployed Baize and reach the selected enemy at 390px.
+- The existing Insight target mark remains visible after hit according to normal status rendering.
+- 扶桑甲獸 motion must be visibly distinguishable across successive frames while its logical path center stays unchanged.
+- Preserve enemy path-facing mirror and tower target-facing behavior.
+- No Level1–5 balance/gameplay changes.

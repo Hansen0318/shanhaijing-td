@@ -355,3 +355,22 @@ test('level-three units reuse render-only Motion Lite and Xiangliu stage pulses'
   assert.ok(MotionSystem.enemyTransform(boss, 0, effects).scale > 1);
   assert.equal(MotionSystem.enemyTransform(boss, 0, effects).xOffset, 0);
 });
+
+
+test('Fusang armored beast has visible render-only stride without changing gameplay coordinates', () => {
+  const enemy = visualEnemy('fusangjiashou', 140, 220);
+  const before = { x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance };
+  const first = MotionSystem.enemyTransform(enemy, 0.125, []);
+  const second = MotionSystem.enemyTransform(enemy, 0.375, []);
+
+  assert.notEqual(first.yOffset, 0);
+  assert.notEqual(first.xOffset, 0);
+  assert.notEqual(first.scale, 1);
+  assert.notDeepEqual(
+    { xOffset: first.xOffset, yOffset: first.yOffset, scale: first.scale },
+    { xOffset: second.xOffset, yOffset: second.yOffset, scale: second.scale },
+  );
+  assert.deepEqual({ x: enemy.x, y: enemy.y, pathDistance: enemy.pathDistance }, before);
+  assert.ok(UNIT_MOTION_CONFIG.enemies.fusangjiashou.bobPixels >= 2);
+  assert.ok(UNIT_MOTION_CONFIG.enemies.fusangjiashou.stridePixels > 0);
+});

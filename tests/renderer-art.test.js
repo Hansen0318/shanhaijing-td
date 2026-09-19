@@ -4,11 +4,11 @@ import { Renderer } from '../src/render/Renderer.js';
 import { LEVELS, MAP_DATA } from '../src/config/gameData.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], moveTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
+  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
   return {
     calls,
-    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo() {}, stroke() {},
-    setLineDash() {}, arc() {}, fill() {}, fillText() {}, strokeText() {}, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
+    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo(...args) { calls.lineTo.push(args); }, stroke() {},
+    setLineDash() {}, arc() {}, fill() {}, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
     quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); },
     drawImage(...args) { calls.drawImage.push(args); },
     rotate(value) { calls.rotate.push(value); },
@@ -160,6 +160,18 @@ test('renderer uses Buzhoushan map art, Xingtian phases, and all level-five mech
   }
 });
 
+test('Level6 keeps inactive sunlight zones visible as faint landmarks', () => {
+  const { renderer, ctx } = rendererFixture({ motionEnabled: false });
+  const game = emptyGame(LEVELS[6]);
+  game.visualTime = 0;
+  game.sunlight = { activeZoneIds: ['A'] };
+  renderer.drawSunlightZones(ctx, game);
+
+  assert.ok(ctx.calls.drawImage.filter(args => args[0].id === 'sunlightZone').length >= 3);
+  assert.equal(ctx.calls.fillText.some(args => args[0] === '日照A・啟動'), true);
+  assert.equal(ctx.calls.fillText.some(args => args[0] === '日照B'), true);
+});
+
 test('Level6 renders baked map props, sunlight, units, states, phase, death and facing through shared paths', () => {
   const { renderer, ctx } = rendererFixture({ motionEnabled: false });
   const game = emptyGame(LEVELS[6]);
@@ -182,9 +194,12 @@ test('Level6 renders baked map props, sunlight, units, states, phase, death and 
 
   assert.equal(ctx.calls.drawImage[0][0].id, 'level6Background');
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === undefined), false);
-  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'sunlightZone'), true);
+  assert.ok(ctx.calls.drawImage.filter(args => args[0].id === 'sunlightZone').length >= 4, 'both sunlight zones need landmark + active passes');
   for (const id of ['yangyu', 'fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'jinwuSunshield', 'yangmuArmorBreak', 'jinwuPhase2']) {
     assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
+  }
+  for (const label of ['日照A・啟動', '日照B・啟動', '加速', '陽木甲', '日輪護體']) {
+    assert.equal(ctx.calls.fillText.some(args => args[0] === label), true, `${label} readability label was not drawn`);
   }
   assert.ok(ctx.calls.scale.some(([x, y]) => x < 0 && y > 0), 'Level6 enemies and death art keep shared path-facing');
 });
@@ -228,6 +243,21 @@ test('only Level4 renders soft curved fog without rectangular fills, clips, or b
     assert.equal(otherLevel.ctx.calls.fillRect.length, 0, `Level${levelId} must not render fog regions`);
     assert.equal(otherLevel.ctx.calls.clip, 0, `Level${levelId} must not clip fog regions`);
   }
+});
+
+test('Baize insight attack draws a visible beam plus impact mark without changing gameplay', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.drawEffects(ctx, { effects: [{
+    type: 'baizeInsight',
+    from: { x: 40, y: 80 },
+    to: { x: 150, y: 120 },
+    life: 0.25,
+    duration: 0.35,
+  }] });
+
+  assert.ok(ctx.calls.moveTo.some(([x, y]) => x === 40 && y === 80), 'Baize beam must start at the tower');
+  assert.ok(ctx.calls.lineTo.some(([x, y]) => x === 150 && y === 120), 'Baize beam must reach the target');
+  assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'baizeInsightMark'), true, 'Baize impact mark must render on target');
 });
 
 test('fog entry draws two bright Meihu echoes, while insight draws one weaker echo', () => {
