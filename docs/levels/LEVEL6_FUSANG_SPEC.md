@@ -247,7 +247,7 @@ The Work ZIP then contains only the smallest implementation / executable-verific
 Current state:
 - Level name/theme: **PLAYER-APPROVED**
 - Geometry V4 path: **PLAYER-APPROVED**
-- Character/VFX source choices: chosen in Chat, but final file manifest awaits player re-supply before ZIP
+- Character/VFX/Boss HUD/unlock source set: **PLAYER-SUPPLIED 12/12 COMPLETE**; see `docs/levels/LEVEL6_ASSET_MANIFEST.md`
 - Tower slots: **MAP-ALIGNED CANDIDATE / FINAL SOURCE + RUNTIME AUDIT PENDING**
 - Sunlight-zone bounds: **DESIGN BASELINE / FINAL SOURCE + RUNTIME AUDIT PENDING**
 - Runtime anchors / footprints: **PENDING FINAL ASSET AUDIT**
@@ -347,3 +347,16 @@ Boss death alone must not end the level if normal enemies remain; Wave completio
 - Confirm T1/T2 interaction with A and T5/T8 interaction with B.
 - Smoke T6/T7 because the lower-left hairpin creates repeated path coverage; do not pre-nerf shared tower stats.
 - Balance tuning after simulation may adjust Level6-only enemy/Wave numbers, but it must not change completed Level1–5 gameplay.
+
+
+## 15. Final source-image set
+
+The player has supplied the complete Level6 source-image set: **12 / 12 planned assets**.
+
+Source/runtime format, alpha requirements, original dimensions, target filenames, and optimization status are recorded in `docs/levels/LEVEL6_ASSET_MANIFEST.md`.
+
+Important:
+- only the map background is expected to remain JPG/WebP without alpha;
+- enemy/Boss sprites, VFX, unlock art, and Boss HUD require transparent-alpha runtime assets;
+- JPEG source art with white background is accepted only as source/reference and must be background-removed before deployment;
+- source collection is complete, but runtime optimization / alpha cleanup / anchor measurement / HUD audit are still pending.
