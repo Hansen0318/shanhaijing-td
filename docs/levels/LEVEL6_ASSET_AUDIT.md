@@ -141,8 +141,6 @@ Recommended Level6 loading groups:
 ### Required / first-screen
 - shared slot platform
 - Level6 background
-- Level6 Spawn
-- Level6 Base
 - current lineup tower art already required by the shared lineup/build UI
 - first-wave enemy: 陽羽
 
@@ -159,7 +157,20 @@ Recommended Level6 loading groups:
 
 Do not make the entire Level6 asset set blocking merely to hide first-use delays.
 
-## 7. Items intentionally not completed in Chat
+## 7. Spawn / Base asset decision
+
+The final Level6 background already contains the designed **日隙** at the route entrance and **扶桑靈核** at the route end as integrated scene elements. Separate Level6 Spawn/Base overlay images would duplicate those visuals and increase transfer/preload cost without adding gameplay information.
+
+Therefore the Level6 asset set remains **12/12 complete**:
+- no separate `level6Spawn` image is required;
+- no separate `level6Base` image is required;
+- Level6 level data should mark Spawn/Base map props as background-baked / no overlay;
+- shared Renderer logic should be generalized to safely skip a missing/disabled Spawn or Base art id, rather than adding a Level6-only conditional;
+- Level1–5 keep their current separate Spawn/Base overlays unchanged.
+
+Runtime acceptance must still verify that the logical path start/end align with the baked 日隙 / 扶桑靈核 artwork.
+
+## 8. Items intentionally not completed in Chat
 
 The following remain Work-only or runtime-dependent:
 
@@ -174,7 +185,7 @@ The following remain Work-only or runtime-dependent:
 
 These are the only categories that should remain in the Work handoff after the package is assembled.
 
-## 8. Handoff rule
+## 9. Handoff rule
 
 Do **not** send Work the original full discussion.
 
