@@ -4,6 +4,8 @@
 
 ### 已完成
 
+- Level6 最小 Work handoff package 已由 Chat 建立並自我驗證：12 張 optimized runtime assets + 2.9KB 短 prompt + asset checksums，ZIP 約 1.2MiB，SHA-256 `3227dc7400be47cf7d60c8ee9de47d05c9f7fba6718f1881e10618f6be0a74cc`。解壓後 12/12 hashes PASS、全部 decode PASS、除背景外皆 RGBA。Work 明確只做 irreducible implementation/tests/runtime，feature branch push 後停止；Chat 負責 review/merge/Pages deploy。
+
 - Chat 已完成 Level6 static asset audit：final background 與 390×610 canonical transform 相符、12 張 source 全部建立 optimized runtime candidates（約 5.38 MiB → 1.12 MiB）、量測陽羽/扶桑甲獸/金烏 visible bounds/anchor/footprint、完成金烏 HUD source empty-channel audit。另確認日隙/扶桑靈核已 baked 進背景，不需要額外 Spawn/Base PNG；未來由 generic optional map-prop contract 處理，Level1–5 不變。
 
 - 玩家已分兩批提供 Level6 最終 source images，共 12/12 齊全；新增 `docs/levels/LEVEL6_ASSET_MANIFEST.md`，逐張記錄 source 尺寸/格式、runtime 檔名、alpha 要求與最佳化狀態。僅背景可維持 JPG/WebP；敵人/Boss/VFX/句芒 unlock/Boss HUD 正式 runtime 需透明 alpha。
@@ -23,14 +25,13 @@
 
 ### 下一步 gate
 
-- 玩家在正式開發／部署前重新提供最終選定並下載保存的全部 Level6 圖片。
-- Chat 先核對完整 asset inventory、檔名、格式、alpha、版本與 source/runtime 對應，完成可安全完成的 geometry / anchor / HUD / manifest 規格。
-- 只有剩餘工作確實需要完整 repo 執行環境、TDD、`npm test` / `npm run check`、browser/runtime 驗證時，才建立最小 Work ZIP。
-- 在此 gate 完成前不開始 Level6 production implementation。
+- Chat-owned pre-handoff gate 已完成；最終 source 12/12、runtime 最佳化、manifest、geometry/anchor/HUD static audit 與 minimal ZIP 自我驗證均已完成。
+- 下一步才交由 Work 處理完整 repo 才能可靠完成的 production implementation、TDD/tests、Boss HUD rendered trackRect 與 browser/runtime smoke。
+- Work 只 push feature branch，不 merge/deploy；Chat 在 engineering evidence clean 後接手 review、merge、Pages deploy 與玩家手機 smoke checklist。
 
 ### 狀態
 
-PRE-IMPLEMENTATION RULES / SPEC CHECKPOINT
+HANDOFF READY / WORK ENGINEERING PENDING
 
 ---
 
