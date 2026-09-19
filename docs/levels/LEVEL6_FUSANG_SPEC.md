@@ -246,3 +246,19 @@ Current state:
 - Level6 implementation: **NOT STARTED**
 - Runtime/browser verification: **NOT STARTED**
 - Player phone smoke: **NOT STARTED**
+
+## 13. Level6 progression acceptance (inherits AGENTS.md Section 15)
+
+Level6 implementation must use the shared data-driven progression contract; it must not introduce `LEVEL6_ROSTER`-style hard-coded UI/gameplay branches.
+
+- Level5 victory exposes Level6 only because Level6 exists in playable level data.
+- Entering Level6 opens lineup first.
+- Level6 entry roster is the four currently owned eligible beasts: 畢方／夫諸／應龍／白澤.
+- Exactly 3 must be selected before confirmation.
+- Retry returns to 0/3 selection.
+- Blessing choices may include selected-beast-specific and shared Blessings, but never a tower-specific Blessing for the omitted fourth beast.
+- First successful Level6 clear adds 句芒 to the owned roster and may show the unlock presentation once.
+- 句芒 is not usable in the Level6 battle that unlocks it.
+- While Level7 is absent from playable level data, Level6 victory shows no next-level action.
+- When Level7 is later added, Level6 victory should expose it through the same generic next-level lookup, and the Level7 lineup should automatically include 句芒 if eligible.
+- The lineup UI must render from roster/progression data and remain usable at 390px / 390×700 when the owned roster grows from four to five beasts.

@@ -4,6 +4,8 @@
 
 ### 已完成
 
+- 追加永久規則：Level4+ roster／lineup／Blessing／unlock／next-level UI 必須 data-driven；禁止以 `LEVEL6_ROSTER`、`levelId < N` 或逐關分支持續擴充。Level6 spec 已加入對應 progression acceptance。
+
 - 補強 `AGENTS.md`：完成關卡預設 frozen、共用 Motion Lite、enemy path-facing mirror、tower target-facing、既有行為 regression、player-approved canonical artifact、pre-handoff asset gate。
 - 補強 `docs/ASSET_INTEGRATION_GUIDE.md`：美術風格／手機可讀性、格式矩陣、runtime scale、VFX 尺度、UI program-contract-first、Boss HUD 共用邏輯、Map Geometry Contract、截圖非座標來源、final source→runtime 最佳化與 asset manifest。
 - 已確認既有 Chat-first / Work-only token 節省規則本來就存在於 `AGENTS.md` Sections 9 / 11，並新增 Section 14 將『玩家先提供最終 source images → Chat 完整 audit → 只把不可由 Chat 完成的 delta 打包給 Work』設為正式 handoff gate。

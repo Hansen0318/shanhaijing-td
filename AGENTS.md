@@ -207,3 +207,19 @@ Before Chat creates a new-level ZIP for Work:
 5. the ZIP contains the approved reference assets/specs and only the smallest unresolved implementation/verification delta that genuinely requires Work.
 
 This gate supplements Sections 9 and 11. The purpose is to prevent Work from spending tokens rediscovering decisions, inventing missing art rules, or redoing tasks Chat can safely complete.
+
+## 15. Post-Level4 roster, Blessing, unlock, and next-level UI must be data-driven
+
+Level4+ progression must not grow through per-level hard-coded roster arrays or repeated level-number conditionals.
+
+- The source of truth is the player's owned/unlocked deployable roster plus optional level-specific eligibility. Lineup UI must render that data; it must not embed a fixed list such as the original four beasts.
+- Level4+ continues to require exactly 3 selected beasts unless the player explicitly changes the global lineup rule.
+- Retry on Level4+ always clears the current lineup and returns to an empty selection.
+- Unlocks are progression data, not UI-only effects. A victory unlock must update owned roster state once, while its presentation may be shown conditionally for the first unlock.
+- A beast unlocked by clearing a level becomes eligible for later playable levels, not retroactively for the battle that just ended.
+- Next-level availability must be derived from actual playable level data (for example whether the next level exists), not from comparisons such as `levelId < N`.
+- If no next playable level exists, the result UI must not show a next-level action. When a next level is later added to level data, the prior level's victory flow should expose it without a new level-number patch.
+- Blessing filtering must be driven by the current lineup / eligible tower types. Tower-specific Blessings for beasts not selected in the lineup must not appear; shared/all-team Blessings may still appear.
+- Blessing ownership should scale through common blessing data tagged by tower/beast identity. Avoid accumulating files or branches whose semantics are only `LEVEL4_*`, `LEVEL6_*`, etc. when the mechanic is globally reusable.
+- UI labels, cards, result unlocks, and roster grids should consume level/progression data rather than duplicate game rules in presentation code.
+- Any migration from existing hard-coded Level4/5 behavior to data-driven progression must preserve current Level1–5 observable behavior and add targeted regression for lineup contents, exactly-3 validation, retry reset, Blessing filtering, unlock state, first-unlock presentation, and next-level visibility.
