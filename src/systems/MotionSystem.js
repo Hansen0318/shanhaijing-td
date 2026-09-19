@@ -1,4 +1,4 @@
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-readability-2';
 
 const TAU = Math.PI * 2;
 
@@ -9,7 +9,7 @@ export class MotionSystem {
     const config = baseConfig?.phases ? { ...baseConfig, ...baseConfig.phases[enemy.bossPhase ?? 1] } : baseConfig;
     if (!config) return { xOffset: 0, yOffset: 0, scale: 1, flash: false };
 
-    let xOffset = 0;
+    let xOffset = config.stridePixels ? Math.sin(visualTime * TAU * config.strideHz) * config.stridePixels : 0;
     let yOffset = config.bobPixels ? Math.sin(visualTime * TAU * config.bobHz) * config.bobPixels : 0;
     let scale = config.idleScale
       ? 1 + config.idleScale * (0.5 + Math.sin(visualTime * TAU * config.idleHz) * 0.5)
