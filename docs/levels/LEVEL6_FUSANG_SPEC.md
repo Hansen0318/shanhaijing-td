@@ -130,6 +130,13 @@ Do not promote these candidate slots/zones to runtime-final until they are check
 - Coverage audit focus for runtime smoke: T1/T2 versus Sunlight A, T5/T8 versus Sunlight B, and the high repeated-path coverage around T6/T7 created by the lower-left hairpin.
 - Do not change existing tower range/damage because of Level6 slot geometry. If runtime evidence shows a new Level6 slot is too dominant, prefer a narrow Level6 slot-position adjustment.
 
+### Spawn / Base rendering contract
+
+- The final background already contains the visual **日隙** and **扶桑靈核**; no separate Level6 Spawn/Base images are required.
+- Keep logical route start/end coordinates in level/map data.
+- Renderer support should be made generically optional for Spawn/Base art ids so Level6 can omit overlays without introducing an `if levelId === 6` rendering patch.
+- Level1–5 Spawn/Base rendering must remain unchanged.
+
 ## 4. Level mechanic — sunlight
 
 The Level6 shared mechanic is **日照區**.
