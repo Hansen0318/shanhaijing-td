@@ -1,5 +1,18 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 諸懷 visual direction approved
+
+- Player continuation accepted the proposed 諸懷 visual direction.
+- Opened **諸懷 only** as `APPROVED_FOR_GENERATION`.
+- Required visual identity: broad heavy bull-like body, four readable horns, large pig-like ears, pale human-like eyes simplified for mobile, short thick legs.
+- Palette remains light/high-contrast: warm ochre / pale earth + stone blue-gray + ivory horns + small cyan accent.
+- No dark full-body mass, dense fur, armor micro-detail, or baked 雷殼.
+- 雷殼 remains Procedural-first.
+- 夔 / 句芒 / Boss HUD / projectile remain blocked.
+- Next exact step: generate one single transparent game-usable 諸懷 PNG and review it before moving on.
+
+---
+
 ## 2026-09-20：Level7 諸懷 visual proposal
 
 - Following the new global creature-art hard rule, Chat prepared only the next creature discussion item: **諸懷**.
