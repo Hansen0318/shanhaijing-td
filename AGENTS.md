@@ -371,3 +371,88 @@ When a level is fully released:
 - record final main/release SHA, deployment verification, and any remaining player-smoke note;
 - preserve the level folder as the historical/canonical record;
 - move the active-level pointer in `WORK_PROGRESS.md` to the next level rather than deleting prior-level documentation.
+
+
+## 18. Stage-gate execution and current-action allowlist are mandatory
+
+The active-level documents are not only memory aids; they are execution gates. A Chat / Work / Codex session must stay inside the currently approved development stage and may not jump ahead just because a later task is already foreseeable.
+
+### Stage gate rule
+
+Before taking any substantial action, identify the active level's current gate from `STATE.md`.
+
+Examples of gates:
+- concept/design review;
+- player approval;
+- numerical freeze;
+- map concept;
+- canonical geometry;
+- asset mockup review;
+- approved asset batch;
+- production implementation;
+- engineering verification;
+- release;
+- player smoke.
+
+Do not execute work from a later gate until the current gate's exit condition is satisfied.
+
+### Current-action allowlist
+
+`STATE.md` must contain:
+- **Current gate**
+- **Allowed now**
+- **Forbidden until gate exit**
+- **Gate exit condition**
+- **Next exact step**
+
+Only actions listed under **Allowed now** are in scope by default.
+
+If a proposed action is not clearly allowed:
+1. stop;
+2. check `SPEC.md`, `ASSETS.md`, `GEOMETRY.md`, and the player's latest instruction;
+3. if still unclear, ask/confirm rather than silently expanding scope.
+
+### Batch image generation gate
+
+Image generation is especially strict because it is easy to jump ahead.
+
+- Never generate a whole future asset list merely because the items are known.
+- A batch may contain only assets marked **APPROVED_FOR_GENERATION** in the active level's `ASSETS.md`.
+- Items marked `proposal`, `mockup first`, `pending discussion`, `Procedural-first`, `not yet approved`, or equivalent are **not allowed** in the batch.
+- Before every batch, compare the requested/generated items against the current approved allowlist.
+- If the batch is sequential, generate only the current approved batch/sub-batch. Do not include assets planned for a later discussion stage.
+- If a later asset becomes obviously necessary while producing an earlier batch, record it as pending; do not generate it early.
+- Player approval of one item does not imply approval of adjacent/future items.
+- A newly generated image must not retroactively be treated as approved simply because it now exists.
+
+### Discussion-before-generation gate
+
+For any item whose design was supposed to be discussed first:
+- discuss/approve the concept first;
+- update `ASSETS.md` status;
+- only then generate it.
+
+This includes borderline Procedural/PNG/Hybrid cases, new Boss/HUD concepts, new deployable-beast projectiles, and any asset whose visual direction has not yet been agreed.
+
+### Self-check before action
+
+Before acting, the agent should be able to answer:
+1. What is the active level?
+2. What is the current gate?
+3. Is this exact action in **Allowed now**?
+4. Does it require player approval first?
+5. Am I accidentally doing work from a later gate?
+6. Will this action invalidate or bypass an earlier decision step?
+
+If any answer is uncertain, do not proceed silently.
+
+### Drift correction
+
+If a session notices it has already crossed a gate incorrectly:
+- stop the out-of-order work;
+- do not continue merely to “finish the batch”;
+- mark the premature output as unapproved/unused unless the player explicitly accepts it;
+- update `STATE.md` with the process deviation and correct Next exact step;
+- resume from the proper gate.
+
+The purpose is to keep the whole development path consistent from initial design through release, including when the same Chat continues for a long time.
