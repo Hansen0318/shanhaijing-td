@@ -17,9 +17,9 @@
 |---|---|---|---|
 | Level7 background | map | image required | APPROVED_FINAL |
 | 欽原 | normal enemy | PNG-first sprite | APPROVED_FINAL — player-approved single-creature PNG visual |
-| 諸懷 | heavy enemy | PNG-first sprite | APPROVED_FOR_GENERATION |
-| 夔 | Boss | PNG sprite | pending approval |
-| 夔 Boss HUD | HUD frame with empty HP channel | PNG | pending approval |
+| 諸懷 | heavy enemy | PNG-first sprite | APPROVED_FINAL — player-approved single-creature PNG visual |
+| 夔 | Boss | PNG-first sprite | APPROVED_FINAL — player-approved revised thunder-beast visual |
+| 夔 Boss HUD | HUD frame with empty HP channel | PNG-first | GENERATED_UNAPPROVED — candidate exists, player review pending |
 | 句芒 production tower sprite | deployable tower | PNG sprite | pending approval |
 | 雷脈 landmark/charge/pulse | mechanic VFX | Procedural-first | APPROVED — code-only micro-flow / charge / pulse |
 | 欽原 雷行 emphasis | state VFX | Procedural-first | do not batch |
@@ -43,10 +43,10 @@ Gameplay and Geometry V3 are frozen. Final source-art inventory is now being res
 
 Current classification direction:
 - Level7 background — APPROVED_FINAL.
-- 欽原 — PNG-first character sprite; visual design still requires player discussion.
-- 諸懷 — PNG-first character sprite; visual design still requires player discussion.
-- 夔 — PNG-first Boss sprite; visual design still requires player discussion.
-- 夔 Boss HUD — PNG-first empty-channel frame; produce after Boss visual direction is approved.
+- 欽原 — APPROVED_FINAL single-creature PNG visual.
+- 諸懷 — APPROVED_FINAL single-creature PNG visual.
+- 夔 — APPROVED_FINAL revised single-Boss PNG visual, clearly differentiated from 諸懷.
+- 夔 Boss HUD — GENERATED_UNAPPROVED candidate exists; do not use/package until player explicitly accepts or revises it.
 - 句芒 production tower sprite — PNG-first deployable sprite; Level6 unlock art is not automatically reused.
 - 雷脈 idle/charge/pulse — Procedural-first; no image.
 - 欽原 雷行 — Procedural-first.
@@ -71,12 +71,13 @@ Only these statuses control image generation:
 
 ## Current Level7 image-generation allowlist
 
-**欽原 sub-batch complete. No next creature sub-batch is open yet.**
+**欽原 / 諸懷 / 夔 creature visuals are approved. Current review item: 夔 Boss HUD candidate only.**
 
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
 Everything else remains blocked:
-- 諸懷 / 夔 / 夔 Boss HUD / 句芒 production tower sprite — not approved for generation yet;
+- 句芒 production tower sprite — not approved for generation yet;
+- 夔 Boss HUD candidate exists but is GENERATED_UNAPPROVED and cannot enter the final package until player approval;
 - 句芒 projectile — Hybrid candidate / PENDING_DISCUSSION;
 - procedural thunder/status visuals — do not create dedicated art.
 
@@ -113,3 +114,12 @@ Status: **APPROVED_FOR_GENERATION**
 Visual proposal is recorded in `DESIGN.md` Section 21.
 
 Player continuation accepted this visual direction. Generate 諸懷 only as one single transparent-background game-usable PNG. Keep 夔, 句芒, Boss HUD and projectile art blocked.
+
+
+### Asset sync after player approvals — 諸懷 / 夔
+
+- 諸懷: player accepted the simplified broad four-horn heavy-beast single PNG direction → **APPROVED_FINAL**.
+- 夔: first version was rejected as too similar to 諸懷; revised version changed silhouette/palette to a distinct blue-white thunder beast and was accepted by player continuation → **APPROVED_FINAL**.
+- 夔 Boss HUD: a candidate was generated afterward, but no explicit player approval has been recorded → **GENERATED_UNAPPROVED**.
+- Do not infer approval of the HUD from approval of the Boss sprite.
+- Final Work ZIP still waits for the player's re-uploaded concrete files and FINAL FILESET AUDIT PASS per AGENTS.md Section 14.
