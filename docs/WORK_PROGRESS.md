@@ -1,5 +1,18 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 Geometry V3 player-approved and frozen
+
+- Player approved the latest Geometry Guide V3 after correcting Spawn entry, Base endpoint, and two path turns.
+- Promoted Geometry V3 to canonical `docs/levels/level7/GEOMETRY.md`.
+- Canonical 390×610 path, Spawn/Base, T1–T8 and 雷脈 A/B initial gameplay bounds are now frozen.
+- Geometry Guide V1/V2 are obsolete; future Chat/Work must not re-guess coordinates.
+- Runtime interpolation may add local anchors only to preserve the approved centerline; it may not move the route.
+- Level7 gate advanced from MAP CONCEPT / CANONICAL GEOMETRY to **ASSET / VFX PLANNING**.
+- No production code or Work handoff yet.
+- Next exact step: finalize Level7 asset/VFX inventory and discuss the next exact source-art sub-batch.
+
+---
+
 ## 2026-09-20：Level7 background approved / Geometry Guide V1 prepared
 
 - Player approved the clean no-text 雷澤天野 background.
