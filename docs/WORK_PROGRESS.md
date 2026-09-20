@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 balance proposal
+
+- Chat 已補第一版 Level7 數值與 Wave baseline，仍標示為 player approval pending，未改 production gameplay。
+- 欽原暫定：HP100 / Sp88 / DMG1 / R14；雷脈 pulse 命中時雷行 ×1.25、1.4s、刷新不疊加。
+- 諸懷暫定：HP390 / Sp25 / DMG3 / R30；雷脈 pulse 命中時雷殼 damage taken ×0.80、1.6s、刷新不疊加。
+- 夔暫定：BaseHP7000 / Sp16 / DMG20；W10 Boss ×1.10 = 7700；P1 7s pulse / 0.9s telegraph / A↔B；P2 50% HP、Sp×1.15、5s pulse、A→B→A+B 循環，不回血、不第二條血。
+- 句芒暫定：Cost130 / Dmg10 / Interval1.15 / Range138 / projectileSpeed380；global attack interval support Lv1 ×0.95、Lv2 ×0.92、Lv3 ×0.89，多隻不疊、最高等級生效、包含自身。
+- 句芒仍採 shared level damage ×1.30 / ×1.50，不另造等級公式。
+- 已建立 W1–W10 第一版：W1/2 欽原，W3 混合，W4 諸懷，W5–9 漸增，W10 欽原×8 + 諸懷×4 + 夔×1。
+- Level7 暫不新增另一隻 deployable unlock，避免 roster 每關膨脹；通關只接 Level8（存在時）。
+- 圖片仍未開始生產；句芒 projectile 需先做 Hybrid mockup 給玩家確認。
+
+---
+
 ## 2026-09-20：Level7 concept proposal
 
 - Chat 已完成第一版 Level7 concept draft，尚未視為玩家核准。
