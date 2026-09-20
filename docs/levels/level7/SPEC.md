@@ -67,6 +67,7 @@
 - **L7-R054** A+B is still one discrete event, not a persistent dual-zone state.
 - **L7-R055** No rapid full-screen white strobe; use localized glow / electric veins / ring expansion.
 - **L7-R056** Telegraph and pulse must remain readable at 390px / 390×700 without obscuring HP bars, towers, or enemy silhouettes.
+- **L7-R057** 雷脈 idle micro-animation, 0.9s charge, and pulse are Procedural-first code VFX; no dedicated lightning animation image/sprite-sheet is required.
 
 ## 7. 句芒
 

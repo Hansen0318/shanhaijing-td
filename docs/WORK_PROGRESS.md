@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 background approved / Geometry Guide V1 prepared
+
+- Player approved the clean no-text 雷澤天野 background.
+- 雷脈 A/B micro-animation, 0.9s charge and pulse are approved as Procedural-first code VFX; no animation sprite-sheet/PNG batch.
+- Prepared Geometry Guide V1 on the approved background: yellow candidate centerline, red anchors, Spawn/Base, T1–T8 candidate centers and 雷脈 A/B candidate bounds.
+- Candidate coordinates are recorded in `docs/levels/level7/GEOMETRY.md` but explicitly **not canonical** until player review/correction.
+- Next step: player corrects/approves Geometry Guide V1; Chat then creates V2 and freezes geometry only after approval.
+- No production gameplay implementation and no later character/HUD/projectile image batch started.
+
+---
+
 ## 2026-09-20：Level7 clean background candidate generated
 
 - Generated one clean Level7 雷澤天野 background candidate using the approved lightning-zigzag direction.

@@ -62,7 +62,7 @@ After that, the next gate becomes **ASSET / VFX PLANNING**.
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- final generated background/crop approval;
+- player correction/approval of Geometry Guide V1;
 - route layout;
 - Spawn/Base visual placement;
 - 8 tower slots;
@@ -78,7 +78,9 @@ Still pending:
 - Geometry and asset ledgers created for future canonical data.
 - Level7 map composition direction approved: upper-left Spawn → **lightning-zigzag route** → 雷脈A / 雷脈B at major turns → lower-right 震木神壇.
 - Background-only image generation sub-batch approved; all character/HUD/projectile art remains blocked.
-- One clean no-text Level7 background candidate has been generated and is **GENERATED_UNAPPROVED** pending player crop/composition review.
+- Clean no-text Level7 background candidate has been **PLAYER APPROVED** as the geometry source.
+- Thunder-vein idle micro-animation / 0.9s charge / pulse is approved as **Procedural-first**; no dedicated animation image batch.
+- Geometry Guide V1 has been prepared for player correction; its path/slot/zone coordinates remain candidate-only until player confirms.
 
 ## Not completed
 
@@ -95,7 +97,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-background-candidate-20260920`
+- `docs/level7-geometry-guide-v1-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -114,4 +116,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Review the generated clean Level7 background candidate. If accepted, freeze its crop/source identity and then create a path/Spawn/Base/T1–T8/thunder-zone geometry overlay for player correction before canonical coordinates are recorded.**
+**Review Geometry Guide V1 against the approved background. Player may mark/correct the yellow enemy centerline, red anchors, T1–T8 centers, Spawn/Base, and 雷脈A/B. Only after that review may the corrected values be promoted to canonical geometry.**

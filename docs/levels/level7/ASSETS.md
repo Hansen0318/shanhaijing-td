@@ -15,13 +15,13 @@
 
 | Item | Purpose | Classification | Production status |
 |---|---|---|---|
-| Level7 background | map | image required | GENERATED_UNAPPROVED |
+| Level7 background | map | image required | APPROVED_FINAL |
 | 欽原 | normal enemy | PNG sprite | pending approval |
 | 諸懷 | heavy enemy | PNG sprite | pending approval |
 | 夔 | Boss | PNG sprite | pending approval |
 | 夔 Boss HUD | HUD frame with empty HP channel | PNG | pending approval |
 | 句芒 production tower sprite | deployable tower | PNG sprite | pending approval |
-| 雷脈 landmark/charge/pulse | mechanic VFX | Procedural-first | do not batch yet |
+| 雷脈 landmark/charge/pulse | mechanic VFX | Procedural-first | APPROVED — code-only micro-flow / charge / pulse |
 | 欽原 雷行 emphasis | state VFX | Procedural-first | do not batch |
 | 諸懷 雷殼 | state VFX | Procedural-first or Hybrid | decide after review |
 | 夔 thunder pulse | Boss/mechanic VFX | Procedural-first | do not batch |
@@ -58,7 +58,7 @@ Only these statuses control image generation:
 
 **Current approved sub-batch: map background only**
 
-- Level7 background candidate for 雷澤天野 — **GENERATED_UNAPPROVED**; awaiting player crop/composition approval
+- Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
 Everything else remains blocked:
 - 欽原 / 諸懷 / 夔 / 夔 Boss HUD / 句芒 production tower sprite — not approved for generation yet;
