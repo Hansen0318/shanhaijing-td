@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Global development continuity system completed
+
+- 新增 `docs/DEVELOPMENT_PLAYBOOK.md`，作為所有新開發者 / Chat / Work / Codex 的專案接手與執行導航。
+- `AGENTS.md` 新增全專案級硬規則：新 session onboarding、同一長 session 的 pre-action context refresh、pre-question check、decision promotion、stage-completeness audit、handoff-completeness audit。
+- 這些規則適用所有未來關卡與子系統，不限 Level7。
+- 新關卡必須使用 `docs/levels/_TEMPLATE/` 的 STATE / SPEC / DESIGN / GEOMETRY / ASSETS 五檔結構，再開始正式設計/實作。
+- 核心工作循環固定為：了解目前狀態 → 確認 current gate / allowed action → 執行 → 立即記錄決策/狀態 → 再進下一步。
+- 新接手者應能只靠 GitHub 文件了解：整體架構、規則、目前進度、已核准內容、當前 gate、branch/SHA、驗證狀態與 Next exact step。
+
+---
+
 ## 2026-09-20：Stage-gate enforcement added
 
 - 對長期開發新增「不是只有記錄，而是限制執行順序」的硬規則。
