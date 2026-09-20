@@ -53,8 +53,8 @@ The final Level7 asset inventory is classified and the required source-art sub-b
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- player re-upload of the concrete final Level7 source files;
-- Chat-owned FINAL FILESET AUDIT and minimal Work package preparation;
+- Work production implementation/integration using the audited Level7 handoff package;
+- automated tests / check / runtime smoke / release verification;
 
 ## Completed
 
@@ -78,7 +78,7 @@ Still pending:
 ## Not completed
 
 - Final asset inventory.
-- Player final-file re-upload + FINAL FILESET AUDIT.
+- Work implementation from the audited handoff package.
 - Production implementation.
 - Automated tests / check.
 - 390px / 390×700 runtime smoke.
@@ -107,4 +107,24 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Player re-uploads the concrete final Level7 image files intended for implementation. Chat then performs the mandatory FINAL FILESET AUDIT against `ASSETS.md` before creating the minimal Work handoff package. Do not start Work implementation before that audit passes.**
+**FINAL FILESET AUDIT PASS. Hand the prepared minimal Level7 package to Work for production implementation. Work must use the audited canonical source/runtime mapping and must not redesign or substitute assets.**
+
+
+## FINAL FILESET AUDIT — PASS (2026-09-21)
+
+Player re-uploaded the six concrete Level7 final files and Chat audited the actual bytes before Work packaging.
+
+Canonical source SHA-256:
+- background JPEG 984×1536: `6b3de3912084683165f6431cdaa8c72ea0b9b661e5b3f5fa7a85b717335032ad`
+- 欽原 PNG RGBA 1254×1254: `e76d3bf946eaea621e924b33bb46c000d477449bed8b6052ffb1f1382429d3ff`
+- 諸懷 JPEG 1536×1024: `251ff1d1788186595f70463015ead95d78f18045ec6756e196e79a5b5fb4b767`
+- 夔 JPEG 1374×1145: `1b9c80e6fde229e11d87bd0e8487c02ae9aae327ad3a008cd8e32eb63fc8fccd`
+- 夔 Boss HUD PNG RGBA 2172×724: `648c4e0abd35e454ab9daa118056375667057d280fa81874daf2589342e85710`
+- 句芒 projectile JPEG 1536×1024: `0c75470514da66fe14ed0243e56a322540fc5768af4b7ca208ce84c0aefe5061`
+
+Technical normalization:
+- 諸懷 / 夔 / 句芒 projectile player source downloads have white JPEG backgrounds; audited runtime candidates convert them to transparent PNG without redesign.
+- 欽原 and 夔 HUD source files already contain alpha.
+- Background crop/aspect is preserved; runtime candidate is recompressed only.
+- 句芒 body is intentionally absent from the upload set and reuses the existing Level6 `unlock_jumang_v1.png` visual source per the frozen player decision.
+- Runtime candidate names and hashes are recorded in the handoff package `ASSET_MANIFEST.json` / `SHA256SUMS.txt`.

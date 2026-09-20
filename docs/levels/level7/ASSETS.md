@@ -4,7 +4,7 @@
 
 ## Status
 
-**ASSET INVENTORY CLOSED — FINAL SOURCE FILE AUDIT PENDING**
+**FINAL FILESET AUDIT PASS — READY FOR WORK INTEGRATION**
 
 ## Confirmed existing/shared assets
 
@@ -173,3 +173,27 @@ After the single PNG is shown, wait for explicit player approval before marking 
 - No further Level7 image generation is required before implementation.
 - Remaining procedural visuals are code-owned and stay out of the image package.
 - Next asset gate is the mandatory FINAL FILESET AUDIT: player re-uploads the concrete final files intended for Work; Chat verifies version/purpose/format/alpha/dimensions/crop/filename mapping and rejects stale variants before packaging.
+
+
+### FINAL FILESET AUDIT PASS — 2026-09-21
+
+The player re-uploaded the exact six final Level7 files intended for implementation. Chat verified role/version/count/format/dimensions/alpha state and SHA-256 before packaging.
+
+Source identities:
+- background: JPEG 984×1536 / `6b3de3912084683165f6431cdaa8c72ea0b9b661e5b3f5fa7a85b717335032ad`
+- 欽原: PNG RGBA 1254×1254 / `e76d3bf946eaea621e924b33bb46c000d477449bed8b6052ffb1f1382429d3ff`
+- 諸懷: JPEG 1536×1024 / `251ff1d1788186595f70463015ead95d78f18045ec6756e196e79a5b5fb4b767`
+- 夔: JPEG 1374×1145 / `1b9c80e6fde229e11d87bd0e8487c02ae9aae327ad3a008cd8e32eb63fc8fccd`
+- 夔 HUD: PNG RGBA 2172×724 / `648c4e0abd35e454ab9daa118056375667057d280fa81874daf2589342e85710`
+- 句芒 projectile: JPEG 1536×1024 / `0c75470514da66fe14ed0243e56a322540fc5768af4b7ca208ce84c0aefe5061`
+
+Packaging/runtime mapping:
+- `bg_leize_tianye_v1.jpg`
+- `enemy_qinyuan_v1.png`
+- `enemy_zhuhuai_v1.png`
+- `boss_kui_v1.png`
+- `ui_boss_kui_panel_v1.png`
+- `fx_jumang_leafblade_v1.png`
+- 句芒 deployable body: derive/reuse repo existing `assets/ui/unlock_jumang_v1.png`; no new body art.
+
+White-background JPEG source files (諸懷 / 夔 / projectile) were converted into transparent runtime candidates during packaging; this is technical normalization only, not visual redesign. Work must still verify alpha fringe/anchor at runtime and measure the rendered 夔 HUD empty-channel trackRect.
