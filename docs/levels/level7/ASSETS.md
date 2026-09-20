@@ -15,7 +15,7 @@
 
 | Item | Purpose | Classification | Production status |
 |---|---|---|---|
-| Level7 background | map | image required | pending concept |
+| Level7 background | map | image required | APPROVED_FOR_GENERATION |
 | 欽原 | normal enemy | PNG sprite | pending approval |
 | 諸懷 | heavy enemy | PNG sprite | pending approval |
 | 夔 | Boss | PNG sprite | pending approval |
@@ -56,10 +56,13 @@ Only these statuses control image generation:
 
 ## Current Level7 image-generation allowlist
 
-**None.**
+**Current approved sub-batch: map background only**
 
-At the current `STATE.md` gate, no final Level7 batch is approved for generation.
+- Level7 background concept/final-source candidate for 雷澤天野 — **APPROVED_FOR_GENERATION**
 
-The 句芒 projectile remains a **Hybrid candidate / PENDING_DISCUSSION** and must first be discussed or mocked up when the player reaches that decision. Enemy/Boss/map/HUD final assets are also not yet approved for generation.
+Everything else remains blocked:
+- 欽原 / 諸懷 / 夔 / 夔 Boss HUD / 句芒 production tower sprite — not approved for generation yet;
+- 句芒 projectile — Hybrid candidate / PENDING_DISCUSSION;
+- procedural thunder/status visuals — do not create dedicated art.
 
-A future batch must list exact filenames/items here with **APPROVED_FOR_GENERATION** before generation begins.
+This approval is limited to the background sub-batch. Generating the background does **not** authorize later character/HUD/projectile assets.
