@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：通用怪獸生成硬規則建立 / 欽原形象確認
+
+- 欽原經數輪簡化後，玩家已確認最終方向：單隻、簡化、大色塊、高對比、避免黑色主體糊成一團。
+- 新增全專案永久怪獸／生物素材規則：新敵人、Boss、相關 creature sprite 生成前必須先參考已完成關卡的既有怪獸風格與簡化程度。
+- 手機可讀性優先：先輪廓、再主特徵、最後才是少量細節；普通敵人尤其要簡化。
+- 顏色必須用清楚的大色塊與主要特徵對比，避免大量黑色／深色細節與接近色在小尺寸合併成一坨。
+- 怪獸視覺討論預設**直接生成單張、透明背景、可放進遊戲的 PNG 候選**；禁止預設生成設定表、分隔板、orthographic sheet、sprite atlas、尺寸比較板或多姿勢拼圖。
+- 設定表／多視圖只在玩家明確要求時才做。
+- 玩家確認單張 PNG 後，即視為 canonical approved source identity；後續只做 trim/resize/compress/anchor 等 runtime optimization，不因換 Chat/Work 而重畫。
+- 程式可處理的雷行／護盾／加速／trail／aura 等仍依 Procedural-first 規則，不烤死在怪獸本體。
+- Level7 欽原標記為 `APPROVED_FINAL` 視覺；下一步回到 sequential gate，先討論諸懷，尚未開啟諸懷生成。
+
+---
+
 ## 2026-09-20：Level7 欽原 visual direction approved
 
 - Player continuation accepted the proposed 欽原 visual direction.
