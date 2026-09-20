@@ -5,7 +5,7 @@
 ## Active level
 
 - Level: **7**
-- Development phase: **MAP CONCEPT / CANONICAL GEOMETRY**
+- Development phase: **ASSET / VFX PLANNING**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level7/`
 - Last continuity-structure update: 2026-09-20
@@ -13,37 +13,27 @@
 
 ## Current gate
 
-**MAP CONCEPT / CANONICAL GEOMETRY**
+**ASSET / VFX PLANNING**
 
 ### Allowed now
 
-- review/approve Level7 background composition and visual layout;
-- define Spawn/Base presentation;
-- design the route shape against the approved background concept;
-- after the background/crop is approved, measure canonical 390×610 path, tower slots, thunder zones and anchors;
-- update `GEOMETRY.md` as coordinates become canonical;
-- discuss only geometry-dependent art needs required for this gate.
+- finalize Level7 asset inventory against the frozen gameplay + geometry;
+- classify each visual as existing reuse / Procedural-first / PNG-first / Hybrid;
+- discuss visual direction for 欽原 / 諸懷 / 夔 / 句芒 production sprite / 夔 Boss HUD;
+- decide whether 句芒 projectile requires a mockup before final generation;
+- open only the exact player-approved asset sub-batch in `ASSETS.md`.
 
 ### Forbidden until gate exit
 
 - no production gameplay implementation;
-- no final Level7 enemy/Boss/tower art batch;
-- no Boss HUD generation;
-- no 句芒 final projectile asset;
 - no Work implementation handoff;
-- no release/testing work for unimplemented Level7.
+- no unapproved future asset batch;
+- no dedicated PNG for procedural thunder/status effects;
+- no geometry re-design unless player explicitly reopens it.
 
 ### Gate exit condition
 
-The player has approved the final background/crop and the canonical 390×610 geometry is recorded for:
-- ordered path;
-- Spawn;
-- Base;
-- T1–T8;
-- thunder region A/B;
-- any required anchor/footprint notes.
-
-After that, the next gate becomes **ASSET / VFX PLANNING**.
+The final Level7 asset inventory is classified and the required source-art sub-batches have been discussed/approved. Any mockup-first item has been resolved. Only then may the project advance to **ASSET PRODUCTION / STATIC AUDIT**.
 
 ## Confirmed / approved
 
@@ -62,12 +52,10 @@ After that, the next gate becomes **ASSET / VFX PLANNING**.
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- player correction/approval of Geometry Guide V1;
-- route layout;
-- Spawn/Base visual placement;
-- 8 tower slots;
-- thunder-zone placement;
-- map-dependent asset needs.
+- final Level7 asset inventory/classification;
+- enemy/Boss/tower visual direction;
+- 句芒 projectile mockup decision;
+- final image-generation sub-batches.
 
 ## Completed
 
@@ -80,12 +68,10 @@ Still pending:
 - Background-only image generation sub-batch approved; all character/HUD/projectile art remains blocked.
 - Clean no-text Level7 background candidate has been **PLAYER APPROVED** as the geometry source.
 - Thunder-vein idle micro-animation / 0.9s charge / pulse is approved as **Procedural-first**; no dedicated animation image batch.
-- Geometry Guide V1 has been prepared for player correction; its path/slot/zone coordinates remain candidate-only until player confirms.
+- Geometry Guide V3 was player-approved and has been promoted to canonical 390×610 geometry in `GEOMETRY.md`.
 
 ## Not completed
 
-- Canonical 390×610 path.
-- Spawn/Base/tower-slot/thunder-zone geometry.
 - Final asset inventory.
 - 句芒 projectile mockup decision.
 - Production implementation.
@@ -97,7 +83,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-geometry-guide-v1-20260920`
+- `docs/level7-geometry-freeze-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -116,4 +102,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Review Geometry Guide V1 against the approved background. Player may mark/correct the yellow enemy centerline, red anchors, T1–T8 centers, Spawn/Base, and 雷脈A/B. Only after that review may the corrected values be promoted to canonical geometry.**
+**Finalize the Level7 asset/VFX inventory using the frozen gameplay and Geometry V3. Discuss and approve the next exact source-art sub-batch before generating it.**

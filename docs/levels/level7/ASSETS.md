@@ -4,7 +4,7 @@
 
 ## Status
 
-**PLANNING / NO FINAL BATCH APPROVED**
+**ASSET / VFX PLANNING — GEOMETRY FROZEN**
 
 ## Confirmed existing/shared assets
 
@@ -39,7 +39,22 @@
 
 ## Final inventory
 
-Pending player approval of gameplay concept and background direction.
+Gameplay and Geometry V3 are frozen. Final source-art inventory is now being resolved.
+
+Current classification direction:
+- Level7 background — APPROVED_FINAL.
+- 欽原 — PNG-first character sprite; visual design still requires player discussion.
+- 諸懷 — PNG-first character sprite; visual design still requires player discussion.
+- 夔 — PNG-first Boss sprite; visual design still requires player discussion.
+- 夔 Boss HUD — PNG-first empty-channel frame; produce after Boss visual direction is approved.
+- 句芒 production tower sprite — PNG-first deployable sprite; Level6 unlock art is not automatically reused.
+- 雷脈 idle/charge/pulse — Procedural-first; no image.
+- 欽原 雷行 — Procedural-first.
+- 諸懷 雷殼 — default Procedural-first; escalate to Hybrid only if 390px smoke is unclear.
+- 夔 thunder pulse — Procedural-first.
+- 句芒 team-support indicator — Procedural-first.
+- 句芒 attack projectile — Hybrid candidate; mockup/discussion first.
+- 句芒 impact — Procedural-first.
 
 
 ## Generation status vocabulary
@@ -56,7 +71,7 @@ Only these statuses control image generation:
 
 ## Current Level7 image-generation allowlist
 
-**Current approved sub-batch: map background only**
+**No new source-art sub-batch is open yet. Background sub-batch is complete.**
 
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
