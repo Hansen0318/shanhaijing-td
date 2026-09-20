@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 design start
+
+- Level7 開發正式開始，但目前只鎖定 progression / 句芒進場規則，尚未鎖定關卡主題與數值。
+- Level6 通關解鎖句芒；Level7 lineup 必須顯示 畢方／夫諸／應龍／白澤／句芒 五隻，仍然 5 選 3。
+- 句芒在 Level7 可立即選擇；Retry 回 0/3；Blessing 依本場三隻過濾。
+- 建議第一次進 Level7 時對句芒卡做一次輕量「NEW」提示，但資料來源仍是 shared unlock/progression，不做 Level7 特例。
+- 句芒角色方向維持全隊型木神支援，與白澤敵方 debuff 分離；數值、攻擊方式、投射物與 Blessing 尚未定案。
+- 已新增 `docs/levels/LEVEL7_DESIGN_DRAFT.md`，後續先由 Chat 完成主題、敵人、Boss、機制、句芒數值與圖片需求，再決定 Work handoff。
+
+---
+
 ## 2026-09-20：Attack visual / asset production hard rule
 
 - 已將攻擊視覺正式分類為 **Procedural-first / PNG-first / Hybrid**。
