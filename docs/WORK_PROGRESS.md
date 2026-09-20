@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 gameplay baseline frozen / geometry gate opened
+
+- Player continuation instruction treated as approval to advance the previously reviewed Level7 gameplay direction.
+- Promoted Level7 theme, enemy set, Boss, 雷脈 mechanic, 句芒 baseline, W1–W10 and clear behavior from proposal into `docs/levels/level7/SPEC.md`.
+- Added stable Level7 Decision/Requirement IDs for implementation traceability.
+- Level7 current gate advanced to **MAP CONCEPT / CANONICAL GEOMETRY**.
+- Added first map composition proposal to `DESIGN.md`: upper-left Spawn → upper crossing / 雷脈A → middle fold → lower approach / 雷脈B → lower-right 震木神壇.
+- No production code, geometry coordinates, or image generation performed.
+- Next exact step: player review/approval of the background/map composition; only after approval may canonical 390×610 coordinates be measured.
+
+---
+
 ## 2026-09-20：Anti-leak governance + Work budget
 
 - 新增 `docs/DEVELOPMENT_GOVERNANCE.md`。
