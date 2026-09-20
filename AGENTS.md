@@ -216,14 +216,38 @@ When the player approves a geometry, asset choice, UI contract, or level specifi
 
 Before Chat creates a new-level ZIP for Work:
 
-1. the player supplies the final chosen source images that are intended for implementation;
-2. Chat audits the complete required asset inventory, filenames, formats, alpha/background requirements, and approved variants;
-3. Chat finishes every safe static task it can complete, including canonical geometry/specs, asset naming, UI contracts, runtime-size targets, manifests, and acceptance criteria;
-4. source art and runtime deployment assets remain distinct; oversized source art is not considered ready for deployment;
-5. the ZIP contains the approved reference assets/specs and only the smallest unresolved implementation/verification delta that genuinely requires Work.
+1. the player re-uploads the **actual final files they downloaded and intend to hand off** for implementation; do not build the Work ZIP directly from temporary chat-generation references, previews, or assumed filenames;
+2. Chat performs a final asset-identity audit against the repository's approved records (`ASSETS.md`, level `STATE.md`, manifests, and any canonical approval notes);
+3. the audit must confirm, per asset:
+   - the uploaded file is the same approved visual/version;
+   - purpose and asset identity are correct;
+   - no obsolete or unapproved variant is mixed in;
+   - filename mapping is unambiguous;
+   - format is correct;
+   - transparency/alpha exists where required;
+   - dimensions/aspect/crop are acceptable;
+   - the file can be mapped to the intended runtime inventory;
+4. Chat compares the **player-uploaded final set** against the **recorded approved set** and confirms the two sets are complete and consistent;
+5. if any mismatch, missing file, stale version, wrong alpha/background, or uncertain identity is found, **stop the handoff gate** and resolve that discrepancy before packaging;
+6. only after that audit passes does Chat normalize filenames, create/refresh the final asset manifest and checksums, and prepare runtime-optimization candidates as appropriate;
+7. Chat finishes every other safe static task it can complete, including canonical geometry/specs, UI contracts, runtime-size targets, manifests, and acceptance criteria;
+8. source art and runtime deployment assets remain distinct; oversized source art is not considered ready for deployment;
+9. the ZIP contains only the audited player-uploaded final assets/reference specs plus the smallest unresolved implementation/verification delta that genuinely requires Work.
+
+### Final-file identity rule
+
+The authoritative input to a Work ZIP is the **player re-uploaded, audited final file set**, not Chat memory and not a prior temporary generation attachment.
+
+A chat-generated image may become approved source art during design, but before Work packaging the player must re-upload the copy they actually kept/downloaded. Chat then verifies that this concrete file matches the recorded approved identity.
+
+The purpose is to prevent:
+- packaging the wrong revision;
+- mixing approved and obsolete variants;
+- filename/content drift;
+- alpha/crop/format mismatches;
+- Work integrating an image that differs from what the player approved.
 
 This gate supplements Sections 9 and 11. The purpose is to prevent Work from spending tokens rediscovering decisions, inventing missing art rules, or redoing tasks Chat can safely complete.
-
 ## 15. Post-Level4 roster, Blessing, unlock, and next-level UI must be data-driven
 
 Level4+ progression must not grow through per-level hard-coded roster arrays or repeated level-number conditionals.

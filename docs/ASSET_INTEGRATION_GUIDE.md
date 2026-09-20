@@ -299,3 +299,31 @@ Use these states:
 
 Do not skip `APPROVED_FINAL` merely because an image was generated.
 Do not advance another creature automatically when the current creature is approved.
+
+## Final player-file re-upload audit before Work packaging
+
+This is the last static asset gate before any level/package ZIP is handed to Work.
+
+### Required sequence
+
+1. Complete image discussion and player approval normally.
+2. Record approved identities/status in the level `ASSETS.md`.
+3. When all required art is ready for handoff, the player re-uploads the exact files they actually downloaded and want used.
+4. Chat audits every re-uploaded file against the approved inventory.
+5. Confirm correct visual/version, intended role, count, no obsolete duplicates, format, alpha/transparency where required, dimensions/aspect/crop, and filename/runtime mapping.
+6. If any discrepancy exists, stop and resolve it before ZIP creation.
+7. After PASS, assign canonical package filenames, create/update the asset manifest, record dimensions/alpha/size, create hashes/checksums, perform safe runtime optimization, and verify source-to-runtime mapping.
+8. Only then create the Work ZIP.
+
+### Audit result terminology
+
+- **FINAL FILESET AUDIT PASS** — uploaded final files match the recorded approved set and are ready for packaging.
+- **FINAL FILESET AUDIT BLOCKED** — one or more files are missing, mismatched, stale, ambiguous, or technically unsuitable.
+
+Do not call a package handoff-ready until this audit passes.
+
+### Packaging rule
+
+The Work ZIP may contain audited player-uploaded final source files, derived optimized runtime candidates, canonical manifests/checksums/specs, and the smallest Work-only implementation/verification instructions.
+
+It must not silently substitute a different chat-generated revision, concept sheet, unapproved alternate, or guessed filename-equivalent file.

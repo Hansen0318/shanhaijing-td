@@ -296,3 +296,17 @@ Before merge:
 - full-suite/runtime work is not automatic unless risk/release requirements justify it.
 
 The governance system is successful only if it both reduces omissions **and** keeps Work tasks smaller.
+
+## 12. Final asset-set reconciliation before Work
+
+Before the project leaves asset production/static audit and enters Work implementation:
+
+1. player re-uploads the exact final files they actually downloaded;
+2. Chat reconciles those concrete files with the approved `ASSETS.md` inventory;
+3. discrepancies stop the gate;
+4. after `FINAL FILESET AUDIT PASS`, Chat creates manifests/checksums/runtime candidates;
+5. only then may the minimal Work package be created.
+
+The purpose is to make the handoff depend on verified files, not conversation memory.
+
+This step is Chat-owned/static and must not be delegated to Work.
