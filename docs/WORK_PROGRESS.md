@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## Active development pointer — Level7
+
+- Active level: **Level7**
+- Canonical handoff entry: `docs/levels/level7/STATE.md`
+- Approved requirements: `docs/levels/level7/SPEC.md`
+- Design proposals/history: `docs/levels/level7/DESIGN.md`
+- Geometry source: `docs/levels/level7/GEOMETRY.md`
+- Asset/VFX ledger: `docs/levels/level7/ASSETS.md`
+- New Chat / Work sessions must follow `AGENTS.md` Section 17 read order and continue from `STATE.md -> Next exact step`.
+- Legacy `docs/levels/LEVEL7_DESIGN_DRAFT.md` is now a redirect only and is not authoritative.
+- Current Level7 phase: **DESIGN / PLAYER APPROVAL PENDING**; production implementation has not started.
+
+---
+
 ## 2026-09-20：Level7 balance proposal
 
 - Chat 已補第一版 Level7 數值與 Wave baseline，仍標示為 player approval pending，未改 production gameplay。
