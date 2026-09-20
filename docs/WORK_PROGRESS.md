@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 asset state reconciliation
+
+- Reconciled GitHub state with actual player approvals from the current development conversation.
+- 諸懷 single-creature PNG direction is now recorded as `APPROVED_FINAL`.
+- 夔 first candidate was rejected for being too similar to 諸懷; the revised blue-white thunder-beast version was accepted and is now `APPROVED_FINAL`.
+- A 夔 Boss HUD candidate was generated afterward, but it has **not** received explicit player approval; status is `GENERATED_UNAPPROVED`.
+- Next gate action is to review/approve or revise that HUD candidate before opening 句芒 production art.
+- No production code or Work handoff is started; final ZIP still requires player re-upload + FINAL FILESET AUDIT PASS.
+
+---
+
 ## 2026-09-20：Work ZIP 前新增玩家 final-file re-upload audit
 
 - 所有圖片都確認後，玩家必須重新上傳自己實際下載、準備交付 Work 的最終檔案。
