@@ -16,7 +16,7 @@
 | Item | Purpose | Classification | Production status |
 |---|---|---|---|
 | Level7 background | map | image required | APPROVED_FINAL |
-| 欽原 | normal enemy | PNG-first sprite | APPROVED_FOR_GENERATION |
+| 欽原 | normal enemy | PNG-first sprite | APPROVED_FINAL — player-approved single-creature PNG visual |
 | 諸懷 | heavy enemy | PNG sprite | pending approval |
 | 夔 | Boss | PNG sprite | pending approval |
 | 夔 Boss HUD | HUD frame with empty HP channel | PNG | pending approval |
@@ -71,7 +71,7 @@ Only these statuses control image generation:
 
 ## Current Level7 image-generation allowlist
 
-**Current approved source-art sub-batch: 欽原 only.**
+**欽原 sub-batch complete. No next creature sub-batch is open yet.**
 
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
@@ -85,8 +85,22 @@ This approval is limited to the background sub-batch. Generating the background 
 
 ### Proposed next sub-batch — 欽原 only
 
-Status: **APPROVED_FOR_GENERATION**
+Status: **APPROVED_FINAL**
 
 Visual proposal is recorded in `DESIGN.md` Section 20.
 
-Player continuation accepted this visual direction. Generate 欽原 only. Do not automatically include 諸懷, 夔, 句芒, Boss HUD, or projectile art in the same batch.
+The player approved the final simplified single-creature 欽原 PNG direction. Preserve this visual identity; later work may only perform runtime optimization/integration. Do not automatically include 諸懷, 夔, 句芒, Boss HUD, or projectile art in the same batch.
+
+
+### Level7 creature-generation rule inheritance
+
+All remaining Level7 creature art follows `AGENTS.md` Section 21 and the creature source-art contract in `docs/ASSET_INTEGRATION_GUIDE.md`.
+
+For 諸懷 / 夔 / 句芒 production sprite:
+- discuss visual identity first;
+- show the player only a single game-usable transparent PNG candidate by default;
+- no concept sheet / multi-panel board unless explicitly requested;
+- simplify for phone readability;
+- use strong feature/body color separation;
+- avoid dark-detail-heavy bodies that collapse into a blob;
+- approve the current creature before opening the next sub-batch.
