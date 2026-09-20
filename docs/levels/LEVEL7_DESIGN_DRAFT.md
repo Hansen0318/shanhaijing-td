@@ -247,3 +247,206 @@ Do not generate the Level7 asset batch until the player approves the concept and
 8. measure canonical 390×610 path / slots / thunder zones;
 9. approve final asset inventory;
 10. create only the image assets that survive the Procedural / PNG / Hybrid classification.
+
+
+## 13. Proposed Level7 numerical baseline
+
+> Status: CHAT BALANCE PROPOSAL / PLAYER APPROVAL PENDING
+
+These values are designed to step up moderately from Level6 without assuming the player brings 句芒.
+
+### 欽原
+
+Proposed base stats:
+- HP: **100**
+- Speed: **88**
+- Base Damage: **1**
+- Reward: **14**
+- Radius class: small
+
+**雷行**
+- Trigger: 欽原 is logically inside the thunder region at the instant that region pulses.
+- Effect: movement speed × **1.25** for **1.4s**.
+- Re-trigger refreshes duration; it does not multiply/stack with itself.
+- Leaving the zone does not cancel an already-triggered short 雷行 burst.
+- Presentation: procedural speed streak / electric edge emphasis; no dedicated projectile asset.
+
+This deliberately differs from Level6 陽羽, whose sunlight speed bonus exists only while inside the currently active continuous zone.
+
+### 諸懷
+
+Proposed base stats:
+- HP: **390**
+- Speed: **25**
+- Base Damage: **3**
+- Reward: **30**
+- Radius class: heavy
+
+**雷殼**
+- Trigger: 諸懷 is logically inside a thunder region when that region pulses.
+- Effect: damage taken × **0.80** for **1.6s**.
+- Re-trigger refreshes duration; the defense multiplier does not stack.
+- Once the short duration ends, defense returns immediately to normal.
+- Presentation: brief charged shell / electric outline around the body.
+
+This is a discrete pulse-triggered temporary defense state, not the continuous location-bound armor used by Level6 扶桑甲獸.
+
+### 夔
+
+Proposed base stats:
+- Base HP: **7000**
+- Speed: **16**
+- Base Damage: **20**
+- Reward: **0**
+- Radius class: Boss
+
+W10 proposed Boss HP multiplier: **×1.10**
+- Runtime W10 HP baseline: **7700**
+
+#### P1
+- Boss phase: 1
+- Thunder pulse cadence: every **7.0s**
+- Telegraph: **0.9s**
+- Pulse targets one thunder region at a time, alternating A → B → A → B.
+- 夔 itself does not receive 欽原雷行 or 諸懷雷殼 from its own battlefield pulse.
+
+#### P2
+Trigger once at **50% HP**:
+- no healing;
+- no second HP bar;
+- Speed × **1.15**;
+- pulse cadence becomes **5.0s**;
+- telegraph remains **0.9s**;
+- pulse sequence becomes:
+  - first pulse: A
+  - second pulse: B
+  - third pulse: **A+B**
+  - then repeat.
+
+This creates escalating battlefield pressure without copying 金烏's permanently active dual sunlight zones.
+
+## 14. Proposed 句芒 gameplay baseline
+
+> Status: CHAT BALANCE PROPOSAL / PLAYER APPROVAL PENDING
+
+### Base tower data
+
+- Cost: **130**
+- Damage: **10**
+- Attack interval: **1.15s**
+- Range: **138**
+- Projectile speed: **380**
+- Role label: **全隊增益 / 木神支援**
+
+句芒 should contribute visible single-target damage, but its individual DPS stays below dedicated damage towers because the global team support is its primary value.
+
+### Global support
+
+At least one deployed 句芒 enables a team-wide attack-interval multiplier.
+
+- Lv1 strongest deployed 句芒: all deployed towers attack interval × **0.95**
+- Lv2: × **0.92**
+- Lv3: × **0.89**
+
+Rules:
+- includes 句芒 itself;
+- multiple deployed 句芒 do not stack;
+- use only the strongest currently deployed 句芒 level;
+- selling/removing the strongest recalculates from the remaining 句芒;
+- selling/removing the last 句芒 removes the support bonus immediately;
+- this multiplier is a shared team-support layer and must compose predictably with existing Blessing attack-speed modifiers rather than rewriting them.
+
+### Level scaling
+
+Use the existing common tower level-damage contract unless implementation evidence requires a narrow exception:
+- Lv1 damage: base
+- Lv2 damage: existing shared ×1.30
+- Lv3 damage: existing shared ×1.50
+
+Do not invent a second 句芒-specific damage-level formula.
+
+### Proposed Blessing direction
+
+Do not add Level7-only mechanics just to fill three cards. Candidate 句芒-specific Blessings:
+
+- **青羽**: 句芒 damage +20%
+- **春生**: global support improves by a small fixed amount
+- **神木**: 句芒 range +15%
+
+Exact 春生 support increment remains unfrozen until executable balance simulation.
+
+### Attack visual
+
+Current recommendation remains:
+- small 青木靈羽 / 葉刃 body: **Hybrid candidate**
+- procedural green trail
+- procedural impact glow
+
+Do not create the projectile asset until the player approves the mockup direction.
+
+## 15. Proposed W1–W10 baseline
+
+The wave structure introduces each enemy independently before mixing them, then increases pressure gradually.
+
+| Wave | Composition | interval | hpMultiplier | bossHpMultiplier |
+|---|---|---:|---:|---:|
+| W1 | 欽原 ×6 | 1.10 | 1.00 | — |
+| W2 | 欽原 ×8 | 1.00 | 1.00 | — |
+| W3 | 欽原 ×6 + 諸懷 ×2 | 1.00 | 1.00 | — |
+| W4 | 諸懷 ×4 | 1.05 | 1.00 | — |
+| W5 | 欽原 ×10 + 諸懷 ×3 | 0.90 | 1.05 | — |
+| W6 | 欽原 ×14 + 諸懷 ×4 | 0.78 | 1.10 | — |
+| W7 | 欽原 ×10 + 諸懷 ×6 | 0.82 | 1.15 | — |
+| W8 | 欽原 ×16 + 諸懷 ×6 | 0.70 | 1.22 | — |
+| W9 | 欽原 ×18 + 諸懷 ×8 | 0.64 | 1.30 | — |
+| W10 | 欽原 ×8 + 諸懷 ×4 + 夔 ×1 | 0.84 | 1.18 | 1.10 |
+
+Design constraints:
+- W1–W2 must remain comfortable enough for the player to read the thunder telegraph.
+- W3–W4 teach the interaction of fast and heavy enemies with the same pulse mechanic.
+- W8–W9 may be dense, but global enemy-spacing/readability rules still apply.
+- W10 must not end when 夔 dies if normal enemies remain.
+- W10 must not end while 夔 is alive even if the normal queue is empty.
+- Boss and remaining minions may overlap in time, but spawning must preserve the shared spacing contract.
+
+## 16. Thunder mechanic timing proposal
+
+### P1 / normal waves
+
+- Two fixed thunder regions: A / B.
+- One region charges at a time.
+- Cycle interval: **7.0s**.
+- Telegraph duration: **0.9s**.
+- After telegraph, the region pulses once, then returns to faint landmark state.
+- Next cycle charges the other region.
+
+### Boss P2
+
+- Cycle interval: **5.0s**.
+- Telegraph remains **0.9s**.
+- Sequence: A → B → A+B → repeat.
+- The A+B pulse is still one discrete event, not a persistent dual-zone field.
+
+### Safety / readability
+
+- no rapid white full-screen flash;
+- use localized glow / electric veins / ring expansion;
+- no strobing faster than the readable telegraph cadence;
+- active telegraph must remain identifiable at 390px / 390×700;
+- zone VFX must not obscure HP bars, towers, or enemy silhouettes.
+
+## 17. Level7 clear reward / progression proposal
+
+Do **not** add another deployable-beast unlock at Level7 by default.
+
+Reason:
+- Level3 unlocked 白澤;
+- Level6 unlocked 句芒;
+- unlocking a new deployable every single level would rapidly inflate roster/UI/balance scope.
+
+Proposed Level7 clear behavior:
+- victory progresses to Level8 once Level8 exists;
+- no new beast unlock is required for Level7;
+- if a later design decides Level7 needs a special unlock, add it through shared progression data rather than a Level7-specific UI branch.
+
+This keeps Level7 focused on teaching and validating 句芒 as the newly available fifth roster member.
