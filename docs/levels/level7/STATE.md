@@ -1,6 +1,6 @@
 # Level7 — Current State / Handoff
 
-> This is the first file a new Chat / Work session reads after the project-wide rules and `docs/WORK_PROGRESS.md`.
+> This is the Level7 handoff entry. New/returning sessions must first follow `AGENTS.md` and `docs/DEVELOPMENT_PLAYBOOK.md`, then `docs/WORK_PROGRESS.md`, then this file.
 
 ## Active level
 
