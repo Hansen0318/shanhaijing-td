@@ -10,6 +10,42 @@
 - Active canonical folder: `docs/levels/level7/`
 - Last continuity-structure update: 2026-09-20
 
+
+## Current gate
+
+**PLAYER REVIEW / DESIGN APPROVAL**
+
+### Allowed now
+
+- review/revise the proposed Level7 theme, enemy set, Boss, thunder mechanic, 句芒 role and proposed numerical baseline;
+- discuss alternatives;
+- promote only player-approved decisions into `SPEC.md`;
+- prepare a concept/mockup only when the current discussion explicitly calls for one;
+- update documentation to reflect player decisions.
+
+### Forbidden until gate exit
+
+- no production gameplay implementation;
+- no canonical map/path/slot coordinates;
+- no final Level7 image batch;
+- no Boss HUD generation;
+- no enemy/Boss/tower final art batch;
+- no 句芒 projectile final asset;
+- no Work implementation handoff;
+- no tests/release work for unimplemented Level7.
+
+### Gate exit condition
+
+The player has approved or revised the Level7 core gameplay concept sufficiently to freeze:
+- final level theme/name direction;
+- normal enemies;
+- Boss;
+- map mechanic;
+- 句芒 gameplay baseline;
+- W1–W10 / Boss phase baseline.
+
+After that, accepted decisions move to `SPEC.md` and the next gate becomes **MAP CONCEPT / CANONICAL GEOMETRY**.
+
 ## Confirmed / approved
 
 - Level6 clear unlocks **句芒** through shared progression data.
