@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 route revised to lightning-zigzag
+
+- Player approved moving away from the conventional smooth S-shaped road.
+- Canonical design direction is now a lightning-bolt / Z-like zigzag route with a few strong turns.
+- 雷脈 A/B should align with two meaningful route turns/crossings.
+- Upper-left Spawn and lower-right 震木神壇 remain.
+- No canonical coordinates are frozen yet; the actual background candidate must be approved first.
+- Background-only generation allowlist remains unchanged; all character/HUD/projectile art is still blocked.
+
+---
+
 ## 2026-09-20：Level7 map composition approved / background-only sub-batch opened
 
 - Player continuation accepted the proposed Level7 map composition.
