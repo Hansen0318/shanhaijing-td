@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Stage-gate enforcement added
+
+- 對長期開發新增「不是只有記錄，而是限制執行順序」的硬規則。
+- `STATE.md` 現在必須明列 Current gate / Allowed now / Forbidden until gate exit / Gate exit condition / Next exact step。
+- 圖片批量生成新增強制 allowlist：只有 `ASSETS.md` 標成 `APPROVED_FOR_GENERATION` 的項目可以進當前批次。
+- 未討論、mockup first、Procedural-first、未核准、屬於後續階段的圖片，不得提前生成。
+- 若發現自己已跨 gate 做太早，必須停止，不得因為「都開始了」就把後面整批做完。
+- Level7 目前 gate = PLAYER REVIEW / DESIGN APPROVAL；目前 final image-generation allowlist = none。
+
+---
+
 ## Active development pointer — Level7
 
 - Active level: **Level7**

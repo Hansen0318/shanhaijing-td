@@ -40,3 +40,26 @@
 ## Final inventory
 
 Pending player approval of gameplay concept and background direction.
+
+
+## Generation status vocabulary
+
+Only these statuses control image generation:
+
+- **APPROVED_FOR_GENERATION** — allowed in the next/current image batch.
+- **MOCKUP_APPROVED_ONLY** — may generate a small concept/mockup, not final production art.
+- **PENDING_DISCUSSION** — do not generate.
+- **PROCEDURAL_FIRST** — do not generate a dedicated image unless later escalated.
+- **BLOCKED_BY_GEOMETRY** — do not generate final map-dependent art yet.
+- **GENERATED_UNAPPROVED** — output exists but is not canonical/usable until player accepts it.
+- **APPROVED_FINAL** — player-approved final source art; proceed to optimization/integration when the project gate permits.
+
+## Current Level7 image-generation allowlist
+
+**None.**
+
+At the current `STATE.md` gate, no final Level7 batch is approved for generation.
+
+The 句芒 projectile remains a **Hybrid candidate / PENDING_DISCUSSION** and must first be discussed or mocked up when the player reaches that decision. Enemy/Boss/map/HUD final assets are also not yet approved for generation.
+
+A future batch must list exact filenames/items here with **APPROVED_FOR_GENERATION** before generation begins.
