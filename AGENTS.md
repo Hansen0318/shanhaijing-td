@@ -239,3 +239,47 @@ Level4+ progression must not grow through per-level hard-coded roster arrays or 
 - Blessing ownership should scale through common blessing data tagged by tower/beast identity. Avoid accumulating files or branches whose semantics are only `LEVEL4_*`, `LEVEL6_*`, etc. when the mechanic is globally reusable.
 - UI labels, cards, result unlocks, and roster grids should consume level/progression data rather than duplicate game rules in presentation code.
 - Any migration from existing hard-coded Level4/5 behavior to data-driven progression must preserve current Level1–5 observable behavior and add targeted regression for lineup contents, exactly-3 validation, retry reset, Blessing filtering, unlock state, first-unlock presentation, and next-level visibility.
+
+
+## 16. Attack-visual implementation and asset-production policy
+
+Every new tower attack, enemy attack, Boss skill, projectile, status effect, or battlefield VFX must be classified **before** it is added to an image-generation batch.
+
+### A. Procedural-first
+
+Use code-generated rendering by default when the visual is primarily:
+- beam / laser / energy line / linked ray;
+- aura / shield / glow;
+- area / zone highlight;
+- status indicator;
+- short hit flash / impact spark;
+- speed / motion trail.
+
+Procedural-first items are **not** added to the formal batch-image production list by default.
+
+### B. PNG-first
+
+Use a dedicated transparent runtime asset when the player needs to see a distinct physical projectile body, for example:
+- fireball;
+- ice shard;
+- rock shot;
+- feather / leaf / blade projectile;
+- solar orb;
+- thorn / seed / other identifiable object.
+
+PNG-first items belong in the formal asset-production list after the visual direction is approved.
+
+### C. Hybrid
+
+Use a small clear PNG core plus procedural trail / glow / impact when a recognizable projectile body is needed but a fully image-driven effect would be unnecessarily heavy.
+
+### Decision and escalation rules
+
+- Decide Procedural-first / PNG-first / Hybrid **before** batch image generation.
+- Do not generate projectile art “just in case”.
+- If a Procedural-first result is clear at 390px / 390×700, keep it procedural and do not later add redundant art merely for decoration.
+- If player/runtime smoke shows the procedural result is unclear, it may be escalated to Hybrid or PNG-first.
+- If classification is uncertain, first provide a lightweight mockup, textual visual spec, or small runtime prototype for player review. Do not add it to the final production list until the direction is agreed.
+- Visual choice must preserve gameplay timing, damage, targeting, range, pathing, and balance unless the player explicitly requests a gameplay change.
+- Reuse existing approved effects/assets when suitable instead of generating near-duplicate art.
+- This policy applies project-wide to all future levels and all future Chat / Work sessions.

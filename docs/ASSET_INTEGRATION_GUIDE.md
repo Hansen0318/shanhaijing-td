@@ -169,3 +169,71 @@ VFX 尺度以受影響物件／區域為基準：
 - If runtime evidence shows one new-map slot is excessively dominant, prefer a narrow new-level slot-position adjustment before changing shared tower stats or previously completed levels.
 - A path correction does not automatically justify moving approved tower slots. Re-check whether the slot itself is visually or mechanically wrong before changing it.
 - Debug/acceptance should confirm that the rendered slot platform, pointer hit area, and logical slot center all refer to the same intended map position.
+
+
+## 20. Attack Visual Production Policy
+
+Before generating any new attack/projectile/VFX asset, classify the visual as **Procedural-first**, **PNG-first**, or **Hybrid**.
+
+### 20.1 Procedural-first — do not add to batch art by default
+Use programmatic rendering first for:
+- beam / laser / spiritual ray / lightning line;
+- shield / aura / glow;
+- map-zone highlight;
+- status ring / status emphasis;
+- short hit flash;
+- speed trail / motion streak.
+
+These should not enter the formal batch-image list unless player/runtime smoke later proves the result insufficient.
+
+### 20.2 PNG-first — include in batch art
+Use a dedicated transparent PNG/WebP when the attack identity depends on seeing a concrete projectile body, such as:
+- fireball;
+- rock;
+- feather blade;
+- leaf blade;
+- solar orb;
+- ice shard;
+- thorn / seed / other physical-looking shot.
+
+### 20.3 Hybrid
+Prefer a small optimized projectile image plus code-generated trail/glow/impact when that gives better readability with less asset weight than a large all-in-one effect.
+
+### 20.4 Borderline cases
+If the implementation type is unclear:
+1. do not immediately create a final production asset;
+2. prepare a small mockup, concept image, textual visual spec, or lightweight procedural prototype;
+3. review with the player;
+4. then decide whether the item belongs in the production asset list.
+
+### 20.5 Batch-list admission rule
+The batch image list should contain only assets that are actually required:
+- unit sprites;
+- Boss sprites;
+- map/background assets;
+- UI/HUD frames;
+- confirmed PNG-first / Hybrid projectiles;
+- VFX that genuinely require dedicated art.
+
+Do not include:
+- procedural beams;
+- procedural zone highlights;
+- procedural labels/state text;
+- procedural hit flashes;
+- procedural trails;
+- redundant “backup” projectile images.
+
+### 20.6 Mobile acceptance / escalation
+At 390px / 390×700 the player must be able to identify:
+- who attacked;
+- what target was hit;
+- whether the visual is an attack / state / zone;
+- the important gameplay state.
+
+If this is clear, keep the Procedural-first solution. If not, discuss escalation to Hybrid or PNG-first rather than silently generating more art.
+
+### 20.7 Current project examples
+- 白澤 attack beam → Procedural-first beam + existing Insight impact mark.
+- 日照區 emphasis → Procedural-first / existing zone asset support.
+- speed / armor / shield readability → Procedural-first or Hybrid depending on mobile smoke.
+- future fireball / solar orb / leaf blade / rock projectile → normally PNG-first or Hybrid.

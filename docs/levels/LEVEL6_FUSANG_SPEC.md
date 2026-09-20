@@ -421,3 +421,16 @@ Player phone smoke identified two additional presentation gaps. These are readab
 - 扶桑甲獸 motion must be visibly distinguishable across successive frames while its logical path center stays unchanged.
 - Preserve enemy path-facing mirror and tower target-facing behavior.
 - No Level1–5 balance/gameplay changes.
+
+
+## 18. Attack-visual classification reference
+
+Level6 is a reference implementation of the project-wide rule in `AGENTS.md` Section 16 and `docs/ASSET_INTEGRATION_GUIDE.md` Section 20.
+
+- 白澤 attack beam: **Procedural-first**. The beam is drawn by code; the existing Insight mark is reused for the impact. No dedicated beam PNG is required unless future player smoke rejects the result.
+- 日照區 A/B emphasis: **Procedural-first / existing asset-assisted**. Do not create additional redundant zone images unless the current presentation proves insufficient.
+- 陽羽加速 / 陽木甲 / 日輪護體: use the existing approved assets plus procedural emphasis where needed; do not generate duplicate replacements simply because readability is tuned.
+- 扶桑甲獸 Motion Lite is procedural presentation and must not create new movement-sprite assets.
+- Any future Level6 projectile with a concrete body must be classified separately before asset generation.
+
+This classification is an example, not a Level6-only exception; future levels inherit the same decision process.
