@@ -594,3 +594,87 @@ The high-level rules are:
 Before any Work handoff, Chat must confirm that the repository already contains enough canonical context for Work to execute without rediscovering decisions.
 
 If a new governance rule would require Work to spend substantial time/tokens on checks that Chat, a static script, or the player can perform more cheaply, redesign the rule before adopting it.
+
+
+## 21. Creature / monster art generation is a permanent mobile-readability contract
+
+This rule applies to every future **enemy, Boss, and creature sprite** unless a documented asset-specific exception is approved.
+
+### Reference existing game art before generation
+
+Before proposing or generating a new creature:
+- inspect the established creature sprites from completed levels;
+- match the existing game's simplification level, silhouette language, cel-shading/flat-color treatment, outline weight, contrast, and mobile-scale readability;
+- do not design a creature as a standalone illustration that looks good only when enlarged;
+- do not introduce a visibly different art style merely because a new level has a different theme.
+
+The target is **same game, new creature**, not **new art style per level**.
+
+### Silhouette and major features come before detail
+
+Creature design priority is:
+
+1. readable outer silhouette;
+2. immediately identifiable major feature(s);
+3. clear facing / movement direction;
+4. a small amount of supporting detail.
+
+Rules:
+- ordinary enemies must be especially simple;
+- Bosses may carry more detail, but their silhouette and major feature still come first;
+- remove decorative fragments, armor pieces, feather subdivisions, micro-patterns, tiny glow marks, or texture that do not survive the intended mobile runtime size;
+- if removing roughly half the small detail does not hurt recognition, prefer the simpler version.
+
+### Color and contrast are gameplay requirements
+
+- Use a small number of clear color groups.
+- Major identifying parts must contrast against the body: head/face, eye, horn, wing, tail, weapon, core, shell, etc.
+- Avoid large dark/black masses with low internal separation; on a phone they can collapse into one unreadable blob.
+- Avoid many neighboring mid-tone colors that merge after downscaling.
+- Attribute color (thunder/fire/wood/etc.) is secondary to silhouette and contrast.
+- Judge the sprite at expected runtime scale, not only at source-image size.
+
+### Production-facing source art
+
+For a creature intended to enter the game:
+- final discussion candidates should already be **single-creature, transparent-background PNG-style assets** suitable for game integration;
+- no text, labels, captions, frames, comparison grids, orthographic boards, concept-sheet layouts, size-preview panels, or multiple separated poses unless the player explicitly asks for a design sheet;
+- no baked environment/background;
+- no baked ground shadow unless the runtime contract explicitly requires one;
+- no baked motion trail, speed line, aura, shield, status effect, or large glow when that effect is classified Procedural-first;
+- preserve enough transparent margin for Motion Lite / hit / death presentation without clipping;
+- default facing must follow the shared facing contract so runtime mirrorX can handle opposite travel/target direction.
+
+### Player-discussion workflow for creature art
+
+The default iteration loop is:
+
+1. discuss the creature's role and the few defining visual features;
+2. generate **one single production-style PNG candidate**;
+3. player reviews that actual game-usable candidate;
+4. revise the same creature as another single PNG candidate if needed;
+5. when the player approves it, record it as the canonical approved source art;
+6. only then move to the next creature/sub-batch.
+
+Do **not** insert concept sheets, multi-panel creature boards, sprite atlases, or unrelated future assets into this loop unless the player explicitly requests them.
+
+Approval of one creature does not approve adjacent creatures, Boss HUDs, projectiles, or VFX.
+
+### Mobile-readability check before approval
+
+Before calling a creature art direction ready, verify conceptually/staticly:
+- major silhouette remains recognizable around the established same-class runtime size;
+- major feature remains visible after downscaling;
+- color blocks stay separated;
+- the body does not become one dark mass;
+- source pose works with shared path-facing/target-facing mirror behavior;
+- procedural effects have not been unnecessarily baked into the sprite.
+
+Runtime/player smoke remains the final visual acceptance when the creature is integrated.
+
+### Canonical-art rule
+
+Once the player approves a single creature PNG candidate:
+- do not regenerate/restyle it merely because a new Chat/Work session starts;
+- later processing may trim/resize/compress/optimize it for runtime, but must preserve the approved visual identity;
+- replacement requires explicit player request or concrete runtime evidence that the approved asset is unusable.
