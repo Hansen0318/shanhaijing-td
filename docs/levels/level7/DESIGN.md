@@ -534,3 +534,22 @@ Do not freeze coordinates yet. Final slots must be measured after the final back
 - no excessive cliffs/props that hide enemies;
 - no full-screen lightning baked into the background;
 - no canonical coordinates before the actual final background is chosen.
+
+
+## 19. Route revision — lightning zigzag
+
+> Status: PLAYER APPROVED DIRECTION
+
+The previous smooth S / folded-road idea is superseded for Level7.
+
+Approved route identity:
+- use a **lightning-bolt / Z-like zigzag** as the main road silhouette;
+- prefer 3–4 strong directional changes over a continuous serpentine curve;
+- keep turn radii broad enough for enemy spacing/readability and large Boss sprites;
+- 雷脈A / 雷脈B should coincide with two meaningful turn/crossing points;
+- preserve the upper-left Spawn → lower-right 震木神壇 progression;
+- use tower slots in three tactical bands around the upper, middle and lower route sections;
+- avoid a dominant central slot that trivially covers most of the path;
+- do not revert to a conventional smooth S merely for convenience.
+
+This route shape is specifically intended to make Level7 visually and tactically distinct from earlier levels while reinforcing the 雷澤 theme.
