@@ -84,7 +84,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/monster-generation-hard-rule-20260920`
+- `docs/level7-zhuhuai-visual-proposal-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -103,4 +103,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Discuss 諸懷 visual identity next under the new global creature-art rule. Show only one simplified, high-contrast, game-usable single PNG candidate when its generation sub-batch is approved.**
+**Review the 諸懷 visual proposal in `DESIGN.md` Section 21. If approved, open 諸懷 alone for generation and show one simplified, high-contrast, transparent single PNG candidate.**

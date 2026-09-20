@@ -1,5 +1,18 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 諸懷 visual proposal
+
+- Following the new global creature-art hard rule, Chat prepared only the next creature discussion item: **諸懷**.
+- Historical traits retained: bull-like body, four horns, human-like eyes, pig-like ears.
+- Game simplification direction: broad heavy silhouette, four horns as the dominant signature, large pig-like ears, pale unsettling eyes, short thick legs, no dense armor/fur detail.
+- Proposed palette: warm ochre / pale earth body, stone or desaturated blue-gray secondary mass, ivory horns, small cyan electric accent.
+- 雷殼 remains Procedural-first; no second armored-state PNG by default.
+- 諸懷 remains `PENDING_DISCUSSION`; no image generation is authorized yet.
+- 夔 / 句芒 / Boss HUD / projectile remain blocked.
+- Next exact step: player approves/revises 諸懷 direction; only then generate one single transparent game-usable PNG.
+
+---
+
 ## 2026-09-20：通用怪獸生成硬規則建立 / 欽原形象確認
 
 - 欽原經數輪簡化後，玩家已確認最終方向：單隻、簡化、大色塊、高對比、避免黑色主體糊成一團。

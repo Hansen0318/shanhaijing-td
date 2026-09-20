@@ -607,3 +607,69 @@ When 雷行 triggers:
 If the player approves this direction:
 - 欽原 becomes **APPROVED_FOR_GENERATION** as the first and only character sub-batch item;
 - 諸懷 / 夔 / 句芒 / Boss HUD remain blocked for later discussion.
+
+
+## 21. Next creature visual proposal — 諸懷
+
+> Status: CHAT VISUAL PROPOSAL / PLAYER APPROVAL PENDING
+
+Historical identity to preserve:
+- bull-like body;
+- **four horns**;
+- human-like eyes;
+- pig-like ears;
+- man-eating beast from the 北山經 tradition.
+
+For Shanhaijing TD, the visual should simplify those traits rather than render every mythological detail literally.
+
+### Proposed game silhouette
+
+諸懷 should read as the **heavy / slow Level7 enemy** immediately.
+
+Recommended silhouette:
+- low, broad bull-like body;
+- oversized shoulder/chest mass;
+- **four horns as the main signature**: two larger forward/upward horns + two shorter rear/side horns;
+- pig-like ears kept large enough to read, but simplified;
+- human-like eyes represented as a calm/unnerving pale eye shape, not a realistic human face;
+- short thick legs;
+- compact tail;
+- no armor plates covering the whole body.
+
+### Simplification target
+
+Compared with 欽原:
+- much broader and heavier;
+- fewer small appendages;
+- no dense fur texture;
+- no tiny horn ridges;
+- no engraved armor patterns;
+- no black/dark full-body mass.
+
+Use 3–4 large color groups only.
+
+### Color direction
+
+Recommended:
+- main body: warm ochre / pale earth-brown;
+- underside / secondary mass: muted stone-gray or desaturated blue-gray;
+- horns: pale ivory;
+- eyes / thunder-reactive accent: bright cyan or pale electric blue.
+
+This keeps it clearly separated from 欽原 while still belonging to 雷澤天野.
+
+### 雷殼 handling
+
+Base 諸懷 PNG should stay normal-state only.
+
+When 雷殼 activates:
+- use Procedural-first rim glow / short electric shell emphasis;
+- do not create a second armored 諸懷 PNG unless later mobile smoke proves the state unreadable.
+
+### Generation rule
+
+If the player approves this direction:
+- open **諸懷 only** as the next `APPROVED_FOR_GENERATION` creature sub-batch;
+- generate one single transparent-background, game-usable PNG candidate;
+- no concept sheet, no comparison board, no multiple poses;
+- keep 夔 / 句芒 / Boss HUD / projectile blocked.
