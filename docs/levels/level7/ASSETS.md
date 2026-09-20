@@ -26,7 +26,7 @@
 | 諸懷 雷殼 | state VFX | Procedural-first or Hybrid | decide after review |
 | 夔 thunder pulse | Boss/mechanic VFX | Procedural-first | do not batch |
 | 句芒 team-support indicator | state VFX | Procedural-first | do not batch |
-| 句芒 青木靈羽／葉刃 | projectile | Hybrid | APPROVED_FOR_GENERATION — one minimal transparent projectile core only |
+| 句芒 青木靈羽／葉刃 | projectile | Hybrid | APPROVED_FINAL — player-approved simplified high-contrast projectile core |
 | 句芒 impact glow | hit VFX | Procedural-first | do not batch |
 
 ## Batch-admission rule
@@ -76,7 +76,7 @@ Only these statuses control image generation:
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
 Current exact image-generation allowlist:
-- **句芒 青木靈羽／葉刃 projectile core only — APPROVED_FOR_GENERATION.**
+- 句芒 青木靈羽／葉刃 projectile core — **APPROVED_FINAL**; do not regenerate.
 
 Everything else remains blocked:
 - procedural thunder/status/support/trail/impact visuals — do not create dedicated art.
@@ -158,3 +158,11 @@ Runtime companion visuals remain code-only:
 - global team-support indicator → Procedural-first.
 
 After the single PNG is shown, wait for explicit player approval before marking it APPROVED_FINAL or opening any later asset step.
+
+### Player approval — 句芒 projectile
+
+- Player approved the simplified second 青木靈羽／葉刃 candidate with reduced detail and stronger color-block readability.
+- Status → **APPROVED_FINAL**.
+- Preserve this exact visual identity; later runtime work may only trim/resize/compress it.
+- Trail and impact remain Procedural-first and must not be baked into a replacement projectile image.
+- No further Level7 source-art generation is opened by this approval.
