@@ -26,7 +26,7 @@
 | 諸懷 雷殼 | state VFX | Procedural-first or Hybrid | decide after review |
 | 夔 thunder pulse | Boss/mechanic VFX | Procedural-first | do not batch |
 | 句芒 team-support indicator | state VFX | Procedural-first | do not batch |
-| 句芒 青木靈羽／葉刃 | projectile | Hybrid candidate | mockup first |
+| 句芒 青木靈羽／葉刃 | projectile | Hybrid | APPROVED_FOR_GENERATION — one minimal transparent projectile core only |
 | 句芒 impact glow | hit VFX | Procedural-first | do not batch |
 
 ## Batch-admission rule
@@ -53,7 +53,7 @@ Current classification direction:
 - 諸懷 雷殼 — default Procedural-first; escalate to Hybrid only if 390px smoke is unclear.
 - 夔 thunder pulse — Procedural-first.
 - 句芒 team-support indicator — Procedural-first.
-- 句芒 attack projectile — Hybrid candidate; mockup/discussion first.
+- 句芒 attack projectile — **Hybrid approved**: one minimal 青木靈羽／葉刃 transparent PNG core + procedural short green trail + procedural impact glow.
 - 句芒 impact — Procedural-first.
 
 
@@ -75,9 +75,11 @@ Only these statuses control image generation:
 
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
+Current exact image-generation allowlist:
+- **句芒 青木靈羽／葉刃 projectile core only — APPROVED_FOR_GENERATION.**
+
 Everything else remains blocked:
-- 句芒 projectile — Hybrid candidate / PENDING_DISCUSSION;
-- procedural thunder/status visuals — do not create dedicated art.
+- procedural thunder/status/support/trail/impact visuals — do not create dedicated art.
 
 This approval is limited to the background sub-batch. Generating the background does **not** authorize later character/HUD/projectile assets.
 
@@ -132,3 +134,27 @@ Player continuation accepted this visual direction. Generate 諸懷 only as one 
 - Unlock presentation and deployed tower may use different optimized files only for runtime/layout reasons; they are still derivatives of the same canonical source.
 - This reuse decision applies to 句芒 for this release; it does not retroactively change 白澤's existing separate unlock/tower assets.
 - Next unresolved visual decision: 句芒 attack projectile classification/mockup.
+
+
+### Approved next sub-batch — 句芒 projectile core only
+
+Status: **APPROVED_FOR_GENERATION**
+
+Player continuation accepted the Hybrid direction.
+
+Generate exactly **one** game-usable transparent PNG:
+- identity: 青木靈羽／葉刃;
+- purpose: 句芒's lightweight single-target attack projectile core;
+- silhouette: one compact leaf-feather/blade shape, readable at very small mobile size;
+- palette: bright spring green / jade with a small warm-gold highlight; avoid dark mass;
+- detail: extremely simple, large color regions, no micro-veins or ornate texture;
+- orientation: clear horizontal travel direction so runtime rotation/facing is predictable;
+- background: transparent;
+- no text, no sheet, no multiple variants, no trail baked into the PNG, no impact baked into the PNG.
+
+Runtime companion visuals remain code-only:
+- short soft green trail → Procedural-first;
+- hit glow / small scatter → Procedural-first;
+- global team-support indicator → Procedural-first.
+
+After the single PNG is shown, wait for explicit player approval before marking it APPROVED_FINAL or opening any later asset step.
