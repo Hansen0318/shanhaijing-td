@@ -83,7 +83,11 @@
 - **L7-R068** Selling/removing the strongest recomputes from remaining 句芒; removing the last one removes the bonus.
 - **L7-R069** The support multiplier includes 句芒 itself.
 - **L7-R070** Use the existing shared tower damage scaling contract: Lv2 ×1.30, Lv3 ×1.50. Do not create a separate 句芒 damage-level formula.
-- 句芒 attack visual remains a Hybrid candidate: small 青木靈羽／葉刃 body + procedural trail/impact. Final asset generation is not yet approved.
+- **L7-R071** 句芒 attack visual is Hybrid: player-approved simplified high-contrast 青木靈羽／葉刃 PNG core + Procedural-first short green trail + Procedural-first impact glow.
+- **L7-R072** 句芒 Blessing「青羽」: 句芒 damage +20% per layer.
+- **L7-R073** 句芒 Blessing「神木」: 句芒 range +15% per layer.
+- **L7-R074** 句芒 Blessing「春生」: improve the active global attack-interval multiplier by -0.02 per layer. Examples: base Lv1/Lv2/Lv3 ×0.95/×0.92/×0.89 → one layer ×0.93/×0.90/×0.87 → two layers ×0.91/×0.88/×0.85.
+- **L7-R075** These 句芒 Blessings inherit the existing same-item maximum of 2 layers.
 
 ## 8. W1–W10 baseline
 
@@ -140,10 +144,8 @@ Level7 inherits all applicable `AGENTS.md`, `docs/DEVELOPMENT_PLAYBOOK.md`, and 
 Geometry is now frozen in `GEOMETRY.md`.
 
 Remaining:
-- enemy/Boss sprite visual anchors/footprints against final art;
-- final asset inventory and image-generation allowlist;
-- 句芒 final projectile art direction/mockup;
-- exact 句芒-specific Blessing values, including 春生 increment.
+- enemy/Boss sprite visual anchors/footprints against final art during runtime integration;
+- final source-file audit/package before production implementation.
 
 
 ## 13. Approved map composition direction
