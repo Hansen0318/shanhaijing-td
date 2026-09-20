@@ -52,10 +52,10 @@ The final Level7 asset inventory is classified and the required source-art sub-b
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- final Level7 asset inventory/classification;
-- enemy/Boss/tower visual direction;
-- 句芒 projectile mockup decision;
-- final image-generation sub-batches.
+- 夔 Boss HUD approval/revision;
+- 句芒 production tower visual direction;
+- 句芒 projectile mockup/classification resolution;
+- final Level7 asset inventory/classification closure;
 
 ## Completed
 
@@ -70,6 +70,9 @@ Still pending:
 - Thunder-vein idle micro-animation / 0.9s charge / pulse is approved as **Procedural-first**; no dedicated animation image batch.
 - Geometry Guide V3 was player-approved and has been promoted to canonical 390×610 geometry in `GEOMETRY.md`.
 - 欽原 final simplified single-creature PNG visual has been player-approved; preserve it as canonical source-art identity.
+- 諸懷 simplified four-horn heavy-enemy single PNG visual has been player-approved.
+- 夔 revised blue-white thunder-beast Boss single PNG visual has been player-approved after rejecting the first too-similar version.
+- 夔 Boss HUD candidate exists but remains GENERATED_UNAPPROVED pending explicit player review.
 
 ## Not completed
 
@@ -84,7 +87,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-zhuhuai-approved-20260920`
+- `docs/level7-sync-approved-assets-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -103,4 +106,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Generate one 諸懷 source-art candidate using the approved visual direction. Review that single PNG before opening 夔 or any later asset sub-batch.**
+**Review the existing 夔 Boss HUD candidate. Either approve it or request revision. Do not open 句芒 production art until the HUD status is resolved.**
