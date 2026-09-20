@@ -283,3 +283,91 @@ Use a small clear PNG core plus procedural trail / glow / impact when a recogniz
 - Visual choice must preserve gameplay timing, damage, targeting, range, pathing, and balance unless the player explicitly requests a gameplay change.
 - Reuse existing approved effects/assets when suitable instead of generating near-duplicate art.
 - This policy applies project-wide to all future levels and all future Chat / Work sessions.
+
+
+## 17. Active-level continuity, read order, and handoff state are mandatory
+
+The repository, not conversation memory, is the source of continuity for long-running level development. A new Chat, Work, Codex session, or recovered session must identify the active level and read its current state before planning or implementation.
+
+### Required read order
+
+Before changing an active level:
+
+1. read `AGENTS.md`;
+2. read the newest relevant summary in `docs/WORK_PROGRESS.md`;
+3. identify the active level;
+4. read `docs/levels/levelN/STATE.md`;
+5. read `docs/levels/levelN/SPEC.md`;
+6. read `GEOMETRY.md` when touching map/path/slots/zones/anchors;
+7. read `ASSETS.md` when touching art/VFX/HUD/projectiles/preload;
+8. read `DESIGN.md` only for proposals, alternatives, rationale, and items not yet promoted to the formal spec;
+9. inspect the current branch / latest relevant SHA and diff;
+10. continue from the **Next exact step** recorded in `STATE.md`.
+
+**Do not start implementation until the active-level state has been identified.**
+
+### Per-level document contract
+
+For every newly developed level, use:
+
+```
+docs/levels/levelN/
+  STATE.md
+  SPEC.md
+  DESIGN.md
+  GEOMETRY.md
+  ASSETS.md
+```
+
+- **STATE.md** — the handoff entry point: current phase, approval state, branch/SHA, completed work, pending work, blockers, verification status, and one precise Next exact step.
+- **SPEC.md** — only approved/frozen implementation requirements. Draft proposals must not be silently promoted here.
+- **DESIGN.md** — proposals, alternatives, rationale, balance drafts, and player-approval-pending decisions.
+- **GEOMETRY.md** — canonical logical map size, background/crop identity, ordered path, Spawn/Base, tower slots, special zones, anchors, and geometry approval/runtime status.
+- **ASSETS.md** — approved/planned asset inventory, filenames, Procedural-first / PNG-first / Hybrid classification, alpha/format/size/preload state, and asset approval status.
+
+### Source-of-truth priority
+
+If documents disagree, resolve in this order:
+
+1. `AGENTS.md` for project-wide hard rules;
+2. active-level `STATE.md` for current phase/status and what work is next;
+3. active-level `SPEC.md` for approved gameplay/acceptance requirements;
+4. active-level `GEOMETRY.md` / `ASSETS.md` for their domains;
+5. `docs/WORK_PROGRESS.md` for cross-project chronology/recovery notes;
+6. active-level `DESIGN.md` and older drafts for non-authoritative proposals/history.
+
+A newer player-approved decision recorded in the appropriate canonical file supersedes an older proposal. Do not use an old draft to override a formal spec.
+
+### State-update checkpoints
+
+Update the active level's `STATE.md` whenever any of these changes:
+
+- player approval/freeze status;
+- design/spec milestone;
+- canonical geometry;
+- asset inventory/classification;
+- implementation branch or relevant SHA;
+- engineering test/check status;
+- merge/main release status;
+- Pages deployment status;
+- player phone/device smoke status;
+- blocker;
+- Next exact step.
+
+For a substantial session, update `STATE.md` before handoff or interruption even if `WORK_PROGRESS.md` is also updated.
+
+### No-memory / no-rework rule
+
+- Do not rely on a previous Chat's memory, a long conversation transcript, or an old Work prompt as the canonical source.
+- Do not ask the player to re-explain information already recorded in the active-level canonical files.
+- Do not re-design, re-measure, regenerate, or re-implement work marked approved/completed merely because a new session started.
+- If runtime evidence contradicts a canonical document, record the discrepancy in `STATE.md`, preserve the last known-good source, and resolve it explicitly before changing the spec.
+- Work handoffs should reference these files rather than restating large permanent context blocks.
+
+### Level closure
+
+When a level is fully released:
+- mark `STATE.md` as released;
+- record final main/release SHA, deployment verification, and any remaining player-smoke note;
+- preserve the level folder as the historical/canonical record;
+- move the active-level pointer in `WORK_PROGRESS.md` to the next level rather than deleting prior-level documentation.
