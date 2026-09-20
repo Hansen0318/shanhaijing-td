@@ -1,5 +1,15 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 clean background candidate generated
+
+- Generated one clean Level7 雷澤天野 background candidate using the approved lightning-zigzag direction.
+- Candidate intentionally contains no gameplay labels/text overlay.
+- Asset status is **GENERATED_UNAPPROVED**; it is not yet canonical and is not committed as production art.
+- No geometry coordinates were assigned.
+- Next step is player review of the actual candidate/crop. If accepted, Chat will create the geometry overlay first for player correction, then freeze 390×610 coordinates.
+
+---
+
 ## 2026-09-20：Level7 route revised to lightning-zigzag
 
 - Player approved moving away from the conventional smooth S-shaped road.
