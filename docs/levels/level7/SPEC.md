@@ -137,12 +137,10 @@ Level7 inherits all applicable `AGENTS.md`, `docs/DEVELOPMENT_PLAYBOOK.md`, and 
 
 ## 12. Still open / not yet frozen
 
-- final background composition;
-- canonical 390×610 path;
-- Spawn/Base positions;
-- 8 tower slots;
-- thunder-zone coordinates;
-- enemy/Boss sprite anchors/footprints against final art;
+Geometry is now frozen in `GEOMETRY.md`.
+
+Remaining:
+- enemy/Boss sprite visual anchors/footprints against final art;
 - final asset inventory and image-generation allowlist;
 - 句芒 final projectile art direction/mockup;
 - exact 句芒-specific Blessing values, including 春生 increment.
@@ -163,3 +161,14 @@ Level7 inherits all applicable `AGENTS.md`, `docs/DEVELOPMENT_PLAYBOOK.md`, and 
 
 - **L7-G011** The route silhouette itself should visually echo a lightning strike / broken zigzag so Level7 is immediately distinguishable from prior S-shaped or soft-curved maps.
 - **L7-G012** Thunder regions A/B should sit at two meaningful zigzag turning/crossing points rather than appearing as unrelated decorative circles.
+
+
+## 14. Canonical geometry freeze
+
+- **L7-G100** Player-approved ordered enemy centerline is canonical in `GEOMETRY.md`.
+- **L7-G101** Spawn logical entry = **(40,34)**.
+- **L7-G102** Base logical endpoint = **(343,497)**.
+- **L7-G110** T1–T8 canonical centers are frozen in `GEOMETRY.md`.
+- **L7-G120** Thunder A/B initial gameplay regions are frozen in `GEOMETRY.md`.
+- Geometry Guide V3 supersedes V1/V2.
+- Runtime smoothing/interpolation must preserve the approved centerline and must not visibly cut zigzag corners.
