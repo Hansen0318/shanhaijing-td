@@ -17,7 +17,7 @@
 |---|---|---|---|
 | Level7 background | map | image required | APPROVED_FINAL |
 | 欽原 | normal enemy | PNG-first sprite | APPROVED_FINAL — player-approved single-creature PNG visual |
-| 諸懷 | heavy enemy | PNG-first sprite | PENDING_DISCUSSION — visual proposal ready |
+| 諸懷 | heavy enemy | PNG-first sprite | APPROVED_FOR_GENERATION |
 | 夔 | Boss | PNG sprite | pending approval |
 | 夔 Boss HUD | HUD frame with empty HP channel | PNG | pending approval |
 | 句芒 production tower sprite | deployable tower | PNG sprite | pending approval |
@@ -108,8 +108,8 @@ For 諸懷 / 夔 / 句芒 production sprite:
 
 ### Proposed next sub-batch — 諸懷 only
 
-Status: **PENDING_DISCUSSION**
+Status: **APPROVED_FOR_GENERATION**
 
 Visual proposal is recorded in `DESIGN.md` Section 21.
 
-No generation is authorized yet. If the player approves the visual direction, change only 諸懷 to `APPROVED_FOR_GENERATION` and generate one single transparent-background game-usable PNG. Keep 夔, 句芒, Boss HUD and projectile art blocked.
+Player continuation accepted this visual direction. Generate 諸懷 only as one single transparent-background game-usable PNG. Keep 夔, 句芒, Boss HUD and projectile art blocked.
