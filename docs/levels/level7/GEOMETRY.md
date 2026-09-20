@@ -1,109 +1,145 @@
 # Level7 — Geometry Contract
 
-> Canonical geometry lives here once player-approved. Candidate values below come from Geometry Guide V1 and must not be implemented as final until the player confirms/corrects the overlay.
+> This file is the canonical geometry source for Level7. New Chat / Work sessions must not re-guess these coordinates from screenshots or regenerate the route.
 
 ## Status
 
-**GEOMETRY GUIDE V1 / PLAYER CORRECTION PENDING**
+**CANONICAL / PLAYER APPROVED — Geometry Guide V3 (2026-09-20)**
+
+The player explicitly approved the final Geometry Guide V3 path after correcting Spawn entry, Base endpoint, and two route turns.
 
 ## Logical map
 
 - Width: **390**
 - Height: **610**
-- Background source: player-approved clean 雷澤天野 background generated 2026-09-20
-- Crop contract: minimal center crop to the established 390:610 aspect, then runtime scale to 390×610
-- Geometry Guide: `level7_geometry_guide_v1.png` (conversation artifact; candidate overlay only)
+- Geometry source image: approved Geometry Guide V3
+- Source guide dimensions used for measurement: **1004×1567**
+- Logical transform:
+  - x = sourceX × 390 / 1004
+  - y = sourceY × 610 / 1567
+- Background: player-approved clean Level7 雷澤天野 background
+- Runtime contract: preserve this background/crop relationship; do not re-crop independently after implementation.
 
-## Candidate enemy centerline — V1
+## L7-G100 — Canonical enemy centerline
 
-Ordered candidate anchors, 390×610 logical coordinates:
+Ordered 390×610 logical anchors:
 
 ```
-(18,61)
-(55,82)
-(104,96)
-(154,109)
-(207,131)
-(250,158)
-(267,190)
-(241,215)
-(199,238)
-(155,261)
-(130,284)
-(151,309)
-(195,332)
-(239,356)
-(271,381)
-(260,408)
-(225,431)
-(201,455)
-(220,478)
-(265,501)
-(309,523)
-(341,548)
-(354,570)
+(40,34)
+(45,77)
+(81,93)
+(124,106)
+(165,120)
+(183,128)
+(190,147)
+(224,157)
+(259,181)
+(251,206)
+(199,230)
+(156,249)
+(169,269)
+(209,291)
+(242,308)
+(241,331)
+(200,353)
+(178,375)
+(195,391)
+(226,405)
+(263,425)
+(307,450)
+(323,480)
+(343,497)
 ```
 
-- Spawn candidate: **(18,61)**
-- Base candidate: **(354,570)**
-- Path smoothing: **pending player correction / implementation audit**
+- **L7-G101 Spawn logical entry:** **(40,34)**
+- **L7-G102 Base logical endpoint:** **(343,497)**
 
-These coordinates are deliberately not canonical yet.
+Notes:
+- The path starts from the player-corrected upper entry, not from the decorative Spawn label marker.
+- The path terminates at the player-circled glowing altar/core center, not at the lower UI label.
+- The two player-corrected turns around 雷脈 A and the mid/lower fold are represented in the ordered anchors above.
+- Runtime interpolation/smoothing must remain close to the approved centerline and must not cut across terrain at the zigzag turns.
+- If implementation smoothing visibly cuts corners, increase local anchor density rather than moving the approved route.
 
-## Candidate tower-slot centers — V1
+## L7-G110 — Canonical tower-slot centers
 
-- T1: **(139,78)**
-- T2: **(291,122)**
-- T3: **(131,160)**
-- T4: **(95,257)**
-- T5: **(281,247)**
-- T6: **(289,352)**
-- T7: **(136,420)**
-- T8: **(253,463)**
+390×610 logical centers:
 
-Player review must confirm that the logical centers match the visible baked stone platforms and that later UI/hit areas will not be blocked.
+- T1: **(138,78)**
+- T2: **(294,124)**
+- T3: **(135,161)**
+- T4: **(97,259)**
+- T5: **(287,249)**
+- T6: **(293,358)**
+- T7: **(138,423)**
+- T8: **(258,464)**
 
-## Candidate thunder regions — V1
+These centers correspond to the baked circular stone platforms in the approved background.
 
-Candidate overlay bounds:
+Runtime acceptance:
+- visual slot marker must remain centered on the baked platform;
+- touch/hit area must remain usable at 390px / 390×700;
+- no Preparation/UI overlay may block a slot;
+- range overlays may not be used to justify silently moving a canonical slot.
 
-- Thunder A: **x=170..245, y=120..164**
-- Thunder B: **x=154..235, y=367..416**
+## L7-G120 — Canonical thunder regions
 
-The exact gameplay hit region may be refined after player correction. The background lightning veins are only landmarks; active animation remains procedural.
+390×610 logical candidate/interaction rectangles derived from the approved V3 guide:
 
-## Procedural thunder presentation
+- Thunder A: **x=187, y=116, width=63, height=42**
+- Thunder B: **x=153, y=360, width=66, height=49**
 
-Approved presentation:
-1. idle: low-frequency subtle electric flow / alpha shimmer;
-2. charge: **0.9s** localized brightness ramp + small branching arcs;
-3. pulse: short localized electric burst / expanding ring;
+These are the canonical initial gameplay regions for implementation.
+
+Rules:
+- background lightning veins are landmarks only;
+- idle/charge/pulse animation is procedural;
+- gameplay checks use the logical region, not sampled image brightness;
+- if runtime/player smoke shows the visible lightning landmark and gameplay region feel misaligned, correct only the narrow region bounds and record the revision here before release.
+
+## L7-G130 — Procedural thunder presentation
+
+Approved sequence:
+
+1. idle — subtle low-frequency electric flow / alpha shimmer;
+2. charge — **0.9s** localized brightness ramp + small branching arcs;
+3. pulse — short localized electric burst / expanding ring;
 4. return to idle.
 
-No full-screen flash. No rapid strobe. No dedicated animation PNG/sprite-sheet required.
+Constraints:
+- no full-screen white flash;
+- no rapid strobe;
+- A/B state must correspond to gameplay state;
+- Boss P2 A+B triggers both regions in the same discrete event;
+- no dedicated animation PNG or sprite sheet.
 
-## Sprite / anchor notes
+## L7-G140 — Facing / motion inheritance
 
-- 欽原: pending final runtime asset
-- 諸懷: pending final runtime asset
-- 夔: pending final runtime asset
-- Enemy/Boss path-facing mirror is inherited from shared AGENTS.md contract.
-- Tower target-facing mirror is inherited from shared AGENTS.md contract.
+- Enemy/Boss path-facing mirror uses the shared inherited facing contract.
+- Towers, including 句芒, use shared target-facing mirror and retain facing after attack.
+- Motion Lite is inherited.
+- Render-only motion must not mutate gameplay coordinates/pathDistance.
 
-## Player correction procedure
+## Geometry verification ownership
 
-1. Review Geometry Guide V1.
-2. Correct the yellow centerline first; the line should follow the visible road center.
-3. Correct Spawn/Base if needed.
-4. Correct T1–T8 centers if any marker is off the baked platform center.
-5. Correct 雷脈 A/B bounds if the gameplay region should cover a different road segment.
-6. Chat converts the correction into 390×610 logical values and produces Geometry Guide V2.
-7. Only after player approval are the corrected values marked **CANONICAL / PLAYER APPROVED**.
+- Static coordinate contract: **STATIC**
+- Runtime path interpolation / no corner-cutting: **TARGETED_TEST + PLAYER_SMOKE**
+- Tower slot touch/readability at 390px / 390×700: **PLAYER_SMOKE**
+- Thunder visual/gameplay alignment: **PLAYER_SMOKE**
+- Shared facing behavior regression: **TARGETED_TEST**
 
-## Rules
+## Change control
 
-- Geometry must be measured against the approved runtime background/crop.
-- Phone screenshots may report mismatches but are not coordinate sources.
-- Background/path/Spawn/Base/slots/zones are one contract; a material change requires re-validation of affected coordinates.
-- Motion offsets must not mutate gameplay path coordinates.
-- Once player-approved, record approval state/date and never re-guess the path in a new Chat/Work session.
+This geometry is now frozen.
+
+Do not:
+- re-measure from a later screenshot;
+- generate a new route because a new Chat/Work session starts;
+- let Work invent alternate anchors;
+- move tower slots for convenience.
+
+A revision requires either:
+- explicit player request; or
+- runtime evidence of a concrete mismatch.
+
+Any revision must be recorded here and in `STATE.md` before implementation continues.
