@@ -83,7 +83,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-geometry-freeze-20260920`
+- `docs/level7-qinyuan-visual-proposal-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -102,4 +102,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Finalize the Level7 asset/VFX inventory using the frozen gameplay and Geometry V3. Discuss and approve the next exact source-art sub-batch before generating it.**
+**Review the 欽原 visual proposal in `DESIGN.md` Section 20. If approved, open 欽原 alone as the first character `APPROVED_FOR_GENERATION` sub-batch; keep all later assets blocked.**
