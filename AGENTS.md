@@ -456,3 +456,119 @@ If a session notices it has already crossed a gate incorrectly:
 - resume from the proper gate.
 
 The purpose is to keep the whole development path consistent from initial design through release, including when the same Chat continues for a long time.
+
+
+## 19. Project onboarding, pre-action context refresh, and document-completeness audit are mandatory
+
+These continuity rules apply to **all future development**, not only Level7 or any specific level. They are intended for any new developer, Chat, Work, Codex session, or returning session that takes over this repository.
+
+### New-session onboarding before execution
+
+Before proposing, asking, editing, implementing, generating assets, delegating to Work, or running release work, a new/returning session must first understand the project at three levels:
+
+1. **Project-wide rules and architecture**
+   - read `AGENTS.md`;
+   - read `docs/DEVELOPMENT_PLAYBOOK.md`;
+   - read any domain guide relevant to the task, especially `docs/ASSET_INTEGRATION_GUIDE.md` for art/VFX/UI/geometry work.
+2. **Current cross-project progress**
+   - read the newest active pointer / relevant summary in `docs/WORK_PROGRESS.md`;
+   - identify the active level or active subsystem.
+3. **Current local state**
+   - for level work, read that level's `STATE.md` first, then the relevant `SPEC.md`, `GEOMETRY.md`, `ASSETS.md`, and `DESIGN.md`;
+   - inspect the current branch, latest relevant SHA, and diff before changing code or documents.
+
+A session must not begin execution merely from conversation memory or from the latest user sentence in isolation.
+
+### Pre-action context refresh
+
+This rule also applies **inside the same long Chat/Work session**.
+
+Before any substantial next action, the agent must refresh enough current context to answer:
+
+- What is the active scope?
+- What is already approved/frozen?
+- What is still proposal/pending?
+- What is the current stage/gate?
+- What actions are allowed now?
+- What action is forbidden until later?
+- What is the one current Next exact step?
+- Has anything changed in GitHub since the last action?
+
+“Substantial action” includes:
+- asking the player to make a design decision;
+- proposing a new feature/mechanic that changes scope;
+- generating or requesting assets;
+- editing canonical specs/geometry;
+- implementing production code;
+- sending a Work handoff;
+- merging/deploying/releasing.
+
+Do not keep marching forward from an old mental snapshot when the repository state should be checked.
+
+### Pre-question check
+
+Before asking the player a development question:
+
+1. check whether the answer is already recorded as approved in `SPEC.md`, `STATE.md`, `GEOMETRY.md`, or `ASSETS.md`;
+2. check whether the question belongs to the **current gate**;
+3. do not re-ask decisions that are already frozen;
+4. do not ask later-stage questions merely because they will eventually be needed;
+5. ask only the smallest unresolved decision needed to advance the current gate.
+
+This prevents repeated questions and prevents discussion from jumping ahead of the intended development sequence.
+
+### Decision promotion is immediate
+
+When the player approves, rejects, or revises a development decision:
+
+- update the appropriate canonical file in the same development stage;
+- approved gameplay/acceptance requirements move into `SPEC.md`;
+- approved map geometry moves into `GEOMETRY.md`;
+- approved asset classifications/inventory/status move into `ASSETS.md`;
+- unresolved alternatives and rationale remain in `DESIGN.md`;
+- update `STATE.md` so the next session can see the decision without reading the chat.
+
+A decision is not considered safely preserved if it exists only in conversation text.
+
+### Stage-completeness audit before advancing
+
+A gate may advance only after its required documentation is complete enough for the next stage.
+
+Before changing the current gate, verify:
+- all decisions required by the current gate are recorded;
+- unresolved `TBD` / pending items are either intentionally deferred or are not blockers for the next gate;
+- the canonical file for each affected domain exists and is current;
+- `STATE.md` reflects the new phase;
+- the next stage's prerequisites are explicit.
+
+If required information is missing, remain in the current gate. Do not let Work or implementation invent the missing decision.
+
+### Handoff-completeness audit
+
+Before handing work to another Chat/Work/developer:
+
+- confirm the new owner can identify project architecture, active scope, current gate, approved requirements, canonical geometry/assets if applicable, current branch/SHA, verification status, blockers, and Next exact step **from repository documents alone**;
+- update `STATE.md` immediately before handoff when needed;
+- keep the handoff prompt short and point to canonical docs instead of reconstructing the project from memory;
+- never make the next owner infer decisions from old chat transcripts.
+
+### Documentation lifecycle
+
+The documentation system is part of production development, not optional notes.
+
+For each active level:
+- `STATE.md` stays small/current and is updated continuously;
+- `SPEC.md` contains only approved/frozen implementation requirements;
+- `DESIGN.md` can be long and retain proposals/history;
+- `GEOMETRY.md` is the canonical geometry record;
+- `ASSETS.md` is the canonical asset/VFX status and generation/integration record.
+
+When a level is complete, freeze its final state rather than deleting the documentation. Future levels start from the same structure.
+
+### Drift prevention principle
+
+At every stage, prefer:
+**understand current state → confirm allowed next step → act → record the resulting decision/state → then continue.**
+
+Do not use:
+**remember roughly → act several steps ahead → document afterward.**
