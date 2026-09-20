@@ -152,10 +152,13 @@ Level7 inherits all applicable `AGENTS.md`, `docs/DEVELOPMENT_PLAYBOOK.md`, and 
 - **L7-G001** Battlefield is a vertical stormland map targeting the established 390×610 logical runtime.
 - **L7-G002** Spawn direction: upper-left / left-upper edge, using a storm-rift or broken thunder-gate presentation.
 - **L7-G003** Base direction: lower-right **震木神壇**, using a compact ancient wood-and-stone altar/core presentation.
-- **L7-G004** Route structure: upper approach → 雷脈A crossing → middle fold/hairpin → lower approach → 雷脈B crossing → lower-right Base.
-- **L7-G005** The middle fold may create repeated path coverage, but must not become so tight that one ordinary central slot trivially dominates most of the route.
+- **L7-G004** Route structure: a distinct **lightning-bolt / zigzag path** rather than a conventional smooth S-curve: upper-left Spawn → upper horizontal/diagonal segment → 雷脈A turn → central angled drop/turn → 雷脈B turn → lower-right Base.
+- **L7-G005** The path should use a few strong angular turns / large Z-like bends, not many tight serpent curves. Avoid geometry that lets one ordinary central slot trivially dominate most of the route.
 - **L7-G006** Thunder A/B must be spatially separated enough that one normal-range tower does not automatically dominate both regions.
 - **L7-G007** Background may bake faint thunder-vein landmarks into the terrain, but active charging/pulse brightness remains procedural.
 - **L7-G008** Background must avoid permanent full-screen lightning, large rectangular zone plates, or props that hide enemies/HP readability.
 - **L7-G009** Target tower-slot distribution for later measurement: roughly 2 upper / 3 middle / 3 lower, subject to final background/crop audit.
 - **L7-G010** No canonical path/slot/zone coordinates are valid until the final background/crop is player-approved and measured.
+
+- **L7-G011** The route silhouette itself should visually echo a lightning strike / broken zigzag so Level7 is immediately distinguishable from prior S-shaped or soft-curved maps.
+- **L7-G012** Thunder regions A/B should sit at two meaningful zigzag turning/crossing points rather than appearing as unrelated decorative circles.
