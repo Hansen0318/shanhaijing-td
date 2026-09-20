@@ -458,3 +458,79 @@ Proposed Level7 clear behavior:
 - if a later design decides Level7 needs a special unlock, add it through shared progression data rather than a Level7-specific UI branch.
 
 This keeps Level7 focused on teaching and validating 句芒 as the newly available fifth roster member.
+
+
+## 18. Map concept proposal — 雷澤天野
+
+> Status: CHAT MAP CONCEPT PROPOSAL / PLAYER APPROVAL PENDING
+
+### Composition goal
+
+The background should make the thunder mechanic readable without looking like a flat arena.
+
+Recommended composition:
+- vertical mobile battlefield, 390×610 logical target;
+- storm-dark upper sky / distant ridge visible only near the top edge;
+- wet open grassland and fractured ancient stone as the main playable ground;
+- one broad S-shaped / folded stone-and-mud road from **upper-left Spawn** toward **lower-right Base**;
+- two visually distinct thunder-vein crossings integrated into the road rather than floating decorative circles;
+- enough breathing room around the route for 8 tower slots without creating one dominant central slot that covers both thunder regions and most of the route.
+
+### Proposed route structure
+
+Use a readable three-section route:
+
+1. **Upper approach**
+   - Spawn enters from upper-left / left-upper edge.
+   - Road travels rightward across a shallow upper bend.
+   - Thunder region A sits on this first major crossing.
+
+2. **Middle fold**
+   - Road bends down-left then back toward center/right, creating one meaningful hairpin but not an extreme multi-pass cluster.
+   - This is the main tactical tower-placement area.
+   - Keep enough spacing between the parallel road segments so enemy silhouettes and tower range readability remain clear.
+
+3. **Lower approach**
+   - Road travels toward lower-right.
+   - Thunder region B sits on the final third, separated enough from A that one ordinary-range tower cannot trivially dominate both.
+   - Base / 震木神壇 sits near lower-right with clear visual separation from the last bend.
+
+### Environmental landmarks
+
+Recommended non-gameplay landmarks:
+- broken standing stones / weathered ritual pillars;
+- shallow reflective puddles;
+- faint branching thunder veins embedded in the ground;
+- one or two distant twisted trees, kept away from the road/slot hit areas;
+- localized blue-white storm glow, but no baked bright lightning bolt crossing the entire battlefield.
+
+### Thunder-zone visual contract
+
+The background itself may contain faint ground-vein landmarks for A/B, but:
+- active charging/pulse brightness remains procedural;
+- the baked background must not look permanently active;
+- region boundaries must be measurable against the final background;
+- no bright rectangular zone plate.
+
+### Spawn / Base direction
+
+- Spawn: storm rift / broken thunder gate at upper-left.
+- Base: **震木神壇**, a compact ancient wood-and-stone altar/core at lower-right.
+- Both should either be baked cleanly into the final background or later use approved map-prop assets; do not decide separate PNG props before background composition is approved.
+
+### Tower-slot planning rule
+
+Target 8 slots distributed roughly:
+- 2 around upper approach;
+- 3 around middle fold;
+- 3 around lower approach.
+
+Do not freeze coordinates yet. Final slots must be measured after the final background/crop is approved and must pass the shared coverage/UI/hit-area contract.
+
+### What this proposal intentionally avoids
+
+- no Level6-style two large obvious rectangular zones;
+- no route so tightly folded that one central slot covers nearly the whole map;
+- no excessive cliffs/props that hide enemies;
+- no full-screen lightning baked into the background;
+- no canonical coordinates before the actual final background is chosen.
