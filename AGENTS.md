@@ -572,3 +572,25 @@ At every stage, prefer:
 
 Do not use:
 **remember roughly → act several steps ahead → document afterward.**
+
+
+## 20. Anti-leak governance and Work budget are permanent
+
+All future development must also follow `docs/DEVELOPMENT_GOVERNANCE.md`.
+
+The high-level rules are:
+
+- use lightweight machine-checkable preflight for structural/gate mistakes;
+- assign stable Decision/Requirement IDs only to important cross-file or verifiable decisions;
+- perform compact change-impact / traceability checks when an approved decision changes;
+- perform a bounded pre-merge Red Team audit on the changed scope;
+- map requirements to the **cheapest valid verification owner**: STATIC, TARGETED_TEST, WORK_RUNTIME, PLAYER_SMOKE, or MIXED;
+- governance must reduce Work usage rather than create more Work;
+- Chat completes all safe planning/spec/static/preflight/impact work before handoff;
+- Work receives only the smallest executable delta that genuinely requires its environment;
+- player-owned phone/visual/usability smoke must not be duplicated by Work unless explicitly requested;
+- full tests/browser smoke are risk- and scope-driven, not automatic rituals.
+
+Before any Work handoff, Chat must confirm that the repository already contains enough canonical context for Work to execute without rediscovering decisions.
+
+If a new governance rule would require Work to spend substantial time/tokens on checks that Chat, a static script, or the player can perform more cheaply, redesign the rule before adopting it.
