@@ -1,5 +1,18 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 concept proposal
+
+- Chat 已完成第一版 Level7 concept draft，尚未視為玩家核准。
+- 暫定主題：`第7關・雷澤天野`；Base working name：`震木神壇`。
+- 暫定普通敵：欽原（快壓力）／諸懷（重壓力）；Boss：夔。
+- 暫定 map mechanic：兩個固定「雷脈／雷擊區」，採離散 pulse + telegraph，不複製 Level6 持續日照區。
+- 句芒 working role：全隊增益／木神支援 + 輕量單體輸出；global buff 非近距離光環，多隻不疊加，最高等級決定 bonus。
+- 暫定 global attack interval bonus：Lv1 ×0.94、Lv2 ×0.91、Lv3 ×0.88；尚未 freeze。
+- 句芒攻擊視覺建議先做 Hybrid mockup（青木靈羽／葉刃小型投射物 + 程式 trail/impact），未核准前不進批量圖片。
+- 本輪只更新 design draft，不改 production gameplay。
+
+---
+
 ## 2026-09-20：Level7 design start
 
 - Level7 開發正式開始，但目前只鎖定 progression / 句芒進場規則，尚未鎖定關卡主題與數值。
