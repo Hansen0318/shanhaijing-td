@@ -237,3 +237,65 @@ If this is clear, keep the Procedural-first solution. If not, discuss escalation
 - 日照區 emphasis → Procedural-first / existing zone asset support.
 - speed / armor / shield readability → Procedural-first or Hybrid depending on mobile smoke.
 - future fireball / solar orb / leaf blade / rock projectile → normally PNG-first or Hybrid.
+
+
+## Creature source-art production contract
+
+This section operationalizes `AGENTS.md` Section 21.
+
+### Default output used for player review
+
+For enemies / Bosses / creature sprites, the normal review artifact is the same type of source image intended for game integration:
+
+- **one creature only**;
+- transparent-background PNG;
+- no text;
+- no labels;
+- no design-sheet panels;
+- no multiple orthographic views;
+- no comparison grid;
+- no sprite atlas;
+- no environment/background;
+- no baked procedural effects.
+
+A concept sheet is an exception and must be explicitly requested by the player. Do not use one by default.
+
+### Visual simplification target
+
+At source-art review time:
+- compare against completed-level creature sprites;
+- reduce detail until major silhouette/features survive mobile downscaling;
+- ordinary enemies should use fewer visual subdivisions than Bosses;
+- prefer large simple color regions over many small shaded fragments;
+- preserve strong light/dark or hue contrast between identifying parts;
+- avoid predominantly black/dark bodies when the internal features disappear at 36–50px-class runtime sizes.
+
+### Source vs runtime copy
+
+Player approval freezes the **visual source**, not its deployment byte size.
+
+After approval:
+1. retain the approved source art;
+2. make a runtime copy sized for actual canvas display / DPR;
+3. preserve alpha;
+4. audit trim, transparent margin, fringe, anchor, and silhouette;
+5. compress/optimize without changing the approved visual identity.
+
+Do not regenerate the creature simply to optimize it.
+
+### Facing / effects
+
+- source pose should use the project's agreed default facing;
+- runtime uses shared mirror behavior;
+- Motion Lite remains render-side;
+- Procedural-first state effects stay separate from the base creature image;
+- create alternate state PNGs only when the approved asset classification explicitly requires them.
+
+### Review-to-canonical status flow
+
+Use these states:
+
+`PENDING_DISCUSSION → APPROVED_FOR_GENERATION → GENERATED_UNAPPROVED → APPROVED_FINAL → RUNTIME_OPTIMIZED → INTEGRATED`
+
+Do not skip `APPROVED_FINAL` merely because an image was generated.
+Do not advance another creature automatically when the current creature is approved.
