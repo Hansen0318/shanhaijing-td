@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Attack visual / asset production hard rule
+
+- 已將攻擊視覺正式分類為 **Procedural-first / PNG-first / Hybrid**。
+- 可由程式清楚表達的 beam / laser / aura / zone / status / hit flash / trail，預設不進入批量圖片生產清單。
+- 有明確實體投射物本體的火球／石塊／羽刃／葉刃／太陽彈等，才預設列入 PNG 或 Hybrid 素材需求。
+- 邊界案例先做示意圖、文字 visual spec 或小型 runtime prototype，玩家確認後再決定是否產圖。
+- 手機 390px / 390×700 可讀性是保留 procedural 或升級為 Hybrid/PNG 的主要驗收依據。
+- 白澤 beam 作為目前 reference case：程式 beam + 既有 Insight impact mark，不新增專屬 beam 圖。
+
+---
+
 ## 2026-09-19：Level6 readability polish
 
 ### Player feedback
