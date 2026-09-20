@@ -1,5 +1,15 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-21：Level7 句芒 Blessings frozen / asset inventory closed
+
+- Player approved the proposed 句芒 Blessing set: 青羽 +20% damage/layer; 神木 +15% range/layer; 春生 improves the active global attack-interval multiplier by -0.02/layer; existing same-item maximum remains 2 layers.
+- Spring-growth examples: base Lv1/Lv2/Lv3 ×0.95/×0.92/×0.89 → one layer ×0.93/×0.90/×0.87 → two layers ×0.91/×0.88/×0.85.
+- Level7 image/VFX inventory is now closed; no further source-art generation is required before implementation.
+- Gate advances to ASSET PRODUCTION / STATIC AUDIT.
+- Next exact step is player re-upload of the concrete final Level7 files, followed by Chat-owned FINAL FILESET AUDIT. Work implementation remains blocked until that audit passes.
+
+---
+
 ## 2026-09-21：Level7 句芒 projectile approved
 
 - Player approved the simplified second 青木靈羽／葉刃 projectile candidate: reduced detail, stronger color blocks, clearer small-screen silhouette.
