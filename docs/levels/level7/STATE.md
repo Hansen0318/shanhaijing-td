@@ -52,7 +52,7 @@ The final Level7 asset inventory is classified and the required source-art sub-b
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- 句芒 projectile PNG player review after generation;
+- exact 句芒-specific Blessing values, especially 春生 increment;
 - final Level7 asset inventory/classification closure;
 
 ## Completed
@@ -72,12 +72,12 @@ Still pending:
 - 夔 revised blue-white thunder-beast Boss single PNG visual has been player-approved after rejecting the first too-similar version.
 - 夔 Boss HUD blue-white empty-channel candidate has been player-approved → APPROVED_FINAL.
 - 句芒 deployable tower will reuse the exact visual identity of the existing Level6 unlock art; no second creature design/generation is required. Runtime optimization may derive a separate file without redesign.
-- 句芒 attack visual classification is approved as **Hybrid**: one minimal 青木靈羽／葉刃 PNG projectile core + procedural trail/impact. Only that single projectile core is currently open for generation.
+- 句芒 attack visual is **Hybrid**: the simplified high-contrast 青木靈羽／葉刃 PNG projectile core is player-approved (APPROVED_FINAL), with procedural trail/impact.
 
 ## Not completed
 
 - Final asset inventory.
-- 句芒 projectile PNG generation + player approval.
+- Exact 句芒-specific Blessing values, especially 春生 increment.
 - Production implementation.
 - Automated tests / check.
 - 390px / 390×700 runtime smoke.
@@ -87,7 +87,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-jumang-projectile-20260921`
+- `docs/level7-jumang-projectile-approved-20260921`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -106,4 +106,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Generate exactly one transparent 句芒 青木靈羽／葉刃 projectile-core PNG according to `ASSETS.md`, then stop for player review. Do not generate trail/impact/support images or a new 句芒 creature body image.**
+**Resolve the remaining 句芒-specific Blessing values, especially 春生. Keep 青羽 +20% damage and 神木 +15% range unless the player revises them; propose/freeze 春生 before final asset-inventory closure.**
