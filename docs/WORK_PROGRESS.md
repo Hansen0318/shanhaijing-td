@@ -1,5 +1,15 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Work ZIP 前新增玩家 final-file re-upload audit
+
+- 所有圖片都確認後，玩家必須重新上傳自己實際下載、準備交付 Work 的最終檔案。
+- Chat 不直接拿聊天中的臨時生成引用打包 Work ZIP；必須用玩家重新上傳的 concrete final files。
+- Chat 對照 GitHub `ASSETS.md / STATE / manifest`，逐張確認版本、用途、格式、alpha、尺寸/比例/裁切、檔名映射與是否混入舊版。
+- uploaded final set 必須與 recorded approved set 完整一致；任何 mismatch 都先停，不打包。
+- PASS 後才建立 canonical package filenames、manifest、checksums、runtime optimization candidates，最後才產生最小 Work ZIP。
+- 此 gate 為 Chat-owned static audit，不增加 Work token 或重測負擔。
+
+---
 ## 2026-09-20：Level7 諸懷 visual direction approved
 
 - Player continuation accepted the proposed 諸懷 visual direction.
