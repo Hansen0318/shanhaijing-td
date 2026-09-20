@@ -9,7 +9,7 @@
 ## Confirmed existing/shared assets
 
 - Existing Level1–6 shared UI/runtime assets remain reusable where contracts match.
-- 句芒 unlock art from Level6 is an unlock presentation asset; it is not automatically the Level7 production tower sprite.
+- 句芒 Level6 unlock art is the **canonical approved visual source** for both the unlock presentation and the Level7 deployable tower. Runtime may use a separately optimized copy/path, but must not redesign the creature.
 
 ## Proposed Level7 asset needs — not yet approved
 
@@ -19,8 +19,8 @@
 | 欽原 | normal enemy | PNG-first sprite | APPROVED_FINAL — player-approved single-creature PNG visual |
 | 諸懷 | heavy enemy | PNG-first sprite | APPROVED_FINAL — player-approved single-creature PNG visual |
 | 夔 | Boss | PNG-first sprite | APPROVED_FINAL — player-approved revised thunder-beast visual |
-| 夔 Boss HUD | HUD frame with empty HP channel | PNG-first | GENERATED_UNAPPROVED — candidate exists, player review pending |
-| 句芒 production tower sprite | deployable tower | PNG sprite | pending approval |
+| 夔 Boss HUD | HUD frame with empty HP channel | PNG-first | APPROVED_FINAL — player-approved blue-white empty-channel HUD |
+| 句芒 deployable tower | reuse Level6 unlock visual source | existing-source reuse | APPROVED_FINAL visual identity — no new creature generation |
 | 雷脈 landmark/charge/pulse | mechanic VFX | Procedural-first | APPROVED — code-only micro-flow / charge / pulse |
 | 欽原 雷行 emphasis | state VFX | Procedural-first | do not batch |
 | 諸懷 雷殼 | state VFX | Procedural-first or Hybrid | decide after review |
@@ -46,8 +46,8 @@ Current classification direction:
 - 欽原 — APPROVED_FINAL single-creature PNG visual.
 - 諸懷 — APPROVED_FINAL single-creature PNG visual.
 - 夔 — APPROVED_FINAL revised single-Boss PNG visual, clearly differentiated from 諸懷.
-- 夔 Boss HUD — GENERATED_UNAPPROVED candidate exists; do not use/package until player explicitly accepts or revises it.
-- 句芒 production tower sprite — PNG-first deployable sprite; Level6 unlock art is not automatically reused.
+- 夔 Boss HUD — APPROVED_FINAL player-approved blue-white empty-channel HUD.
+- 句芒 deployable tower — reuse the Level6 unlock art as the same canonical visual source; create only an optimized runtime copy/path if implementation needs one, with no visual redesign.
 - 雷脈 idle/charge/pulse — Procedural-first; no image.
 - 欽原 雷行 — Procedural-first.
 - 諸懷 雷殼 — default Procedural-first; escalate to Hybrid only if 390px smoke is unclear.
@@ -71,13 +71,11 @@ Only these statuses control image generation:
 
 ## Current Level7 image-generation allowlist
 
-**欽原 / 諸懷 / 夔 creature visuals are approved. Current review item: 夔 Boss HUD candidate only.**
+**欽原 / 諸懷 / 夔 / 夔 Boss HUD are approved. 句芒 reuses its approved Level6 unlock visual; no new 句芒 creature-art batch is needed.**
 
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
 Everything else remains blocked:
-- 句芒 production tower sprite — not approved for generation yet;
-- 夔 Boss HUD candidate exists but is GENERATED_UNAPPROVED and cannot enter the final package until player approval;
 - 句芒 projectile — Hybrid candidate / PENDING_DISCUSSION;
 - procedural thunder/status visuals — do not create dedicated art.
 
@@ -123,3 +121,14 @@ Player continuation accepted this visual direction. Generate 諸懷 only as one 
 - 夔 Boss HUD: a candidate was generated afterward, but no explicit player approval has been recorded → **GENERATED_UNAPPROVED**.
 - Do not infer approval of the HUD from approval of the Boss sprite.
 - Final Work ZIP still waits for the player's re-uploaded concrete files and FINAL FILESET AUDIT PASS per AGENTS.md Section 14.
+
+
+### Player decision — 句芒 source reuse / 夔 HUD approval
+
+- Player approved the existing blue-white 夔 Boss HUD candidate → **APPROVED_FINAL**.
+- Player chose to reuse the **same 句芒 visual source already shown by the Level6 unlock reward** for the Level7 deployable tower.
+- Therefore **do not generate a second 句芒 creature image** merely for tower deployment.
+- Runtime integration may create a trimmed/resized/compressed derivative such as a tower-runtime asset path, but it must preserve the exact approved visual identity.
+- Unlock presentation and deployed tower may use different optimized files only for runtime/layout reasons; they are still derivatives of the same canonical source.
+- This reuse decision applies to 句芒 for this release; it does not retroactively change 白澤's existing separate unlock/tower assets.
+- Next unresolved visual decision: 句芒 attack projectile classification/mockup.

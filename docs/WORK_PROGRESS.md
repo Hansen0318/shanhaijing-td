@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 夔 HUD approved / 句芒 reuse decision
+
+- Player approved the blue-white 夔 Boss HUD empty-channel image → `APPROVED_FINAL`.
+- Confirmed existing code uses separate 白澤 unlock and tower assets; this is not a project-wide same-file precedent.
+- For **句芒**, player explicitly chose a simpler release-specific rule: reuse the existing Level6 unlock visual as the canonical visual source for the Level7 deployable tower.
+- Do **not** generate a second 句芒 creature image. Runtime may derive trim/resize/compress copies as needed, without changing the approved visual identity.
+- Next unresolved visual item is 句芒 attack projectile classification/mockup.
+- No Work handoff or production implementation has started; final source files still require player re-upload + FINAL FILESET AUDIT PASS before packaging.
+
+---
+
 ## 2026-09-20：Level7 asset state reconciliation
 
 - Reconciled GitHub state with actual player approvals from the current development conversation.

@@ -52,8 +52,6 @@ The final Level7 asset inventory is classified and the required source-art sub-b
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- 夔 Boss HUD approval/revision;
-- 句芒 production tower visual direction;
 - 句芒 projectile mockup/classification resolution;
 - final Level7 asset inventory/classification closure;
 
@@ -72,7 +70,8 @@ Still pending:
 - 欽原 final simplified single-creature PNG visual has been player-approved; preserve it as canonical source-art identity.
 - 諸懷 simplified four-horn heavy-enemy single PNG visual has been player-approved.
 - 夔 revised blue-white thunder-beast Boss single PNG visual has been player-approved after rejecting the first too-similar version.
-- 夔 Boss HUD candidate exists but remains GENERATED_UNAPPROVED pending explicit player review.
+- 夔 Boss HUD blue-white empty-channel candidate has been player-approved → APPROVED_FINAL.
+- 句芒 deployable tower will reuse the exact visual identity of the existing Level6 unlock art; no second creature design/generation is required. Runtime optimization may derive a separate file without redesign.
 
 ## Not completed
 
@@ -87,7 +86,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-sync-approved-assets-20260920`
+- `docs/level7-jumang-source-reuse-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -106,4 +105,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Review the existing 夔 Boss HUD candidate. Either approve it or request revision. Do not open 句芒 production art until the HUD status is resolved.**
+**Resolve 句芒 attack projectile: review the Hybrid candidate (small leaf/green-feather projectile core + procedural trail/impact) and either approve it, simplify it to Procedural-first, or revise it. Do not generate a new 句芒 creature body image.**
