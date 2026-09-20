@@ -4,7 +4,7 @@
 
 ## Status
 
-**ASSET / VFX PLANNING — GEOMETRY FROZEN**
+**ASSET INVENTORY CLOSED — FINAL SOURCE FILE AUDIT PENDING**
 
 ## Confirmed existing/shared assets
 
@@ -166,3 +166,10 @@ After the single PNG is shown, wait for explicit player approval before marking 
 - Preserve this exact visual identity; later runtime work may only trim/resize/compress it.
 - Trail and impact remain Procedural-first and must not be baked into a replacement projectile image.
 - No further Level7 source-art generation is opened by this approval.
+
+### Asset inventory closure
+
+- Player-approved required source-art set is now fully classified.
+- No further Level7 image generation is required before implementation.
+- Remaining procedural visuals are code-owned and stay out of the image package.
+- Next asset gate is the mandatory FINAL FILESET AUDIT: player re-uploads the concrete final files intended for Work; Chat verifies version/purpose/format/alpha/dimensions/crop/filename mapping and rejects stale variants before packaging.

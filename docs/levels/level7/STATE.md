@@ -5,7 +5,7 @@
 ## Active level
 
 - Level: **7**
-- Development phase: **ASSET / VFX PLANNING**
+- Development phase: **ASSET PRODUCTION / STATIC AUDIT**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level7/`
 - Last continuity-structure update: 2026-09-20
@@ -13,7 +13,7 @@
 
 ## Current gate
 
-**ASSET / VFX PLANNING**
+**ASSET PRODUCTION / STATIC AUDIT**
 
 ### Allowed now
 
@@ -45,6 +45,7 @@ The final Level7 asset inventory is classified and the required source-art sub-b
 - 句芒 is selectable in Level7 and is a global ally-support / wood-god support archetype, mechanically distinct from 白澤's enemy-debuff role.
 - The first Level7 entry should make the newly unlocked 句芒 discoverable; any one-time NEW treatment must be data-driven/reusable, not a Level7-only roster branch.
 - Project-wide attack visuals follow `AGENTS.md` Section 16: Procedural-first / PNG-first / Hybrid classification before batch image production.
+- 句芒 Blessings are frozen: 青羽 +20% damage/layer; 神木 +15% range/layer; 春生 improves the active global attack-interval multiplier by -0.02/layer; same item max 2 layers.
 - No Level7 production code, balance, geometry, or asset batch is frozen merely because it appears in `DESIGN.md`.
 
 ## Current proposals — not yet frozen
@@ -52,8 +53,8 @@ The final Level7 asset inventory is classified and the required source-art sub-b
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- exact 句芒-specific Blessing values, especially 春生 increment;
-- final Level7 asset inventory/classification closure;
+- player re-upload of the concrete final Level7 source files;
+- Chat-owned FINAL FILESET AUDIT and minimal Work package preparation;
 
 ## Completed
 
@@ -77,7 +78,7 @@ Still pending:
 ## Not completed
 
 - Final asset inventory.
-- Exact 句芒-specific Blessing values, especially 春生 increment.
+- Player final-file re-upload + FINAL FILESET AUDIT.
 - Production implementation.
 - Automated tests / check.
 - 390px / 390×700 runtime smoke.
@@ -87,7 +88,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-jumang-projectile-approved-20260921`
+- `docs/level7-freeze-jumang-blessings-20260921`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -106,4 +107,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Resolve the remaining 句芒-specific Blessing values, especially 春生. Keep 青羽 +20% damage and 神木 +15% range unless the player revises them; propose/freeze 春生 before final asset-inventory closure.**
+**Player re-uploads the concrete final Level7 image files intended for implementation. Chat then performs the mandatory FINAL FILESET AUDIT against `ASSETS.md` before creating the minimal Work handoff package. Do not start Work implementation before that audit passes.**
