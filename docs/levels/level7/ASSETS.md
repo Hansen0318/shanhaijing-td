@@ -16,7 +16,7 @@
 | Item | Purpose | Classification | Production status |
 |---|---|---|---|
 | Level7 background | map | image required | APPROVED_FINAL |
-| 欽原 | normal enemy | PNG sprite | pending approval |
+| 欽原 | normal enemy | PNG-first sprite | PENDING_DISCUSSION — visual proposal ready |
 | 諸懷 | heavy enemy | PNG sprite | pending approval |
 | 夔 | Boss | PNG sprite | pending approval |
 | 夔 Boss HUD | HUD frame with empty HP channel | PNG | pending approval |
@@ -81,3 +81,12 @@ Everything else remains blocked:
 - procedural thunder/status visuals — do not create dedicated art.
 
 This approval is limited to the background sub-batch. Generating the background does **not** authorize later character/HUD/projectile assets.
+
+
+### Proposed next sub-batch — 欽原 only
+
+Status: **PENDING_DISCUSSION**
+
+Visual proposal is recorded in `DESIGN.md` Section 20.
+
+No generation is authorized yet. If the player approves the visual direction, change only 欽原 to `APPROVED_FOR_GENERATION`. Do not automatically include 諸懷, 夔, 句芒, Boss HUD, or projectile art in the same batch.

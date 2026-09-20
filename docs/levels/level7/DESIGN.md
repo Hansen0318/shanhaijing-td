@@ -553,3 +553,57 @@ Approved route identity:
 - do not revert to a conventional smooth S merely for convenience.
 
 This route shape is specifically intended to make Level7 visually and tactically distinct from earlier levels while reinforcing the 雷澤 theme.
+
+
+## 20. First source-art sub-batch proposal — 欽原
+
+> Status: CHAT VISUAL PROPOSAL / PLAYER APPROVAL PENDING
+
+To keep asset production sequential, the first proposed source-art item is **欽原 only**. No other Level7 character/HUD/projectile asset is opened by this proposal.
+
+### Visual role
+
+欽原 should read immediately as the small / fast Level7 enemy.
+
+Recommended visual direction:
+- compact **蜂鳥／毒蜂型山海異獸** silhouette rather than a humanoid or quadruped;
+- one dominant body mass with two readable wing groups;
+- sharp tail/stinger shape that remains visible at small runtime scale;
+- slightly forward-leaning flying posture so movement direction is obvious;
+- default source pose faces **right**, allowing the inherited shared path-facing mirror system to flip it left when needed;
+- feet/legs simplified or tucked close to the body so they do not become unreadable noise at 36–50px runtime size;
+- strong eye/head silhouette and stinger are more important than fine feather/insect detail.
+
+### Level7 visual language
+
+Suggested palette relationship:
+- dark charcoal / deep blue-green body;
+- restrained pale cyan/electric-blue markings;
+- a small warm accent may be used around eye/stinger for contrast;
+- do not bake a large lightning aura into the sprite, because 雷行 is Procedural-first runtime VFX.
+
+### Runtime/readability constraints
+
+- transparent-background PNG source;
+- simple outer silhouette;
+- no baked ground shadow;
+- no baked motion streak;
+- no text;
+- no rectangular glow plate;
+- enough transparent margin for Motion Lite bob/hit/death without clipping;
+- source should remain legible after runtime optimization to the established normal-enemy class.
+
+### 雷行 separation
+
+The base sprite represents normal 欽原 only.
+
+When 雷行 triggers:
+- renderer adds procedural electric edge/speed emphasis;
+- no second “powered-up 欽原” PNG;
+- no dedicated speed-trail asset.
+
+### Proposed production status
+
+If the player approves this direction:
+- 欽原 becomes **APPROVED_FOR_GENERATION** as the first and only character sub-batch item;
+- 諸懷 / 夔 / 句芒 / Boss HUD remain blocked for later discussion.

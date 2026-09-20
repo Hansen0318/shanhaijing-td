@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 first character sub-batch proposal — 欽原
+
+- Asset/VFX gate remains active; no production implementation or Work handoff.
+- To avoid jumping ahead, Chat prepared only the **欽原** visual direction as the next discussion item.
+- Proposed silhouette: compact fast 蜂鳥／毒蜂型異獸, right-facing source pose, readable wings/head/stinger, low-detail mobile silhouette.
+- 雷行 remains Procedural-first; no powered-up alternate PNG or dedicated trail image.
+- 欽原 remains `PENDING_DISCUSSION`; no image generation is authorized yet.
+- 諸懷 / 夔 / 句芒 / Boss HUD / projectile remain blocked.
+- Next exact step: player approves/revises 欽原 visual direction; only then open the first character generation sub-batch.
+
+---
+
 ## 2026-09-20：Level7 Geometry V3 player-approved and frozen
 
 - Player approved the latest Geometry Guide V3 after correcting Spawn entry, Base endpoint, and two path turns.
