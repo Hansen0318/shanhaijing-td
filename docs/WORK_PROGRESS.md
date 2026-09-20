@@ -1,5 +1,14 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-21：Level7 句芒 projectile approved
+
+- Player approved the simplified second 青木靈羽／葉刃 projectile candidate: reduced detail, stronger color blocks, clearer small-screen silhouette.
+- Projectile core status → `APPROVED_FINAL`; do not regenerate.
+- Hybrid contract remains: approved PNG core + Procedural-first trail + Procedural-first impact.
+- Next unresolved design gate is exact 句芒-specific Blessing values, especially 春生 increment.
+
+---
+
 ## 2026-09-20：Level7 夔 HUD approved / 句芒 reuse decision
 
 - Player approved the blue-white 夔 Boss HUD empty-channel image → `APPROVED_FINAL`.
