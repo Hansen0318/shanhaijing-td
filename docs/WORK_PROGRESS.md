@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Anti-leak governance + Work budget
+
+- 新增 `docs/DEVELOPMENT_GOVERNANCE.md`。
+- 將四個高價值機制正式化：Machine-checkable Preflight、Decision/Requirement ID、Change Impact/Traceability、bounded Pre-merge Red Team Audit。
+- 新增 requirement verification owner：STATIC / TARGETED_TEST / WORK_RUNTIME / PLAYER_SMOKE / MIXED。
+- 明確規定治理機制不得拖垮 Work；Chat 必須先完成可安全完成的規格、文件、靜態檢查、impact/preflight，再只交給 Work 最小 executable delta。
+- 玩家可自行快速驗證的手機視覺／操作 smoke 預設由 PLAYER_SMOKE 負責，不要求 Work 重複。
+- full tests / browser smoke 改為依風險與 scope 決定，不因「有測試」就自動全部跑。
+- Pre-merge Red Team Audit 只針對本次 changed scope，禁止演變成全 repo 重審或全關卡重玩。
+
+---
+
 ## 2026-09-20：Global development continuity system completed
 
 - 新增 `docs/DEVELOPMENT_PLAYBOOK.md`，作為所有新開發者 / Chat / Work / Codex 的專案接手與執行導航。
