@@ -69,7 +69,7 @@ Still pending:
 - Clean no-text Level7 background candidate has been **PLAYER APPROVED** as the geometry source.
 - Thunder-vein idle micro-animation / 0.9s charge / pulse is approved as **Procedural-first**; no dedicated animation image batch.
 - Geometry Guide V3 was player-approved and has been promoted to canonical 390×610 geometry in `GEOMETRY.md`.
-- 欽原 visual direction approved as the first character source-art sub-batch; only 欽原 is open for generation.
+- 欽原 final simplified single-creature PNG visual has been player-approved; preserve it as canonical source-art identity.
 
 ## Not completed
 
@@ -84,7 +84,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-qinyuan-approved-20260920`
+- `docs/monster-generation-hard-rule-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -103,4 +103,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Generate one 欽原 source-art candidate using the approved visual direction. Review that candidate before discussing or opening the next asset sub-batch.**
+**Discuss 諸懷 visual identity next under the new global creature-art rule. Show only one simplified, high-contrast, game-usable single PNG candidate when its generation sub-batch is approved.**
