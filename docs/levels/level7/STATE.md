@@ -5,7 +5,7 @@
 ## Active level
 
 - Level: **7**
-- Development phase: **DESIGN / PLAYER APPROVAL PENDING**
+- Development phase: **MAP CONCEPT / CANONICAL GEOMETRY**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level7/`
 - Last continuity-structure update: 2026-09-20
@@ -13,38 +13,37 @@
 
 ## Current gate
 
-**PLAYER REVIEW / DESIGN APPROVAL**
+**MAP CONCEPT / CANONICAL GEOMETRY**
 
 ### Allowed now
 
-- review/revise the proposed Level7 theme, enemy set, Boss, thunder mechanic, 句芒 role and proposed numerical baseline;
-- discuss alternatives;
-- promote only player-approved decisions into `SPEC.md`;
-- prepare a concept/mockup only when the current discussion explicitly calls for one;
-- update documentation to reflect player decisions.
+- review/approve Level7 background composition and visual layout;
+- define Spawn/Base presentation;
+- design the route shape against the approved background concept;
+- after the background/crop is approved, measure canonical 390×610 path, tower slots, thunder zones and anchors;
+- update `GEOMETRY.md` as coordinates become canonical;
+- discuss only geometry-dependent art needs required for this gate.
 
 ### Forbidden until gate exit
 
 - no production gameplay implementation;
-- no canonical map/path/slot coordinates;
-- no final Level7 image batch;
+- no final Level7 enemy/Boss/tower art batch;
 - no Boss HUD generation;
-- no enemy/Boss/tower final art batch;
-- no 句芒 projectile final asset;
+- no 句芒 final projectile asset;
 - no Work implementation handoff;
-- no tests/release work for unimplemented Level7.
+- no release/testing work for unimplemented Level7.
 
 ### Gate exit condition
 
-The player has approved or revised the Level7 core gameplay concept sufficiently to freeze:
-- final level theme/name direction;
-- normal enemies;
-- Boss;
-- map mechanic;
-- 句芒 gameplay baseline;
-- W1–W10 / Boss phase baseline.
+The player has approved the final background/crop and the canonical 390×610 geometry is recorded for:
+- ordered path;
+- Spawn;
+- Base;
+- T1–T8;
+- thunder region A/B;
+- any required anchor/footprint notes.
 
-After that, accepted decisions move to `SPEC.md` and the next gate becomes **MAP CONCEPT / CANONICAL GEOMETRY**.
+After that, the next gate becomes **ASSET / VFX PLANNING**.
 
 ## Confirmed / approved
 
@@ -60,19 +59,15 @@ After that, accepted decisions move to `SPEC.md` and the next gate becomes **MAP
 
 ## Current proposals — not yet frozen
 
-See `DESIGN.md` for full rationale. Current working proposal includes:
+Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
-- Level name/theme: **第7關・雷澤天野**.
-- Base working name: **震木神壇**.
-- Normal enemies: **欽原** / **諸懷**.
-- Boss: **夔**.
-- Map mechanic: two pulsed **雷脈／雷擊區** with telegraph; distinct from Level6 continuous sunlight.
-- 句芒: global attack-speed support + light single-target attack.
-- Draft enemy/Boss/tower numbers and W1–W10 exist in `DESIGN.md`.
-- Level7 clear currently proposes no additional deployable-beast unlock.
-- 句芒 projectile currently proposes Hybrid: small 青木靈羽／葉刃 body + procedural trail/impact.
-
-These items require player approval before promotion to `SPEC.md`.
+Still pending:
+- background composition;
+- route layout;
+- Spawn/Base visual placement;
+- 8 tower slots;
+- thunder-zone placement;
+- map-dependent asset needs.
 
 ## Completed
 
@@ -84,9 +79,6 @@ These items require player approval before promotion to `SPEC.md`.
 
 ## Not completed
 
-- Player approval/freeze of Level7 theme, enemies, Boss, thunder mechanic.
-- Player approval/freeze of 句芒 numerical gameplay.
-- Player approval/freeze of W1–W10 / Boss phase numbers.
 - Background concept approval.
 - Canonical 390×610 path.
 - Spawn/Base/tower-slot/thunder-zone geometry.
@@ -100,10 +92,10 @@ These items require player approval before promotion to `SPEC.md`.
 
 ## Current branch / SHA
 
-This continuity structure was prepared on branch:
-- `docs/active-level-handoff-20260920`
+Current documentation branch:
+- `docs/level7-freeze-gameplay-20260920`
 
-After merge, future sessions must inspect current `main` and the active feature branch rather than assuming this branch remains active.
+After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
 ## Verification status
 
@@ -120,4 +112,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Review the Level7 gameplay proposal with the player and either approve or revise the proposed theme/enemies/Boss/thunder mechanic/句芒 baseline. Once approved, promote only the accepted values into `SPEC.md`; then proceed to the background/map concept and canonical geometry.**
+**Review and approve the Level7 background/map composition. Do not assign canonical coordinates until the background/crop direction is approved.**
