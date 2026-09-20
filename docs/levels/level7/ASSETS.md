@@ -15,7 +15,7 @@
 
 | Item | Purpose | Classification | Production status |
 |---|---|---|---|
-| Level7 background | map | image required | APPROVED_FOR_GENERATION |
+| Level7 background | map | image required | GENERATED_UNAPPROVED |
 | 欽原 | normal enemy | PNG sprite | pending approval |
 | 諸懷 | heavy enemy | PNG sprite | pending approval |
 | 夔 | Boss | PNG sprite | pending approval |
@@ -58,7 +58,7 @@ Only these statuses control image generation:
 
 **Current approved sub-batch: map background only**
 
-- Level7 background concept/final-source candidate for 雷澤天野 — **APPROVED_FOR_GENERATION**
+- Level7 background candidate for 雷澤天野 — **GENERATED_UNAPPROVED**; awaiting player crop/composition approval
 
 Everything else remains blocked:
 - 欽原 / 諸懷 / 夔 / 夔 Boss HUD / 句芒 production tower sprite — not approved for generation yet;

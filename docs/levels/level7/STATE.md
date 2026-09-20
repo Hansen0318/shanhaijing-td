@@ -78,6 +78,7 @@ Still pending:
 - Geometry and asset ledgers created for future canonical data.
 - Level7 map composition direction approved: upper-left Spawn → **lightning-zigzag route** → 雷脈A / 雷脈B at major turns → lower-right 震木神壇.
 - Background-only image generation sub-batch approved; all character/HUD/projectile art remains blocked.
+- One clean no-text Level7 background candidate has been generated and is **GENERATED_UNAPPROVED** pending player crop/composition review.
 
 ## Not completed
 
@@ -94,7 +95,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-map-concept-approved-20260920`
+- `docs/level7-background-candidate-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -113,4 +114,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Generate one Level7 雷澤天野 background candidate using the approved lightning-zigzag route, then review/approve its crop. Do not assign canonical coordinates until that actual background is accepted.**
+**Review the generated clean Level7 background candidate. If accepted, freeze its crop/source identity and then create a path/Spawn/Base/T1–T8/thunder-zone geometry overlay for player correction before canonical coordinates are recorded.**
