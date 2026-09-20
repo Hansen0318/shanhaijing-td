@@ -1,5 +1,15 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 map composition approved / background-only sub-batch opened
+
+- Player continuation accepted the proposed Level7 map composition.
+- Promoted the composition contract into `SPEC.md` as L7-G001..G010.
+- Approved **only** the Level7 雷澤天野 background for image generation.
+- Character/Boss/HUD/句芒 projectile assets remain blocked; no later asset batch is authorized.
+- Next step: generate one background candidate, obtain player approval of the actual crop, then measure canonical 390×610 path/slots/thunder zones from that accepted background.
+
+---
+
 ## 2026-09-20：Level7 gameplay baseline frozen / geometry gate opened
 
 - Player continuation instruction treated as approval to advance the previously reviewed Level7 gameplay direction.

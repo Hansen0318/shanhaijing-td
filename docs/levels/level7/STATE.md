@@ -62,7 +62,7 @@ After that, the next gate becomes **ASSET / VFX PLANNING**.
 Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
 
 Still pending:
-- background composition;
+- final generated background/crop approval;
 - route layout;
 - Spawn/Base visual placement;
 - 8 tower slots;
@@ -76,10 +76,11 @@ Still pending:
 - Existing Level7 design proposals preserved in `DESIGN.md`.
 - Confirmed progression requirements separated into `SPEC.md`.
 - Geometry and asset ledgers created for future canonical data.
+- Level7 map composition direction approved: upper-left Spawn → 雷脈A → middle fold → 雷脈B → lower-right 震木神壇.
+- Background-only image generation sub-batch approved; all character/HUD/projectile art remains blocked.
 
 ## Not completed
 
-- Background concept approval.
 - Canonical 390×610 path.
 - Spawn/Base/tower-slot/thunder-zone geometry.
 - Final asset inventory.
@@ -93,7 +94,7 @@ Still pending:
 ## Current branch / SHA
 
 Current documentation branch:
-- `docs/level7-freeze-gameplay-20260920`
+- `docs/level7-map-concept-approved-20260920`
 
 After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
 
@@ -112,4 +113,4 @@ Documentation-only change. No production gameplay was changed and no executable 
 
 ## Next exact step
 
-**Review and approve the Level7 background/map composition. Do not assign canonical coordinates until the background/crop direction is approved.**
+**Generate one Level7 雷澤天野 background candidate using the approved composition, then review/approve its crop. Do not assign canonical coordinates until that actual background is accepted.**
