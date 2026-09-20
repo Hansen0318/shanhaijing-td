@@ -271,3 +271,28 @@ For Level8 and later:
 5. do not start design/implementation before the new folder exists.
 
 This keeps every future level consistent even when development changes hands.
+
+
+## 11. Governance / verification cost control
+
+Read `docs/DEVELOPMENT_GOVERNANCE.md` before creating a Work handoff.
+
+For every important requirement, choose the cheapest valid verification owner:
+- STATIC
+- TARGETED_TEST
+- WORK_RUNTIME
+- PLAYER_SMOKE
+- MIXED
+
+Before Work:
+1. Chat finishes safe specification, documentation, static inspection, impact analysis and preflight repair.
+2. Chat records what Work must change and what Work must **not** change.
+3. Chat marks player-owned smoke so Work does not duplicate it.
+4. Work receives only the unresolved executable delta.
+
+Before merge:
+- Chat/static review performs the bounded Red Team audit first;
+- Work runs only executable checks justified by its changed scope;
+- full-suite/runtime work is not automatic unless risk/release requirements justify it.
+
+The governance system is successful only if it both reduces omissions **and** keeps Work tasks smaller.
