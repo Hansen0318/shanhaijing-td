@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-20：Level7 欽原 visual direction approved
+
+- Player continuation accepted the proposed 欽原 visual direction.
+- Opened **欽原 only** as `APPROVED_FOR_GENERATION`.
+- 諸懷 / 夔 / 句芒 / Boss HUD / projectile remain blocked.
+- 欽原 base sprite: compact fast bee/hummingbird-like beast, right-facing source pose, readable wings/head/stinger, transparent background, simplified mobile silhouette.
+- 雷行 remains Procedural-first and is not baked into the sprite.
+- Next exact step: generate one 欽原 source candidate and review it before opening the next asset sub-batch.
+
+---
+
 ## 2026-09-20：Level7 first character sub-batch proposal — 欽原
 
 - Asset/VFX gate remains active; no production implementation or Work handoff.

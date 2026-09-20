@@ -16,7 +16,7 @@
 | Item | Purpose | Classification | Production status |
 |---|---|---|---|
 | Level7 background | map | image required | APPROVED_FINAL |
-| 欽原 | normal enemy | PNG-first sprite | PENDING_DISCUSSION — visual proposal ready |
+| 欽原 | normal enemy | PNG-first sprite | APPROVED_FOR_GENERATION |
 | 諸懷 | heavy enemy | PNG sprite | pending approval |
 | 夔 | Boss | PNG sprite | pending approval |
 | 夔 Boss HUD | HUD frame with empty HP channel | PNG | pending approval |
@@ -71,12 +71,12 @@ Only these statuses control image generation:
 
 ## Current Level7 image-generation allowlist
 
-**No new source-art sub-batch is open yet. Background sub-batch is complete.**
+**Current approved source-art sub-batch: 欽原 only.**
 
 - Level7 background for 雷澤天野 — **APPROVED_FINAL** as geometry source
 
 Everything else remains blocked:
-- 欽原 / 諸懷 / 夔 / 夔 Boss HUD / 句芒 production tower sprite — not approved for generation yet;
+- 諸懷 / 夔 / 夔 Boss HUD / 句芒 production tower sprite — not approved for generation yet;
 - 句芒 projectile — Hybrid candidate / PENDING_DISCUSSION;
 - procedural thunder/status visuals — do not create dedicated art.
 
@@ -85,8 +85,8 @@ This approval is limited to the background sub-batch. Generating the background 
 
 ### Proposed next sub-batch — 欽原 only
 
-Status: **PENDING_DISCUSSION**
+Status: **APPROVED_FOR_GENERATION**
 
 Visual proposal is recorded in `DESIGN.md` Section 20.
 
-No generation is authorized yet. If the player approves the visual direction, change only 欽原 to `APPROVED_FOR_GENERATION`. Do not automatically include 諸懷, 夔, 句芒, Boss HUD, or projectile art in the same batch.
+Player continuation accepted this visual direction. Generate 欽原 only. Do not automatically include 諸懷, 夔, 句芒, Boss HUD, or projectile art in the same batch.
