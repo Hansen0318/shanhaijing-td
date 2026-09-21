@@ -99,6 +99,51 @@ test('level-five lineup uses its supplied banner and preview inside the existing
   assert.equal((ui.dom['lineup-choices'].innerHTML.match(/data-action="toggle-lineup"/g) ?? []).length, 4);
 });
 
+test('first Level7 lineup marks newly unlocked Jumang and keeps the five-choice roster unchanged', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[7], levelId: 7, state: 'lineup', lineupSelection: [], lineupNewType: 'jumang',
+    lineupRoster: () => ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang'],
+  };
+  ui.dom = {
+    'lineup-overlay': { hidden: true }, 'lineup-choices': { innerHTML: '' },
+    'confirm-lineup-button': { disabled: true }, 'lineup-count': { textContent: '' },
+    'lineup-eyebrow': { textContent: '' }, 'lineup-title': { textContent: '' }, 'lineup-help': { innerHTML: '' },
+    'lineup-banner': { hidden: true, src: '' }, 'lineup-preview': { hidden: true, src: '' },
+  };
+  ui.renderLineup();
+  assert.equal((ui.dom['lineup-choices'].innerHTML.match(/data-action="toggle-lineup"/g) ?? []).length, 5);
+  assert.match(ui.dom['lineup-choices'].innerHTML, /data-type="jumang"[\s\S]*NEW/);
+  assert.match(ui.dom['lineup-choices'].innerHTML, /unlock_jumang_v1\.png/);
+
+  ui.game.lineupNewType = null;
+  ui.lineupKey = null;
+  ui.renderLineup();
+  assert.doesNotMatch(ui.dom['lineup-choices'].innerHTML, />NEW</);
+  assert.equal((ui.dom['lineup-choices'].innerHTML.match(/data-action="toggle-lineup"/g) ?? []).length, 5);
+});
+
+test('Level7 wave preview and Kui HUD use packaged art and measured track geometry', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[7], levelId: 7, state: 'preparation', enemies: [], effects: [],
+    wave: { waveNumber: 9, queue: [], getWaveGroups: () => LEVELS[7].waves[9].groups },
+  };
+  ui.dom = bossSlotDom();
+  ui.renderBossSlot();
+  for (const file of ['enemy_qinyuan_v1.png', 'enemy_zhuhuai_v1.png', 'boss_kui_v1.png']) assert.match(ui.dom['wave-preview-enemies'].innerHTML, new RegExp(file));
+
+  const boss = { isBoss: true, type: 'kui', hp: 3500, maxHp: 7000, data: { name: '夔' } };
+  ui.game.state = 'combat';
+  ui.game.enemies = [boss];
+  ui.renderBossSlot();
+  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_kui_panel_v1\.png/);
+  assert.deepEqual([
+    ui.dom['boss-hud'].style['--boss-track-left'], ui.dom['boss-hud'].style['--boss-track-top'],
+    ui.dom['boss-hud'].style['--boss-track-width'], ui.dom['boss-hud'].style['--boss-track-height'],
+  ], ['9.9%', '52.6%', '80.4%', '14.2%']);
+});
+
 test('wave preview renders packaged enemy images and first-level identity', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
@@ -264,6 +309,7 @@ test('each Boss HUD applies its measured track geometry and follows 100, 50 and 
     { levelId: 4, type: 'jiuweihu', name: '九尾狐', panel: /ui_boss_jiuweihu_panel_v2\.png/, rect: ['15.3%', '61.6%', '78.7%', '11%'] },
     { levelId: 5, type: 'xingtian', name: '刑天', panel: /ui_boss_xingtian_panel_v1\.png/, rect: ['9.7%', '52.3%', '80.8%', '17%'] },
     { levelId: 6, type: 'jinwu', name: '金烏', panel: /ui_boss_jinwu_panel_v1\.png/, rect: ['3.7%', '43.8%', '92.5%', '21.9%'] },
+    { levelId: 7, type: 'kui', name: '夔', panel: /ui_boss_kui_panel_v1\.png/, rect: ['9.9%', '52.6%', '80.4%', '14.2%'] },
   ];
 
   for (const { levelId, type, name, panel, rect } of cases) {

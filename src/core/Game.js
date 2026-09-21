@@ -28,6 +28,7 @@ export class Game {
     this.random = random;
     this.motionEnabled = motionEnabled;
     this.unlockedBeasts = new Set(ownedRosterThrough(initialLevelId - 1));
+    this.lineupNewType = null;
     this.resetRun(initialLevelId);
   }
   resetRun(levelId = this.levelId ?? 1) {
@@ -35,6 +36,7 @@ export class Game {
     if (!level) return false;
     this.levelId = level.id;
     this.level = level;
+    this.lineupNewType = null;
     this.time = new GameTime();
     this.map = new GameMap(level.map);
     this.economy = new Economy(GAME_CONFIG.initialGold);
@@ -73,7 +75,10 @@ export class Game {
   }
   enterLevel(levelId) {
     if (this.state !== 'victory' || levelId !== this.nextLevelId() || !getLevelData(levelId)) return false;
-    return this.resetRun(levelId);
+    const newlyUnlockedType = this.pendingUnlock;
+    const entered = this.resetRun(levelId);
+    if (entered) this.lineupNewType = newlyUnlockedType;
+    return entered;
   }
   beginLevelFourLineup() {
     if (this.levelId !== 4) return false;

@@ -4,7 +4,7 @@ import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?
 import { MotionSystem } from '../systems/MotionSystem.js?v=level6-readability-2';
 import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level6-1';
 
-const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58] });
+const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58] });
 const FOG_VISUAL_PATHS = Object.freeze({
   upper: { start: [218, 116], c1: [214, 140], c2: [137, 181], end: [140, 214], normal: [-0.78, -0.62] },
   lower: { start: [245, 406], c1: [277, 407], c2: [335, 438], end: [335, 467], normal: [-0.56, 0.83] },
@@ -37,6 +37,7 @@ export class Renderer {
     this.drawBackground(ctx, game);
     this.drawFogZones(ctx, game);
     this.drawSunlightZones(ctx, game);
+    this.drawThunderZones(ctx, game);
     this.drawSlots(ctx, game);
     this.drawMapProps(ctx, game);
     this.drawTowers(ctx, game);
@@ -82,6 +83,41 @@ export class Renderer {
       ctx.fillText(label, centerX, zone.y - 3);
       ctx.restore();
     });
+  }
+  drawThunderZones(ctx, game) {
+    const zones = game.level.map.thunderZones ?? [];
+    if (!zones.length) return;
+    const charge = new Set(game.effects.filter(effect => effect.type === 'thunderCharge' && effect.life > 0).flatMap(effect => effect.zoneIds));
+    const pulse = new Set(game.effects.filter(effect => effect.type === 'thunderPulse' && effect.life > 0).flatMap(effect => effect.zoneIds));
+    const time = game.visualTime ?? 0;
+    for (const zone of zones) {
+      const isCharging = charge.has(zone.id);
+      const isPulsing = pulse.has(zone.id);
+      const alpha = isPulsing ? 0.32 : isCharging ? 0.2 + Math.sin(time * 15) * 0.04 : 0.07;
+      ctx.save();
+      ctx.fillStyle = `rgba(73, 190, 255, ${alpha})`;
+      ctx.strokeStyle = isPulsing ? 'rgba(220, 249, 255, .98)' : isCharging ? 'rgba(117, 224, 255, .88)' : 'rgba(91, 166, 207, .42)';
+      ctx.lineWidth = isPulsing ? 3 : isCharging ? 2 : 1;
+      ctx.fillRect(zone.x, zone.y, zone.width, zone.height);
+      ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
+      if (isPulsing) {
+        ctx.beginPath();
+        ctx.moveTo(zone.x + zone.width * 0.32, zone.y);
+        ctx.lineTo(zone.x + zone.width * 0.52, zone.y + zone.height * 0.48);
+        ctx.lineTo(zone.x + zone.width * 0.43, zone.y + zone.height);
+        ctx.stroke();
+      }
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.font = 'bold 10px system-ui';
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(6,20,34,.9)';
+      ctx.fillStyle = isPulsing ? '#f2fdff' : isCharging ? '#a9efff' : 'rgba(166,218,241,.68)';
+      const label = `雷脈${zone.id}${isPulsing ? '・脈衝' : isCharging ? '・蓄能' : ''}`;
+      ctx.strokeText(label, zone.x + zone.width / 2, zone.y - 3);
+      ctx.fillText(label, zone.x + zone.width / 2, zone.y - 3);
+      ctx.restore();
+    }
   }
   drawStateTag(ctx, text, x, y, { fill = '#fff1a8', background = 'rgba(34,23,8,.78)' } = {}) {
     const width = 14 + text.length * 11;
@@ -215,7 +251,7 @@ export class Renderer {
   drawTowers(ctx, game) {
     game.towers.forEach((tower, index) => {
       if (!tower) return;
-      if (index === game.selectedSlot) { const range = tower.getStats(game.blessings.modifiers).range; ctx.beginPath(); ctx.arc(tower.x, tower.y, range, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,205,103,.09)'; ctx.fill(); ctx.strokeStyle = 'rgba(241,205,103,.65)'; ctx.lineWidth = 1.5; ctx.stroke(); }
+      if (index === game.selectedSlot) { const range = tower.getStats(game.blessings.modifiers, game.teamIntervalMultiplier?.() ?? 1).range; ctx.beginPath(); ctx.arc(tower.x, tower.y, range, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,205,103,.09)'; ctx.fill(); ctx.strokeStyle = 'rgba(241,205,103,.65)'; ctx.lineWidth = 1.5; ctx.stroke(); }
       const [width, height] = TOWER_BOXES[tower.type];
       const motion = MotionSystem.towerTransform(tower, game.visualTime ?? 0, game.effects, this.motionEnabled);
       const drewTower = this.drawContained(ctx, tower.type, tower.x + motion.xOffset, tower.y + 4 + motion.yOffset, width, height, {
@@ -307,6 +343,9 @@ export class Renderer {
         if (enemy.type === 'yangyu' && enemy.inSunlight) this.drawStateTag(ctx, '加速', enemy.x, tagY);
         if (enemy.yangmuArmorActive) this.drawStateTag(ctx, '陽木甲', enemy.x, tagY, { fill: '#ffe58a', background: 'rgba(58,40,15,.82)' });
         if (enemy.sunShieldActive) this.drawStateTag(ctx, '日輪護體', enemy.x, tagY, { fill: '#fff3b0', background: 'rgba(83,46,4,.84)' });
+        if (enemy.statuses.thunderSprint) this.drawStateTag(ctx, '雷行', enemy.x, tagY, { fill: '#b8f3ff', background: 'rgba(13,45,72,.84)' });
+        if (enemy.statuses.thunderShell) this.drawStateTag(ctx, '雷殼', enemy.x, tagY, { fill: '#d3f6ff', background: 'rgba(21,50,75,.86)' });
+        if (enemy.type === 'kui' && (enemy.bossPhase ?? 1) >= 2) this.drawStateTag(ctx, '雷怒', enemy.x, tagY, { fill: '#ecfbff', background: 'rgba(15,49,84,.9)' });
       }
       if (enemy.hitFlash > 0 && !enemy.isBoss && !enemy.isIllusion) this.healthBar(ctx, enemy.x - 17, enemy.y - enemy.radius - 10, 34, enemy.hp / enemy.maxHp);
     });
@@ -315,12 +354,49 @@ export class Renderer {
   drawProjectiles(ctx, game) {
     game.projectiles.forEach(p => {
       const angle = Math.atan2(p.targetPoint.y - p.y, p.targetPoint.x - p.x);
-      const id = p.type === 'bifang' ? 'bifangFireball' : 'fuzhuFrostshot';
-      if (this.drawContained(ctx, id, p.x, p.y, p.type === 'bifang' ? 19 : 20, 13, { rotation: angle })) return;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.type === 'bifang' ? 6 : 5, 0, Math.PI * 2); ctx.fillStyle = p.type === 'bifang' ? '#ff7b38' : '#9eeeff'; ctx.fill();
+      const id = p.type === 'bifang' ? 'bifangFireball' : p.type === 'jumang' ? 'jumangLeafblade' : 'fuzhuFrostshot';
+      if (p.type === 'jumang') {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(141, 242, 174, .72)';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - Math.cos(angle) * 13, p.y - Math.sin(angle) * 13);
+        ctx.stroke();
+        ctx.restore();
+      }
+      if (this.drawContained(ctx, id, p.x, p.y, p.type === 'bifang' ? 19 : p.type === 'jumang' ? 22 : 20, 13, { rotation: angle })) return;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.type === 'bifang' ? 6 : 5, 0, Math.PI * 2); ctx.fillStyle = p.type === 'bifang' ? '#ff7b38' : p.type === 'jumang' ? '#8df2ae' : '#9eeeff'; ctx.fill();
     });
   }
   drawEffects(ctx, game) {
+    game.effects.filter(effect => effect.type === 'kuiPhase2').forEach(effect => {
+      const source = game.enemies?.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.25, effect.life / effect.duration);
+      ctx.strokeStyle = '#bfeeff';
+      ctx.lineWidth = 4 - progress * 2;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 42 + progress * 24, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    });
+    game.effects.filter(effect => effect.type === 'jumangImpact').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      ctx.fillStyle = 'rgba(136, 246, 175, .24)';
+      ctx.strokeStyle = '#baffce';
+      ctx.lineWidth = 3 - progress;
+      ctx.beginPath();
+      ctx.arc(effect.x, effect.y, 7 + progress * 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    });
     game.effects.filter(effect => effect.type === 'fogEntry').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       const fade = Math.max(0, effect.life / effect.duration);

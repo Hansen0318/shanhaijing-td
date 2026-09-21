@@ -126,7 +126,8 @@ export class UIController {
     this.dom['lineup-choices'].innerHTML = roster.map(type => {
       const item = TOWER_DATA[type];
       const active = selected.has(type);
-      return `<button class="lineup-card${active ? ' selected' : ''}" data-action="toggle-lineup" data-type="${type}" aria-pressed="${active}"><img src="${assetUrl(type)}" alt=""><strong>${item.name}</strong><small>${item.role}</small><b>${item.cost} G</b></button>`;
+      const isNew = this.game.lineupNewType === type;
+      return `<button class="lineup-card${active ? ' selected' : ''}${isNew ? ' newly-unlocked' : ''}" data-action="toggle-lineup" data-type="${type}" aria-pressed="${active}">${isNew ? '<em class="lineup-new-badge">NEW</em>' : ''}<img src="${assetUrl(type)}" alt=""><strong>${item.name}</strong><small>${item.role}</small><b>${item.cost} G</b></button>`;
     }).join('');
     this.dom['confirm-lineup-button'].disabled = selected.size !== 3;
     if (this.dom['lineup-count']) this.dom['lineup-count'].textContent = `${selected.size} / 3`;
