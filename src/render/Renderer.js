@@ -93,29 +93,42 @@ export class Renderer {
     for (const zone of zones) {
       const isCharging = charge.has(zone.id);
       const isPulsing = pulse.has(zone.id);
-      const alpha = isPulsing ? 0.32 : isCharging ? 0.2 + Math.sin(time * 15) * 0.04 : 0.07;
+      const alpha = isPulsing ? 0.28 : isCharging ? 0.14 + Math.sin(time * 15) * 0.03 : 0.025;
+      const centerX = zone.x + zone.width / 2;
+      const centerY = zone.y + zone.height / 2;
+      const radiusX = zone.width * 0.52;
+      const radiusY = zone.height * 0.58;
       ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(73, 190, 255, ${alpha})`;
-      ctx.strokeStyle = isPulsing ? 'rgba(220, 249, 255, .98)' : isCharging ? 'rgba(117, 224, 255, .88)' : 'rgba(91, 166, 207, .42)';
-      ctx.lineWidth = isPulsing ? 3 : isCharging ? 2 : 1;
-      ctx.fillRect(zone.x, zone.y, zone.width, zone.height);
-      ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
-      if (isPulsing) {
-        ctx.beginPath();
-        ctx.moveTo(zone.x + zone.width * 0.32, zone.y);
-        ctx.lineTo(zone.x + zone.width * 0.52, zone.y + zone.height * 0.48);
-        ctx.lineTo(zone.x + zone.width * 0.43, zone.y + zone.height);
+      ctx.fill();
+      if (isCharging || isPulsing) {
+        ctx.strokeStyle = isPulsing ? 'rgba(220, 249, 255, .92)' : 'rgba(117, 224, 255, .7)';
+        ctx.lineWidth = isPulsing ? 2.5 : 1.5;
         ctx.stroke();
       }
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.font = 'bold 10px system-ui';
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(6,20,34,.9)';
-      ctx.fillStyle = isPulsing ? '#f2fdff' : isCharging ? '#a9efff' : 'rgba(166,218,241,.68)';
-      const label = `雷脈${zone.id}${isPulsing ? '・脈衝' : isCharging ? '・蓄能' : ''}`;
-      ctx.strokeText(label, zone.x + zone.width / 2, zone.y - 3);
-      ctx.fillText(label, zone.x + zone.width / 2, zone.y - 3);
+      if (isPulsing) {
+        ctx.beginPath();
+        ctx.moveTo(centerX - radiusX * 0.35, centerY - radiusY * 0.65);
+        ctx.lineTo(centerX + radiusX * 0.05, centerY - radiusY * 0.05);
+        ctx.lineTo(centerX - radiusX * 0.08, centerY + radiusY * 0.65);
+        ctx.moveTo(centerX + radiusX * 0.12, centerY - radiusY * 0.55);
+        ctx.lineTo(centerX + radiusX * 0.38, centerY);
+        ctx.lineTo(centerX + radiusX * 0.22, centerY + radiusY * 0.52);
+        ctx.stroke();
+      }
+      if (isCharging || isPulsing) {
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.font = 'bold 10px system-ui';
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(6,20,34,.9)';
+        ctx.fillStyle = isPulsing ? '#f2fdff' : '#a9efff';
+        const label = `雷脈${zone.id}${isPulsing ? '・脈衝' : '・蓄能'}`;
+        ctx.strokeText(label, centerX, zone.y - 3);
+        ctx.fillText(label, centerX, zone.y - 3);
+      }
       ctx.restore();
     }
   }

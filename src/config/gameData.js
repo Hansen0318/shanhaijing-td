@@ -434,7 +434,7 @@ const levelSeven = Object.freeze({
   map: LEVEL7_MAP_DATA,
   waves: LEVEL7_WAVE_DATA,
   art: Object.freeze({
-    background: 'level7Background', backgroundCrop: { x: 0, y: 0, width: 390, height: 610 },
+    background: 'level7Background', backgroundCrop: { x: 0, y: 0, width: 984, height: 1536 },
     bossPanel: 'kuiBossPanel',
   }),
   lineup: Object.freeze({
