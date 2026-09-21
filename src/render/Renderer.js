@@ -6,10 +6,11 @@ import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level7-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58] });
 const LEVEL7_WATERFALLS = Object.freeze([
-  Object.freeze({ x: 56, y: 132, width: 17, height: 46, phase: 0.1 }),
-  Object.freeze({ x: 201, y: 96, width: 15, height: 38, phase: 0.8 }),
-  Object.freeze({ x: 173, y: 221, width: 16, height: 40, phase: 1.5 }),
-  Object.freeze({ x: 183, y: 503, width: 19, height: 53, phase: 2.2 }),
+  // Player-confirmed waterfall locations from phone smoke. Width follows the visible waterfall body.
+  Object.freeze({ x: 48, y: 137, width: 22, height: 57, phase: 0.1 }),
+  Object.freeze({ x: 21, y: 266, width: 12, height: 61, phase: 0.8 }),
+  Object.freeze({ x: 315, y: 157, width: 7, height: 53, phase: 1.5 }),
+  Object.freeze({ x: 171, y: 492, width: 23, height: 58, phase: 2.2 }),
 ]);
 
 const FOG_VISUAL_PATHS = Object.freeze({
