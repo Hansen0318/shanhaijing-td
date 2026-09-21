@@ -1,8 +1,8 @@
 import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level7-mapfix-1';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
-import { GameMap } from '../map/GameMap.js';
-import { Enemy } from '../entities/Enemy.js?v=fog-visual-1';
+import { GameMap } from '../map/GameMap.js?v=base-arrival-1';
+import { Enemy } from '../entities/Enemy.js?v=base-arrival-1';
 import { Illusion } from '../entities/Illusion.js';
 import { Tower } from '../entities/Tower.js?v=blessing-fix-1&tower-facing=1';
 import { Projectile } from '../entities/Projectile.js';
