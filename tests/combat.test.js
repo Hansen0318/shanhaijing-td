@@ -77,3 +77,13 @@ test('burn damage bypasses rock armor because it is not a normal hit', () => {
   StatusSystem.update(enemy, 1);
   assert.equal(enemy.hp, 95);
 });
+
+test('thunder shell reduces every damage kind only for its active duration', () => {
+  const enemy = target(0);
+  enemy.statuses.thunderShell = { remaining: 1.6, damageMultiplier: 0.8 };
+  assert.equal(CombatSystem.resolveDamage(100, enemy), 80);
+  assert.equal(CombatSystem.resolveDamage(100, enemy, { damageKind: 'aoe' }), 80);
+  assert.equal(CombatSystem.resolveDamage(100, enemy, { damageKind: 'dot' }), 80);
+  StatusSystem.update(enemy, 1.61);
+  assert.equal(CombatSystem.resolveDamage(100, enemy), 100);
+});

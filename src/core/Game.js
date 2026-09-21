@@ -18,6 +18,7 @@ import { MotionSystem } from '../systems/MotionSystem.js?v=level6-readability-2'
 import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level6-readability-2';
 import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level6-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
+import { ThunderSystem } from '../systems/ThunderSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -60,6 +61,7 @@ export class Game {
     this.stats = { kills: 0, built: 0 };
     this.levelBossDefeated = false;
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
+    this.thunder = ThunderSystem.reset();
     this.time.setPaused(true);
     return true;
   }
@@ -276,6 +278,7 @@ export class Game {
         });
       }
     });
+    ThunderSystem.update(this, dt);
     SunlightSystem.update(this, 0);
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
@@ -304,6 +307,11 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'kuiPhase2') {
+      this.thunder = ThunderSystem.reset({ phase2: true });
+      this.effects.push({ type: 'kuiPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'jinwuPhase2') {
       this.sunlight.phase2 = true;
       this.effects.push({ type: 'jinwuPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });

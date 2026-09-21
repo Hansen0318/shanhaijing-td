@@ -20,6 +20,7 @@ export class CombatSystem {
       damage *= 1 - reduction;
     }
     damage *= enemy.sunlightDamageMultiplier ?? 1;
+    damage *= enemy.statuses?.thunderShell?.damageMultiplier ?? 1;
     if (damage > 0) damage = Math.max(enemy.data?.minimumNormalDamage ?? 0, damage);
     return Number(damage.toFixed(3));
   }

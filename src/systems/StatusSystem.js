@@ -23,7 +23,8 @@ export class StatusSystem {
     const sprint = enemy.statuses.fogSprint?.amount ?? 0;
     const bossStep = enemy.statuses.bossStep ? 0.25 : 0;
     const slowEffectiveness = (enemy.data?.slowEffectiveness ?? 1) * (enemy.slowEffectivenessMultiplier ?? 1);
-    return Math.max(0.2, 1 - slow * slowEffectiveness) * (1 + sprint + bossStep);
+    const thunderSprint = enemy.statuses.thunderSprint?.multiplier ?? 1;
+    return Math.max(0.2, 1 - slow * slowEffectiveness) * (1 + sprint + bossStep) * thunderSprint;
   }
   static update(enemy, dt) {
     const burn = enemy.statuses.burn;
@@ -34,7 +35,7 @@ export class StatusSystem {
     }
     const slow = enemy.statuses.slow;
     if (slow) { slow.remaining -= dt; if (slow.remaining <= 0) delete enemy.statuses.slow; }
-    for (const key of ['fogSprint', 'insight']) {
+    for (const key of ['fogSprint', 'insight', 'thunderSprint', 'thunderShell']) {
       const status = enemy.statuses[key];
       if (!status) continue;
       status.remaining -= dt;
