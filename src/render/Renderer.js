@@ -1,7 +1,7 @@
 import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level7-1';
 import { ArtStore } from '../config/artAssets.js?v=level7-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level7-1';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level7-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level7-visualfix-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level7-visualfix-1';
 import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level7-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58] });
@@ -90,46 +90,92 @@ export class Renderer {
     const charge = new Set(game.effects.filter(effect => effect.type === 'thunderCharge' && effect.life > 0).flatMap(effect => effect.zoneIds));
     const pulse = new Set(game.effects.filter(effect => effect.type === 'thunderPulse' && effect.life > 0).flatMap(effect => effect.zoneIds));
     const time = game.visualTime ?? 0;
+
+    const strokeBolt = (ctx, points, alpha, width, shadowBlur) => {
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.shadowColor = `rgba(104, 224, 255, ${Math.min(1, alpha)})`;
+      ctx.shadowBlur = shadowBlur;
+      ctx.strokeStyle = `rgba(111, 225, 255, ${alpha * 0.72})`;
+      ctx.lineWidth = width + 3;
+      ctx.beginPath();
+      points.forEach((point, index) => index === 0 ? ctx.moveTo(point[0], point[1]) : ctx.lineTo(point[0], point[1]));
+      ctx.stroke();
+      ctx.shadowBlur = Math.max(2, shadowBlur * 0.45);
+      ctx.strokeStyle = `rgba(244, 253, 255, ${alpha})`;
+      ctx.lineWidth = width;
+      ctx.stroke();
+      ctx.restore();
+    };
+
     for (const zone of zones) {
       const isCharging = charge.has(zone.id);
       const isPulsing = pulse.has(zone.id);
-      const alpha = isPulsing ? 0.28 : isCharging ? 0.14 + Math.sin(time * 15) * 0.03 : 0.025;
+      const flicker = 0.5 + Math.sin(time * 23 + (zone.id === 'B' ? 1.7 : 0)) * 0.5;
+      const alpha = isPulsing ? 0.5 : isCharging ? 0.24 + flicker * 0.08 : 0.035;
       const centerX = zone.x + zone.width / 2;
       const centerY = zone.y + zone.height / 2;
-      const radiusX = zone.width * 0.52;
-      const radiusY = zone.height * 0.58;
+      const radiusX = zone.width * 0.56;
+      const radiusY = zone.height * 0.64;
+
       ctx.save();
       ctx.translate(centerX, centerY);
       ctx.scale(radiusX, radiusY);
-      const glow = ctx.createRadialGradient(0, 0, 0.05, 0, 0, 1);
-      glow.addColorStop(0, `rgba(126, 225, 255, ${Math.min(0.38, alpha * 1.35)})`);
-      glow.addColorStop(0.55, `rgba(73, 190, 255, ${alpha})`);
-      glow.addColorStop(1, 'rgba(73, 190, 255, 0)');
+      const glow = ctx.createRadialGradient(0, 0, 0.03, 0, 0, 1);
+      glow.addColorStop(0, `rgba(205, 248, 255, ${Math.min(0.72, alpha * 1.35)})`);
+      glow.addColorStop(0.28, `rgba(108, 218, 255, ${Math.min(0.58, alpha * 1.05)})`);
+      glow.addColorStop(0.68, `rgba(51, 158, 232, ${alpha * 0.52})`);
+      glow.addColorStop(1, 'rgba(51, 158, 232, 0)');
       ctx.fillStyle = glow;
       ctx.fillRect(-1, -1, 2, 2);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      if (isPulsing) {
-        ctx.beginPath();
-        ctx.moveTo(centerX - radiusX * 0.35, centerY - radiusY * 0.65);
-        ctx.lineTo(centerX + radiusX * 0.05, centerY - radiusY * 0.05);
-        ctx.lineTo(centerX - radiusX * 0.08, centerY + radiusY * 0.65);
-        ctx.moveTo(centerX + radiusX * 0.12, centerY - radiusY * 0.55);
-        ctx.lineTo(centerX + radiusX * 0.38, centerY);
-        ctx.lineTo(centerX + radiusX * 0.22, centerY + radiusY * 0.52);
-        ctx.stroke();
-      }
+      ctx.restore();
+
       if (isCharging || isPulsing) {
+        const boltAlpha = isPulsing ? 0.98 : 0.5 + flicker * 0.18;
+        const mainBolt = [
+          [centerX - radiusX * 0.26, centerY - radiusY * 0.78],
+          [centerX + radiusX * 0.02, centerY - radiusY * 0.26],
+          [centerX - radiusX * 0.12, centerY + radiusY * 0.02],
+          [centerX + radiusX * 0.12, centerY + radiusY * 0.33],
+          [centerX - radiusX * 0.02, centerY + radiusY * 0.78],
+        ];
+        strokeBolt(ctx, mainBolt, boltAlpha, isPulsing ? 2.2 : 1.35, isPulsing ? 13 : 8);
+
+        const branchLeft = [
+          [centerX - radiusX * 0.1, centerY - radiusY * 0.02],
+          [centerX - radiusX * 0.46, centerY + radiusY * 0.18],
+          [centerX - radiusX * 0.58, centerY + radiusY * 0.48],
+        ];
+        const branchRight = [
+          [centerX + radiusX * 0.08, centerY + radiusY * 0.29],
+          [centerX + radiusX * 0.42, centerY + radiusY * 0.09],
+          [centerX + radiusX * 0.58, centerY + radiusY * 0.34],
+        ];
+        strokeBolt(ctx, branchLeft, boltAlpha * 0.78, isPulsing ? 1.6 : 1, isPulsing ? 10 : 6);
+        strokeBolt(ctx, branchRight, boltAlpha * 0.74, isPulsing ? 1.5 : 1, isPulsing ? 10 : 6);
+
+        if (isPulsing) {
+          const flash = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(radiusX, radiusY) * 0.9);
+          flash.addColorStop(0, 'rgba(235, 253, 255, .46)');
+          flash.addColorStop(0.4, 'rgba(116, 224, 255, .18)');
+          flash.addColorStop(1, 'rgba(116, 224, 255, 0)');
+          ctx.fillStyle = flash;
+          ctx.fillRect(centerX - radiusX, centerY - radiusY, radiusX * 2, radiusY * 2);
+        }
+
+        ctx.save();
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
         ctx.font = 'bold 10px system-ui';
         ctx.lineWidth = 3;
         ctx.strokeStyle = 'rgba(6,20,34,.9)';
-        ctx.fillStyle = isPulsing ? '#f2fdff' : '#a9efff';
+        ctx.fillStyle = isPulsing ? '#f5feff' : '#bcefff';
         const label = `雷脈${zone.id}${isPulsing ? '・脈衝' : '・蓄能'}`;
         ctx.strokeText(label, centerX, zone.y - 3);
         ctx.fillText(label, centerX, zone.y - 3);
+        ctx.restore();
       }
-      ctx.restore();
     }
   }
   drawStateTag(ctx, text, x, y, { fill = '#fff1a8', background = 'rgba(34,23,8,.78)' } = {}) {
