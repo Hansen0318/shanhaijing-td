@@ -99,15 +99,15 @@ export class Renderer {
       const radiusX = zone.width * 0.52;
       const radiusY = zone.height * 0.58;
       ctx.save();
-      ctx.beginPath();
-      ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(73, 190, 255, ${alpha})`;
-      ctx.fill();
-      if (isCharging || isPulsing) {
-        ctx.strokeStyle = isPulsing ? 'rgba(220, 249, 255, .92)' : 'rgba(117, 224, 255, .7)';
-        ctx.lineWidth = isPulsing ? 2.5 : 1.5;
-        ctx.stroke();
-      }
+      ctx.translate(centerX, centerY);
+      ctx.scale(radiusX, radiusY);
+      const glow = ctx.createRadialGradient(0, 0, 0.05, 0, 0, 1);
+      glow.addColorStop(0, `rgba(126, 225, 255, ${Math.min(0.38, alpha * 1.35)})`);
+      glow.addColorStop(0.55, `rgba(73, 190, 255, ${alpha})`);
+      glow.addColorStop(1, 'rgba(73, 190, 255, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(-1, -1, 2, 2);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (isPulsing) {
         ctx.beginPath();
         ctx.moveTo(centerX - radiusX * 0.35, centerY - radiusY * 0.65);
