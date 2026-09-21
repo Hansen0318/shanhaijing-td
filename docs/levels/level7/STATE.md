@@ -6,16 +6,16 @@
 
 - Level: **7 — 雷澤天野**
 - Base: **震木神壇**
-- Development phase: **ENGINEERING PASS / PUBLIC RUNTIME SMOKE PENDING**
-- Active branch: `feat/level7-leize`
+- Development phase: **RELEASE COMPLETE / PUBLIC RUNTIME SMOKE PASS**
+- Released branch: `main`
 - Canonical folder: `docs/levels/level7/`
 - Last state update: 2026-09-21
 
 ## Current gate
 
-**RELEASE CLOSURE**
+**RELEASE COMPLETE**
 
-Production implementation, approved-asset integration, automated verification, and the pre-smoke checkpoint are complete. Remaining work is final branch review, reconciliation with current remote `main`, merge, GitHub Pages deployment, and public runtime verification.
+Production implementation, approved-asset integration, automated verification, final branch review, merge, GitHub Pages deployment, and public runtime verification are complete. Physical-player phone smoke remains a separate follow-up and is not claimed here.
 
 ## Implemented
 
@@ -39,6 +39,9 @@ Production implementation, approved-asset integration, automated verification, a
 - Every JavaScript file under `src/` and `tests/` passes `node --check`.
 - Safe-push checkpoints through the approved art/UI integration are present locally and on the remote feature branch.
 - Local cloud-browser navigation to `127.0.0.1` was blocked with `net::ERR_BLOCKED_BY_CLIENT`; no local visual or player-device PASS is claimed from that attempt.
+- PR [#37](https://github.com/Hansen0318/shanhaijing-td/pull/37) merged to `main` at gameplay merge SHA `9e7bfc3197b3ac9a30333204f88d18e3e541a2ae`.
+- GitHub Pages served the `level7-1` entry/CSS versions and exposed Level7 through `?devMenu=1`.
+- Public 390×700 smoke passed the normal Level6→Level7 transition with 句芒 NEW, empty 5-choose-3 lineup, Wave 1 with 句芒, Thunder A charge, Thunder B pulse, 夔 P2 at 3850/7700 HP, victory, and retry back to an empty 0/3 lineup without NEW.
 
 ## Bounded Red Team audit
 
@@ -55,14 +58,11 @@ Production implementation, approved-asset integration, automated verification, a
 - Do not infer canonical geometry from a screenshot; `GEOMETRY.md` remains authoritative.
 - Do not claim a browser/player smoke PASS without observing the deployed runtime.
 
-## Remaining release checks
+## Remaining non-blocking follow-up
 
-1. Complete the final branch diff and requirement review.
-2. Reconcile the remote feature head against the latest remote `main`, then merge without force-pushing.
-3. Verify GitHub Pages deploys the merged `main` SHA.
-4. On the public site, verify `?devMenu=1`, direct Level7 entry, the normal Level6→Level7 NEW transition fixture, 390×700 layout, eight slots, Thunder A/B behavior, 句芒 support, 夔 Phase 2, and victory.
-5. Keep real-player phone smoke distinct if no physical-device test is performed.
+1. Optional physical-player phone smoke on the public Pages URL.
+2. Report any device-specific rendering issue as a new scoped task; do not reopen frozen Level7 design without player direction.
 
 ## Next exact step
 
-Commit and push the cache/version and handoff-documentation closure, perform the final review, merge to current remote `main`, verify Pages, and record the deployed `main` SHA and public smoke evidence.
+No release action remains. Preserve the released Level7 implementation and use this handoff as the baseline for any future device-specific follow-up.

@@ -308,6 +308,6 @@ Confirm: no gate crossing; no unapproved art; no geometry/balance drift; no Leve
 
 Record branch/SHA, completed work, exact commands/results, runtime limitations, release status, and singular next step in `STATE.md` and `WORK_PROGRESS.md`; commit and push.
 
-- [ ] **Step 5: Review, merge, deploy, and verify public flows**
+- [x] **Step 5: Review, merge, deploy, and verify public flows**
 
 Follow `AGENTS.md` Section 8: final whole-branch review; sync/reconcile latest `main`; merge verified `feat/level7-leize`; push `main`; wait for Pages source/deploy; verify public `?devMenu=1` exposes Level7 and normal Level6 victory unlocks 句芒 then enters Level7 5-choose-3 lineup. Record final main SHA and deployment evidence before reporting.

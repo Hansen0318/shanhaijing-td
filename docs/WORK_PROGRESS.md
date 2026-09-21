@@ -722,8 +722,8 @@ ENGINEERING COMPLETE / 390 BROWSER SMOKE BLOCKED
 
 ### 狀態
 
-ENGINEERING PASS / PUBLIC RUNTIME SMOKE PENDING / RELEASE CLOSURE IN PROGRESS
+RELEASE COMPLETE / PUBLIC RUNTIME SMOKE PASS / PLAYER PHONE SMOKE NOT CLAIMED
 
 ### 下一步
 
-完成最終 diff review，將 cache/version 與 handoff 更新提交至遠端 feature branch；與最新 `main` 對齊後合併，確認 GitHub Pages 部署，並在公開網址執行 Level7 的 devMenu、正常 Level6→7、390×700、雷脈、句芒、夔 Phase 2 與勝利 smoke。
+PR [#37](https://github.com/Hansen0318/shanhaijing-td/pull/37) 已合併；gameplay merge SHA 為 `9e7bfc3197b3ac9a30333204f88d18e3e541a2ae`。GitHub Pages 已提供 `level7-1`；公開 390×700 smoke 已通過 devMenu Level7、正常 Level6→7 與句芒 NEW、空的 5 選 3、句芒 Wave 1、雷脈 A 蓄能、雷脈 B 脈衝、夔 P2（3850/7700）、勝利，以及重試後空的 0/3 且 NEW 消失。實體手機玩家 smoke 未執行，故不宣稱 PASS。
