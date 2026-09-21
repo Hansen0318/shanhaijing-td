@@ -1,5 +1,5 @@
 import { Game } from './core/Game.js?v=level7-visualfix-1';
-import { Renderer } from './render/Renderer.js?v=level7-waterfall-1';
+import { Renderer } from './render/Renderer.js?v=level7-waterfall-2';
 import { UIController } from './ui/UIController.js?v=level7-1';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level7-1';
 
