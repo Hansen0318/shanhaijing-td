@@ -1,6 +1,9 @@
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level7-1';
 
+const BASE_ARRIVAL_LINGER_SECONDS = 0.28;
+const BASE_ARRIVAL_EXIT_DISTANCE = 22;
+
 let nextEnemyId = 1;
 export class Enemy {
   constructor(type, data, map) {
@@ -17,6 +20,8 @@ export class Enemy {
     this.pathDistance = 0;
     this.alive = true;
     this.reachedBase = false;
+    this.baseArrivalRemaining = 0;
+    this.baseArrivalDuration = 0;
     this.statuses = {};
     this.hitFlash = 0;
     this.visualHitFlash = 0;
@@ -69,8 +74,23 @@ export class Enemy {
     } else if (this.chargeRemaining > 0) {
       this.chargeRemaining = Math.max(0, this.chargeRemaining - dt);
     }
-    if (this.pathDistance >= this.map.totalLength) { this.reachedBase = true; this.alive = false; }
+    if (this.pathDistance >= this.map.totalLength) {
+      this.pathDistance = this.map.totalLength;
+      Object.assign(this, this.map.positionAt(this.map.totalLength));
+      this.reachedBase = true;
+      this.baseArrivalDuration = BASE_ARRIVAL_LINGER_SECONDS;
+      this.baseArrivalRemaining = BASE_ARRIVAL_LINGER_SECONDS;
+      this.alive = false;
+    }
     return chargeEvent ?? fogEntry;
+  }
+  updateBaseArrival(dt) {
+    if (!this.reachedBase || this.baseArrivalRemaining <= 0) return false;
+    this.baseArrivalRemaining = Math.max(0, this.baseArrivalRemaining - Math.max(0, dt));
+    const duration = this.baseArrivalDuration || BASE_ARRIVAL_LINGER_SECONDS;
+    const progress = 1 - this.baseArrivalRemaining / duration;
+    Object.assign(this, this.map.positionBeyondEnd(BASE_ARRIVAL_EXIT_DISTANCE * progress));
+    return this.baseArrivalRemaining > 0;
   }
   shouldSpawnIllusions() {
     if (this.type !== 'huanli' || this.spawnedIllusions || !this.alive || this.hp > this.maxHp * 0.6) return false;
