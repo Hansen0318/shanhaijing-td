@@ -200,38 +200,6 @@ function setupLevelFourDev(game, devLevel) {
   }
 }
 
-function syncLevelSevenBattlefieldRatio(levelId) {
-  const shell = document.querySelector('#game-shell');
-  const battlefield = document.querySelector('.battlefield');
-  if (!shell || !battlefield) return;
-
-  if (levelId !== 7) {
-    battlefield.style.removeProperty('width');
-    battlefield.style.removeProperty('height');
-    battlefield.style.removeProperty('flex');
-    battlefield.style.removeProperty('align-self');
-    return;
-  }
-
-  const shellStyle = getComputedStyle(shell);
-  const paddingX = parseFloat(shellStyle.paddingLeft) + parseFloat(shellStyle.paddingRight);
-  const paddingY = parseFloat(shellStyle.paddingTop) + parseFloat(shellStyle.paddingBottom);
-  const gap = parseFloat(shellStyle.rowGap || shellStyle.gap) || 0;
-  const siblings = [...shell.children].filter(node => node !== battlefield);
-  const availableWidth = Math.max(1, shell.clientWidth - paddingX);
-  const availableHeight = Math.max(
-    1,
-    shell.clientHeight - paddingY - siblings.reduce((sum, node) => sum + node.offsetHeight, 0) - gap * Math.max(0, shell.children.length - 1),
-  );
-  const targetWidth = Math.min(availableWidth, availableHeight * 390 / 610);
-  const targetHeight = targetWidth * 610 / 390;
-
-  battlefield.style.width = `${targetWidth}px`;
-  battlefield.style.height = `${targetHeight}px`;
-  battlefield.style.flex = '0 0 auto';
-  battlefield.style.alignSelf = 'center';
-}
-
 function initializeGame() {
   resetViewport();
   const devLevel = Number.parseInt(params.get('devLevel') ?? '', 10);
@@ -249,19 +217,11 @@ function initializeGame() {
   const ui = new UIController(game, renderer);
   let previous = performance.now();
   let initialLoadRecorded = false;
-  let layoutLevelId = game.levelId;
-  const syncBattlefieldLayout = () => syncLevelSevenBattlefieldRatio(game.levelId);
-  syncBattlefieldLayout();
-  addEventListener('resize', syncBattlefieldLayout);
 
   function frame(now) {
     const delta = Math.min((now - previous) / 1000, 0.1);
     previous = now;
     document.body.dataset.level = String(game.levelId);
-    if (layoutLevelId !== game.levelId) {
-      layoutLevelId = game.levelId;
-      syncBattlefieldLayout();
-    }
     game.update(delta);
     renderer.render(game);
     drawPathDebug(renderer, game);
