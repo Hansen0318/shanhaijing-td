@@ -5,6 +5,13 @@ import { MotionSystem } from '../systems/MotionSystem.js?v=level7-visualfix-1';
 import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level7-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58] });
+const LEVEL7_WATERFALLS = Object.freeze([
+  Object.freeze({ x: 56, y: 132, width: 17, height: 46, phase: 0.1 }),
+  Object.freeze({ x: 201, y: 96, width: 15, height: 38, phase: 0.8 }),
+  Object.freeze({ x: 173, y: 221, width: 16, height: 40, phase: 1.5 }),
+  Object.freeze({ x: 183, y: 503, width: 19, height: 53, phase: 2.2 }),
+]);
+
 const FOG_VISUAL_PATHS = Object.freeze({
   upper: { start: [218, 116], c1: [214, 140], c2: [137, 181], end: [140, 214], normal: [-0.78, -0.62] },
   lower: { start: [245, 406], c1: [277, 407], c2: [335, 438], end: [335, 467], normal: [-0.56, 0.83] },
@@ -35,6 +42,7 @@ export class Renderer {
     const map = game.level.map;
     ctx.clearRect(0, 0, map.width, map.height);
     this.drawBackground(ctx, game);
+    this.drawLevelSevenWaterfalls(ctx, game);
     this.drawFogZones(ctx, game);
     this.drawSunlightZones(ctx, game);
     this.drawThunderZones(ctx, game);
@@ -206,6 +214,57 @@ export class Renderer {
     this.drawGrid(ctx, map);
     this.drawPath(ctx, map);
   }
+  drawLevelSevenWaterfalls(ctx, game) {
+    if (game.level.id !== 7) return;
+    const time = game.visualTime ?? 0;
+
+    for (const fall of LEVEL7_WATERFALLS) {
+      const flow = (time * 0.85 + fall.phase) % 1;
+      const centerX = fall.x + fall.width / 2;
+      const bottomY = fall.y + fall.height;
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+
+      const halo = ctx.createLinearGradient(fall.x, fall.y, fall.x, bottomY);
+      halo.addColorStop(0, 'rgba(180, 235, 255, 0)');
+      halo.addColorStop(0.18, 'rgba(176, 231, 255, .055)');
+      halo.addColorStop(0.72, 'rgba(137, 217, 255, .09)');
+      halo.addColorStop(1, 'rgba(213, 247, 255, .03)');
+      ctx.fillStyle = halo;
+      ctx.fillRect(fall.x - 2, fall.y, fall.width + 4, fall.height);
+
+      for (let index = 0; index < 4; index += 1) {
+        const lane = (index - 1.5) * (fall.width / 5.5);
+        const wobble = Math.sin(time * 1.45 + fall.phase + index * 1.4) * 0.8;
+        const offset = ((flow + index * 0.23) % 1) * 11;
+        const startY = fall.y - 8 + offset;
+
+        ctx.strokeStyle = `rgba(198, 241, 255, ${0.09 + index * 0.012})`;
+        ctx.lineWidth = index === 1 || index === 2 ? 1.35 : 0.85;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(centerX + lane + wobble, startY);
+        ctx.bezierCurveTo(
+          centerX + lane - 1.2 + wobble, fall.y + fall.height * 0.34,
+          centerX + lane + 1.4 - wobble, fall.y + fall.height * 0.68,
+          centerX + lane + wobble * 0.4, bottomY - 2,
+        );
+        ctx.stroke();
+      }
+
+      const mistPulse = 0.035 + (Math.sin(time * 1.1 + fall.phase) + 1) * 0.012;
+      const mist = ctx.createRadialGradient(centerX, bottomY - 1, 0, centerX, bottomY - 1, fall.width * 0.85);
+      mist.addColorStop(0, `rgba(218, 249, 255, ${mistPulse + 0.035})`);
+      mist.addColorStop(0.5, `rgba(177, 231, 249, ${mistPulse})`);
+      mist.addColorStop(1, 'rgba(177, 231, 249, 0)');
+      ctx.fillStyle = mist;
+      ctx.fillRect(centerX - fall.width, bottomY - fall.width, fall.width * 2, fall.width * 1.55);
+
+      ctx.restore();
+    }
+  }
+
   drawFogZones(ctx, game) {
     if (game.level.id !== 4) return;
     const zones = game.level.map.fogZones ?? [];
