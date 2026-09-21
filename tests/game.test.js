@@ -155,3 +155,33 @@ test('wave ten presents the unified boss arrival and qiongqi frenzy banners in o
   game.advanceBanner(1.11);
   assert.equal(game.banner, '窮奇 狂暴化！');
 });
+
+
+test('escaped enemies visibly pass the endpoint before base damage and wave completion', () => {
+  const game = new Game();
+  game.state = 'combat';
+  game.wave.waveNumber = 1;
+  game.wave.active = true;
+  game.wave.queue.length = 0;
+  game.wave.spawnedAlive = 1;
+  const enemy = game.spawnEnemy('minion');
+  enemy.pathDistance = game.map.totalLength - 0.1;
+
+  game.update(0.01);
+
+  assert.equal(enemy.reachedBase, true);
+  assert.equal(enemy.alive, false);
+  assert.equal(game.enemies.includes(enemy), true);
+  assert.equal(game.baseHp, 20);
+  assert.equal(game.wave.spawnedAlive, 1);
+  assert.equal(game.state, 'combat');
+
+  game.update(0.1);
+  game.update(0.1);
+  game.update(0.1);
+
+  assert.equal(game.enemies.length, 0);
+  assert.equal(game.baseHp, 19);
+  assert.equal(game.wave.spawnedAlive, 0);
+  assert.equal(game.state, 'blessing');
+});

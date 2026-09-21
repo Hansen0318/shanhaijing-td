@@ -1,8 +1,8 @@
 import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level7-mapfix-1';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
-import { GameMap } from '../map/GameMap.js';
-import { Enemy } from '../entities/Enemy.js?v=fog-visual-1';
+import { GameMap } from '../map/GameMap.js?v=base-arrival-1';
+import { Enemy } from '../entities/Enemy.js?v=base-arrival-1';
 import { Illusion } from '../entities/Illusion.js';
 import { Tower } from '../entities/Tower.js?v=blessing-fix-1&tower-facing=1';
 import { Projectile } from '../entities/Projectile.js';
@@ -269,6 +269,10 @@ export class Game {
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
     SunlightSystem.update(this, dt);
     this.enemies.forEach(enemy => {
+      if (!enemy.alive && enemy.reachedBase && enemy.baseArrivalRemaining > 0) {
+        enemy.updateBaseArrival(dt);
+        return;
+      }
       const event = enemy.update(dt);
       if (event?.type === 'fogEntry') {
         this.effects.push({
@@ -307,6 +311,7 @@ export class Game {
       const bossContext = { inFog: Boolean(this.map.fogZoneAt(enemy)), insightActive: Boolean(enemy.statuses.insight) };
       for (const event of BossSystem.update(enemy, dt, bossContext)) this.handleBossEvent(enemy, event);
       if (!enemy.alive && !enemy.processed) {
+        if (enemy.reachedBase && enemy.baseArrivalRemaining > 0) return;
         enemy.processed = true;
         if (enemy.reachedBase) this.damageBase(enemy.baseDamage); else this.onEnemyKilled(enemy);
         this.wave.enemyRemoved();
