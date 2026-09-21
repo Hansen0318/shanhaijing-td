@@ -94,6 +94,13 @@ export const ART_ASSETS = Object.freeze({
   sunlightZone: 'assets/effects/fx_sunlight_zone_v1.png',
   jinwuBossPanel: 'assets/ui/ui_boss_jinwu_panel_v1.png',
   jumangUnlock: 'assets/ui/unlock_jumang_v1.png',
+  jumang: 'assets/ui/unlock_jumang_v1.png',
+  level7Background: 'assets/levels/level7/bg_leize_tianye_v1.jpg',
+  qinyuan: 'assets/enemies/enemy_qinyuan_v1.png',
+  zhuhuai: 'assets/enemies/enemy_zhuhuai_v1.png',
+  kui: 'assets/bosses/boss_kui_v1.png',
+  kuiBossPanel: 'assets/ui/ui_boss_kui_panel_v1.png',
+  jumangLeafblade: 'assets/effects/fx_jumang_leafblade_v1.png',
 });
 
 // Inner channel geometry measured from each source panel, normalized after the
@@ -107,7 +114,7 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   jinwu: Object.freeze({ left: '3.7%', top: '43.8%', width: '92.5%', height: '21.9%' }),
 });
 
-const ASSET_CACHE_VERSION = 'level6-1';
+const ASSET_CACHE_VERSION = 'level7-1';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
@@ -133,6 +140,7 @@ export const LEVEL_ART_IDS = Object.freeze({
   4: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'level4Background', 'level4Spawn', 'level4Base', 'baize', 'meihu', 'huanli', 'jiuweihuPhase1', 'jiuweihuPhase2', 'jiuweihuPhase3', 'jiuweihuCast', 'jiuweihuProjectile', 'jiuweihuBurst', 'jiuweihuPhaseAura', 'jiuweihuUltimate', 'baizeInsightMark', 'jiuweihuBossPanel', 'level4LineupPanel']),
   5: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'lili', 'xingtianPhase1', 'xingtianPhase2', 'zhuyanCharge', 'liliArmorBreak', 'xingtianShield', 'xingtianEvolution', 'xingtianEarthquake', 'xingtianBossPanel', 'level5Banner', 'level5BossWarning', 'level5Preview']),
   6: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'level6Background', 'yangyu', 'fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'sunlightZone', 'jinwuBossPanel', 'jumangUnlock']),
+  7: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'jumang', 'level7Background', 'qinyuan', 'zhuhuai', 'kui', 'kuiBossPanel', 'jumangLeafblade']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
@@ -142,6 +150,7 @@ export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
   4: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level4Background', 'level4Spawn', 'level4Base', 'meihu', 'level4LineupPanel']),
   5: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'level5Banner', 'level5Preview']),
   6: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level6Background', 'yangyu', 'sunlightZone']),
+  7: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level7Background', 'qinyuan']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
@@ -151,6 +160,7 @@ export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
   4: Object.freeze(LEVEL_ART_IDS[4].filter(id => !LEVEL_REQUIRED_ART_IDS[4].includes(id))),
   5: Object.freeze(LEVEL_ART_IDS[5].filter(id => !LEVEL_REQUIRED_ART_IDS[5].includes(id))),
   6: Object.freeze(LEVEL_ART_IDS[6].filter(id => !LEVEL_REQUIRED_ART_IDS[6].includes(id))),
+  7: Object.freeze(LEVEL_ART_IDS[7].filter(id => !LEVEL_REQUIRED_ART_IDS[7].includes(id))),
 });
 
 export function assetUrl(id) {

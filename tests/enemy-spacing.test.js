@@ -86,6 +86,25 @@ test('mixed-type followers use both rendered footprints at the spawn gate', () =
   }
 });
 
+test('Level7 mixed qinyuan, zhuhuai and kui use the shared real spawn gate', () => {
+  const game = new Game(() => 0.2, 7);
+  assert.equal(game.canSpawnEnemy('qinyuan'), true);
+  const qinyuan = game.spawnEnemy('qinyuan');
+  const qinyuanToZhuhuai = minimumEnemyPathSpacing('qinyuan', 'zhuhuai');
+  qinyuan.pathDistance = qinyuanToZhuhuai - 0.01;
+  assert.equal(game.canSpawnEnemy('zhuhuai'), false);
+  qinyuan.pathDistance = qinyuanToZhuhuai;
+  assert.equal(game.canSpawnEnemy('zhuhuai'), true);
+  const zhuhuai = game.spawnEnemy('zhuhuai');
+  qinyuan.pathDistance += 200;
+  const zhuhuaiToKui = minimumEnemyPathSpacing('zhuhuai', 'kui');
+  zhuhuai.pathDistance = zhuhuaiToKui - 0.01;
+  assert.equal(game.canSpawnEnemy('kui'), false);
+  zhuhuai.pathDistance = zhuhuaiToKui;
+  assert.equal(game.canSpawnEnemy('kui'), true);
+  assert.equal(game.spawnEnemy('kui').type, 'kui');
+});
+
 test('spacing never slows an already spawned follower', () => {
   const game = new Game(() => 0.2, 1);
   game.wave = new WaveManager([{ groups: [{ type: 'minion', count: 2 }], interval: 0 }]);

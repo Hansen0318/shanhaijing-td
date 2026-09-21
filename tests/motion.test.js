@@ -265,6 +265,18 @@ test('Level6 units use shared Motion Lite with distinct light, heavy, and Boss p
   assert.equal(jinwu.deathSeconds, 0.45);
 });
 
+test('Level7 units and Jumang reuse shared Motion Lite profiles', () => {
+  const { qinyuan, zhuhuai, kui } = UNIT_MOTION_CONFIG.enemies;
+  assert.ok(qinyuan.bobPixels > zhuhuai.bobPixels);
+  assert.ok(qinyuan.bobHz > zhuhuai.bobHz);
+  assert.equal(qinyuan.deathSeconds, 0.18);
+  assert.equal(zhuhuai.deathSeconds, 0.24);
+  assert.deepEqual(Object.keys(kui.phases), ['1', '2']);
+  assert.ok(kui.phases[2].idleScale > kui.phases[1].idleScale);
+  assert.equal(kui.deathSeconds, 0.45);
+  assert.ok(UNIT_MOTION_CONFIG.towers.jumang.recoilPixels > 0);
+});
+
 test('first-level enemy hit and death visuals use configured durations', () => {
   const game = new Game(() => 0, 1);
   for (const [type, expectedDeath] of [['minion', 0.18], ['swift', 0.16], ['giant', 0.22]]) {

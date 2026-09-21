@@ -22,6 +22,7 @@ export const TOWER_DATA = Object.freeze({
   fuzhu: { id: 'fuzhu', name: '夫諸', emoji: '🦌', role: '緩速控場', cost: 100, damage: 8, interval: 1.2, range: 125, projectileSpeed: 360, slow: 0.25, slowDuration: 2, level3: { slowBonus: 0.15 } },
   yinglong: { id: 'yinglong', name: '應龍', emoji: '🐉', role: '高傷穿透', cost: 160, damage: 32, interval: 1.4, range: 170, projectileSpeed: 520, penetration: 2, level3: { penetrationBonus: 1 } },
   baize: { id: 'baize', name: '白澤', emoji: '🦄', role: '洞察輔助', cost: 125, damage: 14, interval: 1.05, range: 128, projectileSpeed: 400, insightDuration: 3, vulnerability: 0.15, bossVulnerability: 0.1, level2: { insightDuration: 4, rangeBonus: 8 }, level3: { defensePierce: 0.25 } },
+  jumang: { id: 'jumang', name: '句芒', emoji: '🌿', role: '全隊增益', cost: 130, damage: 10, interval: 1.15, range: 138, projectileSpeed: 380 },
 });
 
 export const ENEMY_DATA = Object.freeze({
@@ -44,6 +45,9 @@ export const ENEMY_DATA = Object.freeze({
   yangyu: { id: 'yangyu', name: '陽羽', emoji: '☀️', hp: 90, speed: 86, baseDamage: 1, reward: 13, radius: 11 },
   fusangjiashou: { id: 'fusangjiashou', name: '扶桑甲獸', emoji: '🪲', hp: 350, speed: 26, baseDamage: 3, reward: 28, radius: 18 },
   jinwu: { id: 'jinwu', name: '金烏', emoji: '🐦', hp: 6200, speed: 17, baseDamage: 20, reward: 0, radius: 29, isBoss: true, bossMechanic: { type: 'jinwu' } },
+  qinyuan: { id: 'qinyuan', name: '欽原', emoji: '🐝', hp: 100, speed: 88, baseDamage: 1, reward: 14, radius: 11 },
+  zhuhuai: { id: 'zhuhuai', name: '諸懷', emoji: '🐂', hp: 390, speed: 25, baseDamage: 3, reward: 30, radius: 18 },
+  kui: { id: 'kui', name: '夔', emoji: '⚡', hp: 7000, speed: 16, baseDamage: 20, reward: 0, radius: 29, isBoss: true, bossMechanic: { type: 'kui' } },
 });
 
 const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
@@ -123,6 +127,19 @@ export const LEVEL6_WAVE_DATA = Object.freeze([
   wave([{ type: 'yangyu', count: 16 }, { type: 'fusangjiashou', count: 6 }], 0.68, { hpMultiplier: 1.25 }),
   wave([{ type: 'yangyu', count: 18 }, { type: 'fusangjiashou', count: 8 }], 0.62, { hpMultiplier: 1.35 }),
   wave([{ type: 'yangyu', count: 8 }, { type: 'fusangjiashou', count: 4 }, { type: 'jinwu', count: 1 }], 0.82, { hpMultiplier: 1.2, bossHpMultiplier: 1.1 }),
+]);
+
+export const LEVEL7_WAVE_DATA = Object.freeze([
+  wave([{ type: 'qinyuan', count: 6 }], 1.1),
+  wave([{ type: 'qinyuan', count: 8 }], 1),
+  wave([{ type: 'qinyuan', count: 6 }, { type: 'zhuhuai', count: 2 }], 1),
+  wave([{ type: 'zhuhuai', count: 4 }], 1.05),
+  wave([{ type: 'qinyuan', count: 10 }, { type: 'zhuhuai', count: 3 }], 0.9, { hpMultiplier: 1.05 }),
+  wave([{ type: 'qinyuan', count: 14 }, { type: 'zhuhuai', count: 4 }], 0.78, { hpMultiplier: 1.1 }),
+  wave([{ type: 'qinyuan', count: 10 }, { type: 'zhuhuai', count: 6 }], 0.82, { hpMultiplier: 1.15 }),
+  wave([{ type: 'qinyuan', count: 16 }, { type: 'zhuhuai', count: 6 }], 0.7, { hpMultiplier: 1.22 }),
+  wave([{ type: 'qinyuan', count: 18 }, { type: 'zhuhuai', count: 8 }], 0.64, { hpMultiplier: 1.3 }),
+  wave([{ type: 'qinyuan', count: 8 }, { type: 'zhuhuai', count: 4 }, { type: 'kui', count: 1 }], 0.84, { hpMultiplier: 1.18, bossHpMultiplier: 1.1 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
@@ -287,6 +304,29 @@ export const LEVEL6_MAP_DATA = Object.freeze({
   ],
 });
 
+export const LEVEL7_MAP_DATA = Object.freeze({
+  width: 390,
+  height: 610,
+  pathWidth: 54,
+  pathSmoothing: 2,
+  waypoints: [
+    { x: 40, y: 34 }, { x: 45, y: 77 }, { x: 81, y: 93 }, { x: 124, y: 106 },
+    { x: 165, y: 120 }, { x: 183, y: 128 }, { x: 190, y: 147 }, { x: 224, y: 157 },
+    { x: 259, y: 181 }, { x: 251, y: 206 }, { x: 199, y: 230 }, { x: 156, y: 249 },
+    { x: 169, y: 269 }, { x: 209, y: 291 }, { x: 242, y: 308 }, { x: 241, y: 331 },
+    { x: 200, y: 353 }, { x: 178, y: 375 }, { x: 195, y: 391 }, { x: 226, y: 405 },
+    { x: 263, y: 425 }, { x: 307, y: 450 }, { x: 323, y: 480 }, { x: 343, y: 497 },
+  ],
+  thunderZones: [
+    { id: 'A', x: 187, y: 116, width: 63, height: 42 },
+    { id: 'B', x: 153, y: 360, width: 66, height: 49 },
+  ],
+  slots: [
+    { x: 138, y: 78 }, { x: 294, y: 124 }, { x: 135, y: 161 }, { x: 97, y: 259 },
+    { x: 287, y: 249 }, { x: 293, y: 358 }, { x: 138, y: 423 }, { x: 258, y: 464 },
+  ],
+});
+
 const levelOne = Object.freeze({
   ...LEVEL_DATA,
   map: MAP_DATA,
@@ -382,7 +422,25 @@ const levelSix = Object.freeze({
   }),
 });
 
-export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive, 6: levelSix });
+const levelSeven = Object.freeze({
+  id: 7,
+  name: '雷澤天野',
+  baseName: '震木神壇',
+  bossType: 'kui',
+  bossVictoryRequiresWaveClear: true,
+  map: LEVEL7_MAP_DATA,
+  waves: LEVEL7_WAVE_DATA,
+  art: Object.freeze({
+    background: 'level7Background', backgroundCrop: { x: 0, y: 0, width: 390, height: 610 },
+    bossPanel: 'kuiBossPanel',
+  }),
+  lineup: Object.freeze({
+    eyebrow: '第七關・雷澤天野', title: '第7關・雷澤天野',
+    help: '本關可從五隻異獸中選擇三隻出戰<br>敵情：欽原與諸懷穿越雷脈，夔掌控雷擊區<br>推薦職能：控制／全隊增益／範圍攻擊',
+  }),
+});
+
+export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive, 6: levelSix, 7: levelSeven });
 
 export function getLevelData(levelId) {
   return LEVELS[levelId] ?? null;
