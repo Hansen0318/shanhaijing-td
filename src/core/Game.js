@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level6-1';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level7-1';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js';
@@ -9,15 +9,17 @@ import { Projectile } from '../entities/Projectile.js';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
-import { WaveManager } from '../systems/WaveManager.js?v=level6-1';
+import { WaveManager } from '../systems/WaveManager.js?v=level7-1';
 import { BossSystem } from '../systems/BossSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
 import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level6-readability-2';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level6-readability-2';
-import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level6-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level7-1';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level7-1';
+import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level7-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
+import { ThunderSystem } from '../systems/ThunderSystem.js';
+import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -26,6 +28,7 @@ export class Game {
     this.random = random;
     this.motionEnabled = motionEnabled;
     this.unlockedBeasts = new Set(ownedRosterThrough(initialLevelId - 1));
+    this.lineupNewType = null;
     this.resetRun(initialLevelId);
   }
   resetRun(levelId = this.levelId ?? 1) {
@@ -33,6 +36,7 @@ export class Game {
     if (!level) return false;
     this.levelId = level.id;
     this.level = level;
+    this.lineupNewType = null;
     this.time = new GameTime();
     this.map = new GameMap(level.map);
     this.economy = new Economy(GAME_CONFIG.initialGold);
@@ -60,6 +64,7 @@ export class Game {
     this.stats = { kills: 0, built: 0 };
     this.levelBossDefeated = false;
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
+    this.thunder = ThunderSystem.reset();
     this.time.setPaused(true);
     return true;
   }
@@ -70,7 +75,10 @@ export class Game {
   }
   enterLevel(levelId) {
     if (this.state !== 'victory' || levelId !== this.nextLevelId() || !getLevelData(levelId)) return false;
-    return this.resetRun(levelId);
+    const newlyUnlockedType = this.pendingUnlock;
+    const entered = this.resetRun(levelId);
+    if (entered) this.lineupNewType = newlyUnlockedType;
+    return entered;
   }
   beginLevelFourLineup() {
     if (this.levelId !== 4) return false;
@@ -100,6 +108,9 @@ export class Game {
     return this.levelId >= 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
   }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
+  teamIntervalMultiplier() {
+    return JumangSupportSystem.intervalMultiplier(this.towers, this.blessings.modifiers);
+  }
   buildTower(slotIndex, type) {
     const data = TOWER_DATA[type];
     if (!this.canManageTowers() || !this.availableTowerTypes().includes(type) || !data || this.towers[slotIndex] || !this.level.map.slots[slotIndex]) return { ok: false };
@@ -276,6 +287,7 @@ export class Game {
         });
       }
     });
+    ThunderSystem.update(this, dt);
     SunlightSystem.update(this, 0);
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
@@ -304,6 +316,11 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'kuiPhase2') {
+      this.thunder = ThunderSystem.reset({ phase2: true });
+      this.effects.push({ type: 'kuiPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'jinwuPhase2') {
       this.sunlight.phase2 = true;
       this.effects.push({ type: 'jinwuPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
@@ -373,6 +390,7 @@ export class Game {
   }
   updateTowers(dt) {
     const targets = [...this.enemies, ...this.illusions];
+    const intervalMultiplier = this.teamIntervalMultiplier();
     for (const tower of this.towers) {
       if (!tower) continue;
       let activeDt = dt;
@@ -384,7 +402,7 @@ export class Game {
       }
       tower.cooldown -= activeDt;
       if (tower.cooldown > 0) continue;
-      const stats = tower.getStats(this.blessings.modifiers);
+      const stats = tower.getStats(this.blessings.modifiers, intervalMultiplier);
       const target = CombatSystem.acquireTarget(tower, targets, stats.range, { preferReal: tower.type === 'baize' });
       if (!target) continue;
       tower.faceTarget(target.x);

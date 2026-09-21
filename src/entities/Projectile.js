@@ -34,7 +34,13 @@ export class Projectile {
       });
     } else if (this.target.alive) {
       CombatSystem.hit(this.target, this.stats.damage, { slowedVulnerability: this.modifiers.slowedVulnerability });
-      StatusSystem.applySlow(this.target, this.stats.slow, this.stats.slowDuration);
+      if (this.type === 'fuzhu') StatusSystem.applySlow(this.target, this.stats.slow, this.stats.slowDuration);
+      if (this.type === 'jumang') {
+        this.effects.push({
+          type: 'jumangImpact', x: this.targetPoint.x, y: this.targetPoint.y,
+          life: 0.3, duration: 0.3,
+        });
+      }
     }
     this.alive = false;
   }

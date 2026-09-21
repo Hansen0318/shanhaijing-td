@@ -16,13 +16,14 @@ import {
 } from '../src/config/progressionData.js';
 
 test('campaign progression is derived from playable levels and unlock data', () => {
-  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6]);
+  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6, 7]);
   assert.deepEqual(UNLOCK_BY_LEVEL, { 3: 'baize', 6: 'jumang' });
   assert.deepEqual(baseOwnedRoster(), ['bifang', 'fuzhu', 'yinglong']);
   assert.deepEqual(ownedRosterThrough(3), ['bifang', 'fuzhu', 'yinglong', 'baize']);
   assert.deepEqual(ownedRosterThrough(6), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
   assert.equal(nextPlayableLevelId(5), 6);
-  assert.equal(nextPlayableLevelId(6), null);
+  assert.equal(nextPlayableLevelId(6), 7);
+  assert.equal(nextPlayableLevelId(7), null);
 });
 
 test('Level5 victory enters an empty Level6 four-beast lineup', () => {
@@ -43,14 +44,30 @@ test('lineup eligibility reads the persistent owned roster instead of inferring 
   assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize']);
 });
 
-test('Level6 victory unlocks Jumang once and has no Level7 action', () => {
+test('Level6 victory unlocks Jumang once and enters an empty Level7 five-beast lineup', () => {
   const game = new Game(() => 0.2, 6);
   game.end('victory');
   assert.equal(game.unlockedBeasts.has('jumang'), true);
   assert.equal(game.pendingUnlock, 'jumang');
-  assert.equal(game.nextLevelId(), null);
+  assert.equal(game.nextLevelId(), 7);
+  assert.equal(game.enterLevel(7), true);
+  assert.equal(game.state, 'lineup');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
+  assert.deepEqual(game.lineupSelection, []);
+});
+
+test('Level7 requires exactly three, remains valid without Jumang, and retry clears lineup', () => {
+  const game = new Game(() => 0.2, 7);
+  for (const type of ['bifang', 'fuzhu']) game.toggleLineup(type);
+  assert.equal(game.confirmLineup(), false);
+  game.toggleLineup('yinglong');
+  assert.equal(game.confirmLineup(), true, 'a three-beast lineup without Jumang remains valid');
+  game.end('defeat');
+  assert.equal(game.restart(), true);
+  assert.equal(game.state, 'lineup');
+  assert.deepEqual(game.lineupSelection, []);
   game.end('victory');
-  assert.equal(game.pendingUnlock, null, 'the unlock presentation is emitted only once');
+  assert.equal(game.nextLevelId(), null);
 });
 
 test('blessing draw returns three distinct choices and weights deployed towers', () => {

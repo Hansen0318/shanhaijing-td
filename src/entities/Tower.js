@@ -16,14 +16,18 @@ export class Tower {
     if (targetX < this.x) this.facing = -1;
     else if (targetX > this.x) this.facing = 1;
   }
-  getStats(modifiers = {}) {
+  getStats(modifiers = {}, intervalMultiplier = 1) {
     const levelDamageMultiplier = this.level >= 3 ? 1.5 : this.level >= 2 ? 1.3 : 1;
     const levelDamage = this.data.damage * levelDamageMultiplier;
     const towerDamage = modifiers[`${this.type}Damage`] ?? 0;
     const stats = {
       damage: Number((levelDamage * (1 + (modifiers.allDamage ?? 0)) * (1 + towerDamage)).toFixed(3)),
-      interval: this.data.interval / (1 + (modifiers.attackSpeed ?? 0)),
-      range: this.data.range * (1 + (this.type === 'fuzhu' ? modifiers.fuzhuRange ?? 0 : 0)),
+      interval: (this.data.interval / (1 + (modifiers.attackSpeed ?? 0))) * intervalMultiplier,
+      range: this.data.range * (1 + (
+        this.type === 'fuzhu' ? modifiers.fuzhuRange ?? 0
+          : this.type === 'jumang' ? modifiers.jumangRange ?? 0
+            : 0
+      )),
       projectileSpeed: this.data.projectileSpeed,
       explosionRadius: this.data.explosionRadius,
       slow: this.data.slow,

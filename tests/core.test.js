@@ -7,13 +7,13 @@ import { GameMap } from '../src/map/GameMap.js';
 import { Enemy } from '../src/entities/Enemy.js';
 import { Tower } from '../src/entities/Tower.js';
 
-test('configuration contains the four-beast roster and preserves level-one waves', () => {
+test('configuration contains the five-beast catalog and preserves level-one waves', () => {
   assert.equal(GAME_CONFIG.initialGold, 300);
   assert.equal(GAME_CONFIG.baseHp, 20);
-  assert.deepEqual(Object.keys(TOWER_DATA), ['bifang', 'fuzhu', 'yinglong', 'baize']);
+  assert.deepEqual(Object.keys(TOWER_DATA), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
   assert.deepEqual(Object.keys(ENEMY_DATA).filter(type => ['minion', 'swift', 'giant', 'qiongqi'].includes(type)), ['minion', 'swift', 'giant', 'qiongqi']);
   assert.equal(WAVE_DATA.length, 10);
-  assert.equal(BLESSING_DATA.length, 12);
+  assert.equal(BLESSING_DATA.length, 15);
   assert.equal(MAP_DATA.slots.length, 8);
   assert.deepEqual(WAVE_DATA[9].groups, [{ type: 'minion', count: 4 }, { type: 'qiongqi', count: 1 }]);
 });

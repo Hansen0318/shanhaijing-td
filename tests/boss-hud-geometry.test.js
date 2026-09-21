@@ -59,3 +59,24 @@ test('Jinwu HP fill matches its measured channel in the real absolute-positionin
     assert.ok(rendered.top + rendered.height <= channel.top + channel.height + 0.6);
   }
 });
+
+test('Kui HP fill stays inside the conservative empty channel after the real nine-slice mapping', () => {
+  const channel = { left: 46, top: 23, width: 323, height: 4.5 };
+  const border = 6;
+  const containingWidth = PANEL_WIDTH - border * 2;
+  const containingHeight = PANEL_HEIGHT - border * 2;
+  const geometry = BOSS_HUD_GEOMETRY.kui;
+  const rendered = {
+    left: border + percent(geometry.left) * containingWidth,
+    top: border + percent(geometry.top) * containingHeight,
+    width: percent(geometry.width) * containingWidth,
+    height: percent(geometry.height) * containingHeight,
+  };
+  for (const key of ['left', 'top', 'width', 'height']) {
+    assert.ok(Math.abs(rendered[key] - channel[key]) <= 0.65, `kui rendered ${key} misses its measured empty channel`);
+  }
+  for (const ratio of [1, 0.5, 0.25]) {
+    assert.ok(rendered.left + rendered.width * ratio <= channel.left + channel.width + 0.65);
+    assert.ok(rendered.top + rendered.height <= channel.top + channel.height + 0.65);
+  }
+});

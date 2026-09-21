@@ -49,11 +49,22 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
       hitRecoilPixels: 4,
       deathSeconds: 0.45,
     }),
+    qinyuan: Object.freeze({ bobPixels: 2.7, bobHz: 2.6, deathSeconds: 0.18 }),
+    zhuhuai: Object.freeze({ bobPixels: 1.2, bobHz: 0.92, deathSeconds: 0.24 }),
+    kui: Object.freeze({
+      phases: Object.freeze({
+        1: Object.freeze({ idleScale: 0.02, idleHz: 0.68, bobPixels: 1.2, bobHz: 0.72 }),
+        2: Object.freeze({ idleScale: 0.04, idleHz: 0.9, bobPixels: 2.4, bobHz: 1.02 }),
+      }),
+      hitRecoilPixels: 4,
+      deathSeconds: 0.45,
+    }),
   }),
   towers: Object.freeze({
     bifang: Object.freeze({ idleScale: 0.01, idleHz: 1.15, recoilPixels: 2.5, recoilSeconds: 0.09 }),
     fuzhu: Object.freeze({ idleScale: 0.004, idleHz: 0.72, recoilPixels: 1.5, recoilSeconds: 0.09 }),
     yinglong: Object.freeze({ idleScale: 0.005, idleHz: 0.8, recoilPixels: 2.25, recoilSeconds: 0.09 }),
     baize: Object.freeze({ idleScale: 0.012, idleHz: 0.9, recoilPixels: 2, recoilSeconds: 0.1 }),
+    jumang: Object.freeze({ idleScale: 0.012, idleHz: 0.88, recoilPixels: 2, recoilSeconds: 0.1 }),
   }),
 });

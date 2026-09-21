@@ -19,13 +19,13 @@ function assertCompletePngWithAlpha(bytes, id) {
   assert.equal(hasAlpha, true, `${id} must retain alpha transparency`);
 }
 
-test('art catalog exposes all 95 packaged assets and every file is deployable', async () => {
+test('art catalog exposes all 102 asset IDs and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 95);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 95);
+  assert.equal(entries.length, 102);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 101, 'only Jumang body reuse may share a path');
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.jpg');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
   assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.jpg');
@@ -50,11 +50,43 @@ test('art catalog exposes all 95 packaged assets and every file is deployable', 
   assert.equal(ART_ASSETS.jinwu, 'assets/bosses/boss_jinwu_v1.png');
   assert.equal(ART_ASSETS.jinwuBossPanel, 'assets/ui/ui_boss_jinwu_panel_v1.png');
   assert.equal(ART_ASSETS.jumangUnlock, 'assets/ui/unlock_jumang_v1.png');
+  assert.equal(ART_ASSETS.level7Background, 'assets/levels/level7/bg_leize_tianye_v1.jpg');
+  assert.equal(ART_ASSETS.qinyuan, 'assets/enemies/enemy_qinyuan_v1.png');
+  assert.equal(ART_ASSETS.zhuhuai, 'assets/enemies/enemy_zhuhuai_v1.png');
+  assert.equal(ART_ASSETS.kui, 'assets/bosses/boss_kui_v1.png');
+  assert.equal(ART_ASSETS.kuiBossPanel, 'assets/ui/ui_boss_kui_panel_v1.png');
+  assert.equal(ART_ASSETS.jumangLeafblade, 'assets/effects/fx_jumang_leafblade_v1.png');
+  assert.equal(ART_ASSETS.jumang, ART_ASSETS.jumangUnlock, 'deployed Jumang reuses the approved unlock visual');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level6-1$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level7-1$`));
+  }
+});
+
+test('level-seven runtime art is alpha-safe, mobile-sized, and staged', async () => {
+  const { ART_ASSETS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
+  const alphaBudgets = {
+    qinyuan: [256, 256, 300_000], zhuhuai: [320, 225, 300_000], kui: [384, 293, 500_000],
+    kuiBossPanel: [1152, 351, 500_000], jumangLeafblade: [160, 83, 300_000],
+  };
+  for (const [id, [width, height, maxBytes]] of Object.entries(alphaBudgets)) {
+    const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
+    assertCompletePngWithAlpha(bytes, id);
+    assert.deepEqual(pngDimensions(bytes), { width, height });
+    assert.ok(bytes.length < maxBytes, `${id} exceeds ${maxBytes} bytes`);
+  }
+  const background = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS.level7Background}`, moduleUrl)));
+  assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
+  assert.deepEqual([...background.subarray(-2)], [255, 217]);
+  assert.ok(background.length < 800_000);
+
+  for (const id of ['slotPlatform', 'level7Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'qinyuan']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[7].includes(id), true, `${id} must be ready for Level7 first paint`);
+  }
+  for (const id of ['zhuhuai', 'kui', 'kuiBossPanel', 'jumangLeafblade']) {
+    assert.equal(LEVEL_DEFERRED_ART_IDS[7].includes(id), true, `${id} must remain deferred`);
   }
 });
 

@@ -1,130 +1,68 @@
 # Level7 — Current State / Handoff
 
-> This is the Level7 handoff entry. New/returning sessions must first follow `AGENTS.md` and `docs/DEVELOPMENT_PLAYBOOK.md`, then `docs/WORK_PROGRESS.md`, then this file.
+> New/returning sessions must first follow `AGENTS.md`, `docs/DEVELOPMENT_PLAYBOOK.md`, `docs/WORK_PROGRESS.md`, then this file.
 
 ## Active level
 
-- Level: **7**
-- Development phase: **ASSET PRODUCTION / STATIC AUDIT**
-- Production implementation: **NOT STARTED**
-- Active canonical folder: `docs/levels/level7/`
-- Last continuity-structure update: 2026-09-20
-
+- Level: **7 — 雷澤天野**
+- Base: **震木神壇**
+- Development phase: **ENGINEERING PASS / PUBLIC RUNTIME SMOKE PENDING**
+- Active branch: `feat/level7-leize`
+- Canonical folder: `docs/levels/level7/`
+- Last state update: 2026-09-21
 
 ## Current gate
 
-**ASSET PRODUCTION / STATIC AUDIT**
+**RELEASE CLOSURE**
 
-### Allowed now
+Production implementation, approved-asset integration, automated verification, and the pre-smoke checkpoint are complete. Remaining work is final branch review, reconciliation with current remote `main`, merge, GitHub Pages deployment, and public runtime verification.
 
-- finalize Level7 asset inventory against the frozen gameplay + geometry;
-- classify each visual as existing reuse / Procedural-first / PNG-first / Hybrid;
-- discuss visual direction for 欽原 / 諸懷 / 夔 / 句芒 production sprite / 夔 Boss HUD;
-- decide whether 句芒 projectile requires a mockup before final generation;
-- open only the exact player-approved asset sub-batch in `ASSETS.md`.
+## Implemented
 
-### Forbidden until gate exit
+- Exact Geometry V3 route, Spawn, Base, Thunder Vein A/B, and eight deploy slots.
+- Level6 victory unlocks 句芒; Level7 presents 畢方／夫諸／應龍／白澤／句芒 as an empty 5-choose-3 roster.
+- First Level7 entry shows the reusable data-driven NEW treatment for 句芒; retry clears the lineup and the one-time treatment.
+- Ten Waves, 欽原／諸懷 enemy behavior, 夔 Boss phases, and the victory gate requiring both Wave completion and Boss death.
+- Thunder system: Phase 1 A/B alternation, 0.9-second charge, pulses, Phase 2 A/B/A+B patterns, statuses, and 夔 immunity.
+- 夔 Phase 2 behavior and Boss HUD.
+- 句芒 support aura applies the strongest active attack-interval multiplier; 春生 improves that multiplier, with 青羽／神木 blessings and hybrid projectile visuals.
+- Six approved Level7 assets plus the Level6 句芒 visual alias, integrated without redesign.
+- Shared progression, motion, spacing, rendering, UI, dev fixtures, and browser-smoke fixtures extended for Level7.
+- 夔 HUD geometry fixed from the real 1152×351 alpha channel with a 70px nine-slice and 6px border.
+- Static-module cache version advanced to `level7-1` across entry points and contract tests.
 
-- no production gameplay implementation;
-- no Work implementation handoff;
-- no unapproved future asset batch;
-- no dedicated PNG for procedural thunder/status effects;
-- no geometry re-design unless player explicitly reopens it.
+## Verification evidence
 
-### Gate exit condition
+- Level7/shared targeted suite: **110/110 PASS**.
+- Full suite: **209/209 PASS**.
+- `npm run check`: **PASS**.
+- Every JavaScript file under `src/` and `tests/` passes `node --check`.
+- Safe-push checkpoints through the approved art/UI integration are present locally and on the remote feature branch.
+- Local cloud-browser navigation to `127.0.0.1` was blocked with `net::ERR_BLOCKED_BY_CLIENT`; no local visual or player-device PASS is claimed from that attempt.
 
-The final Level7 asset inventory is classified and the required source-art sub-batches have been discussed/approved. Any mockup-first item has been resolved. Only then may the project advance to **ASSET PRODUCTION / STATIC AUDIT**.
+## Bounded Red Team audit
 
-## Confirmed / approved
-
-- Level6 clear unlocks **句芒** through shared progression data.
-- Level7 lineup must show owned eligible roster: 畢方／夫諸／應龍／白澤／句芒.
-- Level7 remains **5 choose 3**.
-- Retry returns to an empty 0/3 lineup.
-- Blessing filtering follows the selected 3.
-- 句芒 is selectable in Level7 and is a global ally-support / wood-god support archetype, mechanically distinct from 白澤's enemy-debuff role.
-- The first Level7 entry should make the newly unlocked 句芒 discoverable; any one-time NEW treatment must be data-driven/reusable, not a Level7-only roster branch.
-- Project-wide attack visuals follow `AGENTS.md` Section 16: Procedural-first / PNG-first / Hybrid classification before batch image production.
-- 句芒 Blessings are frozen: 青羽 +20% damage/layer; 神木 +15% range/layer; 春生 improves the active global attack-interval multiplier by -0.02/layer; same item max 2 layers.
-- No Level7 production code, balance, geometry, or asset batch is frozen merely because it appears in `DESIGN.md`.
-
-## Current proposals — not yet frozen
-
-Current geometry-stage proposal is recorded in `DESIGN.md`. Gameplay/theme/enemy/Boss/句芒/Wave baseline has now been promoted to `SPEC.md`.
-
-Still pending:
-- Work production implementation/integration using the audited Level7 handoff package;
-- automated tests / check / runtime smoke / release verification;
-
-## Completed
-
-- Project-wide continuity/handoff structure defined in `AGENTS.md`.
-- Level7 per-level documentation folder established.
-- Existing Level7 design proposals preserved in `DESIGN.md`.
-- Confirmed progression requirements separated into `SPEC.md`.
-- Geometry and asset ledgers created for future canonical data.
-- Level7 map composition direction approved: upper-left Spawn → **lightning-zigzag route** → 雷脈A / 雷脈B at major turns → lower-right 震木神壇.
-- Background-only image generation sub-batch approved; all character/HUD/projectile art remains blocked.
-- Clean no-text Level7 background candidate has been **PLAYER APPROVED** as the geometry source.
-- Thunder-vein idle micro-animation / 0.9s charge / pulse is approved as **Procedural-first**; no dedicated animation image batch.
-- Geometry Guide V3 was player-approved and has been promoted to canonical 390×610 geometry in `GEOMETRY.md`.
-- 欽原 final simplified single-creature PNG visual has been player-approved; preserve it as canonical source-art identity.
-- 諸懷 simplified four-horn heavy-enemy single PNG visual has been player-approved.
-- 夔 revised blue-white thunder-beast Boss single PNG visual has been player-approved after rejecting the first too-similar version.
-- 夔 Boss HUD blue-white empty-channel candidate has been player-approved → APPROVED_FINAL.
-- 句芒 deployable tower will reuse the exact visual identity of the existing Level6 unlock art; no second creature design/generation is required. Runtime optimization may derive a separate file without redesign.
-- 句芒 attack visual is **Hybrid**: the simplified high-contrast 青木靈羽／葉刃 PNG projectile core is player-approved (APPROVED_FINAL), with procedural trail/impact.
-
-## Not completed
-
-- Final asset inventory.
-- Work implementation from the audited handoff package.
-- Production implementation.
-- Automated tests / check.
-- 390px / 390×700 runtime smoke.
-- Merge/release/Pages verification.
-- Player phone smoke.
-
-## Current branch / SHA
-
-Current documentation branch:
-- `docs/level7-freeze-jumang-blessings-20260921`
-
-After merge, future sessions must inspect current `main` and any active feature branch rather than assuming this branch remains active.
-
-## Verification status
-
-Documentation-only change. No production gameplay was changed and no executable test claim is made here.
+- No gate crossing or unapproved art substitution.
+- No intentional Level1–6 gameplay, geometry, or balance change.
+- Level1–6 behavior remains covered by the full regression suite.
+- Evidence language distinguishes automated engineering verification from runtime/player smoke.
 
 ## Do not redo
 
-- Do not redesign Level1–6 while developing Level7.
-- Do not recreate shared progression, Motion Lite, facing, spacing, Boss HUD, release, or attack-visual policies.
-- Do not make a Level7-only five-roster implementation; use shared owned/unlocked progression.
-- Do not generate a Level7 image batch before classification/approval.
-- Do not infer canonical geometry from a phone screenshot.
-- Do not implement values from `DESIGN.md` as if they were already player-approved.
+- Do not redesign Level1–6 while closing Level7.
+- Do not recreate approved assets, geometry, balance, shared progression, Motion Lite, facing, spacing, Boss HUD, or attack-visual policies.
+- Do not replace the shared owned/unlocked roster with a Level7-only branch.
+- Do not infer canonical geometry from a screenshot; `GEOMETRY.md` remains authoritative.
+- Do not claim a browser/player smoke PASS without observing the deployed runtime.
+
+## Remaining release checks
+
+1. Complete the final branch diff and requirement review.
+2. Reconcile the remote feature head against the latest remote `main`, then merge without force-pushing.
+3. Verify GitHub Pages deploys the merged `main` SHA.
+4. On the public site, verify `?devMenu=1`, direct Level7 entry, the normal Level6→Level7 NEW transition fixture, 390×700 layout, eight slots, Thunder A/B behavior, 句芒 support, 夔 Phase 2, and victory.
+5. Keep real-player phone smoke distinct if no physical-device test is performed.
 
 ## Next exact step
 
-**FINAL FILESET AUDIT PASS. Hand the prepared minimal Level7 package to Work for production implementation. Work must use the audited canonical source/runtime mapping and must not redesign or substitute assets.**
-
-
-## FINAL FILESET AUDIT — PASS (2026-09-21)
-
-Player re-uploaded the six concrete Level7 final files and Chat audited the actual bytes before Work packaging.
-
-Canonical source SHA-256:
-- background JPEG 984×1536: `6b3de3912084683165f6431cdaa8c72ea0b9b661e5b3f5fa7a85b717335032ad`
-- 欽原 PNG RGBA 1254×1254: `e76d3bf946eaea621e924b33bb46c000d477449bed8b6052ffb1f1382429d3ff`
-- 諸懷 JPEG 1536×1024: `251ff1d1788186595f70463015ead95d78f18045ec6756e196e79a5b5fb4b767`
-- 夔 JPEG 1374×1145: `1b9c80e6fde229e11d87bd0e8487c02ae9aae327ad3a008cd8e32eb63fc8fccd`
-- 夔 Boss HUD PNG RGBA 2172×724: `648c4e0abd35e454ab9daa118056375667057d280fa81874daf2589342e85710`
-- 句芒 projectile JPEG 1536×1024: `0c75470514da66fe14ed0243e56a322540fc5768af4b7ca208ce84c0aefe5061`
-
-Technical normalization:
-- 諸懷 / 夔 / 句芒 projectile player source downloads have white JPEG backgrounds; audited runtime candidates convert them to transparent PNG without redesign.
-- 欽原 and 夔 HUD source files already contain alpha.
-- Background crop/aspect is preserved; runtime candidate is recompressed only.
-- 句芒 body is intentionally absent from the upload set and reuses the existing Level6 `unlock_jumang_v1.png` visual source per the frozen player decision.
-- Runtime candidate names and hashes are recorded in the handoff package `ASSET_MANIFEST.json` / `SHA256SUMS.txt`.
+Commit and push the cache/version and handoff-documentation closure, perform the final review, merge to current remote `main`, verify Pages, and record the deployed `main` SHA and public smoke evidence.

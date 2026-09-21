@@ -70,6 +70,12 @@ export class GameMap {
       && point.y >= zone.y && point.y <= zone.y + zone.height
     ))?.id ?? null;
   }
+  thunderZoneAt(point) {
+    return (this.data.thunderZones ?? []).find(zone => (
+      point.x >= zone.x && point.x <= zone.x + zone.width
+      && point.y >= zone.y && point.y <= zone.y + zone.height
+    ))?.id ?? null;
+  }
   chargeCorridorAt(point) {
     const zone = this.data.chargeCorridor;
     return Boolean(zone

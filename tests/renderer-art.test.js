@@ -1,14 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Renderer } from '../src/render/Renderer.js';
-import { LEVELS, MAP_DATA } from '../src/config/gameData.js';
+import { LEVELS, MAP_DATA, TOWER_DATA } from '../src/config/gameData.js';
+import { Tower } from '../src/entities/Tower.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
+  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], strokeRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
   return {
     calls,
     setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo(...args) { calls.lineTo.push(args); }, stroke() {},
-    setLineDash() {}, arc() {}, fill() {}, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
+    strokeRect(...args) { calls.strokeRect.push(args); }, setLineDash() {}, arc(...args) { calls.arc.push(args); }, fill() {}, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
     quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); },
     drawImage(...args) { calls.drawImage.push(args); },
     rotate(value) { calls.rotate.push(value); },
@@ -202,6 +203,42 @@ test('Level6 renders baked map props, sunlight, units, states, phase, death and 
     assert.equal(ctx.calls.fillText.some(args => args[0] === label), true, `${label} readability label was not drawn`);
   }
   assert.ok(ctx.calls.scale.some(([x, y]) => x < 0 && y > 0), 'Level6 enemies and death art keep shared path-facing');
+});
+
+test('Level7 renders thunder landmarks, states, units, Jumang projectile, and Kui P2 emphasis', () => {
+  const { renderer, ctx } = rendererFixture({ motionEnabled: false });
+  const game = emptyGame(LEVELS[7]);
+  game.visualTime = 0.25;
+  game.illusions = [];
+  game.thunder = { chargingZoneIds: ['A'], lastPulseZoneIds: ['B'] };
+  game.effects = [
+    { type: 'thunderCharge', zoneIds: ['A'], life: 0.5, duration: 0.9 },
+    { type: 'thunderPulse', zoneIds: ['B'], life: 0.2, duration: 0.42 },
+    { type: 'kuiPhase2', x: 150, y: 60, life: 0.5, duration: 0.8 },
+    { type: 'jumangImpact', x: 220, y: 90, life: 0.2, duration: 0.3 },
+  ];
+  const map = { totalLength: 100, positionAt: () => ({ x: 40, y: 20 }), isWeakWater: () => false };
+  game.enemies = [
+    { type: 'qinyuan', id: 1, x: 50, y: 20, radius: 11, hp: 100, maxHp: 100, isBoss: false, visualHitFlash: 0, hitFlash: 0, statuses: { thunderSprint: { remaining: 1 } }, map, pathDistance: 40 },
+    { type: 'zhuhuai', id: 2, x: 100, y: 40, radius: 18, hp: 390, maxHp: 390, isBoss: false, visualHitFlash: 0, hitFlash: 0, statuses: { thunderShell: { remaining: 1 } }, map, pathDistance: 30 },
+    { type: 'kui', id: 3, bossPhase: 2, x: 150, y: 60, radius: 29, hp: 3500, maxHp: 7000, isBoss: true, visualHitFlash: 0, hitFlash: 0, statuses: {}, map, pathDistance: 20 },
+  ];
+  game.towers[0] = new Tower('jumang', TOWER_DATA.jumang, game.level.map.slots[0]);
+  game.projectiles = [{ type: 'jumang', x: 195, y: 80, targetPoint: { x: 230, y: 100 } }];
+
+  renderer.render(game);
+
+  assert.equal(ctx.calls.drawImage[0][0].id, 'level7Background');
+  assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
+  for (const id of ['qinyuan', 'zhuhuai', 'kui', 'jumang', 'jumangLeafblade']) {
+    assert.equal(ctx.calls.drawImage.some(args => args[0].id === id), true, `${id} art was not drawn`);
+  }
+  for (const label of ['雷脈A・蓄能', '雷脈B・脈衝', '雷行', '雷殼', '雷怒']) {
+    assert.equal(ctx.calls.fillText.some(args => args[0] === label), true, `${label} presentation was not drawn`);
+  }
+  assert.ok(ctx.calls.rotate.length >= 1, 'leafblade must rotate toward its target');
+  assert.ok(ctx.calls.moveTo.some(([x, y]) => x === 195 && y === 80), 'leafblade must emit a short procedural trail');
+  assert.ok(ctx.calls.arc.some(([x, y]) => x === 220 && y === 90), 'Jumang impact glow must be localized at impact');
 });
 
 test('optional map props draw for Levels 1-5 and are omitted for Level6', () => {

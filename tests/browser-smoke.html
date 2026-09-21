@@ -65,6 +65,15 @@
     <button data-state="jinwu25">金烏 25%</button>
     <button data-state="level6victory">第6關 Victory</button>
     <button data-state="level6retry">第6關 Retry</button>
+    <button data-state="level7">第7關陣容</button>
+    <button data-state="level7wave1">第7關 Wave 1</button>
+    <button data-state="thunderA">雷脈 A 蓄能</button>
+    <button data-state="thunderB">雷脈 B 脈衝</button>
+    <button data-state="kui1">夔 P1</button>
+    <button data-state="kui2">夔 P2</button>
+    <button data-state="kui25">夔 25%</button>
+    <button data-state="level7victory">第7關 Victory</button>
+    <button data-state="level7retry">第7關 Retry</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -72,7 +81,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level6-1"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level7-1"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -224,6 +233,38 @@
       game.wave.queue.length = 0;
       game.wave.spawnedAlive = 1;
       game.spawnEnemy('jinwu');
+    }
+
+    async function enterLevel7(game, confirm = false) {
+      if (game.levelId === 7) {
+        game.restart();
+      } else {
+        await enterLevel6(game, true);
+        game.end('victory');
+        await twoFrames();
+        frame.contentDocument.querySelector('#next-level-button').click();
+        while (game.levelId !== 7 || frame.contentDocument.body.classList.contains('art-loading')) await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      if (confirm && game.state === 'lineup') {
+        for (const type of ['bifang', 'baize', 'jumang']) game.toggleLineup(type);
+        game.confirmLineup();
+      }
+      await twoFrames();
+    }
+
+    async function configureLevel7Boss(game) {
+      await enterLevel7(game, true);
+      game.wave.waveNumber = 9;
+      game.startWaveNow();
+      game.wave.queue.length = 0;
+      game.wave.spawnedAlive = 1;
+      game.spawnEnemy('kui');
+    }
+
+    function placeInThunder(game, enemy, zoneId) {
+      const zone = game.level.map.thunderZones.find(item => item.id === zoneId);
+      enemy.x = zone.x + zone.width / 2;
+      enemy.y = zone.y + zone.height / 2;
     }
 
     function placeInSunlight(game, enemy, zoneId) {
@@ -440,6 +481,41 @@
       }
       if (state === 'level6retry') {
         await enterLevel6(game, true);
+        game.restart();
+      }
+      if (state === 'level7') await enterLevel7(game, false);
+      if (state === 'level7wave1') {
+        await enterLevel7(game, true);
+        game.economy.add(500);
+        game.buildTower(0, 'jumang');
+        game.startWaveNow();
+      }
+      if (['thunderA', 'thunderB'].includes(state)) {
+        await enterLevel7(game, true);
+        game.state = 'combat';
+        game.time.setPaused(false);
+        const zoneId = state === 'thunderA' ? 'A' : 'B';
+        const enemy = game.spawnEnemy(zoneId === 'A' ? 'qinyuan' : 'zhuhuai');
+        placeInThunder(game, enemy, zoneId);
+        game.thunder.sequenceIndex = zoneId === 'B' ? 1 : 0;
+        game.thunder.countdown = 0.9;
+        game.update(0);
+        if (state === 'thunderB') game.update(0.9);
+      }
+      if (['kui1', 'kui2', 'kui25'].includes(state)) {
+        let boss = game.enemies.find(enemy => enemy.type === 'kui');
+        if (!boss) { await configureLevel7Boss(game); boss = game.enemies.find(enemy => enemy.type === 'kui'); }
+        if (state !== 'kui1') {
+          boss.hp = boss.maxHp * (state === 'kui2' ? 0.5 : 0.25);
+          game.update(0);
+        }
+      }
+      if (state === 'level7victory') {
+        await enterLevel7(game, true);
+        game.end('victory');
+      }
+      if (state === 'level7retry') {
+        await enterLevel7(game, true);
         game.restart();
       }
       requestAnimationFrame(() => requestAnimationFrame(() => snapshot(button.textContent)));
