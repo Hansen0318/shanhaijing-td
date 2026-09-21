@@ -1,8 +1,8 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level6-1';
-import { ArtStore } from '../config/artAssets.js?v=level6-readability-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level6-readability-2';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level6-readability-2';
-import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level6-1';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level7-1';
+import { ArtStore } from '../config/artAssets.js?v=level7-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level7-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level7-1';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level7-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58] });
 const FOG_VISUAL_PATHS = Object.freeze({

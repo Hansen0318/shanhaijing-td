@@ -311,4 +311,3 @@ Record branch/SHA, completed work, exact commands/results, runtime limitations, 
 - [ ] **Step 5: Review, merge, deploy, and verify public flows**
 
 Follow `AGENTS.md` Section 8: final whole-branch review; sync/reconcile latest `main`; merge verified `feat/level7-leize`; push `main`; wait for Pages source/deploy; verify public `?devMenu=1` exposes Level7 and normal Level6 victory unlocks 句芒 then enters Level7 5-choose-3 lineup. Record final main SHA and deployment evidence before reporting.
-

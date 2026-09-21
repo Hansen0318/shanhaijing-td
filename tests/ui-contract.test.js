@@ -102,11 +102,11 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
-  assert.match(html, /styles\.css\?v=level6-1/);
-  assert.match(html, /styles-fixes\.css\?v=level6-1/);
-  assert.match(html, /styles-lineup\.css\?v=level6-1/);
-  assert.match(html, /src\/main\.js\?v=level6-readability-2/);
-  assert.match(game, /WaveManager\.js\?v=level6-1/);
+  assert.match(html, /styles\.css\?v=level7-1/);
+  assert.match(html, /styles-fixes\.css\?v=level7-1/);
+  assert.match(html, /styles-lineup\.css\?v=level7-1/);
+  assert.match(html, /src\/main\.js\?v=level7-1/);
+  assert.match(game, /WaveManager\.js\?v=level7-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
