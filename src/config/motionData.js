@@ -50,7 +50,7 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
       deathSeconds: 0.45,
     }),
     qinyuan: Object.freeze({ bobPixels: 2.7, bobHz: 2.6, deathSeconds: 0.18 }),
-    zhuhuai: Object.freeze({ bobPixels: 1.2, bobHz: 0.92, deathSeconds: 0.24 }),
+    zhuhuai: Object.freeze({ bobPixels: 2.2, bobHz: 0.96, stridePixels: 1.6, strideHz: 0.96, idleScale: 0.022, idleHz: 0.96, hitRecoilPixels: 2.8, deathSeconds: 0.24 }),
     kui: Object.freeze({
       phases: Object.freeze({
         1: Object.freeze({ idleScale: 0.02, idleHz: 0.68, bobPixels: 1.2, bobHz: 0.72 }),
