@@ -269,6 +269,10 @@ export class Game {
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
     SunlightSystem.update(this, dt);
     this.enemies.forEach(enemy => {
+      if (!enemy.alive && enemy.reachedBase && enemy.baseArrivalRemaining > 0) {
+        enemy.updateBaseArrival(dt);
+        return;
+      }
       const event = enemy.update(dt);
       if (event?.type === 'fogEntry') {
         this.effects.push({
@@ -307,6 +311,7 @@ export class Game {
       const bossContext = { inFog: Boolean(this.map.fogZoneAt(enemy)), insightActive: Boolean(enemy.statuses.insight) };
       for (const event of BossSystem.update(enemy, dt, bossContext)) this.handleBossEvent(enemy, event);
       if (!enemy.alive && !enemy.processed) {
+        if (enemy.reachedBase && enemy.baseArrivalRemaining > 0) return;
         enemy.processed = true;
         if (enemy.reachedBase) this.damageBase(enemy.baseDamage); else this.onEnemyKilled(enemy);
         this.wave.enemyRemoved();
