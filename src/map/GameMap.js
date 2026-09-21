@@ -52,6 +52,13 @@ export class GameMap {
     const t = segment.length ? (clamped - segment.start) / segment.length : 0;
     return { x: segment.from.x + (segment.to.x - segment.from.x) * t, y: segment.from.y + (segment.to.y - segment.from.y) * t };
   }
+  positionBeyondEnd(extraDistance = 0) {
+    const segment = this.segments.at(-1);
+    if (!segment || segment.length <= 0) return this.positionAt(this.totalLength);
+    const dx = (segment.to.x - segment.from.x) / segment.length;
+    const dy = (segment.to.y - segment.from.y) / segment.length;
+    return { x: segment.to.x + dx * Math.max(0, extraDistance), y: segment.to.y + dy * Math.max(0, extraDistance) };
+  }
   isWeakWater(point) {
     return (this.data.weakWaterZones ?? []).some(zone => (
       point.x >= zone.x && point.x <= zone.x + zone.width
