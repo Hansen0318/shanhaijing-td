@@ -219,7 +219,7 @@ export class Renderer {
     const time = game.visualTime ?? 0;
 
     for (const fall of LEVEL7_WATERFALLS) {
-      const flow = (time * 0.85 + fall.phase) % 1;
+      const flow = (time * 1.15 + fall.phase) % 1;
       const centerX = fall.x + fall.width / 2;
       const bottomY = fall.y + fall.height;
 
@@ -227,39 +227,49 @@ export class Renderer {
       ctx.globalCompositeOperation = 'screen';
 
       const halo = ctx.createLinearGradient(fall.x, fall.y, fall.x, bottomY);
-      halo.addColorStop(0, 'rgba(180, 235, 255, 0)');
-      halo.addColorStop(0.18, 'rgba(176, 231, 255, .055)');
-      halo.addColorStop(0.72, 'rgba(137, 217, 255, .09)');
-      halo.addColorStop(1, 'rgba(213, 247, 255, .03)');
+      halo.addColorStop(0, 'rgba(198, 242, 255, 0)');
+      halo.addColorStop(0.14, 'rgba(184, 236, 255, .13)');
+      halo.addColorStop(0.7, 'rgba(127, 211, 252, .20)');
+      halo.addColorStop(1, 'rgba(221, 250, 255, .08)');
       ctx.fillStyle = halo;
-      ctx.fillRect(fall.x - 2, fall.y, fall.width + 4, fall.height);
+      ctx.fillRect(fall.x - 3, fall.y, fall.width + 6, fall.height);
 
-      for (let index = 0; index < 4; index += 1) {
-        const lane = (index - 1.5) * (fall.width / 5.5);
-        const wobble = Math.sin(time * 1.45 + fall.phase + index * 1.4) * 0.8;
-        const offset = ((flow + index * 0.23) % 1) * 11;
-        const startY = fall.y - 8 + offset;
+      for (let index = 0; index < 5; index += 1) {
+        const lane = (index - 2) * (fall.width / 6);
+        const wobble = Math.sin(time * 1.6 + fall.phase + index * 1.25) * 1.1;
+        const offset = ((flow + index * 0.19) % 1) * 15;
+        const startY = fall.y - 9 + offset;
 
-        ctx.strokeStyle = `rgba(198, 241, 255, ${0.09 + index * 0.012})`;
-        ctx.lineWidth = index === 1 || index === 2 ? 1.35 : 0.85;
+        ctx.strokeStyle = `rgba(224, 249, 255, ${0.18 + index * 0.018})`;
+        ctx.lineWidth = index === 2 ? 2.2 : index === 1 || index === 3 ? 1.65 : 1.15;
         ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(121, 218, 255, .34)';
+        ctx.shadowBlur = 4;
         ctx.beginPath();
         ctx.moveTo(centerX + lane + wobble, startY);
         ctx.bezierCurveTo(
-          centerX + lane - 1.2 + wobble, fall.y + fall.height * 0.34,
-          centerX + lane + 1.4 - wobble, fall.y + fall.height * 0.68,
-          centerX + lane + wobble * 0.4, bottomY - 2,
+          centerX + lane - 1.8 + wobble, fall.y + fall.height * 0.32,
+          centerX + lane + 1.8 - wobble, fall.y + fall.height * 0.69,
+          centerX + lane + wobble * 0.35, bottomY - 2,
         );
         ctx.stroke();
       }
 
-      const mistPulse = 0.035 + (Math.sin(time * 1.1 + fall.phase) + 1) * 0.012;
-      const mist = ctx.createRadialGradient(centerX, bottomY - 1, 0, centerX, bottomY - 1, fall.width * 0.85);
-      mist.addColorStop(0, `rgba(218, 249, 255, ${mistPulse + 0.035})`);
-      mist.addColorStop(0.5, `rgba(177, 231, 249, ${mistPulse})`);
-      mist.addColorStop(1, 'rgba(177, 231, 249, 0)');
+      const bandY = fall.y + ((flow + 0.38) % 1) * fall.height;
+      const band = ctx.createLinearGradient(fall.x, bandY - 7, fall.x, bandY + 7);
+      band.addColorStop(0, 'rgba(232, 252, 255, 0)');
+      band.addColorStop(0.5, 'rgba(232, 252, 255, .20)');
+      band.addColorStop(1, 'rgba(232, 252, 255, 0)');
+      ctx.fillStyle = band;
+      ctx.fillRect(fall.x - 2, bandY - 7, fall.width + 4, 14);
+
+      const mistPulse = 0.075 + (Math.sin(time * 1.25 + fall.phase) + 1) * 0.025;
+      const mist = ctx.createRadialGradient(centerX, bottomY - 1, 0, centerX, bottomY - 1, fall.width);
+      mist.addColorStop(0, `rgba(228, 252, 255, ${mistPulse + 0.08})`);
+      mist.addColorStop(0.48, `rgba(181, 233, 249, ${mistPulse})`);
+      mist.addColorStop(1, 'rgba(181, 233, 249, 0)');
       ctx.fillStyle = mist;
-      ctx.fillRect(centerX - fall.width, bottomY - fall.width, fall.width * 2, fall.width * 1.55);
+      ctx.fillRect(centerX - fall.width * 1.1, bottomY - fall.width, fall.width * 2.2, fall.width * 1.65);
 
       ctx.restore();
     }
