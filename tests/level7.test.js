@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  BLESSING_DATA,
   ENEMY_DATA,
   LEVEL7_MAP_DATA,
   LEVEL7_WAVE_DATA,
@@ -9,8 +10,12 @@ import {
   getLevelData,
 } from '../src/config/gameData.js';
 import { Game } from '../src/core/Game.js';
+import { Projectile } from '../src/entities/Projectile.js';
+import { Tower } from '../src/entities/Tower.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
+import { BlessingSystem } from '../src/systems/BlessingSystem.js';
 import { CombatSystem } from '../src/systems/CombatSystem.js';
+import { JumangSupportSystem } from '../src/systems/JumangSupportSystem.js';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { ThunderSystem } from '../src/systems/ThunderSystem.js';
 
@@ -159,4 +164,59 @@ test('Level7 victory waits for normal enemies, queue completion, and Kui death',
   ordinary.takeDamage(ordinary.maxHp);
   game.update(0);
   assert.equal(game.state, 'victory');
+});
+
+test('strongest deployed Jumang supplies one team interval multiplier and recomputes', () => {
+  const makeJumang = level => {
+    const tower = new Tower('jumang', TOWER_DATA.jumang, { x: 0, y: 0 });
+    tower.level = level;
+    return tower;
+  };
+  const level1 = makeJumang(1);
+  const level3 = makeJumang(3);
+  assert.equal(JumangSupportSystem.intervalMultiplier([]), 1);
+  assert.equal(JumangSupportSystem.intervalMultiplier([level1]), 0.95);
+  assert.equal(JumangSupportSystem.intervalMultiplier([level1, level3]), 0.89, 'multiple Jumang never compound');
+  assert.equal(JumangSupportSystem.intervalMultiplier([level1, level3], { jumangSpring: 2 }), 0.85);
+  level3.level = 2;
+  assert.equal(JumangSupportSystem.intervalMultiplier([level1, level3]), 0.92, 'upgrades and downgrades recompute from current state');
+  assert.equal(JumangSupportSystem.intervalMultiplier([level1]), 0.95, 'selling the strongest falls back to the remaining Jumang');
+  assert.equal(JumangSupportSystem.intervalMultiplier([]), 1, 'selling the last Jumang removes support');
+
+  const bifang = new Tower('bifang', TOWER_DATA.bifang, { x: 0, y: 0 });
+  const jumang = makeJumang(3);
+  const expected = (TOWER_DATA.bifang.interval / 1.2) * 0.89;
+  assert.equal(bifang.getStats({ attackSpeed: 0.2 }, 0.89).interval, expected);
+  assert.equal(jumang.getStats({}, 0.89).interval, TOWER_DATA.jumang.interval * 0.89, 'support includes Jumang itself');
+});
+
+test('Jumang blessings stack twice and stay out of choices without Jumang in the lineup', () => {
+  const jumangBlessings = BLESSING_DATA.filter(item => item.tower === 'jumang');
+  assert.deepEqual(jumangBlessings.map(item => item.id), ['jumangDamage', 'jumangRange', 'jumangSpring']);
+  const blessings = new BlessingSystem(jumangBlessings, () => 0);
+  assert.deepEqual(blessings.drawChoices([], ['bifang']), []);
+  assert.equal(blessings.drawChoices([], ['jumang']).length, 3);
+  for (const id of ['jumangDamage', 'jumangRange', 'jumangSpring']) {
+    assert.equal(blessings.select(id), true);
+    assert.equal(blessings.select(id), true);
+    assert.equal(blessings.select(id), false);
+  }
+  assert.deepEqual(blessings.modifiers, { jumangDamage: 0.4, jumangRange: 0.3, jumangSpring: 2 });
+
+  const tower = new Tower('jumang', TOWER_DATA.jumang, { x: 0, y: 0 });
+  const stats = tower.getStats(blessings.modifiers);
+  assert.equal(stats.damage, 14);
+  assert.equal(stats.range, TOWER_DATA.jumang.range * 1.3);
+});
+
+test('a real Jumang projectile deals 10 damage, applies no slow, and emits one impact', () => {
+  const game = new Game(() => 0.2, 7);
+  const enemy = game.spawnEnemy('qinyuan');
+  const tower = new Tower('jumang', TOWER_DATA.jumang, { x: enemy.x, y: enemy.y });
+  const effects = [];
+  const projectile = new Projectile(tower, enemy, tower.getStats(), {}, effects);
+  projectile.impact([enemy]);
+  assert.equal(enemy.hp, enemy.maxHp - 10);
+  assert.equal(enemy.statuses.slow, undefined);
+  assert.equal(effects.filter(effect => effect.type === 'jumangImpact').length, 1);
 });

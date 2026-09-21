@@ -88,7 +88,8 @@ export class UIController {
       panel.innerHTML = `<div class="build-grid">${towerTypes.map(type => TOWER_DATA[type]).filter(Boolean).map(item => `<button class="unit-card" data-action="build" data-type="${item.id}" ${this.game.economy.canAfford(item.cost) && this.game.canManageTowers() ? '' : 'disabled'}><img class="unit-art" src="${assetUrl(item.id)}" alt=""><strong>${item.name}</strong><small>${item.role}</small><b>${item.cost} G</b></button>`).join('')}</div>`;
       return;
     }
-    const stats = tower.getStats(this.game.blessings.modifiers);
+    const intervalMultiplier = this.game.teamIntervalMultiplier?.() ?? 1;
+    const stats = tower.getStats(this.game.blessings.modifiers, intervalMultiplier);
     const cost = tower.level < 3 ? Economy.upgradeCost(tower.data, tower.level) : 0;
     const special = tower.type === 'bifang'
       ? `爆炸 ${Math.round(stats.explosionRadius)}`
@@ -96,6 +97,8 @@ export class UIController {
         ? `緩速 ${Math.round(stats.slow * 100)}% / ${stats.slowDuration}秒`
         : tower.type === 'baize'
           ? `洞察 ${stats.insightDuration}秒 / 易傷 ${Math.round(stats.vulnerability * 100)}%`
+          : tower.type === 'jumang'
+            ? `全隊攻擊間隔 ×${intervalMultiplier.toFixed(2)}`
           : `穿透 ${stats.penetration}`;
     panel.innerHTML = `<div class="tower-info"><div><h2><img class="tower-info-art" src="${assetUrl(tower.type)}" alt="">${tower.data.name} <span>Lv.${tower.level}</span></h2><p>傷害 ${Math.round(stats.damage * 10) / 10}　間隔 ${stats.interval.toFixed(2)}秒　射程 ${Math.round(stats.range)}</p><p>${special}</p></div><div class="tower-actions"><button data-action="upgrade" ${tower.level >= 3 || !this.game.economy.canAfford(cost) || !this.game.canManageTowers() ? 'disabled' : ''}>${tower.level >= 3 ? '已滿級' : `升級 ${cost} G`}</button><button class="sell" data-action="sell" ${!this.game.canManageTowers() ? 'disabled' : ''}>${this.game.pendingSellSlot === index ? `再次點擊確認 +${Economy.sellValue(tower.invested)} G` : `出售 +${Economy.sellValue(tower.invested)} G`}</button></div></div>`;
   }

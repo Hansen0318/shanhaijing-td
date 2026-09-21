@@ -19,6 +19,7 @@ import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level6-readability
 import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level6-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
+import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -102,6 +103,9 @@ export class Game {
     return this.levelId >= 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
   }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
+  teamIntervalMultiplier() {
+    return JumangSupportSystem.intervalMultiplier(this.towers, this.blessings.modifiers);
+  }
   buildTower(slotIndex, type) {
     const data = TOWER_DATA[type];
     if (!this.canManageTowers() || !this.availableTowerTypes().includes(type) || !data || this.towers[slotIndex] || !this.level.map.slots[slotIndex]) return { ok: false };
@@ -381,6 +385,7 @@ export class Game {
   }
   updateTowers(dt) {
     const targets = [...this.enemies, ...this.illusions];
+    const intervalMultiplier = this.teamIntervalMultiplier();
     for (const tower of this.towers) {
       if (!tower) continue;
       let activeDt = dt;
@@ -392,7 +397,7 @@ export class Game {
       }
       tower.cooldown -= activeDt;
       if (tower.cooldown > 0) continue;
-      const stats = tower.getStats(this.blessings.modifiers);
+      const stats = tower.getStats(this.blessings.modifiers, intervalMultiplier);
       const target = CombatSystem.acquireTarget(tower, targets, stats.range, { preferReal: tower.type === 'baize' });
       if (!target) continue;
       tower.faceTarget(target.x);
