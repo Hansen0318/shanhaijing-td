@@ -190,6 +190,9 @@ Work must not:
 
 - redo Chat-completed planning;
 - re-derive approved numbers/geometry/assets;
+- pause for a player choice when one implementation is already the repository-safe default and does not change approved design, player-visible behavior, gameplay/balance, frozen geometry/assets, scope, or destructive risk;
+- present functionally equivalent implementation options merely to obtain confirmation; choose the smallest reversible option that fits existing architecture;
+- stop on a non-destructive failure before trying an available safe fallback;
 - reread full historical design files when `STATE.md` + canonical files are enough;
 - run browser smoke unrelated to the changed scope;
 - replay every completed level without an identified shared regression risk;
@@ -200,6 +203,8 @@ Work must not:
 - “improve” unrelated code during a narrow task.
 
 If a required check can be performed by the player more efficiently, record it as `PLAYER SMOKE PENDING` rather than consuming Work budget.
+
+When `STATE.md` exposes one unambiguous **Next exact step**, Work should continue to it automatically after the current gate exits. A generic player message such as **「繼續」 / "continue"** is authorization to execute that recorded next step, not an invitation to reopen settled implementation choices.
 
 ## 9. Chat-before-Work closure
 

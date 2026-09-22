@@ -541,9 +541,16 @@ Before asking the player a development question:
 2. check whether the question belongs to the **current gate**;
 3. do not re-ask decisions that are already frozen;
 4. do not ask later-stage questions merely because they will eventually be needed;
-5. ask only the smallest unresolved decision needed to advance the current gate.
+5. if one option is already the repository-safe default and does not change approved design, player-visible behavior, gameplay/balance, frozen geometry/assets, scope, or destructive risk, **take that default and continue without asking**;
+6. if multiple implementation options are functionally equivalent, prefer the smallest reversible change that follows existing architecture and preserves completed behavior;
+7. if a safe fallback is available after a non-destructive failure, try the fallback before asking the player;
+8. ask only the smallest unresolved decision needed to advance the current gate.
 
-This prevents repeated questions and prevents discussion from jumping ahead of the intended development sequence.
+A player choice is required only when the unresolved choice materially changes approved design or player-visible behavior, changes gameplay/balance or frozen geometry/assets, expands scope, introduces destructive/conflict risk, or cannot proceed because of a genuine permission/environment blocker.
+
+If the player says **「繼續」 / "continue"** and `STATE.md` contains one unambiguous **Next exact step**, execute that step immediately. Do not stop to present implementation choices that are already covered by repository defaults.
+
+This prevents repeated questions, avoids unnecessary Work stalls, and prevents discussion from jumping ahead of the intended development sequence.
 
 ### Decision promotion is immediate
 
