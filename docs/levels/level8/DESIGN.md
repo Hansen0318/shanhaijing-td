@@ -31,6 +31,20 @@
 - Visual telegraph stays low-luminance: ripple, mist density, small bubbles, soft water movement. No bright zone rectangle/ellipse.
 - Exact cadence/durations/thresholds are numerical-gate work, not frozen here.
 
+### Numerical baseline rationale
+- 長右 stays near Level7 fast-enemy speed but gains its pressure through conditional 泥躍 rather than higher permanent speed.
+- 蠱雕 is slightly tougher/slower than 諸懷; most of its identity comes from timed 沼甲 instead of a large HP jump.
+- 化蛇's effective Wave10 HP (8360) advances beyond 夔 without a heal/reset mechanic.
+- Tide is intentionally slower and map-wide, differentiating it from Level7's 7s/5s alternating thunder pulses.
+- 玄龜's 潮震 is periodic delayed utility, so it does not become another every-shot 畢方 explosion or 夫諸 slow tower.
+
+### Next map composition proposal
+- Favor a **broad meandering wetland route** rather than another lightning-Z/S path.
+- Spawn and Base should be placed on different vertical thirds with at least two broad wetland crossings.
+- Use **3 natural wetland pockets** as the initial design target; all three share the global tide state.
+- Background should visibly contain water/marsh at those pockets so gameplay zones and Motion Lite are grounded in actual art.
+- Candidate Motion Lite budget after background approval: slow ground fog, water ripples, occasional bubbles, and one subtle bioluminescent-plant breathing cluster if the art actually contains it.
+
 ## Environment Motion Lite design rule
 - Target **2–4** subtle environment motions per level.
 - Motion must correspond to an element visibly present in the approved background.
