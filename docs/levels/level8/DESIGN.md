@@ -48,6 +48,13 @@
 - Background should visibly contain water/marsh at each future gameplay pocket so wetland bounds and Motion Lite can be measured from real art.
 - Planned Motion Lite budget after background approval: slow fog, water ripples, bubble clusters, plus optional bioluminescent plant breathing only if such a cluster is visibly present.
 
+### Boss HUD UI contract
+- 化蛇 Boss HUD follows the shared project Boss-HUD rule.
+- Upper name area uses a dark solid / near-solid panel so the program-rendered yellow Boss name remains legible.
+- Lower area remains an empty HP channel; the program is the only HP fill source.
+- Name area and health channel are designed inside the **same fixed outer HUD footprint** rather than stacking an extra UI row above the existing HUD.
+- Therefore, the intended implementation must **not reduce battlefield/map height**. If integration would require a taller HUD container, treat it as a layout change and return for player approval.
+
 ## Environment Motion Lite design rule
 - Target **2–4** subtle environment motions per level.
 - Motion must correspond to an element visibly present in the approved background.

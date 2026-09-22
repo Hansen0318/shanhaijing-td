@@ -715,6 +715,19 @@ Do **not** insert concept sheets, multi-panel creature boards, sprite atlases, o
 
 Approval of one creature does not approve adjacent creatures, Boss HUDs, projectiles, or VFX.
 
+### Boss HUD name / health-channel contract
+
+For every Boss HUD source asset:
+- reserve a distinct **Boss-name panel above the health channel**; the runtime writes the Boss name there;
+- the name panel may use a dark solid or near-solid fill so the existing yellow Boss-name text stays readable over bright maps/VFX;
+- keep the health channel itself visually separate and empty; runtime HP remains the only dynamic fill;
+- do **not** increase the HUD's overall runtime footprint merely to add the name panel if the existing Boss-HUD container can accommodate it;
+- prefer integrating the name panel inside the same fixed HUD image/container height so battlefield/map height is not compressed;
+- any HUD source-art redesign must preserve the established runtime outer bounds/aspect contract unless a layout change is explicitly approved;
+- if a proposed HUD would require a taller runtime container or shift the battlefield, stop and treat that as a player-visible layout change rather than a cosmetic asset edit.
+
+This rule applies project-wide to future Boss HUDs unless the player explicitly changes the UI contract.
+
 ### Mobile-readability check before approval
 
 Before calling a creature art direction ready, verify conceptually/staticly:
