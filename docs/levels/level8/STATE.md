@@ -4,49 +4,49 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **GAMEPLAY DESIGN**
+- Development phase: **NUMERICAL BASELINE**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**GAMEPLAY DESIGN**
+**NUMERICAL BASELINE**
 
 ### Allowed now
-- define the two normal enemies, Boss, and newly unlocked deployable identity;
-- define the main environment gameplay mechanic at concept level;
-- define each unit/mechanic role before numerical tuning;
-- keep Environment Motion Lite as a visual-design requirement only until the approved background exists.
+- define base stats for 長右／蠱雕／化蛇／玄龜;
+- define tide cadence, active duration and 化蛇 phase threshold;
+- define 玄龜 潮震 trigger count/radius/damage/push distance;
+- define Level8 W1–W10 composition and scaling intent.
 
 ### Forbidden until gate exit
 - no production implementation;
 - no canonical path/slot coordinates;
 - no final asset batch;
 - no Work implementation handoff;
-- no final numerical balance;
 - no image generation until an item is explicitly allowlisted in `ASSETS.md`.
 
 ### Gate exit condition
-Promote the approved enemy/Boss/new-deployable identities, gameplay roles, and environment-mechanic concept into `SPEC.md`.
+Freeze the complete Level8 numerical baseline and W1–W10 composition in `SPEC.md`.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
 - Level8 theme: **幽冥沼澤 / 毒霧濕地**.
-- Level8 clear will unlock a **new deployable beast**, identity still pending gameplay design.
+- Level8 clear unlocks **玄龜** as the sixth deployable beast.
+- Normal enemies are **長右** and **蠱雕**; Boss is **化蛇**.
+- Environment mechanic is a shared **潮位 / 濕地活化** cycle, with species-specific 長右／蠱雕 benefits and 化蛇 forced-tide control.
+- 玄龜 role is **潮震控場 / delayed area utility** with non-Boss path pushback.
 - Level8 inherits the existing data-driven owned roster, exactly-3 lineup, Blessing filtering, Motion Lite, facing, spacing, release and verification rules.
 - Future map design must define background aspect/display contract before geometry and asset approval.
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- Enemy/Boss/new-deployable set: pending gameplay discussion.
-- Environment Motion Lite principle: 2–4 subtle effects tied to background elements that actually exist in the approved map; no invented decorative overlays after the fact.
+- Numerical baseline and W1–W10 composition.
+- Environment Motion Lite principle remains 2–4 subtle effects tied to background elements that actually exist in the approved map; exact anchors wait for the approved background.
 
 ## Completed
 - Level8 canonical folder initialized.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
-- gameplay design
-- enemy/Boss selection
 - numerical baseline
 - environment mechanic
 - geometry
@@ -68,4 +68,4 @@ Promote the approved enemy/Boss/new-deployable identities, gameplay roles, and e
 - do not generate Level8 art before the corresponding asset is explicitly approved for generation.
 
 ## Next exact step
-**Approve/revise the proposed Level8 enemy/Boss/new-deployable set and their gameplay roles.**
+**Freeze Level8 numerical baseline: unit stats, tide cadence, 化蛇 phases, 玄龜 潮震 values, then W1–W10.**
