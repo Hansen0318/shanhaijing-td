@@ -4,15 +4,16 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **ASSET REVIEW / GEOMETRY MEASUREMENT**
+- Development phase: **VFX / BLESSING / GEOMETRY MEASUREMENT**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**ASSET REVIEW / GEOMETRY MEASUREMENT**
+**VFX / BLESSING / GEOMETRY MEASUREMENT**
 
 ### Allowed now
-- continue the sequential Level8 character-asset review;
+- classify 玄龜 base attack / 潮震 VFX with a Procedural-first default;
+- freeze the three 玄龜 Blessings;
 - preserve the player-approved Level8 Geometry Guide V1 path/tower composition;
 - measure exact path anchors / T1–T8 coordinates from the approved guide/background without redesigning them;
 - define wetland-pocket and Environment Motion Lite anchors from visible marsh features only.
@@ -23,7 +24,7 @@
 - no Work implementation handoff until the remaining Level8 source-art set and exact geometry are finalized.
 
 ### Gate exit condition
-Finish the remaining approved asset sequence and freeze exact measured geometry / wetland anchors.
+Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured geometry / wetland anchors and complete the final asset audit.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -38,7 +39,9 @@ Finish the remaining approved asset sequence and freeze exact measured geometry 
 
 ## Current proposals — not yet frozen
 - exact measured path / T1–T8 / wetland-pocket coordinates;
-- remaining 玄龜 source art and its VFX classification.
+- 玄龜 base-attack / 潮震 VFX classification;
+- 玄龜 three Blessings;
+- exact measured path / T1–T8 / wetland-pocket coordinates.
 
 ## Completed
 - Level8 canonical folder initialized.
@@ -48,11 +51,16 @@ Finish the remaining approved asset sequence and freeze exact measured geometry 
 - 蠱雕 source art approved.
 - 化蛇 source art approved.
 - 化蛇 Boss HUD approved.
+- 玄龜 source art **APPROVED_FINAL**: deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, no snake, simplified large color blocks; only the player-approved “這張可以” candidate is canonical.
+- Later extra 玄龜 variant and the 劇毒蛙王 / frog-type monster are **REJECTED** and must not be used.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
+- 玄龜 base-attack / 潮震 VFX classification
+- 玄龜 three Blessings
 - exact geometry measurement
-- remaining 玄龜 asset/VFX review
+- Environment Motion Lite anchor measurement
+- final asset audit
 - implementation
 - verification
 - release
@@ -67,7 +75,8 @@ Finish the remaining approved asset sequence and freeze exact measured geometry 
 ## Do not redo
 - do not retest or redesign completed Level1–7 unless a Level8 change actually affects a shared contract.
 - do not ask the player to choose implementation details already covered by repository-safe defaults.
-- do not generate Level8 art before the corresponding asset is explicitly approved for generation.
+- do not regenerate or replace 長右、蠱雕、化蛇、化蛇 Boss HUD、玄龜; their canonical source-art decisions are already frozen.
+- rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**Proceed to 玄龜 source-art review, then freeze exact measured path / T1–T8 / wetland-pocket coordinates from the already approved Level8 geometry guide.**
+**Classify 玄龜 ordinary attack and 潮震 VFX using Procedural-first; generate no new image unless static art is proven necessary.**

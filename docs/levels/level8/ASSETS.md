@@ -1,7 +1,7 @@
 # Level8 — Asset / VFX Ledger
 
 ## Status
-**SEQUENTIAL CHARACTER ASSET REVIEW**
+**FINAL CHARACTER ASSET SET APPROVED / VFX REVIEW**
 
 ## Generation status vocabulary
 - APPROVED_FOR_GENERATION
@@ -25,15 +25,15 @@
 | Boss — 化蛇 | gameplay sprite | PNG-first | APPROVED_FINAL |
 | 化蛇 Boss HUD empty slot | Boss UI | PNG-first | APPROVED_FINAL |
 | Environment Motion Lite | living-map visuals | Procedural-first by default | PENDING_DISCUSSION |
-| New deployable — 玄龜 | gameplay sprite | PNG-first | APPROVED_FOR_GENERATION |
+| New deployable — 玄龜 | gameplay sprite | PNG-first | APPROVED_FINAL |
 
 ## Current image-generation allowlist
-**玄龜 only.**
+**None.** Character source art is frozen. 玄龜 ordinary attack / 潮震 must be evaluated Procedural-first before any image generation is considered.
 
 ## Runtime optimization / preload
 - Final runtime background target: 780×1220, exact 39:61 aspect.
 - Generated source may be larger but must preserve the approved 39:61 composition when normalized.
-- Current generation batch authorizes **玄龜 only**. Other Level8 character assets are already approved or remain procedural-first.
+- No Level8 character generation is currently authorized. 長右、蠱雕、化蛇、化蛇 Boss HUD、玄龜 are already approved; effects remain Procedural-first unless a later audit proves static art is necessary.
 
 ## Boss HUD contract for Level8
 - Boss: **化蛇**.
@@ -49,6 +49,8 @@
 - Generic swamp insect / armored swamp beast / frog-like candidates generated during the early Level8 asset pass are **REJECTED** and are not canonical 長右、蠱雕、化蛇 or 玄龜 source art.
 - The over-detailed moss/bone-armored raptor draft generated before the approved 蠱雕 candidate is **REJECTED**; do not reuse it.
 - Extra 化蛇 variants generated after the player had already approved 化蛇 are **REJECTED duplicates** and must not replace the canonical approved Boss art.
+- The extra 玄龜 variant generated after the player approved “這張可以” is **REJECTED** and must not replace the canonical 玄龜.
+- The later **劇毒蛙王 / frog-type monster** is **REJECTED** and is not a 玄龜 candidate or any Level8 canonical unit.
 - Any rejected candidate must not be reused merely because it already exists in a local/temp folder.
 
 ## Player-approved Level8 source art
@@ -56,3 +58,4 @@
 - **蠱雕**: simplified horned raptor/eagle candidate approved by the player; broad winged silhouette, bird beak and talons remain the defining read.
 - **化蛇**: simplified green/cream winged serpent Boss candidate approved by the player.
 - **化蛇 Boss HUD**: fixed-footprint HUD with dark solid/near-solid name panel above the empty HP channel approved by the player.
+- **玄龜**: the player-approved “這張可以” candidate is canonical — deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, no snake, simplified large color blocks for phone readability.
