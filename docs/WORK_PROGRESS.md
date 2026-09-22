@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-22：Level8 gameplay set / mechanic frozen
+
+- Player approved the proposed Level8 gameplay set.
+- Frozen identities/roles: 長右 = agile 泥躍 pressure enemy; 蠱雕 = durable 沼甲 enemy; 化蛇 = two-phase tide-controlling Boss; 玄龜 = Level8-clear sixth deployable with delayed 潮震 area utility + small non-Boss path pushback.
+- Frozen environment concept: shared 潮位 / 濕地活化 cycle activates approved wetland pockets together; this is intentionally not Level7 A/B alternation.
+- 長右／蠱雕 consume different wetland benefits; 化蛇 controls tide timing but does not receive their normal buffs.
+- Visual telegraph remains low-luminance ripple / mist / bubbles / water movement; no bright rectangular/elliptical zone clone.
+- Gate advances to **NUMERICAL BASELINE**.
+- Next exact step: freeze unit stats, tide cadence, 化蛇 phases, 玄龜 潮震 values, then W1–W10.
+
+---
+
 ## 2026-09-22：Level8 theme / unlock scope frozen
 
 - Player continued with the recommended Level8 direction, so the current scope is promoted to **幽冥沼澤 / 毒霧濕地**.
