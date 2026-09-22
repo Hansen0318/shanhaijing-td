@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-22：Level8 development initialized
+
+- Level7 remains released/frozen baseline.
+- Initialized canonical `docs/levels/level8/` STATE / SPEC / DESIGN / GEOMETRY / ASSETS.
+- Level8 current gate is **PROGRESSION / SCOPE**; no production implementation or image generation is authorized yet.
+- Current preferred design candidate is **幽冥沼澤 / 毒霧濕地**; **風蝕荒原 / 砂海古城** remains the main alternative.
+- Environment Motion Lite is now a Level8 design goal: target 2–4 subtle motions tied to features actually present in the approved background.
+- Carried forward the Level7 lesson: freeze background source aspect + runtime battlefield/display contract before background/geometry approval; measure Motion Lite anchors from the accepted background instead of guessing after integration.
+- Existing Work-budget rules remain inherited and are not duplicated: reuse unaffected PASS evidence, targeted/affected regression only, compact recovery, repository-safe defaults without unnecessary player-choice stalls.
+- Next exact step: player approves/revises the Level8 theme direction and decides whether Level8 clear unlocks a new deployable.
+
+---
+
+
 ## 2026-09-21：Level7 FINAL FILESET AUDIT PASS
 
 - Player re-uploaded all six concrete Level7 final source files.
@@ -128,7 +142,7 @@
 ## 2026-09-20：Level7 Geometry V3 player-approved and frozen
 
 - Player approved the latest Geometry Guide V3 after correcting Spawn entry, Base endpoint, and two path turns.
-- Promoted Geometry V3 to canonical `docs/levels/level7/GEOMETRY.md`.
+- Promoted Geometry V3 to canonical `docs/levels/level8/GEOMETRY.md`.
 - Canonical 390×610 path, Spawn/Base, T1–T8 and 雷脈 A/B initial gameplay bounds are now frozen.
 - Geometry Guide V1/V2 are obsolete; future Chat/Work must not re-guess coordinates.
 - Runtime interpolation may add local anchors only to preserve the approved centerline; it may not move the route.
@@ -183,7 +197,7 @@
 ## 2026-09-20：Level7 gameplay baseline frozen / geometry gate opened
 
 - Player continuation instruction treated as approval to advance the previously reviewed Level7 gameplay direction.
-- Promoted Level7 theme, enemy set, Boss, 雷脈 mechanic, 句芒 baseline, W1–W10 and clear behavior from proposal into `docs/levels/level7/SPEC.md`.
+- Promoted Level7 theme, enemy set, Boss, 雷脈 mechanic, 句芒 baseline, W1–W10 and clear behavior from proposal into `docs/levels/level8/SPEC.md`.
 - Added stable Level7 Decision/Requirement IDs for implementation traceability.
 - Level7 current gate advanced to **MAP CONCEPT / CANONICAL GEOMETRY**.
 - Added first map composition proposal to `DESIGN.md`: upper-left Spawn → upper crossing / 雷脈A → middle fold → lower approach / 雷脈B → lower-right 震木神壇.
@@ -226,17 +240,16 @@
 
 ---
 
-## Active development pointer — Level7
+## Active development pointer — Level8
 
-- Active level: **Level7**
-- Canonical handoff entry: `docs/levels/level7/STATE.md`
+- Active level: **Level8**
+- Canonical handoff entry: `docs/levels/level8/STATE.md`
 - Approved requirements: `docs/levels/level7/SPEC.md`
-- Design proposals/history: `docs/levels/level7/DESIGN.md`
+- Design proposals/history: `docs/levels/level8/DESIGN.md`
 - Geometry source: `docs/levels/level7/GEOMETRY.md`
-- Asset/VFX ledger: `docs/levels/level7/ASSETS.md`
+- Asset/VFX ledger: `docs/levels/level8/ASSETS.md`
 - New Chat / Work sessions must follow `AGENTS.md` Section 17 read order and continue from `STATE.md -> Next exact step`.
-- Legacy `docs/levels/LEVEL7_DESIGN_DRAFT.md` is now a redirect only and is not authoritative.
-- Current Level7 phase: **DESIGN / PLAYER APPROVAL PENDING**; production implementation has not started.
+- Current Level8 phase: **PROGRESSION / SCOPE**; production implementation has not started.
 
 ---
 
