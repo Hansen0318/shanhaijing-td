@@ -52,13 +52,17 @@ Before redoing any work after interruption:
 
 1. sync the latest `main`;
 2. check whether the feature branch exists remotely;
-3. read `docs/WORK_PROGRESS.md`;
-4. inspect recent commits and diff;
+3. read the newest relevant entry in `docs/WORK_PROGRESS.md` and the active level's current `STATE.md`;
+4. inspect current branch / HEAD / status / diff;
 5. continue from the first unfinished item only.
 
-Do not reimplement already committed/pushed work.
+Do not reimplement already committed/pushed work. Do not automatically reread every canonical/historical document on recovery; read only the specific file needed when the compact recovery state is insufficient or contradictory.
+
+A checkpoint/test/smoke already recorded as PASS is reusable evidence. Do not rerun it merely because the session restarted or the task continued. Rerun only when a later change can materially affect that verified scope, when the recorded evidence is missing/ambiguous, or when a release contract explicitly requires fresh evidence.
 
 If the expected branch or SHA is missing remotely, first inspect the current/local workspace and reflog for recoverable commits. Recovery comes before reimplementation.
+
+For substantial new-level implementation, default to an isolated worktree + feature branch from the latest `origin/main` when the current workspace is dirty, stale, or diverged. This safe default is pre-authorized and should not trigger a user-choice prompt unless there is a concrete destructive/conflict risk or permission blocker.
 
 ## 5. Push failure / unavailable environment
 
