@@ -21,7 +21,7 @@
 ### Forbidden until gate exit
 - no production implementation;
 - no redesign of the approved route shape / Spawn-Base arrangement / tower-pad composition;
-- no Work implementation handoff until the remaining Level8 source-art set and exact geometry are finalized.
+- no Work implementation handoff until 玄龜 VFX/Blessings, exact geometry, Environment Motion Lite anchors, and final asset audit are finalized.
 
 ### Gate exit condition
 Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured geometry / wetland anchors and complete the final asset audit.
@@ -38,7 +38,6 @@ Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured g
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- exact measured path / T1–T8 / wetland-pocket coordinates;
 - 玄龜 base-attack / 潮震 VFX classification;
 - 玄龜 three Blessings;
 - exact measured path / T1–T8 / wetland-pocket coordinates.
