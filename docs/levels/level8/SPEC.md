@@ -27,7 +27,81 @@
 - 玄龜 must not duplicate 夫諸's slow, 白澤's vulnerability/debuff role, 句芒's global attack-speed support, 畢方's every-shot explosion pattern, or 應龍's penetration role.
 
 ## Numerical baseline
-- pending
+
+### 長右
+- HP: **110**
+- Speed: **86**
+- BaseDamage: **1**
+- Reward: **15**
+- Radius: **12**
+- 泥躍: entering an active wetland patch grants **×1.30 movement speed for 1.6s**.
+- 泥躍 does not stack; re-entering the same active patch does not retrigger until that patch has returned to quiet state and activated again.
+
+### 蠱雕
+- HP: **420**
+- Speed: **24**
+- BaseDamage: **3**
+- Reward: **32**
+- Radius: **18**
+- 沼甲: while inside an active wetland patch, damage taken is **×0.78**.
+- After leaving the active wetland, 沼甲 lingers for **0.6s**.
+- Re-entry refreshes the linger timer; mitigation does not stack.
+
+### 化蛇
+- BaseHP: **7600**
+- Speed: **15**
+- BaseDamage: **20**
+- Reward: **0**
+- Radius: **30**
+- Boss: yes.
+- Wave10 Boss HP multiplier: **×1.10** → effective Wave10 HP **8360**.
+- P2 threshold: **50% HP**, one-time transition, no heal and no second health bar.
+- P1 forced high tide: every **7.0s**, immediately begins a **2.4s** high-tide window.
+- P2 forced high tide: every **5.0s**, high-tide window lasts **3.0s**.
+- P2 movement speed multiplier: **×1.15**.
+- 化蛇 is immune to 泥躍 and 沼甲 and does not receive normal-enemy wetland buffs.
+
+### 潮位 / 濕地活化
+- Natural tide cycle: **10.0s total**.
+- High tide duration: **2.4s**.
+- Quiet/low-tide duration: **7.6s**.
+- All approved wetland pockets activate together during high tide.
+- A forced high tide immediately starts/restarts the high-tide window; overlapping forced activations refresh duration rather than stack.
+- High-tide telegraph must begin **0.8s** before activation using subtle ripple/mist/bubble buildup.
+- No full-screen flash; no rectangular/elliptical zone outline.
+
+### 玄龜
+- Cost: **145**
+- Damage: **13**
+- Attack interval: **1.20s**
+- Range: **140**
+- ProjectileSpeed: **360**
+- Base attack: single-target.
+- 潮震 trigger: every **4 successful attacks** by that 玄龜.
+- 潮震 delay: **0.35s** after the triggering hit.
+- 潮震 radius: **52**
+- 潮震 damage: **18**
+- 潮震 push distance: **18 path-distance units** backward for non-Boss enemies.
+- Bosses take 潮震 damage but are immune to the push.
+- A pushed enemy may not be moved behind Spawn; pushback changes path distance only and must preserve the canonical path/facing/spacing systems.
+
+### W1–W10
+1. W1 — 長右 ×6, spawn interval **1.10s**
+2. W2 — 長右 ×8, **1.00s**
+3. W3 — 長右 ×6 + 蠱雕 ×2, **1.00s**
+4. W4 — 蠱雕 ×4, **1.05s**
+5. W5 — 長右 ×10 + 蠱雕 ×3, **0.90s**, HP ×**1.06**
+6. W6 — 長右 ×14 + 蠱雕 ×4, **0.78s**, HP ×**1.12**
+7. W7 — 長右 ×10 + 蠱雕 ×6, **0.82s**, HP ×**1.18**
+8. W8 — 長右 ×16 + 蠱雕 ×6, **0.70s**, HP ×**1.26**
+9. W9 — 長右 ×18 + 蠱雕 ×8, **0.64s**, HP ×**1.34**
+10. W10 — 長右 ×8 + 蠱雕 ×4 + 化蛇 ×1, **0.84s**, normal-enemy HP ×**1.20**, Boss HP ×**1.10**
+
+### Difficulty intent
+- W1–W3: readable introduction to 潮位 and species-specific wetland behavior.
+- W4–W6: lineup role coverage begins to matter.
+- W7–W9: active use of upgrades/Blessings and mixed-role coverage required.
+- W10: 化蛇 tide pressure + mixed escort should require a developed three-beast setup, without depending on a single mandatory tower.
 
 ## Victory / retry / next-level
 - Retry/lineup behavior inherits the shared contract.
@@ -41,7 +115,6 @@
 - testing is impact-driven: targeted first, affected regressions only, full suite/browser smoke only when justified.
 
 ## Not yet approved
-- numerical values for 長右／蠱雕／化蛇／玄龜;
-- exact tide cadence / active duration / P2 threshold;
-- exact 潮震 trigger count, radius, damage and push distance;
-- wave composition;
+- canonical map composition / path / tower slots / wetland pocket geometry;
+- Level8 source-art direction and final asset set;
+- 玄龜 Blessings;
