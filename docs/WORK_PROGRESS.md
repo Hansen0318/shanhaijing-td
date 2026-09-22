@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-22：Level8 theme / unlock scope frozen
+
+- Player continued with the recommended Level8 direction, so the current scope is promoted to **幽冥沼澤 / 毒霧濕地**.
+- Level8 clear will unlock one new deployable beast through the existing data-driven progression system; exact identity remains in gameplay-design review.
+- Gate advances from PROGRESSION / SCOPE to **GAMEPLAY DESIGN**.
+- Current proposed set for review: 長右 + 蠱雕 normal enemies, 化蛇 Boss, 玄龜 unlock.
+- Environment gameplay proposal uses low-luminance 沼氣 / 水脈 terrain states, visually distinct from Level6 sunlight and Level7 雷脈.
+- Environment Motion Lite remains required but exact anchors/effects stay blocked until the approved background exists.
+- Next exact step: approve/revise the proposed enemy/Boss/new-deployable set and gameplay roles.
+
+---
+
 ## 2026-09-22：Level8 development initialized
 
 - Level7 remains released/frozen baseline.
