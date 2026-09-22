@@ -25,10 +25,12 @@
 | Boss — 化蛇 | gameplay sprite | PNG-first | APPROVED_FINAL |
 | 化蛇 Boss HUD empty slot | Boss UI | PNG-first | APPROVED_FINAL |
 | Environment Motion Lite | living-map visuals | Procedural-first by default | PENDING_DISCUSSION |
+| 玄龜 base attack VFX | single-target projectile | Procedural-only | PROCEDURAL_FIRST |
+| 玄龜 潮震 VFX | delayed area pulse / pushback readability | Procedural-only | PROCEDURAL_FIRST |
 | New deployable — 玄龜 | gameplay sprite | PNG-first | APPROVED_FINAL |
 
 ## Current image-generation allowlist
-**None.** Character source art is frozen. 玄龜 ordinary attack / 潮震 must be evaluated Procedural-first before any image generation is considered.
+**None.** Character source art is frozen. 玄龜 ordinary attack / 潮震 are now frozen as procedural-only VFX; no static source image is required.
 
 ## Runtime optimization / preload
 - Final runtime background target: 780×1220, exact 39:61 aspect.
@@ -59,3 +61,13 @@
 - **化蛇**: simplified green/cream winged serpent Boss candidate approved by the player.
 - **化蛇 Boss HUD**: fixed-footprint HUD with dark solid/near-solid name panel above the empty HP channel approved by the player.
 - **玄龜**: the player-approved “這張可以” candidate is canonical — deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, no snake, simplified large color blocks for phone readability.
+
+
+## 玄龜 VFX contract — frozen
+- **Base attack:** procedural compact cyan/teal water-core projectile with a short soft trail; single-target readability only, no splash ring, beam, or flame silhouette.
+- **潮震 telegraph:** for the frozen **0.35s** delay, draw a small low-luminance cyan contraction ring / water-glyph cue at the target point. The cue must stay local to the target and must not resemble a wetland-pocket boundary.
+- **潮震 impact:** procedural two-stage expanding water-shock rings plus a brief upward mist/splash accent, centered on the frozen impact point. The outer visual footprint should read close to the frozen radius **52** without becoming a persistent zone.
+- Pushback readability comes from the outward pulse plus actual enemy path-distance movement; do not add a separate arrow/knockback icon.
+- Boss impact uses the same damage pulse but no displacement cue beyond the hit effect because Bosses are push-immune.
+- No static PNG/JPG VFX is required for either effect. Revisit image generation only if runtime implementation demonstrates a concrete readability failure that procedural drawing cannot solve.
+- Presentation only: VFX must not alter Damage, interval, ProjectileSpeed, trigger count, delay, radius, push distance, targeting, or hit timing.
