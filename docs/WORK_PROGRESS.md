@@ -1,5 +1,21 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 exact geometry frozen
+
+- Re-verified the player-approved Geometry Guide V1 and clean background source pair at **1024×1536**.
+- Because Level8 runtime uses **39:61**, geometry normalization is frozen as horizontal center-crop **21 px per side** → **982×1536**, then uniform scale to **390×610** logical / **780×1220** runtime.
+- Frozen logical geometry:
+  - Spawn **(44,52)**;
+  - 16 ordered path anchors: **(65,79), (135,104), (225,118), (303,135), (340,166), (314,207), (247,229), (172,259), (196,291), (247,326), (164,358), (120,385), (175,423), (250,444), (281,471), (248,513)**;
+  - Base **(231,538)**;
+  - T1–T8 centers: **(115,133), (289,175), (142,230), (269,291), (104,332), (267,405), (113,440), (342,481)**.
+- Frozen three irregular wetland polygons follow visible floodable/marsh-adjacent road contours; gameplay uses polygon membership, while VFX must use feathered visuals with no hard zone outline.
+- Overlay check against the clean approved background shows the measured centerline follows the approved road. Runtime may only add interpolation anchors; it may not redesign bends or tower placement.
+- Production implementation remains blocked until Environment Motion Lite anchors + final asset audit are complete.
+- Next exact step: **freeze Environment Motion Lite anchors (fog / ripple / bubbles / optional plant micro-motion) from visible background features only.**
+
+---
+
 ## 2026-09-23：Level8 handoff state reconciled
 
 - Canonical gate remains **ASSET REVIEW / GEOMETRY MEASUREMENT**, but the character-art portion is now complete.
