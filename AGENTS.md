@@ -140,6 +140,26 @@ Stop before merge/deploy only when one of these is true:
 
 A handoff TXT/ZIP must **never add a feature-branch-only restriction on its own**. That restriction is valid only when the user explicitly requested it.
 
+### Release cleanup is mandatory after a verified release
+
+After the final release commit is confirmed in `main`, GitHub Pages has picked up that release, and there is no unmerged/unique work left in the implementation workspace, perform a bounded cleanup so future sessions do not rediscover stale temporary state.
+
+Clean up:
+- remove the isolated local worktree used only for the finished feature when it is no longer needed;
+- remove untracked/temp/build/debug artifacts, ad-hoc screenshots, generated intermediate conversion files, and local caches that are not part of the shipped product or permanent verification contract;
+- remove stale local implementation-only scratch files that have no canonical role;
+- a fully merged feature branch may be deleted after verifying its final commits/content are reachable from `main`; keep it when release is blocked, follow-up work is still active, or it still contains unique commits.
+
+Never delete:
+- canonical docs / active-level STATE-SPEC-DESIGN-GEOMETRY-ASSETS records;
+- player-approved source assets or their canonical manifests/checksums;
+- production assets/code;
+- permanent automated tests/fixtures that define shipped behavior;
+- release/verification evidence that the repository intentionally retains;
+- any file/commit that is still the only recoverable copy of work.
+
+Cleanup is a hygiene step, not a gameplay change. It must not rewrite history, reset unrelated work, or remove anything needed by the deployed game. When safety is uncertain, preserve the item and record why instead of deleting it.
+
 ## 9. Chat-first delegation: use Work only for capabilities Chat cannot reliably provide
 
 Token efficiency is the default project policy. Before sending any task to Work/Codex, first determine whether Chat can complete it safely with the available GitHub, file, image, analysis, and deployment tools.
