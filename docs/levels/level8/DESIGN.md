@@ -15,17 +15,21 @@
   - optional small water-flow motion where the final background visibly contains water.
 - Visual goal: active/living background without turning the map into a VFX layer.
 
-### Gameplay set proposal — not yet frozen
-- **Normal enemy A: 長右** — agile marsh raider; flood-associated identity fits the wetland theme. Proposed role: faster pressure unit with short wetland-triggered movement burst, avoiding another permanent speed aura.
-- **Normal enemy B: 蠱雕** — heavier predatory water-edge beast. Proposed role: durable enemy that benefits from swamp cover/mitigation rather than simple raw HP inflation.
-- **Boss: 化蛇** — flood-linked winged serpent/beast as the visual centerpiece. Proposed role: two-phase Boss that actively changes swamp-state timing rather than copying 雷脈 or sunlight-zone cadence.
-- **Level8-clear unlock: 玄龜** — proposed sixth deployable. Role should emphasize controlled splash/area utility and avoid duplicating 夫諸 slow, 白澤 debuff, or 句芒 global attack-speed support.
+### Approved gameplay set
+- **長右** — agile pressure enemy; wetland-triggered **泥躍** movement burst.
+- **蠱雕** — durable marsh predator; active-wetland **沼甲** mitigation with short post-exit carry-over.
+- **化蛇** — two-phase Boss that forces/accelerates high-tide windows and controls the environment instead of consuming the normal-enemy wetland buffs.
+- **玄龜** — Level8-clear unlock; sixth deployable, using delayed **潮震** pulses for area damage + small non-Boss path pushback.
 
-### Environment mechanic proposal — not yet frozen
-- Use **沼氣 / 水脈** as localized terrain states rather than another bright rectangular/pulsing buff zone.
-- Candidate behavior: selected wetland pockets briefly become active; qualifying enemies gain a species-specific benefit while inside/after crossing.
-- Visual telegraph should be low-luminance fog/ripple/bubble activity, clearly distinct from Level6 sunlight and Level7 lightning.
-- Exact timing, affected enemy species, and numerical effects remain for the next gameplay step.
+### Approved environment mechanic
+- The map contains several visually natural wetland pockets.
+- A shared **潮位** cycle moves the whole map between quiet and high-tide states; high tide activates the approved wetland pockets together.
+- This deliberately avoids Level7's alternating A/B rhythm.
+- 長右 and 蠱雕 receive different species-specific benefits from an active wetland.
+- 化蛇 can force an early high tide; P2 increases that pressure and may activate all approved wetland pockets during its surge window.
+- 化蛇 itself does not receive 長右／蠱雕's normal wetland buffs.
+- Visual telegraph stays low-luminance: ripple, mist density, small bubbles, soft water movement. No bright zone rectangle/ellipse.
+- Exact cadence/durations/thresholds are numerical-gate work, not frozen here.
 
 ## Environment Motion Lite design rule
 - Target **2–4** subtle environment motions per level.
