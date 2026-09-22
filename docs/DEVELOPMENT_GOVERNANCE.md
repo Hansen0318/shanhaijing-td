@@ -194,6 +194,7 @@ Work must not:
 - run browser smoke unrelated to the changed scope;
 - replay every completed level without an identified shared regression risk;
 - run full regression merely because it exists if a targeted check is sufficient;
+- rerun an already-PASS checkpoint/test/smoke when no later change touches its verified scope;
 - repeat player-owned smoke unless explicitly requested;
 - generate extra assets or implement later-gate ideas;
 - “improve” unrelated code during a narrow task.
