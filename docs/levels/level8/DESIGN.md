@@ -38,12 +38,15 @@
 - Tide is intentionally slower and map-wide, differentiating it from Level7's 7s/5s alternating thunder pulses.
 - 玄龜's 潮震 is periodic delayed utility, so it does not become another every-shot 畢方 explosion or 夫諸 slow tower.
 
-### Next map composition proposal
-- Favor a **broad meandering wetland route** rather than another lightning-Z/S path.
-- Spawn and Base should be placed on different vertical thirds with at least two broad wetland crossings.
-- Use **3 natural wetland pockets** as the initial design target; all three share the global tide state.
-- Background should visibly contain water/marsh at those pockets so gameplay zones and Motion Lite are grounded in actual art.
-- Candidate Motion Lite budget after background approval: slow ground fog, water ripples, occasional bubbles, and one subtle bioluminescent-plant breathing cluster if the art actually contains it.
+### Approved map composition / display contract
+- Use a **broad irregular meandering wetland route**, deliberately different from Level7's lightning-Z and from a conventional smooth S.
+- Spawn enters from the **upper-right** edge; Base sits on a raised ancient-stone sanctuary/islet in the **lower-left**.
+- Use **3 natural wetland pockets** distributed through the route; all share the global tide state.
+- Logical battlefield remains **390×610**.
+- Canonical runtime background target is **780×1220**, exact 39:61 aspect, using the full normalized image rather than a later partial crop.
+- Preserve the current full-width mobile battlefield presentation; do not reintroduce the narrow/pillarboxed Level7 experiment.
+- Background should visibly contain water/marsh at each future gameplay pocket so wetland bounds and Motion Lite can be measured from real art.
+- Planned Motion Lite budget after background approval: slow fog, water ripples, bubble clusters, plus optional bioluminescent plant breathing only if such a cluster is visibly present.
 
 ## Environment Motion Lite design rule
 - Target **2–4** subtle environment motions per level.

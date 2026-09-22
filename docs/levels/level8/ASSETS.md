@@ -1,7 +1,7 @@
 # Level8 — Asset / VFX Ledger
 
 ## Status
-**PLANNING / NO FINAL BATCH APPROVED**
+**BACKGROUND-ONLY GENERATION OPEN**
 
 ## Generation status vocabulary
 - APPROVED_FOR_GENERATION
@@ -19,7 +19,7 @@
 ## Planned inventory
 | Item | Purpose | Classification | Status |
 |---|---|---|---|
-| Level8 background | battlefield/map | PNG/JPG source | PENDING_DISCUSSION |
+| Level8 background | battlefield/map | PNG/JPG source | APPROVED_FOR_GENERATION |
 | Normal enemy A | gameplay sprite | PNG-first | PENDING_DISCUSSION |
 | Normal enemy B | gameplay sprite | PNG-first | PENDING_DISCUSSION |
 | Boss | gameplay sprite | PNG-first | PENDING_DISCUSSION |
@@ -28,7 +28,9 @@
 | New deployable / projectile | only if progression requires it | pending | BLOCKED_BY_PROGRESSION |
 
 ## Current image-generation allowlist
-**None.**
+**Level8 background only.**
 
 ## Runtime optimization / preload
-- pending
+- Final runtime background target: 780×1220, exact 39:61 aspect.
+- Generated source may be larger but must preserve the approved 39:61 composition when normalized.
+- No character/Boss/HUD/玄龜/projectile art is authorized in this batch.

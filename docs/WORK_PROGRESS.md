@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-22：Level8 map/display contract frozen
+
+- Frozen logical battlefield at 390×610 with exact 39:61 art composition; canonical runtime background target is 780×1220.
+- Preserve current full-width mobile battlefield behavior; do not reintroduce the narrow/pillarboxed Level7 experiment.
+- Frozen map composition: broad irregular wetland meander, Spawn upper-right, Base lower-left on a raised stone sanctuary/islet, three natural wetland pockets sharing tide state.
+- Wetland gameplay bounds and Environment Motion Lite anchors must be measured from the player-approved background; no generic rectangles/guessed overlays.
+- Background-only image-generation allowlist is now open. Character/Boss/HUD/玄龜/projectile art remains blocked.
+- Gate advances to **BACKGROUND GENERATION / PLAYER REVIEW**.
+- Next exact step: generate one background candidate, obtain player approval, then normalize/measure canonical geometry.
+
+---
+
 ## 2026-09-22：Level8 numerical baseline frozen
 
 - Frozen Level8 stats and mechanics:
