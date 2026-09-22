@@ -21,19 +21,19 @@
 |---|---|---|---|
 | Level8 background | battlefield/map | PNG/JPG source | APPROVED_FOR_GENERATION |
 | Normal enemy A — 長右 | gameplay sprite | PNG-first | APPROVED_FINAL |
-| Normal enemy B — 蠱雕 | gameplay sprite | PNG-first | APPROVED_FOR_GENERATION |
+| Normal enemy B — 蠱雕 | gameplay sprite | PNG-first | APPROVED_FINAL |
 | Boss — 化蛇 | gameplay sprite | PNG-first | APPROVED_FINAL |
 | 化蛇 Boss HUD empty slot | Boss UI | PNG-first | APPROVED_FINAL |
 | Environment Motion Lite | living-map visuals | Procedural-first by default | PENDING_DISCUSSION |
-| New deployable — 玄龜 | gameplay sprite | PNG-first | PENDING_DISCUSSION |
+| New deployable — 玄龜 | gameplay sprite | PNG-first | APPROVED_FOR_GENERATION |
 
 ## Current image-generation allowlist
-**蠱雕 only.**
+**玄龜 only.**
 
 ## Runtime optimization / preload
 - Final runtime background target: 780×1220, exact 39:61 aspect.
 - Generated source may be larger but must preserve the approved 39:61 composition when normalized.
-- Current generation batch authorizes **蠱雕 only**. 玄龜 remains blocked until 蠱雕 review is complete.
+- Current generation batch authorizes **玄龜 only**. Other Level8 character assets are already approved or remain procedural-first.
 
 ## Boss HUD contract for Level8
 - Boss: **化蛇**.
@@ -47,9 +47,12 @@
 
 ## Rejected generation attempts
 - Generic swamp insect / armored swamp beast / frog-like candidates generated during the early Level8 asset pass are **REJECTED** and are not canonical 長右、蠱雕、化蛇 or 玄龜 source art.
+- The over-detailed moss/bone-armored raptor draft generated before the approved 蠱雕 candidate is **REJECTED**; do not reuse it.
+- Extra 化蛇 variants generated after the player had already approved 化蛇 are **REJECTED duplicates** and must not replace the canonical approved Boss art.
 - Any rejected candidate must not be reused merely because it already exists in a local/temp folder.
 
 ## Player-approved Level8 source art
 - **長右**: four-eared agile simian candidate approved through player continuation.
+- **蠱雕**: simplified horned raptor/eagle candidate approved by the player; broad winged silhouette, bird beak and talons remain the defining read.
 - **化蛇**: simplified green/cream winged serpent Boss candidate approved by the player.
 - **化蛇 Boss HUD**: fixed-footprint HUD with dark solid/near-solid name panel above the empty HP channel approved by the player.

@@ -4,27 +4,26 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **BACKGROUND GENERATION / PLAYER REVIEW**
+- Development phase: **ASSET REVIEW / GEOMETRY MEASUREMENT**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**BACKGROUND GENERATION / PLAYER REVIEW**
+**ASSET REVIEW / GEOMETRY MEASUREMENT**
 
 ### Allowed now
-- generate **one Level8 background candidate only** using the frozen map/display contract;
-- review the actual crop/composition at phone-oriented scale;
-- revise/regenerate the background if the player rejects it;
-- after player approval, normalize the approved source to the exact 39:61 runtime aspect and measure canonical geometry.
+- continue the sequential Level8 character-asset review;
+- preserve the player-approved Level8 Geometry Guide V1 path/tower composition;
+- measure exact path anchors / T1–T8 coordinates from the approved guide/background without redesigning them;
+- define wetland-pocket and Environment Motion Lite anchors from visible marsh features only.
 
 ### Forbidden until gate exit
 - no production implementation;
-- no final path/slot/wetland coordinates before the background is player-approved;
-- no character/Boss/HUD/玄龜/projectile asset generation;
-- no Work implementation handoff.
+- no redesign of the approved route shape / Spawn-Base arrangement / tower-pad composition;
+- no Work implementation handoff until the remaining Level8 source-art set and exact geometry are finalized.
 
 ### Gate exit condition
-Player approves the actual Level8 background candidate/crop.
+Finish the remaining approved asset sequence and freeze exact measured geometry / wetland anchors.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -38,16 +37,22 @@ Player approves the actual Level8 background candidate/crop.
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- Actual Level8 background candidate/crop.
+- exact measured path / T1–T8 / wetland-pocket coordinates;
+- remaining 玄龜 source art and its VFX classification.
 
 ## Completed
 - Level8 canonical folder initialized.
+- map/display contract frozen.
+- player approved the Level8 Geometry Guide V1 route shape, upper-left Spawn, lower-center Base, and T1–T8 composition.
+- 長右 source art approved.
+- 蠱雕 source art approved.
+- 化蛇 source art approved.
+- 化蛇 Boss HUD approved.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
-- approved background
-- geometry
-- assets
+- exact geometry measurement
+- remaining 玄龜 asset/VFX review
 - implementation
 - verification
 - release
@@ -65,4 +70,4 @@ Player approves the actual Level8 background candidate/crop.
 - do not generate Level8 art before the corresponding asset is explicitly approved for generation.
 
 ## Next exact step
-**Generate one Level8 background candidate and obtain player approval before measuring geometry.**
+**Proceed to 玄龜 source-art review, then freeze exact measured path / T1–T8 / wetland-pocket coordinates from the already approved Level8 geometry guide.**
