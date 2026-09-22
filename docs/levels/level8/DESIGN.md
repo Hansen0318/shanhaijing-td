@@ -4,7 +4,7 @@
 
 ## Current proposals
 
-### Direction A — 幽冥沼澤 / 毒霧濕地
+### Approved theme — 幽冥沼澤 / 毒霧濕地
 - Strong contrast with Level6 sunlight and Level7 thunder.
 - Candidate environment mechanic: localized swamp/mist interaction rather than another bright pulsing zone.
 - Candidate Motion Lite:
@@ -15,14 +15,17 @@
   - optional small water-flow motion where the final background visibly contains water.
 - Visual goal: active/living background without turning the map into a VFX layer.
 
-### Direction B — 風蝕荒原 / 砂海古城
-- Candidate environment mechanic: periodic gust lanes or wind exposure.
-- Candidate Motion Lite:
-  - sand drift;
-  - hanging cloth/flag motion where present;
-  - dry grass/branches sway;
-  - distant sandfall.
-- Keeps palette and environment distinct from Levels6–7.
+### Gameplay set proposal — not yet frozen
+- **Normal enemy A: 長右** — agile marsh raider; flood-associated identity fits the wetland theme. Proposed role: faster pressure unit with short wetland-triggered movement burst, avoiding another permanent speed aura.
+- **Normal enemy B: 蠱雕** — heavier predatory water-edge beast. Proposed role: durable enemy that benefits from swamp cover/mitigation rather than simple raw HP inflation.
+- **Boss: 化蛇** — flood-linked winged serpent/beast as the visual centerpiece. Proposed role: two-phase Boss that actively changes swamp-state timing rather than copying 雷脈 or sunlight-zone cadence.
+- **Level8-clear unlock: 玄龜** — proposed sixth deployable. Role should emphasize controlled splash/area utility and avoid duplicating 夫諸 slow, 白澤 debuff, or 句芒 global attack-speed support.
+
+### Environment mechanic proposal — not yet frozen
+- Use **沼氣 / 水脈** as localized terrain states rather than another bright rectangular/pulsing buff zone.
+- Candidate behavior: selected wetland pockets briefly become active; qualifying enemies gain a species-specific benefit while inside/after crossing.
+- Visual telegraph should be low-luminance fog/ripple/bubble activity, clearly distinct from Level6 sunlight and Level7 lightning.
+- Exact timing, affected enemy species, and numerical effects remain for the next gameplay step.
 
 ## Environment Motion Lite design rule
 - Target **2–4** subtle environment motions per level.
@@ -44,4 +47,4 @@ This avoids retrofitting aspect ratio or guessing effect positions after integra
 - 火山熔谷 and 冰原神域 remain possible future themes, but are lower priority for Level8 because Level6/7 already use strong luminous environmental VFX.
 
 ## Rejected / superseded ideas
-- None yet.
+- 風蝕荒原 / 砂海古城 deferred for a future level after the player continued with the recommended 幽冥沼澤 direction.
