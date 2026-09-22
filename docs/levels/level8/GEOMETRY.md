@@ -1,7 +1,7 @@
 # Level8 — Geometry Contract
 
 ## Status
-**MAP / DISPLAY CONTRACT FROZEN — FINAL COORDINATES PENDING APPROVED BACKGROUND**
+**PLAYER-APPROVED ROUTE / TOWER LAYOUT — EXACT COORDINATES PENDING MEASUREMENT**
 
 ## Logical map
 - width: **390**
@@ -14,21 +14,25 @@
 
 ## Map composition
 - Theme: **幽冥沼澤 / 毒霧濕地**.
-- Route shape: **broad irregular meander**, not a lightning-Z and not a smooth symmetric S.
-- Spawn region: **upper-right quadrant**, entering from the map edge through shallow marsh.
-- Base region: **lower-left quadrant**, on a raised ancient-stone sanctuary/islet.
-- Route should cross or skirt **three natural wetland pockets** distributed across upper-middle, center-left, and lower-middle/right portions of the map.
-- Keep enough dry/raised land around the route to place eight readable tower slots without stacking them on wetland VFX.
+- Player-approved route guide: **broad asymmetric S/meander** with visibly different upper/middle/lower bend radii; not a smooth symmetric S and not Level7's lightning-Z.
+- Spawn region: **upper-left edge**, entering through the wet marsh road.
+- Base region: **lower-center sanctuary/islet**, reached after the final inward curve.
+- Player approved the **8 tower-pad composition** shown in the Level8 Geometry Guide V1: early/mid/late pads alternate across both sides of the route rather than forming a regular grid.
+- Route surface should read as damp/soft marsh road, not dry stone highway.
+- Wetland water/mud remains on both sides of the road; future gameplay wetland pockets must follow visible marsh shapes rather than generic boxes.
+- Keep tower pads visually separated from busy reeds/props at phone scale.
 
 ## Canonical path
-- ordered waypoints: pending approved-background measurement
-- Spawn: pending exact measurement inside the approved upper-right entry
-- Base: pending exact measurement inside the approved lower-left sanctuary approach
-- Do not guess final coordinates before background approval.
+- **Shape / route placement: APPROVED by player from Level8 Geometry Guide V1.**
+- ordered waypoints: pending exact measurement from the approved guide/background
+- Spawn: pending exact measurement in the approved **upper-left** entry
+- Base: pending exact measurement at the approved **lower-center** sanctuary
+- Do not redesign the path shape during implementation; only measure/interpolate anchors needed to preserve the approved centerline.
 
 ## Tower slots
-- T1–T8: pending approved-background measurement
-- composition target: 8 readable dry-land/stone-islet positions distributed across early/mid/late route coverage
+- **T1–T8 placement/composition: APPROVED by player from Level8 Geometry Guide V1.**
+- exact x/y coordinates: pending measurement from the approved guide/background
+- preserve the approved relative ordering and side-of-road placement; do not redistribute pads for convenience.
 - no tower slot should sit inside a wetland pocket or behind a major foreground prop.
 
 ## Special zones
@@ -53,6 +57,6 @@
 
 ## Approval / runtime verification
 - Map/display composition contract: **FROZEN**
-- Background candidate: pending player review
-- Final geometry: pending
+- Route shape / Spawn-Base arrangement / T1–T8 composition: **PLAYER APPROVED**
+- Exact measured geometry: pending
 - Runtime/player smoke: pending
