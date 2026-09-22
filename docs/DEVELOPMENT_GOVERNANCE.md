@@ -255,6 +255,17 @@ For each released level/major feature, record:
 
 This gives a rollback/reference anchor without creating another heavy workflow.
 
+### Release workspace cleanup
+
+Once `main` and Pages are verified and the feature workspace contains no unique unmerged work:
+- remove the finished isolated worktree;
+- delete disposable untracked/temp/build/debug/cache artifacts;
+- delete fully merged feature branches only after confirming their work is reachable from `main`;
+- retain canonical docs, approved assets/manifests, shipped production files, permanent tests/fixtures, and intentional release evidence;
+- retain any branch/file that still contains unique or unresolved work.
+
+The purpose is to reduce stale-state confusion and future token/time waste, not merely disk usage. Cleanup must never be allowed to damage the deployed game or destroy the only copy of recoverable work.
+
 ## 12. Core anti-leak loop
 
 The project-wide operating loop is:
