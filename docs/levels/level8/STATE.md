@@ -4,28 +4,28 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **NUMERICAL BASELINE**
+- Development phase: **MAP CONCEPT / DISPLAY CONTRACT**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**NUMERICAL BASELINE**
+**MAP CONCEPT / DISPLAY CONTRACT**
 
 ### Allowed now
-- define base stats for 長右／蠱雕／化蛇／玄龜;
-- define tide cadence, active duration and 化蛇 phase threshold;
-- define 玄龜 潮震 trigger count/radius/damage/push distance;
-- define Level8 W1–W10 composition and scaling intent.
+- define Level8 map composition and route shape;
+- freeze the background source aspect ratio + runtime battlefield/display contract before image generation;
+- decide Spawn/Base region, eight tower-slot composition, and approximate wetland-pocket placement;
+- define which background elements are intended candidates for Environment Motion Lite;
+- prepare one background-only generation direction after the display contract is frozen.
 
 ### Forbidden until gate exit
 - no production implementation;
-- no canonical path/slot coordinates;
-- no final asset batch;
-- no Work implementation handoff;
-- no image generation until an item is explicitly allowlisted in `ASSETS.md`.
+- no final path/slot/wetland coordinates until an actual background is approved and measured;
+- no character/Boss/HUD/deployable asset generation;
+- no Work implementation handoff.
 
 ### Gate exit condition
-Freeze the complete Level8 numerical baseline and W1–W10 composition in `SPEC.md`.
+Freeze the map/display composition contract and explicitly allowlist **Level8 background only** for generation in `ASSETS.md`.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -39,16 +39,15 @@ Freeze the complete Level8 numerical baseline and W1–W10 composition in `SPEC.
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- Numerical baseline and W1–W10 composition.
-- Environment Motion Lite principle remains 2–4 subtle effects tied to background elements that actually exist in the approved map; exact anchors wait for the approved background.
+- Map composition / route shape / Spawn-Base arrangement.
+- Background source aspect ratio and runtime display contract.
+- Wetland-pocket composition and background Motion Lite candidates.
 
 ## Completed
 - Level8 canonical folder initialized.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
-- numerical baseline
-- environment mechanic
 - geometry
 - assets
 - implementation
@@ -68,4 +67,4 @@ Freeze the complete Level8 numerical baseline and W1–W10 composition in `SPEC.
 - do not generate Level8 art before the corresponding asset is explicitly approved for generation.
 
 ## Next exact step
-**Freeze Level8 numerical baseline: unit stats, tide cadence, 化蛇 phases, 玄龜 潮震 values, then W1–W10.**
+**Freeze Level8 map composition + background/display contract, then open background-only generation.**

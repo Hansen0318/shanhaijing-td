@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-22：Level8 numerical baseline frozen
+
+- Frozen Level8 stats and mechanics:
+  - 長右 HP110 / Sp86 / DMG1 / Reward15 / 泥躍 ×1.30 for 1.6s.
+  - 蠱雕 HP420 / Sp24 / DMG3 / Reward32 / 沼甲 damage-taken ×0.78 while active + 0.6s carry.
+  - 化蛇 BaseHP7600, Wave10 ×1.10 = 8360, Sp15, DMG20, P2 at 50%, P2 Sp×1.15.
+  - Natural tide 10.0s cycle with 2.4s high tide; 0.8s subtle telegraph. 化蛇 forces 2.4s high tide every 7.0s in P1 and 3.0s every 5.0s in P2.
+  - 玄龜 Cost145 / Damage13 / Interval1.20 / Range140 / ProjectileSpeed360; 潮震 every 4 successful attacks, 0.35s delay, radius52, damage18, non-Boss pushback18 path-distance units.
+- Frozen W1–W10 composition/scaling through 化蛇 Boss wave.
+- Gate advances to **MAP CONCEPT / DISPLAY CONTRACT**.
+- Next exact step: freeze Level8 map composition + background source/runtime display contract, then allowlist background-only generation.
+
+---
+
 ## 2026-09-22：Level8 gameplay set / mechanic frozen
 
 - Player approved the proposed Level8 gameplay set.
