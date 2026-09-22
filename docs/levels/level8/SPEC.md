@@ -9,14 +9,15 @@
 - Retry returns to an empty lineup using the existing shared behavior.
 
 ## Core gameplay
-- pending
+- Theme: **幽冥沼澤 / 毒霧濕地**.
+- Environment Motion Lite is a required presentation layer for Level8; exact effects/anchors remain blocked until the background is approved.
 
 ## Numerical baseline
 - pending
 
 ## Victory / retry / next-level
 - Retry/lineup behavior inherits the shared contract.
-- Level8 clear unlock behavior: pending player decision.
+- Level8 clear unlocks one new deployable beast through the existing data-driven progression system; identity is pending gameplay-design approval.
 - Level9 visibility/next-level behavior: pending future scope.
 
 ## Shared inherited requirements
@@ -26,9 +27,7 @@
 - testing is impact-driven: targeted first, affected regressions only, full suite/browser smoke only when justified.
 
 ## Not yet approved
-- Level8 theme;
 - enemies;
 - Boss;
 - environment mechanic;
 - wave composition;
-- tower/deployable unlock after clear.
