@@ -1,5 +1,18 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 handoff state reconciled
+
+- Canonical gate remains **ASSET REVIEW / GEOMETRY MEASUREMENT**, but the character-art portion is now complete.
+- Approved/frozen source art: 長右、蠱雕、化蛇、化蛇 Boss HUD、玄龜.
+- Canonical 玄龜: deep-green turtle body + gold shell ornaments + cyan water-pattern / water-vapor accents; **no snake**; simplified large color blocks. Later alternate 玄龜 and frog-like drafts are rejected.
+- 玄龜 ordinary attack and 潮震 are frozen as **Procedural-only** VFX; 玄龜 Blessings are frozen in `SPEC.md`.
+- Approved geometry remains: 390×610 logical map, upper-left Spawn, asymmetric S/meander route, lower-center Base, T1–T8 composition from Geometry Guide V1.
+- Remaining pre-implementation work: measure exact path / Spawn / Base / T1–T8 / three wetland-pocket coordinates; measure Motion Lite anchors; run final asset/fileset audit; then prepare the minimal implementation handoff.
+- Level1–7 remain frozen; testing stays impact-driven and must not repeat unaffected historical PASS evidence.
+- Exact next step: **freeze measured Level8 geometry and Environment Motion Lite anchors from the already approved map/guide.**
+
+---
+
 ## 2026-09-23：Level8 玄龜 VFX / Blessings frozen
 
 - 玄龜 ordinary attack and 潮震 VFX are frozen **procedural-only**; no new static image asset is required.
