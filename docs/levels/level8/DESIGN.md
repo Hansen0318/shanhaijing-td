@@ -39,14 +39,23 @@
 - 玄龜's 潮震 is periodic delayed utility, so it does not become another every-shot 畢方 explosion or 夫諸 slow tower.
 
 ### Approved map composition / display contract
-- Use a **broad irregular meandering wetland route**, deliberately different from Level7's lightning-Z and from a conventional smooth S.
-- Spawn enters from the **upper-right** edge; Base sits on a raised ancient-stone sanctuary/islet in the **lower-left**.
-- Use **3 natural wetland pockets** distributed through the route; all share the global tide state.
+- Use the player-approved **broad asymmetric S / meandering wetland route**, deliberately different from Level7's lightning-Z and from a conventional smooth symmetric S.
+- Spawn enters from the **upper-left** edge.
+- Base sits at the **lower-center sanctuary/islet** after the final inward curve.
+- Preserve the player-approved **T1–T8 composition** from Level8 Geometry Guide V1; implementation may measure/interpolate but must not redistribute the tower pads.
+- Use **3 natural wetland pockets** distributed along the route; all share the global tide state.
 - Logical battlefield remains **390×610**.
 - Canonical runtime background target is **780×1220**, exact 39:61 aspect, using the full normalized image rather than a later partial crop.
 - Preserve the current full-width mobile battlefield presentation; do not reintroduce the narrow/pillarboxed Level7 experiment.
 - Background should visibly contain water/marsh at each future gameplay pocket so wetland bounds and Motion Lite can be measured from real art.
 - Planned Motion Lite budget after background approval: slow fog, water ripples, bubble clusters, plus optional bioluminescent plant breathing only if such a cluster is visibly present.
+
+### Approved 玄龜 art / attack presentation
+- Canonical 玄龜 source art: deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, **no snake**, simplified large color blocks for phone readability.
+- Ordinary attack VFX is **procedural-only**: compact cyan/teal water-core projectile with a short soft trail.
+- 潮震 VFX is **procedural-only**: local 0.35s contraction telegraph followed by two expanding water-shock rings plus a brief mist/splash accent.
+- No static VFX image should be generated unless runtime evidence proves a concrete readability failure that procedural drawing cannot solve.
+- Rejected extra 玄龜 and frog-like drafts are not canonical and must not be reused.
 
 ### Boss HUD UI contract
 - 化蛇 Boss HUD follows the shared project Boss-HUD rule.
