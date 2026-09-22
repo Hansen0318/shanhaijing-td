@@ -1,14 +1,26 @@
 # Shanhaijing TD Work Progress
 
-## 2026-09-22：Level8 map/display contract frozen
+## 2026-09-22：Level8 current state reconciled
 
-- Frozen logical battlefield at 390×610 with exact 39:61 art composition; canonical runtime background target is 780×1220.
-- Preserve current full-width mobile battlefield behavior; do not reintroduce the narrow/pillarboxed Level7 experiment.
-- Frozen map composition: broad irregular wetland meander, Spawn upper-right, Base lower-left on a raised stone sanctuary/islet, three natural wetland pockets sharing tide state.
-- Wetland gameplay bounds and Environment Motion Lite anchors must be measured from the player-approved background; no generic rectangles/guessed overlays.
-- Background-only image-generation allowlist is now open. Character/Boss/HUD/玄龜/projectile art remains blocked.
-- Gate advances to **BACKGROUND GENERATION / PLAYER REVIEW**.
-- Next exact step: generate one background candidate, obtain player approval, then normalize/measure canonical geometry.
+- Canonical Level8 state is now **ASSET REVIEW / GEOMETRY MEASUREMENT**; production implementation has not started.
+- Player-approved map/display contract:
+  - logical battlefield 390×610;
+  - runtime background target 780×1220, exact 39:61;
+  - preserve current full-width mobile battlefield presentation;
+  - route = player-approved asymmetric S/meander;
+  - Spawn = upper-left;
+  - Base = lower-center sanctuary/islet;
+  - T1–T8 composition approved from Geometry Guide V1.
+- Exact path waypoints / T1–T8 x-y / three wetland-pocket bounds are still pending measurement from the approved guide/background; implementation must preserve the approved route and may only add interpolation anchors needed to follow that centerline.
+- Player-approved Level8 source art:
+  - 長右 = APPROVED_FINAL;
+  - 蠱雕 = APPROVED_FINAL;
+  - 化蛇 = APPROVED_FINAL;
+  - 化蛇 Boss HUD = APPROVED_FINAL.
+- Current unresolved character-art gate: **玄龜 only**. It must be a single turtle-like deployable with no snake mounted/on top and with simplified large color blocks suitable for phone scale.
+- Rejected drafts include generic swamp insect / armored swamp beast / frog-like creatures, the over-detailed early 蠱雕 draft, duplicate 化蛇 variants created after approval, and the frog-like false 玄龜 draft. These must not be reused merely because files exist locally.
+- After 玄龜 approval: classify ordinary attack / 潮震 as Procedural-first where possible; then freeze 玄龜 Blessings; then measure exact geometry and Motion Lite anchors; then run final asset audit before any production implementation.
+- Completed Level1–7 remain frozen. Verification remains impact-driven; do not rerun unrelated historical full-regression work.
 
 ---
 
