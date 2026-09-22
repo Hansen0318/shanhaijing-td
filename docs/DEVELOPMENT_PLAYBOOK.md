@@ -171,6 +171,16 @@ Record:
 
 Then mark the level released in `STATE.md`.
 
+### Gate K — Release cleanup
+After the release source is confirmed in `main` and Pages, and no unique unmerged work remains:
+- remove the completed isolated worktree;
+- remove disposable temp/build/debug/cache artifacts;
+- optionally remove the fully merged feature branch after ancestry/content verification;
+- preserve canonical docs, approved assets, production files, permanent tests and release evidence;
+- never delete the only recoverable copy of any unfinished work.
+
+This gate is cleanup-only and must not change shipped gameplay or reopen completed design.
+
 ## 4. Before every substantial action
 
 Even within the same conversation/session:
