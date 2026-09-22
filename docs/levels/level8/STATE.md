@@ -36,13 +36,13 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- exact measured path / Spawn / Base / T1–T8 / three wetland-pocket coordinates;
 - exact Environment Motion Lite anchors.
 
 ## Completed
 - Level8 canonical folder initialized.
 - map/display contract frozen.
 - player approved the Level8 Geometry Guide V1 route shape, upper-left Spawn, lower-center Base, and T1–T8 composition.
+- exact geometry is now frozen from the approved guide/background: Spawn, 16 path anchors, Base, T1–T8, and three irregular wetland polygons in 390×610 logical coordinates.
 - 長右 source art approved.
 - 蠱雕 source art approved.
 - 化蛇 source art approved.
@@ -54,7 +54,6 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
-- exact geometry measurement
 - Environment Motion Lite anchor measurement
 - final asset audit
 - implementation
@@ -75,4 +74,4 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**Measure exact path waypoints, Spawn, Base, T1–T8, and three wetland pockets from the already approved Level8 Geometry Guide/background without redesign.**
+**Freeze Environment Motion Lite anchors from visible background features only: fog, ripples, bubbles, and optional plant micro-motion if justified.**
