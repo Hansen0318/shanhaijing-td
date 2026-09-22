@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-22：Level8 玄龜 source art frozen / pre-production gate advanced
+
+- Confirmed remote `main` HEAD before this update: `2746d0d7bdd99c41849be8ad7a38228df7c16386`.
+- Player-approved canonical 玄龜 is now **APPROVED_FINAL**: deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, **no snake**, simplified large color blocks. Only the player-approved “這張可以” candidate is canonical.
+- The later extra 玄龜 variant and the **劇毒蛙王 / frog-type monster** are **REJECTED** and must not be used.
+- 長右、蠱雕、化蛇、化蛇 Boss HUD remain APPROVED_FINAL and must not be regenerated.
+- Player-approved Level8 geometry remains frozen at composition level: upper-left Spawn → asymmetric S/meander → lower-center Base; approved T1–T8 layout. Only coordinate measurement/interpolation is allowed; redesign is forbidden.
+- Level1–7 remain frozen. No unrelated full-regression work is authorized unless a shared change actually affects them.
+- Gate is now **VFX / BLESSING / GEOMETRY MEASUREMENT**. Production implementation remains NOT STARTED.
+- Fixed next order: (1) classify 玄龜 ordinary attack + 潮震 VFX Procedural-first; (2) freeze three 玄龜 Blessings; (3) measure path/Spawn/Base/T1–T8/three wetland pockets; (4) freeze Environment Motion Lite anchors; (5) final asset audit; (6) only then production implementation.
+- Next exact step: **玄龜 ordinary attack / 潮震 VFX classification, Procedural-first, no new image unless necessary.**
+
+---
+
 ## 2026-09-22：Level8 current state reconciled
 
 - Canonical Level8 state is now **ASSET REVIEW / GEOMETRY MEASUREMENT**; production implementation has not started.
