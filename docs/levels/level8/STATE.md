@@ -4,28 +4,27 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **MAP CONCEPT / DISPLAY CONTRACT**
+- Development phase: **BACKGROUND GENERATION / PLAYER REVIEW**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**MAP CONCEPT / DISPLAY CONTRACT**
+**BACKGROUND GENERATION / PLAYER REVIEW**
 
 ### Allowed now
-- define Level8 map composition and route shape;
-- freeze the background source aspect ratio + runtime battlefield/display contract before image generation;
-- decide Spawn/Base region, eight tower-slot composition, and approximate wetland-pocket placement;
-- define which background elements are intended candidates for Environment Motion Lite;
-- prepare one background-only generation direction after the display contract is frozen.
+- generate **one Level8 background candidate only** using the frozen map/display contract;
+- review the actual crop/composition at phone-oriented scale;
+- revise/regenerate the background if the player rejects it;
+- after player approval, normalize the approved source to the exact 39:61 runtime aspect and measure canonical geometry.
 
 ### Forbidden until gate exit
 - no production implementation;
-- no final path/slot/wetland coordinates until an actual background is approved and measured;
-- no character/Boss/HUD/deployable asset generation;
+- no final path/slot/wetland coordinates before the background is player-approved;
+- no character/Boss/HUD/玄龜/projectile asset generation;
 - no Work implementation handoff.
 
 ### Gate exit condition
-Freeze the map/display composition contract and explicitly allowlist **Level8 background only** for generation in `ASSETS.md`.
+Player approves the actual Level8 background candidate/crop.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -39,15 +38,14 @@ Freeze the map/display composition contract and explicitly allowlist **Level8 ba
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- Map composition / route shape / Spawn-Base arrangement.
-- Background source aspect ratio and runtime display contract.
-- Wetland-pocket composition and background Motion Lite candidates.
+- Actual Level8 background candidate/crop.
 
 ## Completed
 - Level8 canonical folder initialized.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
+- approved background
 - geometry
 - assets
 - implementation
@@ -67,4 +65,4 @@ Freeze the map/display composition contract and explicitly allowlist **Level8 ba
 - do not generate Level8 art before the corresponding asset is explicitly approved for generation.
 
 ## Next exact step
-**Freeze Level8 map composition + background/display contract, then open background-only generation.**
+**Generate one Level8 background candidate and obtain player approval before measuring geometry.**
