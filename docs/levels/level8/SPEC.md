@@ -25,6 +25,7 @@
 - **潮震**: every configured number of successful attacks, create a short-delay impact pulse at the target location; the pulse deals area damage and pushes non-Boss enemies a small distance backward along the path.
 - Bosses take the pulse damage but are not pushed.
 - 玄龜 must not duplicate 夫諸's slow, 白澤's vulnerability/debuff role, 句芒's global attack-speed support, 畢方's every-shot explosion pattern, or 應龍's penetration role.
+- Canonical source-art direction is frozen: deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, no snake, simplified large color blocks. The later extra 玄龜 variant and 劇毒蛙王 / frog-type draft are rejected.
 
 ## Numerical baseline
 
@@ -115,6 +116,7 @@
 - testing is impact-driven: targeted first, affected regressions only, full suite/browser smoke only when justified.
 
 ## Not yet approved
-- canonical map composition / path / tower slots / wetland pocket geometry;
-- Level8 source-art direction and final asset set;
+- exact measured path waypoints / Spawn / Base / T1–T8 / three wetland-pocket coordinates from the already player-approved Geometry Guide V1;
+- exact Environment Motion Lite anchors;
+- 玄龜 base-attack / 潮震 VFX classification and implementation details beyond the frozen gameplay numbers;
 - 玄龜 Blessings;
