@@ -1,14 +1,14 @@
 # Level8 — Geometry Contract
 
 ## Status
-**PLAYER-APPROVED ROUTE / TOWER LAYOUT — EXACT COORDINATES PENDING MEASUREMENT**
+**PLAYER-APPROVED ROUTE / TOWER LAYOUT — EXACT GEOMETRY MEASURED**
 
 ## Logical map
 - width: **390**
 - height: **610**
 - logical aspect ratio: **39:61**
 - canonical runtime background target: **780×1220** (exact 2× logical map, same 39:61 aspect)
-- generated source may be larger, but the approved composition must be normalized to the exact 39:61 runtime source before geometry measurement.
+- approved source pair is 1024×1536. Normalize by horizontal center-crop **x=21..1003** → **982×1536**, then scale to 390×610 logical (or 780×1220 runtime). This preserves the approved composition while matching 39:61.
 - runtime battlefield/display contract: **preserve the current full-width mobile battlefield behavior; do not introduce Level7-style narrow/pillarboxed containment.** Level8 background art is composed for the 390×610 logical canvas from the start.
 - background/crop: final normalized background should use the full source image; no post-approval partial crop that changes composition.
 
@@ -24,21 +24,52 @@
 
 ## Canonical path
 - **Shape / route placement: APPROVED by player from Level8 Geometry Guide V1.**
-- ordered waypoints: pending exact measurement from the approved guide/background
-- Spawn: pending exact measurement in the approved **upper-left** entry
-- Base: pending exact measurement at the approved **lower-center** sanctuary
-- Do not redesign the path shape during implementation; only measure/interpolate anchors needed to preserve the approved centerline.
+- logical coordinate system: **390×610**, origin at top-left after the 982×1536 normalization crop.
+- Spawn: **(44, 52)**
+- Ordered path anchors:
+  1. **(65, 79)**
+  2. **(135, 104)**
+  3. **(225, 118)**
+  4. **(303, 135)**
+  5. **(340, 166)**
+  6. **(314, 207)**
+  7. **(247, 229)**
+  8. **(172, 259)**
+  9. **(196, 291)**
+  10. **(247, 326)**
+  11. **(164, 358)**
+  12. **(120, 385)**
+  13. **(175, 423)**
+  14. **(250, 444)**
+  15. **(281, 471)**
+  16. **(248, 513)**
+- Base: **(231, 538)**
+- Runtime may add interpolation points only to follow this measured centerline smoothly. It must not move the approved bends or create a new route.
 
 ## Tower slots
 - **T1–T8 placement/composition: APPROVED by player from Level8 Geometry Guide V1.**
-- exact x/y coordinates: pending measurement from the approved guide/background
+- exact logical centers:
+  - T1 **(115, 133)**
+  - T2 **(289, 175)**
+  - T3 **(142, 230)**
+  - T4 **(269, 291)**
+  - T5 **(104, 332)**
+  - T6 **(267, 405)**
+  - T7 **(113, 440)**
+  - T8 **(342, 481)**
 - preserve the approved relative ordering and side-of-road placement; do not redistribute pads for convenience.
 - no tower slot should sit inside a wetland pocket or behind a major foreground prop.
 
 ## Special zones
-- target: **3 wetland pockets**, all sharing the global tide state
-- exact bounds: pending approved-background measurement
-- wetland shapes should follow visible water/marsh contours, not generic rectangles/ellipses.
+- **3 wetland pockets**, all sharing the global tide state.
+- These are measured as irregular on-path floodable polygons following the visibly wet/marsh-adjacent roadway rather than generic rectangles/ellipses.
+- Wetland A — upper-right bend:
+  - polygon: **[(292,140), (325,145), (348,160), (350,185), (334,208), (305,218), (285,205), (292,180)]**
+- Wetland B — middle S basin:
+  - polygon: **[(166,257), (202,250), (235,266), (252,292), (248,320), (222,338), (186,333), (168,306)]**
+- Wetland C — lower bend:
+  - polygon: **[(172,418), (210,414), (250,428), (283,452), (294,478), (280,504), (247,518), (225,496), (225,468), (198,447)]**
+- Polygon membership is the gameplay wetland test. Visual tide VFX must feather inside/around these contours and must not draw hard polygon outlines.
 
 ## Environment Motion Lite anchors
 - target budget: **3–4** subtle motions, measured from visible art only:
@@ -58,5 +89,5 @@
 ## Approval / runtime verification
 - Map/display composition contract: **FROZEN**
 - Route shape / Spawn-Base arrangement / T1–T8 composition: **PLAYER APPROVED**
-- Exact measured geometry: pending
-- Runtime/player smoke: pending
+- Exact measured geometry: **FROZEN FROM APPROVED GUIDE + BACKGROUND**
+- Runtime/player smoke: pending; only runtime overlay evidence may justify sub-pixel/interpolation refinement without changing the frozen route.
