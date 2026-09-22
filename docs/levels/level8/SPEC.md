@@ -85,6 +85,14 @@
 - 潮震 push distance: **18 path-distance units** backward for non-Boss enemies.
 - Bosses take 潮震 damage but are immune to the push.
 - A pushed enemy may not be moved behind Spawn; pushback changes path distance only and must preserve the canonical path/facing/spacing systems.
+- Base-attack VFX is procedural-only: compact cyan/teal water-core projectile with short trail.
+- 潮震 VFX is procedural-only: local 0.35s contraction telegraph followed by two expanding water-shock rings and a brief mist/splash accent; no persistent zone and no static image asset.
+
+### 玄龜 Blessings
+- **玄波** — 潮震 damage **+20% per layer**. Same-item maximum remains **2 layers**.
+- **闊潮** — 潮震 radius **+8 per layer**. Same-item maximum remains **2 layers**.
+- **回瀾** — 潮震 non-Boss push distance **+5 path-distance units per layer**. Same-item maximum remains **2 layers**; Boss push immunity remains unchanged.
+- Blessings do not change 潮震 trigger count, 0.35s delay, base attack interval, targeting, or wetland tide timing.
 
 ### W1–W10
 1. W1 — 長右 ×6, spawn interval **1.10s**
@@ -118,5 +126,3 @@
 ## Not yet approved
 - exact measured path waypoints / Spawn / Base / T1–T8 / three wetland-pocket coordinates from the already player-approved Geometry Guide V1;
 - exact Environment Motion Lite anchors;
-- 玄龜 base-attack / 潮震 VFX classification and implementation details beyond the frozen gameplay numbers;
-- 玄龜 Blessings;

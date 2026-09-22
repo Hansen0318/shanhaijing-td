@@ -12,8 +12,6 @@
 **VFX / BLESSING / GEOMETRY MEASUREMENT**
 
 ### Allowed now
-- classify 玄龜 base attack / 潮震 VFX with a Procedural-first default;
-- freeze the three 玄龜 Blessings;
 - preserve the player-approved Level8 Geometry Guide V1 path/tower composition;
 - measure exact path anchors / T1–T8 coordinates from the approved guide/background without redesigning them;
 - define wetland-pocket and Environment Motion Lite anchors from visible marsh features only.
@@ -24,7 +22,7 @@
 - no Work implementation handoff until 玄龜 VFX/Blessings, exact geometry, Environment Motion Lite anchors, and final asset audit are finalized.
 
 ### Gate exit condition
-Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured geometry / wetland anchors and complete the final asset audit.
+Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchors, then complete the final asset audit.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -38,9 +36,8 @@ Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured g
 - Environment Motion Lite is part of the Level8 design goal; exact elements are measured only after a background is approved.
 
 ## Current proposals — not yet frozen
-- 玄龜 base-attack / 潮震 VFX classification;
-- 玄龜 three Blessings;
-- exact measured path / T1–T8 / wetland-pocket coordinates.
+- exact measured path / Spawn / Base / T1–T8 / three wetland-pocket coordinates;
+- exact Environment Motion Lite anchors.
 
 ## Completed
 - Level8 canonical folder initialized.
@@ -52,11 +49,11 @@ Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured g
 - 化蛇 Boss HUD approved.
 - 玄龜 source art **APPROVED_FINAL**: deep-green turtle body, gold shell ornaments, cyan water-pattern / water-vapor accents, no snake, simplified large color blocks; only the player-approved “這張可以” candidate is canonical.
 - Later extra 玄龜 variant and the 劇毒蛙王 / frog-type monster are **REJECTED** and must not be used.
+- 玄龜 ordinary attack / 潮震 VFX are frozen **procedural-only**; no static VFX art required.
+- 玄龜 Blessings frozen: **玄波** (+20% 潮震 damage/layer), **闊潮** (+8 radius/layer), **回瀾** (+5 non-Boss push path-distance/layer); max 2 layers each.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
 
 ## Not completed
-- 玄龜 base-attack / 潮震 VFX classification
-- 玄龜 three Blessings
 - exact geometry measurement
 - Environment Motion Lite anchor measurement
 - final asset audit
@@ -78,4 +75,4 @@ Freeze 玄龜 VFX classification + three Blessings, then freeze exact measured g
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**Classify 玄龜 ordinary attack and 潮震 VFX using Procedural-first; generate no new image unless static art is proven necessary.**
+**Measure exact path waypoints, Spawn, Base, T1–T8, and three wetland pockets from the already approved Level8 Geometry Guide/background without redesign.**

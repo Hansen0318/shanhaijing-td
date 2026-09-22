@@ -1,5 +1,20 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 玄龜 VFX / Blessings frozen
+
+- 玄龜 ordinary attack and 潮震 VFX are frozen **procedural-only**; no new static image asset is required.
+- Base attack: compact cyan/teal water-core projectile + short soft trail, single-target only.
+- 潮震: local **0.35s** contraction/water-glyph telegraph → two expanding water-shock rings + brief mist/splash accent. It is transient and must not read as a persistent wetland zone.
+- VFX is presentation-only and does not change the frozen trigger count, damage, radius, delay, push distance, targeting, ProjectileSpeed, or attack timing.
+- 玄龜 Blessings frozen, inherited same-item max **2 layers**:
+  - **玄波**: 潮震 damage +20% / layer.
+  - **闊潮**: 潮震 radius +8 / layer.
+  - **回瀾**: non-Boss 潮震 push distance +5 path-distance / layer; Boss push immunity unchanged.
+- These Blessings intentionally do not add slow, vulnerability, global attack-speed support, penetration, or every-shot AoE, preserving the existing roster roles.
+- Current gate remains pre-production. Next exact step: **measure exact path / Spawn / Base / T1–T8 / three wetland pockets from the approved Level8 geometry without redesign.**
+
+---
+
 ## 2026-09-22：Level8 玄龜 source art frozen / pre-production gate advanced
 
 - Confirmed remote `main` HEAD before this update: `2746d0d7bdd99c41849be8ad7a38228df7c16386`.
