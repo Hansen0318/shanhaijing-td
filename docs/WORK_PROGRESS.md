@@ -1,5 +1,16 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 canonical-guide recheck / Base label follow-up
+
+- Player reconfirmed `Level8 Geometry Guide V1` as the sole geometry reference.
+- Fresh pixel-to-logical comparison confirmed existing Spawn, 16 path anchors, Base and T1–T8 already match the approved guide after canonical normalization; the earlier large mismatch came from an incorrectly scaled comparison overlay, not production geometry.
+- PR #68 merged to `main` at `12435e8c5820a8dafc50ab7ec92f12f0ae6f616b`.
+- Level8 `幽冥靈核` label now renders centered below the canonical Base waypoint instead of the map lower-right.
+- Geometry/gameplay values unchanged. 化蛇 follow-up deferred until map/base phone recheck.
+- Next exact step: player rechecks map/base presentation; then address 化蛇 readability only if still needed.
+
+---
+
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
 - Released code baseline: `main` = **`16e32268838de8a39824383e649928f5b9a718b7`** (PR #66); later commits may contain release-closure docs only.
