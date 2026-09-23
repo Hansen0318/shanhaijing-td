@@ -123,7 +123,7 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   huashe: Object.freeze({ left: '11.6%', top: '60.9%', width: '76.7%', height: '17.3%' }),
 });
 
-const ASSET_CACHE_VERSION = 'level8-2';
+const ASSET_CACHE_VERSION = 'level8-3';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
