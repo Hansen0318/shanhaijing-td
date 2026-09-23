@@ -873,6 +873,12 @@ export class Renderer {
   drawLabels(ctx, game) {
     const map = game.level.map;
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = 'bold 11px system-ui'; ctx.fillStyle = '#d7e7d8'; ctx.fillText('敵人入口', 10, 38);
+    if (game.level.id === 8) {
+      const base = map.waypoints.at(-1);
+      ctx.textAlign = 'center';
+      ctx.fillText(game.level.baseName, base.x, Math.min(map.height - 12, base.y + 28));
+      return;
+    }
     ctx.textAlign = 'right'; ctx.fillText(game.level.baseName, map.width - 10, map.height - 20);
   }
 }

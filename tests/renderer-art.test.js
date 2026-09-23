@@ -140,6 +140,13 @@ test('Level8 renderer uses the approved background crop, eight slots, wetlands a
   assert.ok(ctx.calls.ellipse.length >= 2, 'ripple and bubble anchors must remain visibly animated');
 });
 
+test('Level8 base label is centered below the canonical Base instead of the map corner', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.render(emptyGame(LEVELS[8]));
+  const label = ctx.calls.fillText.find(args => args[0] === '幽冥靈核');
+  assert.deepEqual(label, ['幽冥靈核', 231, 566]);
+});
+
 test('Xuangui projectile and delayed shock render procedurally without static VFX art', () => {
   const { renderer, ctx } = rendererFixture();
   renderer.drawProjectiles(ctx, { projectiles: [{ type: 'xuangui', x: 30, y: 40, targetPoint: { x: 70, y: 50 } }] });
