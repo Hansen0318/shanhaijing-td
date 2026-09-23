@@ -1,5 +1,24 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 FINAL ASSET AUDIT PASS / production gate open
+
+- Player re-uploaded the six concrete approved Level8 source files: clean background, 長右, 蠱雕, 化蛇, 化蛇 Boss HUD, 玄龜.
+- Corrected source-handling contract: **background stays JPEG; player does not need to supply transparent PNGs.** Chat performs runtime conversion/optimization for approved character/UI source art.
+- Runtime candidates produced and statically audited:
+  - background 780×1220 JPEG, **373.9 KB**;
+  - 長右 256×228 RGBA PNG, **94.8 KB**;
+  - 蠱雕 256×244 RGBA PNG, **105.3 KB**;
+  - 化蛇 512×501 RGBA PNG, **329.5 KB**;
+  - 玄龜 256×216 RGBA PNG, **96.7 KB**;
+  - 化蛇 Boss HUD 768×183 RGBA PNG, **172.8 KB**.
+- Dark/light contact-sheet inspection: transparent characters show no white rectangular backgrounds or obvious edge halos; pale internal details are preserved. HUD outer white background + HP channel are transparent while the approved upper dark name panel remains.
+- Packaged `shanhaijing_td_level8_package.zip` with canonical source/, runtime_candidates/, Geometry Guide reference, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, and a minimal `WORK_INTEGRATION_PROMPT.txt`.
+- **FINAL ASSET AUDIT: PASS.**
+- Pre-production gates are complete. Production implementation may now start; Work must not redo frozen design/assets/geometry/Motion Lite.
+- Next exact step: **repository/runtime implementation + executable verification on a feature branch, then AGENTS.md Section 8 release closure.**
+
+---
+
 ## 2026-09-23：Level8 Environment Motion Lite anchors frozen
 
 - Frozen four low-frequency procedural motions from visible features on the approved clean background:

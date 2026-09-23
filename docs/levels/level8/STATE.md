@@ -53,9 +53,9 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - 玄龜 ordinary attack / 潮震 VFX are frozen **procedural-only**; no static VFX art required.
 - 玄龜 Blessings frozen: **玄波** (+20% 潮震 damage/layer), **闊潮** (+8 radius/layer), **回瀾** (+5 non-Boss push path-distance/layer); max 2 layers each.
 - Work-budget/no-repeat/no-stall governance already lives in project-wide rules and must not be duplicated here.
+- FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- final asset audit
 - implementation
 - verification
 - release
@@ -74,4 +74,4 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**Run the Level8 final asset audit against concrete player re-uploaded final files; do not package or enter production until the approved source set is byte-level verified.**
+**FINAL ASSET AUDIT PASS. Enter production implementation using the audited runtime candidates; do not redo Level8 design, asset selection, geometry, VFX or Motion Lite planning.**
