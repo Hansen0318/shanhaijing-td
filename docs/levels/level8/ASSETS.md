@@ -24,7 +24,7 @@
 | Normal enemy B — 蠱雕 | gameplay sprite | PNG-first | APPROVED_FINAL |
 | Boss — 化蛇 | gameplay sprite | PNG-first | APPROVED_FINAL |
 | 化蛇 Boss HUD empty slot | Boss UI | PNG-first | APPROVED_FINAL |
-| Environment Motion Lite | living-map visuals | Procedural-first by default | PENDING_DISCUSSION |
+| Environment Motion Lite | living-map visuals | Procedural-only | PROCEDURAL_FIRST |
 | 玄龜 base attack VFX | single-target projectile | Procedural-only | PROCEDURAL_FIRST |
 | 玄龜 潮震 VFX | delayed area pulse / pushback readability | Procedural-only | PROCEDURAL_FIRST |
 | New deployable — 玄龜 | gameplay sprite | PNG-first | APPROVED_FINAL |
@@ -71,3 +71,12 @@
 - Boss impact uses the same damage pulse but no displacement cue beyond the hit effect because Bosses are push-immune.
 - No static PNG/JPG VFX is required for either effect. Revisit image generation only if runtime implementation demonstrates a concrete readability failure that procedural drawing cannot solve.
 - Presentation only: VFX must not alter Damage, interval, ProjectileSpeed, trigger count, delay, radius, push distance, targeting, or hit timing.
+
+
+## Environment Motion Lite — frozen procedural set
+- M1 left-basin ground fog drift: logical bounds **(8,166,86,66)**.
+- M2 central-pool sparse ripple arcs: **(205,143,78,55)**.
+- M3 right-middle marsh bubble clusters: **(304,229,69,63)**.
+- M4 middle-lower reed micro-sway: **(247,306,52,46)**.
+- No static VFX image is required for these motions.
+- Motion Lite remains presentation-only and must not change tide timing, wetland polygons, path geometry, tower slots, targeting, or combat values.

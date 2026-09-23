@@ -72,13 +72,26 @@
 - Polygon membership is the gameplay wetland test. Visual tide VFX must feather inside/around these contours and must not draw hard polygon outlines.
 
 ## Environment Motion Lite anchors
-- target budget: **3–4** subtle motions, measured from visible art only:
-  1. slow ground-fog drift across one low basin;
-  2. ripple motion inside visible wetland water;
-  3. occasional bubble clusters in one marsh pool;
-  4. optional bioluminescent plant breathing only if the approved background contains a clear plant cluster.
-- exact anchors/widths/heights: pending approved-background measurement
-- do not invent motion locations that are not visible environmental features.
+- Budget: **4 subtle motions**, all measured from visible background features in the normalized 390×610 logical map.
+- **M1 — ground fog drift**
+  - bounds: **x=8, y=166, w=86, h=66**
+  - feature: left-side low marsh basin around the half-submerged stone head / dead roots.
+  - motion: slow horizontal drift + opacity breathing only; no bright glow.
+- **M2 — water ripple**
+  - bounds: **x=205, y=143, w=78, h=55**
+  - feature: central open pool around the wrecked boat / lily pads.
+  - motion: sparse expanding ripple arcs with long idle gaps; keep them below enemy/projectile contrast.
+- **M3 — bubble clusters**
+  - bounds: **x=304, y=229, w=69, h=63**
+  - feature: right-middle marsh pool beside the wooden bridge / posts.
+  - motion: occasional 2–4 small bubbles rising and fading locally; no continuous particle fountain.
+- **M4 — reed micro-sway**
+  - bounds: **x=247, y=306, w=52, h=46**
+  - feature: clear reed cluster beside the middle-lower road bend.
+  - motion: very small low-frequency sway, phase-offset across 2–3 reed groups; no whole-patch translation.
+- These anchors are presentation-only and do not define gameplay wetland membership; gameplay uses the three frozen wetland polygons above.
+- Keep all four motions low-frequency and low-luminance. They must not resemble attack telegraphs, tide activation boundaries, tower range indicators, or Boss skills.
+- Do not invent additional motion locations during implementation unless runtime readability proves one of these unusable; any replacement must remain tied to a visible background feature and must not alter gameplay geometry.
 
 ## Anchor / footprint notes
 - Background generation must leave the route and tower-slot candidate land visually readable at phone scale.
