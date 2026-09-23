@@ -1,6 +1,6 @@
-import { Game } from './core/Game.js?v=level8-3';
-import { Renderer } from './render/Renderer.js?v=level8-4';
-import { UIController } from './ui/UIController.js?v=level8-3';
+import { Game } from './core/Game.js?v=level8-5';
+import { Renderer } from './render/Renderer.js?v=level8-5';
+import { UIController } from './ui/UIController.js?v=level8-5';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-3';
 import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level8-3';
 

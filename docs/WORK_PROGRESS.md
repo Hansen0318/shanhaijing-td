@@ -13,6 +13,14 @@
 
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
+- **2026-09-23 narrow active fix:** player phone evidence showed Level8 path/tower/Base presentation is uniformly low against the clean background.
+- Root cause confirmed by image registration: Geometry Guide V1 map content is ~48 source px lower than the clean approved background = ~19 logical px at 390×610.
+- Active branch: `fix/level8-guide-clean-registration-20260923`.
+- Scope: apply **Y -19** to all guide-derived background-registered Level8 geometry; X unchanged. Base-name label follows corrected Base. 化蛇 follow-up is deferred.
+- Next exact step: merge/deploy this narrow correction, then player phone recheck.
+
+## PREVIOUS RELEASE POINTER
+
 - Released code baseline: `main` = **`16e32268838de8a39824383e649928f5b9a718b7`** (PR #66); later commits may contain release-closure docs only.
 - Current product state: **Level1–8 released; Level8 post-release phone alignment fix RELEASE COMPLETE / FROZEN**.
 - Active implementation branch: **none required for recovery**; `fix/level8-post-release-alignment-20260923` is fully merged.

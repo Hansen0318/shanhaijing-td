@@ -1,4 +1,4 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-3';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-5';
 import { ArtStore } from '../config/artAssets.js?v=level8-3';
 import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
 import { MotionSystem } from '../systems/MotionSystem.js?v=level8-3';

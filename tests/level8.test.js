@@ -25,26 +25,26 @@ test('Level8 uses the frozen 幽冥沼澤 identity and exact runtime geometry', 
   assert.equal(level.art.background, 'level8Background');
   assert.deepEqual(level.art.backgroundCrop, { x: 0, y: 0, width: 780, height: 1220 });
   assert.deepEqual(LEVEL8_MAP_DATA.waypoints, [
-    { x: 44, y: 52 }, { x: 65, y: 79 }, { x: 135, y: 104 }, { x: 225, y: 118 },
-    { x: 303, y: 135 }, { x: 340, y: 166 }, { x: 314, y: 207 }, { x: 247, y: 229 },
-    { x: 172, y: 259 }, { x: 196, y: 291 }, { x: 247, y: 326 }, { x: 164, y: 358 },
-    { x: 120, y: 385 }, { x: 175, y: 423 }, { x: 250, y: 444 }, { x: 281, y: 471 },
-    { x: 248, y: 513 }, { x: 231, y: 538 },
+    { x: 44, y: 33 }, { x: 65, y: 60 }, { x: 135, y: 85 }, { x: 225, y: 99 },
+    { x: 303, y: 116 }, { x: 340, y: 147 }, { x: 314, y: 188 }, { x: 247, y: 210 },
+    { x: 172, y: 240 }, { x: 196, y: 272 }, { x: 247, y: 307 }, { x: 164, y: 339 },
+    { x: 120, y: 366 }, { x: 175, y: 404 }, { x: 250, y: 425 }, { x: 281, y: 452 },
+    { x: 248, y: 494 }, { x: 231, y: 519 },
   ]);
   assert.deepEqual(LEVEL8_MAP_DATA.slots, [
-    { x: 115, y: 133 }, { x: 289, y: 175 }, { x: 142, y: 230 }, { x: 269, y: 291 },
-    { x: 104, y: 332 }, { x: 267, y: 405 }, { x: 113, y: 440 }, { x: 342, y: 481 },
+    { x: 115, y: 114 }, { x: 289, y: 156 }, { x: 142, y: 211 }, { x: 269, y: 272 },
+    { x: 104, y: 313 }, { x: 267, y: 386 }, { x: 113, y: 421 }, { x: 342, y: 462 },
   ]);
   assert.deepEqual(LEVEL8_MAP_DATA.wetlandZones, [
-    { id: 'A', points: [{ x: 292, y: 140 }, { x: 325, y: 145 }, { x: 348, y: 160 }, { x: 350, y: 185 }, { x: 334, y: 208 }, { x: 305, y: 218 }, { x: 285, y: 205 }, { x: 292, y: 180 }] },
-    { id: 'B', points: [{ x: 166, y: 257 }, { x: 202, y: 250 }, { x: 235, y: 266 }, { x: 252, y: 292 }, { x: 248, y: 320 }, { x: 222, y: 338 }, { x: 186, y: 333 }, { x: 168, y: 306 }] },
-    { id: 'C', points: [{ x: 172, y: 418 }, { x: 210, y: 414 }, { x: 250, y: 428 }, { x: 283, y: 452 }, { x: 294, y: 478 }, { x: 280, y: 504 }, { x: 247, y: 518 }, { x: 225, y: 496 }, { x: 225, y: 468 }, { x: 198, y: 447 }] },
+    { id: 'A', points: [{ x: 292, y: 121 }, { x: 325, y: 126 }, { x: 348, y: 141 }, { x: 350, y: 166 }, { x: 334, y: 189 }, { x: 305, y: 199 }, { x: 285, y: 186 }, { x: 292, y: 161 }] },
+    { id: 'B', points: [{ x: 166, y: 238 }, { x: 202, y: 231 }, { x: 235, y: 247 }, { x: 252, y: 273 }, { x: 248, y: 301 }, { x: 222, y: 319 }, { x: 186, y: 314 }, { x: 168, y: 287 }] },
+    { id: 'C', points: [{ x: 172, y: 399 }, { x: 210, y: 395 }, { x: 250, y: 409 }, { x: 283, y: 433 }, { x: 294, y: 459 }, { x: 280, y: 485 }, { x: 247, y: 499 }, { x: 225, y: 477 }, { x: 225, y: 449 }, { x: 198, y: 428 }] },
   ]);
   assert.deepEqual(LEVEL8_MAP_DATA.environmentMotion, {
-    fog: { x: 8, y: 166, width: 86, height: 66 },
-    ripple: { x: 205, y: 143, width: 78, height: 55 },
-    bubbles: { x: 304, y: 229, width: 69, height: 63 },
-    reeds: { x: 247, y: 306, width: 52, height: 46 },
+    fog: { x: 8, y: 147, width: 86, height: 66 },
+    ripple: { x: 205, y: 124, width: 78, height: 55 },
+    bubbles: { x: 304, y: 210, width: 69, height: 63 },
+    reeds: { x: 247, y: 287, width: 52, height: 46 },
   });
 });
 

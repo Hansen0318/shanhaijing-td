@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-3';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-5';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js?v=level8-3';
