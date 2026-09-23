@@ -14,7 +14,7 @@
 ### Allowed now
 - verify and release the player-reported Level8 alignment correction;
 - correct only concrete road-center, tower-pad, and fixed-footprint Huashe HUD defects;
-- keep all frozen gameplay, progression, timing, stats, and canonical geometry unchanged.
+- keep configured waves, stats, tide timing, progression, and all canonical anchors unchanged; only approved runtime interpolation samples may change.
 
 ### Forbidden until gate exit
 - no gameplay/design redesign, asset regeneration, geometry remeasurement, or map recrop;
@@ -70,6 +70,7 @@ Review and merge the narrow fix, deploy Pages, then verify Level8 at 390 px / 39
 - background normalization re-audit: PASS; runtime asset matches canonical center-crop/resize pipeline.
 - canonical Spawn/Base/path anchors and T1–T8: unchanged.
 - path/pad targeted renderer tests: **34/34 PASS**.
+- runtime curve audit: old/new route lengths **1048.771 → 1058.486 (+0.926%)**; maximum curve departure **3.64 logical px**, within the 54 px road width; no canonical anchor moved.
 - enemy anchor + affected motion/spacing regressions: **60/60 PASS**.
 - Huashe fixed-footprint HUD/cache regressions: **52/52 PASS**.
 - full `npm test`: **240/240 PASS**.
