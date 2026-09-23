@@ -2,14 +2,13 @@
 
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
-- Repository baseline: latest remote `main` = **`301258e3c166884e64a21499ee512e7858022ef4`**.
-- Current product state: **Level1–8 released; Level8 frozen gameplay with a narrow evidence-backed phone alignment fix in release verification**.
-- Active implementation branch: **`fix/level8-post-release-alignment-20260923`**.
-- Latest remote safe-push checkpoint: **`8001a8cfba1b4aed6163f66c1a46b4bcc6b85226`**; earlier checkpoints `2a4db63`, `3864738`.
-- Completed fixes: canonical background confirmed unchanged; Level8 curve interpolation corrected without moving anchors; tower-pad and 長右／蠱雕 alpha-centroids aligned; Huashe panel uses its fixed-44px compatible slice; cache version advanced.
-- Targeted evidence: path/pad **34/34 PASS**; enemy/motion/spacing **60/60 PASS**; Huashe HUD/cache **52/52 PASS**.
-- Full engineering verification: `npm test` **240/240 PASS**; `npm run check`, changed-JS syntax checks, and release-diff whitespace check PASS.
-- Next exact step: full suite + fresh review → merge `main` → Pages/public 390 px and 390×700 verification → player-phone recheck only.
+- Released code baseline: `main` = **`16e32268838de8a39824383e649928f5b9a718b7`** (PR #66); later commits may contain release-closure docs only.
+- Current product state: **Level1–8 released; Level8 post-release phone alignment fix RELEASE COMPLETE / FROZEN**.
+- Active implementation branch: **none required for recovery**; `fix/level8-post-release-alignment-20260923` is fully merged.
+- Safe-push history: `2a4db63`, `3864738`, `8001a8c`, `1c30c43`, `7daae91`.
+- Engineering verification: targeted **34/34**, **60/60**, **52/52**; full `npm test` **240/240 PASS**; check/syntax/diff PASS; fresh review found no Critical/Important issues.
+- Pages/public verification: `level8-3` live; Level8 dev entry/5-owned exact-3 lineup PASS; 390×700 pads/enemy path/Huashe P1/P2 PASS; Huashe and Level7 Kui retain the same 44 px HUD slot and 426 px battlefield.
+- Next exact step: **player physical-phone recheck of the three corrected visuals only; otherwise initialize Level9 when requested**.
 - Next level: **Level9 is not initialized yet**.
 - If the player asks to develop the next level, initialize `docs/levels/level9/` from `docs/levels/_TEMPLATE/`, set PROGRESSION / SCOPE, update this pointer, and continue Chat-first.
 - If a future session resumes an in-progress level, this pointer must instead name that active level, remote feature branch, latest safe-push SHA, current gate, verification already completed, blocker (if any), and singular next exact step.
@@ -28,6 +27,15 @@
 - Active branch/checkpoints: `fix/level8-post-release-alignment-20260923` at `2a4db63` → `3864738` → `8001a8c`.
 - Full engineering verification: `npm test` **240/240 PASS**; `npm run check`, changed-JS syntax checks, and release-diff whitespace check PASS.
 - Remaining gate: fresh final review, merge/deploy, public 390/390×700 smoke, then player-phone recheck.
+
+### Release closure
+
+- Fresh final review: Ready to merge, no Critical/Important findings.
+- PR #66 merged to `main` at `16e32268838de8a39824383e649928f5b9a718b7`.
+- Pages serves cache version `level8-3`.
+- Public 390×700 evidence: Level8 tower pads and marsh enemies visually align; Huashe P1/P2 HUD is 44 px with a 426 px battlefield, identical outer footprint to Level7 Kui; no battlefield compression.
+- Public dev menu and Level8 five-owned exact-three lineup PASS.
+- Remaining acceptance is the player's physical-phone recheck only.
 
 ---
 
