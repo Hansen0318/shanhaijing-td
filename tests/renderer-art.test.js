@@ -78,6 +78,21 @@ test('each enemy sprite visible center stays on its logical path anchor', () => 
   }
 });
 
+test('Level8 tower-pad visible centroid lands on each frozen tower slot', () => {
+  const { renderer, ctx } = rendererFixture({ art: fakeArt({ slotPlatform: [256, 197] }) });
+  const game = emptyGame(LEVELS[8]);
+  renderer.render(game);
+
+  const draws = ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform');
+  const firstSlot = LEVELS[8].map.slots[0];
+  const firstDraw = draws[0];
+  const renderedScale = firstDraw[4] / firstDraw[0].naturalHeight;
+  const platformTranslations = ctx.calls.translate.filter(([x]) => LEVELS[8].map.slots.some(slot => slot.x === x));
+  const visibleCenterY = platformTranslations[0][1] + firstDraw[2] + 115.842 * renderedScale;
+  assert.ok(Math.abs(visibleCenterY - firstSlot.y) <= 0.2,
+    `tower pad visible center is ${visibleCenterY - firstSlot.y}px away from its frozen slot`);
+});
+
 function emptyGame(level = LEVELS[1]) {
   return {
     level,
