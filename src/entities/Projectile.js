@@ -1,5 +1,5 @@
-import { CombatSystem } from '../systems/CombatSystem.js';
-import { StatusSystem } from '../systems/StatusSystem.js';
+import { CombatSystem } from '../systems/CombatSystem.js?v=level8-2';
+import { StatusSystem } from '../systems/StatusSystem.js?v=level8-2';
 
 export class Projectile {
   constructor(tower, target, stats, modifiers, effects = [], pendingShocks = []) {

@@ -16,7 +16,7 @@
 - Level8 environment mechanic: **潮位 / 濕地活化**. Several map wetland pockets are normally quiet; a shared tide cycle temporarily activates them together. This is not an A/B alternation and must not visually copy Level6 sunlight or Level7 thunder zones.
 - 化蛇 P1 periodically forces an early high-tide activation. P2 begins once at the Boss HP threshold to be frozen in the numerical gate, increases the forced-tide pressure, and may make all approved wetland pockets active during its surge window.
 - Environment telegraph uses low-luminance ripple / drifting mist / bubble activity instead of bright rectangular or elliptical fields.
-- Environment Motion Lite is a required presentation layer for Level8; exact visual effects/anchors remain blocked until the background is approved.
+- Environment Motion Lite is a required presentation layer for Level8; its approved fog/ripple/bubble/reed anchors are frozen in `GEOMETRY.md`.
 
 ## New deployable unlocked by Level8 clear
 - **玄龜** becomes the sixth owned deployable after the first Level8 clear through the existing data-driven unlock flow.

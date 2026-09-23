@@ -78,7 +78,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   for (const state of ['level5', 'level6', 'level6wave1', 'sunlightA', 'sunlightB', 'jinwu1', 'jinwu2', 'jinwu25', 'level6victory', 'level6retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level8-1/);
+  assert.match(smoke, /index\.html\?v=level8-2/);
 });
 
 test('dev menu and guarded direct controls include Level7 thunder, Kui phases, victory, and retry', async () => {
@@ -96,20 +96,23 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   for (const state of ['level7', 'level7wave1', 'thunderA', 'thunderB', 'kui1', 'kui2', 'kui25', 'level7victory', 'level7retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level8-1/);
+  assert.match(smoke, /index\.html\?v=level8-2/);
 });
 
 test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory, and retry', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  const dev = await readFile(new URL('../src/dev/LevelEightDev.js', import.meta.url), 'utf8');
   const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /data-dev-level="8"/);
   assert.match(main, /data-dev-level="8"/);
   assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
-  assert.match(main, /function setupLevelEightDev\(game, devLevel\)/);
+  assert.match(main, /setupLevelEightDev\(game, devLevel, params\)/);
   assert.match(main, /game\.level\.map\.wetlandZones/);
-  assert.match(main, /game\.spawnEnemy\('huashe'\)/);
-  assert.match(main, /game\.unlockedBeasts\.add\('xuangui'\)/);
+  assert.match(dev, /game\.spawnEnemy\('huashe'\)/);
+  assert.match(dev, /game\.unlockedBeasts\.add\('xuangui'\)/);
+  assert.match(dev, /params\.get\('devVictory'\)/);
+  assert.match(dev, /params\.get\('devRetry'\)/);
   for (const state of ['level8', 'level8wave1', 'tideTelegraph', 'tideHigh', 'huashe1', 'huashe2', 'xuanguiShock', 'level8victory', 'level8retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
@@ -118,11 +121,21 @@ test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory,
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
-  assert.match(html, /styles\.css\?v=level8-1/);
-  assert.match(html, /styles-fixes\.css\?v=level8-1/);
-  assert.match(html, /styles-lineup\.css\?v=level8-1/);
-  assert.match(html, /src\/main\.js\?v=level8-1/);
-  assert.match(game, /WaveManager\.js\?v=level8-1/);
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  const enemy = await readFile(new URL('../src/entities/Enemy.js', import.meta.url), 'utf8');
+  const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
+  const progression = await readFile(new URL('../src/config/progressionData.js', import.meta.url), 'utf8');
+  for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css', 'src/main.js']) {
+    assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=level8-2`));
+  }
+  for (const module of ['Game', 'Renderer', 'UIController', 'artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level8-2`));
+  for (const module of ['gameData', 'GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'BossSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData', 'TideSystem']) {
+    assert.match(game, new RegExp(`${module}\\.js\\?v=level8-2`));
+  }
+  assert.match(enemy, /StatusSystem\.js\?v=level8-2/);
+  assert.match(projectile, /CombatSystem\.js\?v=level8-2/);
+  assert.match(projectile, /StatusSystem\.js\?v=level8-2/);
+  assert.match(progression, /gameData\.js\?v=level8-2/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

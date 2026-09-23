@@ -109,6 +109,18 @@ test('forced tide starts immediately and overlapping calls refresh rather than s
   assert.equal(game.tide.activationId, 1, 'a refresh is still the same uninterrupted activation');
 });
 
+test('forced tide restarts one exact window instead of extending into the natural high phase', () => {
+  const game = new Game(() => 0.2, 8);
+  TideSystem.update(game, 6.8);
+  assert.equal(game.tide.telegraph, true);
+  TideSystem.forceHighTide(game, 2.4);
+  TideSystem.update(game, 2.39);
+  assert.equal(game.tide.high, true);
+  TideSystem.update(game, 0.01);
+  assert.equal(game.tide.high, false);
+  assert.equal(game.tide.telegraph, false);
+});
+
 test('長右 mud leap triggers once per wetland patch activation and never buffs 化蛇', () => {
   const game = new Game(() => 0.2, 8);
   const changyou = game.spawnEnemy('changyou');
@@ -253,4 +265,21 @@ test('潮震 waits 0.35s, damages the area, pushes only non-Boss path distance, 
   assert.equal(boss.pathDistance, 70, 'Boss receives damage but is push-immune');
   assert.deepEqual({ x: normal.x, y: normal.y }, game.map.positionAt(62));
   assert.equal(game.effects.filter(effect => effect.type === 'xuanguiShock').length, 1);
+});
+
+test('wave completion waits for a queued final-hit 潮震 to resolve', () => {
+  const game = new Game(() => 0.2, 8);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.wave.waveNumber = 1;
+  game.wave.active = true;
+  game.wave.queue.length = 0;
+  game.wave.spawnedAlive = 0;
+  game.pendingShocks.push({ x: 100, y: 100, remaining: 0.35, radius: 52, damage: 18, pushback: 18 });
+
+  game.update(0);
+  assert.equal(game.state, 'combat');
+  for (let index = 0; index < 4; index += 1) game.update(0.1);
+  assert.equal(game.pendingShocks.length, 0);
+  assert.equal(game.state, 'blessing');
 });

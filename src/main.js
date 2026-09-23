@@ -1,7 +1,8 @@
-import { Game } from './core/Game.js?v=level8-1';
-import { Renderer } from './render/Renderer.js?v=level8-1';
-import { UIController } from './ui/UIController.js?v=level8-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-1';
+import { Game } from './core/Game.js?v=level8-2';
+import { Renderer } from './render/Renderer.js?v=level8-2';
+import { UIController } from './ui/UIController.js?v=level8-2';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-2';
+import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level8-2';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }
@@ -102,41 +103,6 @@ function drawPathDebug(renderer, game) {
     ctx.stroke();
   });
   ctx.restore();
-}
-
-function setupLevelEightDev(game, devLevel) {
-  if (devLevel !== 8) return;
-  const devWave = Number.parseInt(params.get('devWave') ?? '', 10);
-  const devBossPhase = Number.parseInt(params.get('devBossPhase') ?? '', 10);
-  const devTide = params.get('devTide');
-  const devXuangui = params.get('devXuangui') === '1';
-  const needsBattlefield = params.get('devPath') === '1' || Number.isInteger(devWave)
-    || [1, 2].includes(devBossPhase) || ['telegraph', 'high'].includes(devTide) || devXuangui;
-  if (!needsBattlefield) return;
-  if (devXuangui) game.unlockedBeasts.add('xuangui');
-  for (const type of devXuangui ? ['xuangui', 'bifang', 'jumang'] : ['bifang', 'baize', 'jumang']) game.toggleLineup(type);
-  game.confirmLineup();
-  if (devTide === 'telegraph') game.tide.elapsed = 6.8;
-  if (devTide === 'high') game.tide.forcedRemaining = 2.4;
-  if ([1, 2].includes(devBossPhase)) {
-    game.wave.waveNumber = 9;
-    game.startWaveNow();
-    game.wave.queue.length = 0;
-    game.wave.spawnedAlive = 1;
-    const boss = game.spawnEnemy('huashe');
-    if (devBossPhase === 2) { boss.hp = boss.maxHp * 0.5; game.update(0); }
-    return;
-  }
-  if (devXuangui) {
-    game.economy.add(1000);
-    game.buildTower(0, 'xuangui');
-    game.wave.waveNumber = 0;
-    game.startWaveNow();
-  } else if (devWave >= 1 && devWave <= 10) {
-    game.wave.waveNumber = devWave - 1;
-    game.startWaveNow();
-  }
-  game.update(0);
 }
 
 function setupLevelSevenDev(game, devLevel) {
@@ -255,7 +221,7 @@ function initializeGame() {
   setupLevelFiveDev(game, devLevel);
   setupLevelSixDev(game, devLevel);
   setupLevelSevenDev(game, devLevel);
-  setupLevelEightDev(game, devLevel);
+  setupLevelEightDev(game, devLevel, params);
   const art = new ArtStore(Image, initialLevelId);
   const renderer = new Renderer(canvas, art);
   document.body.dataset.level = String(game.levelId);

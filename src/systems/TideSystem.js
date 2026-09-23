@@ -27,6 +27,7 @@ export class TideSystem {
   static forceHighTide(game, duration) {
     if (!(game.map?.data.wetlandZones?.length)) return [];
     game.tide ??= this.reset();
+    game.tide.elapsed = NATURAL_HIGH_START;
     game.tide.forcedRemaining = Math.max(0, duration);
     return this.sync(game);
   }

@@ -1,5 +1,5 @@
-import { StatusSystem } from '../systems/StatusSystem.js';
-import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-1';
+import { StatusSystem } from '../systems/StatusSystem.js?v=level8-2';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-2';
 
 const BASE_ARRIVAL_LINGER_SECONDS = 0.28;
 const BASE_ARRIVAL_EXIT_DISTANCE = 22;
