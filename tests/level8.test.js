@@ -189,12 +189,14 @@ test('化蛇 opens W10 with a readable tide telegraph, then keeps exact P1/P2 ca
   const boss = game.spawnEnemy('huashe');
   assert.equal(boss.maxHp, 8360);
 
-  assert.deepEqual(BossSystem.update(boss, 0), [{ type: 'huasheTideTelegraph', duration: 0.8 }]);
+  assert.deepEqual(BossSystem.update(boss, 0, { escortAlive: false }), [], 'opening tide waits until escort enters');
+  game.spawnEnemy('changyou');
+  assert.deepEqual(BossSystem.update(boss, 0, { escortAlive: true }), [{ type: 'huasheTideTelegraph', duration: 0.8 }]);
   game.handleBossEvent(boss, { type: 'huasheTideTelegraph', duration: 0.8 });
   assert.equal(game.tide.telegraph, true);
   assert.equal(game.tide.high, false);
-  assert.deepEqual(BossSystem.update(boss, 0.79), []);
-  assert.deepEqual(BossSystem.update(boss, 0.01), [{ type: 'huasheForcedTide', duration: 2.4 }]);
+  assert.deepEqual(BossSystem.update(boss, 0.79, { escortAlive: true }), []);
+  assert.deepEqual(BossSystem.update(boss, 0.01, { escortAlive: true }), [{ type: 'huasheForcedTide', duration: 2.4 }]);
   game.handleBossEvent(boss, { type: 'huasheForcedTide', duration: 2.4 });
   assert.equal(game.tide.forcedRemaining, 2.4);
   assert.equal(game.tide.high, true);
