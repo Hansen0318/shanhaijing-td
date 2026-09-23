@@ -5,11 +5,11 @@
 ## Active level
 - Level: **8**
 - Development phase: **RELEASE COMPLETE / FROZEN**
-- Production implementation: **POST-RELEASE ALIGNMENT FIX RELEASED ON MAIN**
+- Production implementation: **POST-RELEASE 化蛇 FLOW FIX MERGED TO MAIN**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**NARROW POST-RELEASE 化蛇 BOSS-FLOW FIX**
+**PLAYER PHONE VERIFICATION — 化蛇 BOSS-FLOW**
 
 ### Allowed now
 - preserve the now player-confirmed Level8 geometry;
@@ -56,13 +56,13 @@ Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phon
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- targeted/full regression for the 化蛇 boss-flow change;
-- merge/deploy and public/player phone confirmation that 化蛇 now visibly controls tide while escort enemies are present.
+- physical-phone confirmation that W10 now reads as 化蛇 + escort, with the opening tide visibly affecting 長右／蠱雕.
+- automated suite execution for PR #71 was not available from this Chat environment; regression coverage was added but execution is not claimed here.
 
 ## Current branch / SHA
-- released `main`: `16e32268838de8a39824383e649928f5b9a718b7` (PR #66)
-- completed branch: `fix/level8-post-release-alignment-20260923`
-- safe-push checkpoints: `2a4db638590049ac04ca855f90ee39c7d7d13def`, `38647388db286f41326b0306d55cb5129e965fb7`, `8001a8cfba1b4aed6163f66c1a46b4bcc6b85226`
+- current `main`: `f592c541cc51a5a83e60bd86dc6c54eb903453de` (PR #71)
+- completed boss-flow branch: `fix/level8-huashe-boss-escort-20260923`
+- previous alignment branch: `fix/level8-post-release-alignment-20260923`
 
 ## Verification status
 - FINAL ASSET AUDIT / ZIP checksum: PASS.
