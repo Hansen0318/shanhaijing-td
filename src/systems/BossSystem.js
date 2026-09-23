@@ -4,7 +4,7 @@ export class BossSystem {
     if (enemy.type === 'xingtian') return this.updateXingtian(enemy, dt);
     if (enemy.type === 'jinwu') return this.updateJinwu(enemy);
     if (enemy.type === 'kui') return this.updateKui(enemy);
-    if (enemy.type === 'huashe') return this.updateHuashe(enemy, dt);
+    if (enemy.type === 'huashe') return this.updateHuashe(enemy, dt, context);
     if (enemy.type !== 'jiuweihu') return this.check(enemy);
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
@@ -83,7 +83,7 @@ export class BossSystem {
     }
     return [];
   }
-  static updateHuashe(enemy, dt) {
+  static updateHuashe(enemy, dt, context = {}) {
     const mechanic = enemy.data.bossMechanic;
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
@@ -95,6 +95,8 @@ export class BossSystem {
     }
     if (enemy.bossTimers.openingTide != null) {
       if (!enemy.bossTimers.openingTelegraphSent) {
+        // Wait until the first escort has entered so the opening tide actually changes the Boss fight.
+        if (!context.escortAlive) return [];
         enemy.bossTimers.openingTelegraphSent = true;
         return [{ type: 'huasheTideTelegraph', duration: 0.8 }];
       }
