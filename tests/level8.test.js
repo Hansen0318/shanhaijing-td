@@ -48,6 +48,28 @@ test('Level8 uses the frozen 幽冥沼澤 identity and exact runtime geometry', 
   });
 });
 
+test('Level8 runtime interpolation keeps every frozen anchor while smoothing phone-visible hairpins', () => {
+  const game = new Game(() => 0.2, 8);
+  for (const anchor of LEVEL8_MAP_DATA.waypoints) {
+    assert.equal(game.map.waypoints.some(point => point.x === anchor.x && point.y === anchor.y), true,
+      `runtime path dropped frozen anchor ${anchor.x},${anchor.y}`);
+  }
+
+  let maximumTurn = 0;
+  for (let index = 1; index < game.map.waypoints.length - 1; index += 1) {
+    const previous = game.map.waypoints[index - 1];
+    const point = game.map.waypoints[index];
+    const next = game.map.waypoints[index + 1];
+    const incoming = Math.atan2(point.y - previous.y, point.x - previous.x);
+    const outgoing = Math.atan2(next.y - point.y, next.x - point.x);
+    let turn = Math.abs(outgoing - incoming);
+    if (turn > Math.PI) turn = Math.PI * 2 - turn;
+    maximumTurn = Math.max(maximumTurn, turn);
+  }
+  assert.ok(maximumTurn * 180 / Math.PI <= 20,
+    `runtime path contains a ${Math.round(maximumTurn * 180 / Math.PI)}° phone-visible kink`);
+});
+
 test('Level8 W1-W10 and frozen enemy/tower values match canonical production data', () => {
   assert.deepEqual(LEVEL8_WAVE_DATA, [
     { groups: [{ type: 'changyou', count: 6 }], interval: 1.1 },
