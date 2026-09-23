@@ -7,6 +7,11 @@ import {
   LEVELS,
   TOWER_DATA,
 } from '../src/config/gameData.js';
+import { Game } from '../src/core/Game.js';
+import { BossSystem } from '../src/systems/BossSystem.js';
+import { CombatSystem } from '../src/systems/CombatSystem.js';
+import { StatusSystem } from '../src/systems/StatusSystem.js';
+import { TideSystem } from '../src/systems/TideSystem.js';
 
 test('Level8 uses the frozen 幽冥沼澤 identity and exact runtime geometry', () => {
   const level = LEVELS[8];
@@ -56,4 +61,121 @@ test('Level8 W1-W10 and frozen enemy/tower values match canonical production dat
   assert.deepEqual(ENEMY_DATA.gudiao, { id: 'gudiao', name: '蠱雕', emoji: '🦅', hp: 420, speed: 24, baseDamage: 3, reward: 32, radius: 18, marshArmorDamageMultiplier: 0.78, marshArmorLinger: 0.6 });
   assert.deepEqual(ENEMY_DATA.huashe, { id: 'huashe', name: '化蛇', emoji: '🐍', hp: 7600, speed: 15, baseDamage: 20, reward: 0, radius: 30, isBoss: true, bossMechanic: { type: 'huashe', phase2Threshold: 0.5, phase2SpeedMultiplier: 1.15, phase1ForcedTideInterval: 7, phase1ForcedTideDuration: 2.4, phase2ForcedTideInterval: 5, phase2ForcedTideDuration: 3 } });
   assert.deepEqual(TOWER_DATA.xuangui, { id: 'xuangui', name: '玄龜', emoji: '🐢', role: '潮震控場', cost: 145, damage: 13, interval: 1.2, range: 140, projectileSpeed: 360, shockEvery: 4, shockDelay: 0.35, shockRadius: 52, shockDamage: 18, shockPushback: 18 });
+});
+
+test('wetland polygons use exact logical edges and reject their surrounding boxes', () => {
+  const game = new Game(() => 0.2, 8);
+  assert.equal(game.map.wetlandZoneAt({ x: 320, y: 175 }), 'A');
+  assert.equal(game.map.wetlandZoneAt({ x: 170, y: 252 }), null, 'polygon lookup cannot fall back to its bounding box');
+  assert.equal(game.map.wetlandZoneAt({ x: 205, y: 292 }), 'B');
+  assert.equal(game.map.wetlandZoneAt({ x: 250, y: 470 }), 'C');
+  assert.equal(game.map.wetlandZoneAt({ x: 20, y: 20 }), null);
+});
+
+test('natural tide has 7.6s quiet, a 0.8s subtle telegraph, then activates all wetlands for 2.4s', () => {
+  const game = new Game(() => 0.2, 8);
+  assert.deepEqual(game.tide, TideSystem.reset());
+  TideSystem.update(game, 6.79);
+  assert.equal(game.tide.high, false);
+  assert.equal(game.tide.telegraph, false);
+  TideSystem.update(game, 0.01);
+  assert.equal(game.tide.telegraph, true);
+  assert.equal(game.effects.filter(effect => effect.type === 'tideTelegraph').length, 1);
+  TideSystem.update(game, 0.8);
+  assert.equal(game.tide.high, true);
+  assert.deepEqual(game.tide.activeZoneIds, ['A', 'B', 'C']);
+  assert.equal(game.tide.activationId, 1);
+  TideSystem.update(game, 2.39);
+  assert.equal(game.tide.high, true);
+  TideSystem.update(game, 0.01);
+  assert.equal(game.tide.high, false);
+  assert.deepEqual(game.tide.activeZoneIds, []);
+});
+
+test('forced tide starts immediately and overlapping calls refresh rather than stack', () => {
+  const game = new Game(() => 0.2, 8);
+  TideSystem.forceHighTide(game, 2.4);
+  assert.equal(game.tide.high, true);
+  assert.equal(game.tide.forcedRemaining, 2.4);
+  assert.equal(game.tide.activationId, 1);
+  TideSystem.update(game, 2);
+  assert.ok(Math.abs(game.tide.forcedRemaining - 0.4) < 1e-9);
+  TideSystem.forceHighTide(game, 2.4);
+  assert.equal(game.tide.forcedRemaining, 2.4, 'refresh resets one window instead of summing durations');
+  assert.equal(game.tide.activationId, 1, 'a refresh is still the same uninterrupted activation');
+});
+
+test('長右 mud leap triggers once per wetland patch activation and never buffs 化蛇', () => {
+  const game = new Game(() => 0.2, 8);
+  const changyou = game.spawnEnemy('changyou');
+  const huashe = game.spawnEnemy('huashe');
+  Object.assign(changyou, { x: 320, y: 175 });
+  Object.assign(huashe, { x: 320, y: 175 });
+  TideSystem.forceHighTide(game, 2.4);
+  TideSystem.update(game, 0);
+  assert.deepEqual(changyou.statuses.marshLeap, { remaining: 1.6, multiplier: 1.3 });
+  assert.equal(huashe.statuses.marshLeap, undefined);
+  changyou.statuses.marshLeap.remaining = 0.2;
+  Object.assign(changyou, { x: 20, y: 20 });
+  TideSystem.update(game, 0);
+  Object.assign(changyou, { x: 320, y: 175 });
+  TideSystem.update(game, 0);
+  assert.equal(changyou.statuses.marshLeap.remaining, 0.2, 'same patch cannot retrigger during one activation');
+  StatusSystem.update(changyou, 0.21);
+  TideSystem.update(game, 2.41);
+  TideSystem.forceHighTide(game, 2.4);
+  TideSystem.update(game, 0);
+  assert.equal(changyou.statuses.marshLeap.remaining, 1.6, 'a new activation may retrigger the same patch');
+  assert.equal(StatusSystem.speedMultiplier(changyou), 1.3);
+});
+
+test('蠱雕 marsh armor mitigates by 0.78 in active wetland and lingers only 0.6s', () => {
+  const game = new Game(() => 0.2, 8);
+  const gudiao = game.spawnEnemy('gudiao');
+  Object.assign(gudiao, { x: 205, y: 292 });
+  TideSystem.forceHighTide(game, 2.4);
+  TideSystem.update(game, 0);
+  assert.deepEqual(gudiao.statuses.marshArmor, { remaining: 0.6, damageMultiplier: 0.78 });
+  assert.equal(CombatSystem.resolveDamage(100, gudiao), 78);
+  Object.assign(gudiao, { x: 20, y: 20 });
+  StatusSystem.update(gudiao, 0.59);
+  assert.equal(CombatSystem.resolveDamage(100, gudiao), 78);
+  StatusSystem.update(gudiao, 0.02);
+  assert.equal(CombatSystem.resolveDamage(100, gudiao), 100);
+});
+
+test('化蛇 P1/P2 forced-tide cadence, phase transition and W10 effective HP are exact', () => {
+  const game = new Game(() => 0.2, 8);
+  game.wave.waveNumber = 10;
+  const boss = game.spawnEnemy('huashe');
+  assert.equal(boss.maxHp, 8360);
+  assert.deepEqual(BossSystem.update(boss, 6.99), []);
+  assert.deepEqual(BossSystem.update(boss, 0.01), [{ type: 'huasheForcedTide', duration: 2.4 }]);
+  game.handleBossEvent(boss, { type: 'huasheForcedTide', duration: 2.4 });
+  assert.equal(game.tide.forcedRemaining, 2.4);
+  boss.hp = boss.maxHp * 0.5;
+  assert.deepEqual(BossSystem.update(boss, 0), [{ type: 'huashePhase2', phase: 2, duration: 0.8 }]);
+  assert.equal(boss.speedMultiplier, 1.15);
+  assert.deepEqual(BossSystem.update(boss, 4.99), []);
+  assert.deepEqual(BossSystem.update(boss, 0.01), [{ type: 'huasheForcedTide', duration: 3 }]);
+  assert.deepEqual(BossSystem.update(boss, 0), []);
+});
+
+test('Level8 victory waits for escort resolution, queue completion and 化蛇 death', () => {
+  const game = new Game(() => 0.2, 8);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.wave.waveNumber = 10;
+  game.wave.active = true;
+  game.wave.queue.length = 0;
+  game.wave.spawnedAlive = 2;
+  const ordinary = game.spawnEnemy('changyou');
+  const boss = game.spawnEnemy('huashe');
+  boss.takeDamage(boss.maxHp);
+  game.update(0);
+  assert.equal(game.state, 'combat');
+  assert.equal(game.levelBossDefeated, true);
+  ordinary.takeDamage(ordinary.maxHp);
+  game.update(0);
+  assert.equal(game.state, 'victory');
 });

@@ -4,6 +4,7 @@ export class BossSystem {
     if (enemy.type === 'xingtian') return this.updateXingtian(enemy, dt);
     if (enemy.type === 'jinwu') return this.updateJinwu(enemy);
     if (enemy.type === 'kui') return this.updateKui(enemy);
+    if (enemy.type === 'huashe') return this.updateHuashe(enemy, dt);
     if (enemy.type !== 'jiuweihu') return this.check(enemy);
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
@@ -81,6 +82,31 @@ export class BossSystem {
       return [{ type: 'kuiPhase2', phase: 2, duration: 0.8 }];
     }
     return [];
+  }
+  static updateHuashe(enemy, dt) {
+    const mechanic = enemy.data.bossMechanic;
+    if (!enemy.bossPhase) {
+      enemy.bossPhase = 1;
+      enemy.bossTimers = { tide: mechanic.phase1ForcedTideInterval };
+    }
+    if (enemy.bossPhase === 1 && enemy.hp / enemy.maxHp <= mechanic.phase2Threshold) {
+      enemy.bossPhase = 2;
+      enemy.speedMultiplier = mechanic.phase2SpeedMultiplier;
+      enemy.bossTimers = { tide: mechanic.phase2ForcedTideInterval };
+      return [{ type: 'huashePhase2', phase: 2, duration: 0.8 }];
+    }
+    const interval = enemy.bossPhase === 2
+      ? mechanic.phase2ForcedTideInterval
+      : mechanic.phase1ForcedTideInterval;
+    enemy.bossTimers.tide -= Math.max(0, dt);
+    if (enemy.bossTimers.tide > 1e-9) return [];
+    enemy.bossTimers.tide += interval;
+    return [{
+      type: 'huasheForcedTide',
+      duration: enemy.bossPhase === 2
+        ? mechanic.phase2ForcedTideDuration
+        : mechanic.phase1ForcedTideDuration,
+    }];
   }
   static updateXingtian(enemy, dt) {
     if (!enemy.bossPhase) {

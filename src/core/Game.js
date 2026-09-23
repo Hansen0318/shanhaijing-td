@@ -20,6 +20,7 @@ import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level7-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
+import { TideSystem } from '../systems/TideSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -65,6 +66,7 @@ export class Game {
     this.levelBossDefeated = false;
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     this.thunder = ThunderSystem.reset();
+    this.tide = TideSystem.reset();
     this.time.setPaused(true);
     return true;
   }
@@ -268,6 +270,7 @@ export class Game {
     const dt = this.time.step(realDelta);
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
     SunlightSystem.update(this, dt);
+    TideSystem.update(this, dt);
     this.enemies.forEach(enemy => {
       if (!enemy.alive && enemy.reachedBase && enemy.baseArrivalRemaining > 0) {
         enemy.updateBaseArrival(dt);
@@ -293,6 +296,7 @@ export class Game {
     });
     ThunderSystem.update(this, dt);
     SunlightSystem.update(this, 0);
+    TideSystem.update(this, 0);
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
     this.updateTowers(dt);
@@ -321,6 +325,15 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'huashePhase2') {
+      this.effects.push({ type: 'huashePhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'huasheForcedTide') {
+      TideSystem.forceHighTide(this, event.duration);
+      this.effects.push({ type: 'huasheForcedTide', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: 0.5, duration: 0.5 });
+      return;
+    }
     if (event.type === 'kuiPhase2') {
       this.thunder = ThunderSystem.reset({ phase2: true });
       this.effects.push({ type: 'kuiPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
