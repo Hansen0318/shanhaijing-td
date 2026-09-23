@@ -93,7 +93,7 @@ test('Level8 W1-W10 and frozen enemy/tower values match canonical production dat
 test('wetland polygons use exact logical edges and reject their surrounding boxes', () => {
   const game = new Game(() => 0.2, 8);
   assert.equal(game.map.wetlandZoneAt({ x: 320, y: 175 }), 'A');
-  assert.equal(game.map.wetlandZoneAt({ x: 170, y: 252 }), null, 'polygon lookup cannot fall back to its bounding box');
+  assert.equal(game.map.wetlandZoneAt({ x: 170, y: 235 }), null, 'polygon lookup cannot fall back to its bounding box');
   assert.equal(game.map.wetlandZoneAt({ x: 205, y: 292 }), 'B');
   assert.equal(game.map.wetlandZoneAt({ x: 250, y: 470 }), 'C');
   assert.equal(game.map.wetlandZoneAt({ x: 20, y: 20 }), null);
