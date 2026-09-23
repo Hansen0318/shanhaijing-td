@@ -21,7 +21,7 @@
 
 - Player evidence identified three presentation-only defects: enemy sprites appearing off the road center, tower-pad overlay drift, and a distorted Huashe Boss HUD.
 - Revalidated the approved background: 1024×1536 center-cropped 21 px per side to 982×1536, then resized to 780×1220 / displayed at 390×610. The repository asset matches this pipeline; no recrop or replacement was made.
-- Kept all canonical Spawn/Base/path anchors, T1–T8, waves, stats, tide timing, mechanics, and progression unchanged.
+- Kept all canonical Spawn/Base/path anchors, T1–T8, waves, stats, tide timing, mechanics configuration, and progression unchanged. The approved runtime interpolation changes route length **1048.771 → 1058.486 (+0.926%)**; maximum departure from the prior polyline is **3.64 logical px**, within the 54 px road width.
 - Increased only Level8 runtime curve sampling and disabled per-segment axis clipping to remove phone-visible hairpin kinks while retaining every canonical anchor.
 - Centered the shared tower-pad art and Level8 長右／蠱雕 sprites on measured alpha centroids. No collision/movement values changed.
 - Kept the shared Boss HUD at 44 px and corrected only Huashe's nine-slice mapping; the approved PNG remains in use and the battlefield footprint is unchanged.
