@@ -4,24 +4,24 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **POST-RELEASE ALIGNMENT / RELEASE VERIFICATION**
-- Production implementation: **RELEASED BASELINE + NARROW PHONE-EVIDENCE FIX ON FEATURE BRANCH**
+- Development phase: **RELEASE COMPLETE / FROZEN**
+- Production implementation: **POST-RELEASE ALIGNMENT FIX RELEASED ON MAIN**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**FINAL REVIEW / MERGE / PUBLIC PHONE-SIZE VERIFICATION**
+**CLOSED — POST-RELEASE ALIGNMENT RELEASE COMPLETE**
 
 ### Allowed now
-- verify and release the player-reported Level8 alignment correction;
-- correct only concrete road-center, tower-pad, and fixed-footprint Huashe HUD defects;
-- keep configured waves, stats, tide timing, progression, and all canonical anchors unchanged; only approved runtime interpolation samples may change.
+- player phone recheck of the released alignment correction;
+- later narrow follow-up only if new concrete device evidence identifies a remaining defect;
+- initialize Level9 from the project template when the player starts the next level.
 
 ### Forbidden until gate exit
-- no gameplay/design redesign, asset regeneration, geometry remeasurement, or map recrop;
-- no unrelated Level1–7 work; regress only shared renderer/HUD contracts actually touched.
+- gate is closed; do not reopen Level8 design, gameplay, geometry, or assets without new concrete evidence;
+- no unrelated Level1–7 work.
 
 ### Gate exit condition
-Review and merge the narrow fix, deploy Pages, then verify Level8 at 390 px / 390×700 and compare the unchanged Level7 Boss HUD footprint.
+Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phone-size verification passed.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -55,14 +55,11 @@ Review and merge the narrow fix, deploy Pages, then verify Level8 at 390 px / 39
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- final whole-branch review;
-- merge to `main` and Pages deployment;
-- public 390 px / 390×700 verification;
-- player phone recheck of the three corrected presentation defects.
+- player phone recheck of the three corrected presentation defects only.
 
 ## Current branch / SHA
-- latest remote `main` baseline: `301258e3c166884e64a21499ee512e7858022ef4`
-- active branch: `fix/level8-post-release-alignment-20260923`
+- released `main`: `16e32268838de8a39824383e649928f5b9a718b7` (PR #66)
+- completed branch: `fix/level8-post-release-alignment-20260923`
 - safe-push checkpoints: `2a4db638590049ac04ca855f90ee39c7d7d13def`, `38647388db286f41326b0306d55cb5129e965fb7`, `8001a8cfba1b4aed6163f66c1a46b4bcc6b85226`
 
 ## Verification status
@@ -75,7 +72,13 @@ Review and merge the narrow fix, deploy Pages, then verify Level8 at 390 px / 39
 - Huashe fixed-footprint HUD/cache regressions: **52/52 PASS**.
 - full `npm test`: **240/240 PASS**.
 - `npm run check`, changed JS syntax checks, and release-diff whitespace check: PASS.
-- browser/public and deployment evidence: pending final gate.
+- fresh final review: **Ready to merge: Yes**, no Critical/Important findings.
+- GitHub Pages deployment: PASS; public entry serves `level8-3`.
+- public `?devMenu=1`: Level8 entry PASS; lineup shows five currently owned beasts and enforces exactly three.
+- public 390×700: Level8 pads, Changyou/Gudiao road-center presentation, wetlands/Motion Lite and Huashe P1/P2 PASS.
+- public HUD footprint comparison: Level8 Huashe and Level7 Kui both **44 px** Boss slot/HUD and **426 px** battlefield; no battlefield compression.
+- Level8 victory/retry/progression logic was unchanged and remains covered by the green suite; historical public production-flow evidence remains valid.
+- physical player-phone recheck is not claimed by Work.
 
 ## Do not redo
 - do not retest or redesign completed Level1–7 unless a Level8 change actually affects a shared contract.
@@ -84,4 +87,4 @@ Review and merge the narrow fix, deploy Pages, then verify Level8 at 390 px / 39
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**Complete full verification and fresh code review, merge to `main`, deploy Pages, verify public Level8/Level7 phone-size rendering, then request only the remaining player-phone recheck.**
+**Player rechecks the three reported presentation defects on the physical phone; otherwise Level8 remains frozen and the next development step is Level9 initialization.**
