@@ -99,6 +99,11 @@
 - Avoid high-contrast decorative objects directly under expected enemy silhouettes.
 - Geometry measurement begins only after the player approves the actual background candidate.
 
+## Runtime label placement
+- Player reconfirmed **Level8 Geometry Guide V1** as the sole geometry source of truth.
+- A fresh pixel-to-logical re-audit confirms the existing Spawn, 16 path anchors, Base, and T1–T8 coordinates already match the guide after the canonical 21 px-per-side normalization crop; do **not** move them because of earlier incorrectly scaled comparison overlays.
+- Level8 runtime base-name text must be centered **below the canonical Base waypoint**, not pinned to the map's lower-right corner.
+
 ## Approval / runtime verification
 - Map/display composition contract: **FROZEN**
 - Route shape / Spawn-Base arrangement / T1–T8 composition: **PLAYER APPROVED**
