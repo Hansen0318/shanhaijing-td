@@ -442,7 +442,7 @@ export class Renderer {
   }
   drawSlots(ctx, game) {
     game.level.map.slots.forEach((slot, index) => {
-      const drewPlatform = this.drawContained(ctx, 'slotPlatform', slot.x, slot.y + 2, 52, 40);
+      const drewPlatform = this.drawContained(ctx, 'slotPlatform', slot.x, slot.y, 52, 40, { anchorY: 115.842 / 197 });
       if (game.towers[index]) return;
       ctx.beginPath(); ctx.arc(slot.x, slot.y, 19, 0, Math.PI * 2);
       ctx.fillStyle = index === game.selectedSlot ? 'rgba(214,184,90,.5)' : drewPlatform ? 'rgba(14,36,29,.2)' : '#314c3c'; ctx.fill();
