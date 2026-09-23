@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 production implementation engineering PASS
+
+- Implemented Level7 victory → Level8 progression, exact-three owned-roster lineup, empty-lineup retry, W1–W10, frozen map/path/T1–T8/wetland geometry, and audited runtime assets.
+- Implemented 長右泥躍、蠱雕沼甲、natural/forced tide、化蛇 P1/P2 + Boss HUD + victory gate.
+- Implemented 玄龜 unlock/tower/facing/Motion Lite, procedural projectile, delayed 潮震 with non-Boss path pushback, and 玄波／闊潮／回瀾 Blessings.
+- Integrated low-frequency fog/ripple/bubbles/reed Motion Lite, preload/cache mappings, dev menu, responsive and browser-smoke entries.
+- Remote safe-push checkpoints: `dd2c63b`, `d113148`, `479f505`, `8935528`, `d8208d9` on `feat/level8-youming-marsh`.
+- Engineering verification: Level8 targeted/affected regressions PASS; `npm test` **233/233 PASS**; `npm run check`, key JS syntax checks and `git diff --check` PASS.
+- Remaining release gate: final review → merge `main` → GitHub Pages deploy → public Level8 dev and Level7→Level8 production-flow verification.
+
+---
+
 ## 2026-09-23：Level8 FINAL ASSET AUDIT PASS / production gate open
 
 - Player re-uploaded the six concrete approved Level8 source files: clean background, 長右, 蠱雕, 化蛇, 化蛇 Boss HUD, 玄龜.

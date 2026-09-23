@@ -123,6 +123,6 @@
 - Motion Lite, enemy path-facing, tower target-facing, spacing/readability, Boss HUD, progression and release contracts remain inherited;
 - testing is impact-driven: targeted first, affected regressions only, full suite/browser smoke only when justified.
 
-## Not yet approved
-- exact measured path waypoints / Spawn / Base / T1–T8 / three wetland-pocket coordinates from the already player-approved Geometry Guide V1;
-- exact Environment Motion Lite anchors;
+## Production status
+- Exact measured path waypoints, Spawn, Base, T1–T8, three wetland polygons, and Environment Motion Lite anchors are frozen in `GEOMETRY.md` and implemented without redesign.
+- Runtime implementation and engineering verification are complete on `feat/level8-youming-marsh`; release/public verification is tracked in `STATE.md`.

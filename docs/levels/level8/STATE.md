@@ -4,25 +4,25 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **VFX / BLESSING / GEOMETRY MEASUREMENT**
-- Production implementation: **NOT STARTED**
+- Development phase: **RELEASE VERIFICATION**
+- Production implementation: **COMPLETE ON FEATURE BRANCH**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**VFX / BLESSING / GEOMETRY MEASUREMENT**
+**FINAL REVIEW / MERGE / PUBLIC VERIFICATION**
 
 ### Allowed now
-- preserve the player-approved Level8 Geometry Guide V1 path/tower composition;
-- measure exact path anchors / T1–T8 coordinates from the approved guide/background without redesigning them;
-- define wetland-pocket and Environment Motion Lite anchors from visible marsh features only.
+- verify the implemented frozen Level8 contracts;
+- correct concrete runtime defects without changing approved gameplay or geometry;
+- complete `AGENTS.md` Section 8 release closure.
 
 ### Forbidden until gate exit
-- no production implementation;
+- no gameplay redesign, image regeneration, geometry remeasurement, or map recrop;
 - no redesign of the approved route shape / Spawn-Base arrangement / tower-pad composition;
 - no Work implementation handoff until 玄龜 VFX/Blessings, exact geometry, Environment Motion Lite anchors, and final asset audit are finalized.
 
 ### Gate exit condition
-Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchors, then complete the final asset audit.
+Merge reviewed implementation to `main`, deploy GitHub Pages, and verify public Level8 dev and Level7→Level8 production flows.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -56,16 +56,21 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- implementation
-- verification
-- release
-- player smoke
+- final branch review
+- merge / GitHub Pages release
+- public browser verification
+- physical player-phone smoke, only if automated 390×700 evidence leaves a device-specific risk
 
 ## Current branch / SHA
-- initialize from latest `main`; inspect current Git state before implementation.
+- feature branch: `feat/level8-youming-marsh`
+- remote safe-push checkpoints: `dd2c63b`, `d113148`, `479f505`, `8935528`, `d8208d9`
 
 ## Verification status
-- documentation initialization only.
+- ZIP checksum: PASS.
+- Level8 targeted and affected shared regressions: PASS.
+- `npm test`: 233/233 PASS.
+- `npm run check`, key JS syntax checks, and `git diff --check`: PASS.
+- local cloud-browser navigation is blocked from localhost by the browser boundary; public Pages runtime verification remains the release gate.
 
 ## Do not redo
 - do not retest or redesign completed Level1–7 unless a Level8 change actually affects a shared contract.
@@ -74,4 +79,4 @@ Freeze exact measured geometry / wetland anchors, Environment Motion Lite anchor
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**FINAL ASSET AUDIT PASS. Enter production implementation using the audited runtime candidates; do not redo Level8 design, asset selection, geometry, VFX or Motion Lite planning.**
+**Perform final feature-branch review, merge to `main`, deploy GitHub Pages, then verify public Level8 dev and Level7→Level8 production flows.**
