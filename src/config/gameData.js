@@ -354,7 +354,8 @@ export const LEVEL8_MAP_DATA = Object.freeze({
   width: 390,
   height: 610,
   pathWidth: 54,
-  pathSmoothing: 2,
+  pathSmoothing: 24,
+  clampPathSmoothing: false,
   waypoints: [
     { x: 44, y: 52 }, { x: 65, y: 79 }, { x: 135, y: 104 }, { x: 225, y: 118 },
     { x: 303, y: 135 }, { x: 340, y: 166 }, { x: 314, y: 207 }, { x: 247, y: 229 },

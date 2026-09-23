@@ -1,7 +1,7 @@
-import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-2';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level8-2';
+import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-3';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level8-3';
 import { Economy } from '../systems/Economy.js';
-import { BEAST_NAMES } from '../config/progressionData.js?v=level8-2';
+import { BEAST_NAMES } from '../config/progressionData.js?v=level8-3';
 
 export class UIController {
   constructor(game, renderer) {

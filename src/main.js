@@ -1,8 +1,8 @@
-import { Game } from './core/Game.js?v=level8-2';
-import { Renderer } from './render/Renderer.js?v=level8-2';
-import { UIController } from './ui/UIController.js?v=level8-2';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-2';
-import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level8-2';
+import { Game } from './core/Game.js?v=level8-3';
+import { Renderer } from './render/Renderer.js?v=level8-3';
+import { UIController } from './ui/UIController.js?v=level8-3';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-3';
+import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level8-3';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }

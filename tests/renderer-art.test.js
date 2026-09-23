@@ -55,14 +55,14 @@ test('each enemy sprite visible center stays on its logical path anchor', () => 
     ['meihu', 'meihu', 256, 256, 127.5], ['huanli', 'huanli', 256, 256, 127.5],
     ['jiuweihu', 'jiuweihuPhase1', 512, 512, 255], ['zhuyan', 'zhuyan', 256, 256, 127.5],
     ['lili', 'lili', 256, 256, 127.5], ['xingtian', 'xingtianPhase1', 384, 384, 191.5],
-    ['changyou', 'changyou', 256, 228, 114], ['gudiao', 'gudiao', 256, 244, 122],
+    ['changyou', 'changyou', 256, 228, 107.489, 139.249], ['gudiao', 'gudiao', 256, 244, 117.151, 129.063],
     ['huashe', 'huashe', 512, 501, 250.5],
   ];
   const dimensions = Object.fromEntries(cases.map(([, artId, width, height]) => [artId, [width, height]]));
   const { renderer, ctx } = rendererFixture({ art: fakeArt(dimensions), motionEnabled: false });
   const map = { totalLength: 100, positionAt: () => ({ x: 101, y: 100 }), isWeakWater: () => false };
 
-  for (const [type, artId, , , visibleCenterY] of cases) {
+  for (const [type, artId, sourceWidth, , visibleCenterY, measuredCenterX = sourceWidth / 2] of cases) {
     const beforeDraws = ctx.calls.drawImage.length;
     const beforeTranslations = ctx.calls.translate.length;
     renderer.drawEnemies(ctx, { visualTime: 0, effects: [], illusions: [], enemies: [{
@@ -74,8 +74,24 @@ test('each enemy sprite visible center stays on its logical path anchor', () => 
     const translate = ctx.calls.translate.slice(beforeTranslations).at(0);
     const renderedScale = draw[4] / draw[0].naturalHeight;
     assert.equal(translate[1], 100, `${type} adds an unmeasured common Y offset`);
+    assert.ok(Math.abs(draw[1] + measuredCenterX * renderedScale) <= 0.1, `${type} visible horizontal center misses its logical path anchor`);
     assert.ok(Math.abs(draw[2] + visibleCenterY * renderedScale) <= 0.1, `${type} visible center misses its logical path anchor`);
   }
+});
+
+test('Level8 tower-pad visible centroid lands on each frozen tower slot', () => {
+  const { renderer, ctx } = rendererFixture({ art: fakeArt({ slotPlatform: [256, 197] }) });
+  const game = emptyGame(LEVELS[8]);
+  renderer.render(game);
+
+  const draws = ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform');
+  const firstSlot = LEVELS[8].map.slots[0];
+  const firstDraw = draws[0];
+  const renderedScale = firstDraw[4] / firstDraw[0].naturalHeight;
+  const platformTranslations = ctx.calls.translate.filter(([x]) => LEVELS[8].map.slots.some(slot => slot.x === x));
+  const visibleCenterY = platformTranslations[0][1] + firstDraw[2] + 115.842 * renderedScale;
+  assert.ok(Math.abs(visibleCenterY - firstSlot.y) <= 0.2,
+    `tower pad visible center is ${visibleCenterY - firstSlot.y}px away from its frozen slot`);
 });
 
 function emptyGame(level = LEVELS[1]) {

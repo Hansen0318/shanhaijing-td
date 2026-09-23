@@ -2,7 +2,7 @@ function clampBetween(value, a, b) {
   return Math.max(Math.min(a, b), Math.min(Math.max(a, b), value));
 }
 
-function smoothWaypoints(points, subdivisions = 1) {
+function smoothWaypoints(points, subdivisions = 1, clampSamples = true) {
   if (subdivisions <= 1 || points.length < 3) return points;
   const result = [points[0]];
 
@@ -22,9 +22,11 @@ function smoothWaypoints(points, subdivisions = 1) {
         + (2 * p0[axis] - 5 * p1[axis] + 4 * p2[axis] - p3[axis]) * t2
         + (-p0[axis] + 3 * p1[axis] - 3 * p2[axis] + p3[axis]) * t3
       );
+      const x = sample('x');
+      const y = sample('y');
       result.push({
-        x: clampBetween(sample('x'), p1.x, p2.x),
-        y: clampBetween(sample('y'), p1.y, p2.y),
+        x: clampSamples ? clampBetween(x, p1.x, p2.x) : x,
+        y: clampSamples ? clampBetween(y, p1.y, p2.y) : y,
       });
     }
   }
@@ -47,7 +49,7 @@ function pointInPolygon(point, vertices) {
 export class GameMap {
   constructor(data) {
     this.data = data;
-    this.waypoints = smoothWaypoints(data.waypoints, data.pathSmoothing ?? 1);
+    this.waypoints = smoothWaypoints(data.waypoints, data.pathSmoothing ?? 1, data.clampPathSmoothing !== false);
     this.segments = [];
     this.totalLength = 0;
     for (let index = 1; index < this.waypoints.length; index += 1) {

@@ -1,8 +1,8 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-2';
-import { ArtStore } from '../config/artAssets.js?v=level8-2';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-2';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level8-2';
-import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level8-2';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-3';
+import { ArtStore } from '../config/artAssets.js?v=level8-3';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level8-3';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level8-3';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58], xuangui: [58, 56] });
 const LEVEL7_WATERFALLS = Object.freeze([
@@ -397,7 +397,7 @@ export class Renderer {
       ctx.restore();
     });
   }
-  drawContained(ctx, id, x, y, boxWidth, boxHeight, { anchorY = 0.5, mirror = false, rotation = 0, alpha = 1, scale: visualScale = 1, filter = 'none' } = {}) {
+  drawContained(ctx, id, x, y, boxWidth, boxHeight, { anchorX = 0.5, anchorY = 0.5, mirror = false, rotation = 0, alpha = 1, scale: visualScale = 1, filter = 'none' } = {}) {
     const image = this.art.get(id);
     if (!image) return false;
     const scale = Math.min(boxWidth / image.naturalWidth, boxHeight / image.naturalHeight);
@@ -409,7 +409,7 @@ export class Renderer {
     if (mirror || visualScale !== 1) ctx.scale(mirror ? -visualScale : visualScale, visualScale);
     ctx.globalAlpha = alpha;
     ctx.filter = filter;
-    ctx.drawImage(image, -width / 2, -height * anchorY, width, height);
+    ctx.drawImage(image, -width * anchorX, -height * anchorY, width, height);
     ctx.restore();
     return true;
   }
@@ -442,7 +442,7 @@ export class Renderer {
   }
   drawSlots(ctx, game) {
     game.level.map.slots.forEach((slot, index) => {
-      const drewPlatform = this.drawContained(ctx, 'slotPlatform', slot.x, slot.y + 2, 52, 40);
+      const drewPlatform = this.drawContained(ctx, 'slotPlatform', slot.x, slot.y, 52, 40, { anchorY: 115.842 / 197 });
       if (game.towers[index]) return;
       ctx.beginPath(); ctx.arc(slot.x, slot.y, 19, 0, Math.PI * 2);
       ctx.fillStyle = index === game.selectedSlot ? 'rgba(214,184,90,.5)' : drewPlatform ? 'rgba(14,36,29,.2)' : '#314c3c'; ctx.fill();
@@ -539,9 +539,9 @@ export class Renderer {
           : enemy.type === 'xingtian'
             ? `xingtianPhase${enemy.bossPhase ?? 1}`
           : enemy.type;
-      const { width, height, anchorY: visualAnchorY } = ENEMY_VISUALS[enemy.type];
+      const { width, height, anchorX: visualAnchorX, anchorY: visualAnchorY } = ENEMY_VISUALS[enemy.type];
       const motion = MotionSystem.enemyTransform(enemy, game.visualTime ?? 0, game.effects, this.motionEnabled);
-      const spriteOptions = { anchorY: visualAnchorY, mirror: next.x < enemy.x, scale: motion.scale, alpha: enemy.isIllusion ? 0.52 : 1 };
+      const spriteOptions = { anchorX: visualAnchorX, anchorY: visualAnchorY, mirror: next.x < enemy.x, scale: motion.scale, alpha: enemy.isIllusion ? 0.52 : 1 };
       const drewEnemy = this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + motion.yOffset, width, height, spriteOptions);
       if (drewEnemy && motion.flash) {
         this.drawContained(ctx, id, enemy.x + motion.xOffset, enemy.y + motion.yOffset, width, height, {
@@ -687,7 +687,7 @@ export class Renderer {
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'unitDeath' && effect.life > 0).forEach(effect => {
-      const { width, height, anchorY: visualAnchorY } = ENEMY_VISUALS[effect.unitType];
+      const { width, height, anchorX: visualAnchorX, anchorY: visualAnchorY } = ENEMY_VISUALS[effect.unitType];
       const motion = MotionSystem.deathTransform(effect);
       const id = effect.unitType === 'jiuweihu'
         ? `jiuweihuPhase${effect.bossPhase ?? 1}`
@@ -695,7 +695,7 @@ export class Renderer {
           ? `xingtianPhase${effect.bossPhase ?? 1}`
           : effect.unitType;
       this.drawContained(ctx, id, effect.x, effect.y, width, height, {
-        anchorY: visualAnchorY, mirror: effect.mirror, scale: motion.scale, alpha: motion.alpha,
+        anchorX: visualAnchorX, anchorY: visualAnchorY, mirror: effect.mirror, scale: motion.scale, alpha: motion.alpha,
       });
     });
     game.effects.filter(effect => effect.type === 'baizeInsight').forEach(effect => {

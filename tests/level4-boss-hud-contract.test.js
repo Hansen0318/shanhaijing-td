@@ -26,14 +26,22 @@ test('all six Boss HUDs use one variable-positioned code-driven fill without ima
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /boss-hud\[data-boss-type="(?:qiongqi|paoxiao|xiangliu|jiuweihu|xingtian|jinwu)"\]::before/);
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /background:\s*#202638/);
   assert.equal((html.match(/id="boss-hp-fill"/g) ?? []).length, 1);
-  assert.match(html, /styles\.css\?v=level8-2/);
-  assert.match(html, /styles-fixes\.css\?v=level8-2/);
-  assert.match(html, /styles-lineup\.css\?v=level8-2/);
-  assert.match(html, /src\/main\.js\?v=level8-2/);
-  assert.match(main, /Renderer\.js\?v=level8-2/);
-  assert.match(main, /UIController\.js\?v=level8-2/);
-  assert.match(main, /artAssets\.js\?v=level8-2/);
-  assert.match(ui, /artAssets\.js\?v=level8-2/);
-  assert.match(renderer, /artAssets\.js\?v=level8-2/);
+  assert.match(html, /styles\.css\?v=level8-3/);
+  assert.match(html, /styles-fixes\.css\?v=level8-3/);
+  assert.match(html, /styles-lineup\.css\?v=level8-3/);
+  assert.match(html, /src\/main\.js\?v=level8-3/);
+  assert.match(main, /Renderer\.js\?v=level8-3/);
+  assert.match(main, /UIController\.js\?v=level8-3/);
+  assert.match(main, /artAssets\.js\?v=level8-3/);
+  assert.match(ui, /artAssets\.js\?v=level8-3/);
+  assert.match(renderer, /artAssets\.js\?v=level8-3/);
   assert.match(ui, /boss-hp-fill'\]\.style\.width = `\$\{boss\.hp \/ boss\.maxHp \* 100\}%`/);
+});
+
+test('Huashe preserves its panel proportions inside the same fixed Boss HUD footprint', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.boss-slot\s*\{[^}]*flex:\s*0 0 44px[^}]*min-height:\s*44px/);
+  const huasheRule = css.match(/\.boss-hud\[data-boss-type="huashe"\]\s*\{([^}]*)\}/)?.[1] ?? '';
+  assert.match(huasheRule, /border-image-slice:\s*25 fill/);
+  assert.doesNotMatch(huasheRule, /(?:height|min-height|padding)\s*:/, 'Huashe cannot enlarge the shared HUD footprint');
 });

@@ -4,24 +4,24 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **RELEASE COMPLETE / FROZEN**
-- Production implementation: **RELEASED ON MAIN**
+- Development phase: **POST-RELEASE ALIGNMENT / RELEASE VERIFICATION**
+- Production implementation: **RELEASED BASELINE + NARROW PHONE-EVIDENCE FIX ON FEATURE BRANCH**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**CLOSED — RELEASE COMPLETE**
+**FINAL REVIEW / MERGE / PUBLIC PHONE-SIZE VERIFICATION**
 
 ### Allowed now
-- player phone/device smoke and narrow follow-up fixes only;
-- regression repair only when concrete evidence shows a shipped defect;
-- initialize Level9 from the project template when the player starts the next level.
+- verify and release the player-reported Level8 alignment correction;
+- correct only concrete road-center, tower-pad, and fixed-footprint Huashe HUD defects;
+- keep configured waves, stats, tide timing, progression, and all canonical anchors unchanged; only approved runtime interpolation samples may change.
 
 ### Forbidden until gate exit
-- gate is already closed; do not reopen Level8 design merely because a new session starts;
-- no regeneration/remeasurement/rebalancing without an explicit new request or concrete shipped defect.
+- no gameplay/design redesign, asset regeneration, geometry remeasurement, or map recrop;
+- no unrelated Level1–7 work; regress only shared renderer/HUD contracts actually touched.
 
 ### Gate exit condition
-Already satisfied: reviewed implementation merged to `main` and release completed.
+Review and merge the narrow fix, deploy Pages, then verify Level8 at 390 px / 390×700 and compare the unchanged Level7 Boss HUD footprint.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -55,22 +55,27 @@ Already satisfied: reviewed implementation merged to `main` and release complete
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- optional physical player-phone smoke / any player-reported narrow visual correction
+- final whole-branch review;
+- merge to `main` and Pages deployment;
+- public 390 px / 390×700 verification;
+- player phone recheck of the three corrected presentation defects.
 
 ## Current branch / SHA
-- released `main`: `e38711aa88641ad3c9cfea4c6e798291d8c77fd5`
-- merged PR: **#64**
-- implementation branch: `feat/level8-youming-marsh` (fully merged; recovery no longer depends on it)
-- historical safe-push checkpoints: `dd2c63b`, `d113148`, `479f505`, `8935528`, `d8208d9`, final head `3f3f46a`
+- latest remote `main` baseline: `301258e3c166884e64a21499ee512e7858022ef4`
+- active branch: `fix/level8-post-release-alignment-20260923`
+- safe-push checkpoints: `2a4db638590049ac04ca855f90ee39c7d7d13def`, `38647388db286f41326b0306d55cb5129e965fb7`, `8001a8cfba1b4aed6163f66c1a46b4bcc6b85226`
 
 ## Verification status
 - FINAL ASSET AUDIT / ZIP checksum: PASS.
-- Level8 targeted and affected shared regressions: PASS.
-- final pre-merge `npm test`: **237/237 PASS**.
-- `npm run check`, key JS syntax checks, and `git diff --check`: PASS.
-- PR #64 merged to `main`.
-- Work release closure reported GitHub Pages/public Level8 verification complete, including dev entry and normal Level7→Level8 progression.
-- physical player-phone smoke is separate and is not claimed here.
+- background normalization re-audit: PASS; runtime asset matches canonical center-crop/resize pipeline.
+- canonical Spawn/Base/path anchors and T1–T8: unchanged.
+- path/pad targeted renderer tests: **34/34 PASS**.
+- runtime curve audit: old/new route lengths **1048.771 → 1058.486 (+0.926%)**; maximum curve departure **3.64 logical px**, within the 54 px road width; no canonical anchor moved.
+- enemy anchor + affected motion/spacing regressions: **60/60 PASS**.
+- Huashe fixed-footprint HUD/cache regressions: **52/52 PASS**.
+- full `npm test`: **240/240 PASS**.
+- `npm run check`, changed JS syntax checks, and release-diff whitespace check: PASS.
+- browser/public and deployment evidence: pending final gate.
 
 ## Do not redo
 - do not retest or redesign completed Level1–7 unless a Level8 change actually affects a shared contract.
@@ -79,4 +84,4 @@ Already satisfied: reviewed implementation merged to `main` and release complete
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**If continuing level development, initialize Level9 from `docs/levels/_TEMPLATE/`; otherwise only perform player-owned Level8 phone smoke or a narrow evidence-backed fix.**
+**Complete full verification and fresh code review, merge to `main`, deploy Pages, verify public Level8/Level7 phone-size rendering, then request only the remaining player-phone recheck.**

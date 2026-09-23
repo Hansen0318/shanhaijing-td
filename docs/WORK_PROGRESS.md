@@ -2,16 +2,32 @@
 
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
-- Repository baseline: latest released `main` = **`e38711aa88641ad3c9cfea4c6e798291d8c77fd5`** (PR #64, Level8「幽冥沼澤」).
-- Current product state: **Level1–8 released; Level8 RELEASE COMPLETE / FROZEN**.
-- Active implementation branch: **none required for recovery**; Level8 feature work is fully merged to `main`.
-- Level8 engineering verification: **237/237 PASS**, `npm run check` PASS, syntax/diff checks PASS.
-- Release verification: Work release closure reported Pages/public Level8 dev entry and normal Level7→Level8 progression verified.
-- Player-device state: physical phone smoke is separate / optional unless the player reports a device-specific defect.
+- Repository baseline: latest remote `main` = **`301258e3c166884e64a21499ee512e7858022ef4`**.
+- Current product state: **Level1–8 released; Level8 frozen gameplay with a narrow evidence-backed phone alignment fix in release verification**.
+- Active implementation branch: **`fix/level8-post-release-alignment-20260923`**.
+- Latest remote safe-push checkpoint: **`8001a8cfba1b4aed6163f66c1a46b4bcc6b85226`**; earlier checkpoints `2a4db63`, `3864738`.
+- Completed fixes: canonical background confirmed unchanged; Level8 curve interpolation corrected without moving anchors; tower-pad and 長右／蠱雕 alpha-centroids aligned; Huashe panel uses its fixed-44px compatible slice; cache version advanced.
+- Targeted evidence: path/pad **34/34 PASS**; enemy/motion/spacing **60/60 PASS**; Huashe HUD/cache **52/52 PASS**.
+- Full engineering verification: `npm test` **240/240 PASS**; `npm run check`, changed-JS syntax checks, and release-diff whitespace check PASS.
+- Next exact step: full suite + fresh review → merge `main` → Pages/public 390 px and 390×700 verification → player-phone recheck only.
 - Next level: **Level9 is not initialized yet**.
 - If the player asks to develop the next level, initialize `docs/levels/level9/` from `docs/levels/_TEMPLATE/`, set PROGRESSION / SCOPE, update this pointer, and continue Chat-first.
 - If a future session resumes an in-progress level, this pointer must instead name that active level, remote feature branch, latest safe-push SHA, current gate, verification already completed, blocker (if any), and singular next exact step.
 - A new Chat / Work / Codex session should not ask the player to restate old context when the repository contains it; follow `AGENTS.md` Section 22 and `DEVELOPMENT_PLAYBOOK.md`.
+
+---
+
+## 2026-09-23：Level8 post-release phone alignment fix in release verification
+
+- Player evidence identified three presentation-only defects: enemy sprites appearing off the road center, tower-pad overlay drift, and a distorted Huashe Boss HUD.
+- Revalidated the approved background: 1024×1536 center-cropped 21 px per side to 982×1536, then resized to 780×1220 / displayed at 390×610. The repository asset matches this pipeline; no recrop or replacement was made.
+- Kept all canonical Spawn/Base/path anchors, T1–T8, waves, stats, tide timing, mechanics configuration, and progression unchanged. The approved runtime interpolation changes route length **1048.771 → 1058.486 (+0.926%)**; maximum departure from the prior polyline is **3.64 logical px**, within the 54 px road width.
+- Increased only Level8 runtime curve sampling and disabled per-segment axis clipping to remove phone-visible hairpin kinks while retaining every canonical anchor.
+- Centered the shared tower-pad art and Level8 長右／蠱雕 sprites on measured alpha centroids. No collision/movement values changed.
+- Kept the shared Boss HUD at 44 px and corrected only Huashe's nine-slice mapping; the approved PNG remains in use and the battlefield footprint is unchanged.
+- Active branch/checkpoints: `fix/level8-post-release-alignment-20260923` at `2a4db63` → `3864738` → `8001a8c`.
+- Full engineering verification: `npm test` **240/240 PASS**; `npm run check`, changed-JS syntax checks, and release-diff whitespace check PASS.
+- Remaining gate: fresh final review, merge/deploy, public 390/390×700 smoke, then player-phone recheck.
 
 ---
 

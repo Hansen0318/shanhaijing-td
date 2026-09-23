@@ -1,4 +1,4 @@
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-2';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
 
 const TAU = Math.PI * 2;
 
