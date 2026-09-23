@@ -6,7 +6,9 @@
 - Remaining gameplay readability defect: old W10 queue spawned 長右 ×8 then 蠱雕 ×4 before 化蛇, so the escort was often dead before the tide-controlling Boss appeared.
 - Active branch: `fix/level8-huashe-boss-escort-20260923`.
 - Fix scope: W10 now spawns **化蛇 first**, followed by 長右 ×8 + 蠱雕 ×4. Once the first escort enters, 化蛇 gives **0.8s tide telegraph → forced 2.4s high tide**. Existing P1 every-7s / P2 every-5s cadence, stats, geometry, HUD and progression are unchanged.
-- Next exact step: targeted/full verification → merge/deploy → public/player check.
+- PR #71 merged to `main` at `f592c541cc51a5a83e60bd86dc6c54eb903453de`.
+- Regression tests were updated for W10 order / opening tide / telegraph rendering. This Chat environment could not execute the repository suite, so no new automated PASS count is claimed.
+- Next exact step: player phone check of W10 化蛇 + escort interaction.
 
 ---
 
