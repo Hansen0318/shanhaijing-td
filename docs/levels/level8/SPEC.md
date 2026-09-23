@@ -14,7 +14,7 @@
 - Normal enemy B: **蠱雕** — durable marsh predator. **沼甲**: while inside an active wetland patch it gains temporary damage mitigation, with only a short carry-over after leaving.
 - Boss: **化蛇** — two-phase flood/mist controller. It manipulates the wetland state rather than receiving the normal 長右／蠱雕 wetland buffs.
 - Level8 environment mechanic: **潮位 / 濕地活化**. Several map wetland pockets are normally quiet; a shared tide cycle temporarily activates them together. This is not an A/B alternation and must not visually copy Level6 sunlight or Level7 thunder zones.
-- 化蛇 enters **before its W10 escort**, immediately gives a **0.8s tide telegraph**, then forces the opening high tide so its terrain-control identity is visible while 長右／蠱雕 are still entering. P1 then periodically forces early high-tide activation. P2 begins once at the Boss HP threshold, increases the forced-tide pressure, and may make all approved wetland pockets active during its surge window.
+- 化蛇 enters **before its W10 escort**. Once the first 長右／蠱雕 escort actually enters the battlefield, 化蛇 gives a **0.8s tide telegraph**, then forces the opening high tide so its terrain-control identity visibly affects the escort fight. P1 then periodically forces early high-tide activation. P2 begins once at the Boss HP threshold, increases the forced-tide pressure, and may make all approved wetland pockets active during its surge window.
 - Environment telegraph uses low-luminance ripple / drifting mist / bubble activity instead of bright rectangular or elliptical fields.
 - Environment Motion Lite is a required presentation layer for Level8; its approved fog/ripple/bubble/reed anchors are frozen in `GEOMETRY.md`.
 
@@ -104,7 +104,7 @@
 7. W7 — 長右 ×10 + 蠱雕 ×6, **0.82s**, HP ×**1.18**
 8. W8 — 長右 ×16 + 蠱雕 ×6, **0.70s**, HP ×**1.26**
 9. W9 — 長右 ×18 + 蠱雕 ×8, **0.64s**, HP ×**1.34**
-10. W10 — **化蛇 ×1 first**, then 長右 ×8 + 蠱雕 ×4 as escort, **0.84s**, normal-enemy HP ×**1.20**, Boss HP ×**1.10**. 化蛇 opening: **0.8s tide telegraph → forced 2.4s high tide**; subsequent P1/P2 cadence remains unchanged.
+10. W10 — **化蛇 ×1 first**, then 長右 ×8 + 蠱雕 ×4 as escort, **0.84s**, normal-enemy HP ×**1.20**, Boss HP ×**1.10**. 化蛇 opening once the first escort enters: **0.8s tide telegraph → forced 2.4s high tide**; subsequent P1/P2 cadence remains unchanged.
 
 ### Difficulty intent
 - W1–W3: readable introduction to 潮位 and species-specific wetland behavior.
