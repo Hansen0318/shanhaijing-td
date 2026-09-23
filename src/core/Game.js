@@ -314,7 +314,13 @@ export class Game {
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
     this.illusions = this.illusions.filter(illusion => illusion.alive);
     this.enemies.forEach(enemy => {
-      const bossContext = { inFog: Boolean(this.map.fogZoneAt(enemy)), insightActive: Boolean(enemy.statuses.insight) };
+      const bossContext = {
+        inFog: Boolean(this.map.fogZoneAt(enemy)),
+        insightActive: Boolean(enemy.statuses.insight),
+        escortAlive: enemy.type === 'huashe' && this.enemies.some(other => (
+          other !== enemy && other.alive && (other.type === 'changyou' || other.type === 'gudiao')
+        )),
+      };
       for (const event of BossSystem.update(enemy, dt, bossContext)) this.handleBossEvent(enemy, event);
       if (!enemy.alive && !enemy.processed) {
         if (enemy.reachedBase && enemy.baseArrivalRemaining > 0) return;
