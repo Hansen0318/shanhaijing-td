@@ -9,12 +9,13 @@
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**NARROW POST-RELEASE GEOMETRY REGISTRATION FIX**
+**NARROW POST-RELEASE 化蛇 BOSS-FLOW FIX**
 
 ### Allowed now
-- correct the newly evidenced fixed vertical registration offset between Geometry Guide V1 and the clean runtime background;
-- update all background-registered Level8 geometry by the same Y correction;
-- keep 化蛇 HUD/ability readability out of scope until this geometry fix is player-checked.
+- preserve the now player-confirmed Level8 geometry;
+- change only W10 spawn sequencing so 化蛇 leads the escort;
+- add the 0.8s opening tide telegraph and opening forced high tide;
+- preserve all existing stats, P1/P2 cadence, HUD, progression and tower systems.
 
 ### Forbidden until gate exit
 - gate is closed; do not reopen Level8 design, gameplay, geometry, or assets without new concrete evidence;
@@ -55,9 +56,8 @@ Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phon
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- merge/deploy the guide-to-clean Y-registration correction;
-- player phone recheck of Level8 path/tower/Base alignment;
-- 化蛇 readability follow-up remains intentionally deferred until geometry is confirmed.
+- targeted/full regression for the 化蛇 boss-flow change;
+- merge/deploy and public/player phone confirmation that 化蛇 now visibly controls tide while escort enemies are present.
 
 ## Current branch / SHA
 - released `main`: `16e32268838de8a39824383e649928f5b9a718b7` (PR #66)
