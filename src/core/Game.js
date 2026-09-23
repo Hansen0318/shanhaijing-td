@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-5';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-6';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js?v=level8-3';
@@ -10,7 +10,7 @@ import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js?v=level8-3';
 import { BlessingSystem } from '../systems/BlessingSystem.js?v=level8-3';
 import { WaveManager } from '../systems/WaveManager.js?v=level8-3';
-import { BossSystem } from '../systems/BossSystem.js?v=level8-3';
+import { BossSystem } from '../systems/BossSystem.js?v=level8-6';
 import { StatusSystem } from '../systems/StatusSystem.js?v=level8-3';
 import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js?v=level8-3';
 import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js?v=level8-3';
@@ -20,7 +20,7 @@ import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level8-3';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
-import { TideSystem } from '../systems/TideSystem.js?v=level8-3';
+import { TideSystem } from '../systems/TideSystem.js?v=level8-6';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -327,6 +327,11 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete() && this.pendingShocks.length === 0) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'huasheTideTelegraph') {
+      TideSystem.telegraphHighTide(this);
+      this.effects.push({ type: 'huasheTideTelegraph', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'huashePhase2') {
       this.effects.push({ type: 'huashePhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
       return;
