@@ -1,5 +1,31 @@
 # Shanhaijing TD Work Progress
 
+## CURRENT HANDOFF POINTER — READ THIS FIRST
+
+- Repository baseline: latest released `main` = **`e38711aa88641ad3c9cfea4c6e798291d8c77fd5`** (PR #64, Level8「幽冥沼澤」).
+- Current product state: **Level1–8 released; Level8 RELEASE COMPLETE / FROZEN**.
+- Active implementation branch: **none required for recovery**; Level8 feature work is fully merged to `main`.
+- Level8 engineering verification: **237/237 PASS**, `npm run check` PASS, syntax/diff checks PASS.
+- Release verification: Work release closure reported Pages/public Level8 dev entry and normal Level7→Level8 progression verified.
+- Player-device state: physical phone smoke is separate / optional unless the player reports a device-specific defect.
+- Next level: **Level9 is not initialized yet**.
+- If the player asks to develop the next level, initialize `docs/levels/level9/` from `docs/levels/_TEMPLATE/`, set PROGRESSION / SCOPE, update this pointer, and continue Chat-first.
+- If a future session resumes an in-progress level, this pointer must instead name that active level, remote feature branch, latest safe-push SHA, current gate, verification already completed, blocker (if any), and singular next exact step.
+- A new Chat / Work / Codex session should not ask the player to restate old context when the repository contains it; follow `AGENTS.md` Section 22 and `DEVELOPMENT_PLAYBOOK.md`.
+
+---
+
+## 2026-09-23：Level8 release complete / handoff closed
+
+- PR #64 `feat: ship Level8 幽冥沼澤` merged to `main` at **`e38711aa88641ad3c9cfea4c6e798291d8c77fd5`**.
+- Final pre-merge verification recorded **237/237 PASS**, `npm run check` PASS, JS syntax/diff checks PASS.
+- Work release closure reported GitHub Pages/public Level8 verification complete, including public dev Level8 and normal Level7→Level8 progression.
+- Level8 canonical `STATE.md` is now closed as RELEASE COMPLETE / FROZEN.
+- Level1–8 are the released baseline. Do not reopen them for a new-level session unless a shared change or concrete defect requires it.
+- Next exact step for continued campaign development: **initialize Level9 using the repository template and begin PROGRESSION / SCOPE**.
+
+---
+
 ## 2026-09-23：Level8 production implementation engineering PASS
 
 - Implemented Level7 victory → Level8 progression, exact-three owned-roster lineup, empty-lineup retry, W1–W10, frozen map/path/T1–T8/wetland geometry, and audited runtime assets.

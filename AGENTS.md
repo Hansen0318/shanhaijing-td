@@ -746,3 +746,73 @@ Once the player approves a single creature PNG candidate:
 - do not regenerate/restyle it merely because a new Chat/Work session starts;
 - later processing may trim/resize/compress/optimize it for runtime, but must preserve the approved visual identity;
 - replacement requires explicit player request or concrete runtime evidence that the approved asset is unusable.
+
+
+## 22. Zero-context takeover is the default for every new Chat / Work / Codex session
+
+The repository must be sufficient for a brand-new session to continue without the player reconstructing the previous conversation.
+
+This rule applies equally to **Chat, Work, Codex, and any future developer/agent**.
+
+### Mandatory zero-context bootstrap
+
+When a user says only that they want to continue this repository/project, continue the current level, start the next level, or resume after an interruption, the new session must **not ask the player to restate prior decisions first**.
+
+Before substantial work:
+
+1. sync / inspect the latest remote `main`;
+2. read `AGENTS.md`;
+3. read `docs/DEVELOPMENT_PLAYBOOK.md`;
+4. read the **CURRENT HANDOFF POINTER** at the top of `docs/WORK_PROGRESS.md`;
+5. read the active level's `STATE.md`;
+6. read only the canonical domain files required by the next action (`SPEC.md`, `GEOMETRY.md`, `ASSETS.md`, `DESIGN.md`);
+7. inspect any recorded active feature branch / latest safe-push SHA before creating new implementation work;
+8. continue from the **first unfinished item / Next exact step**.
+
+A conversation transcript, old Work prompt, or player-written recap is optional context, never the primary source of truth.
+
+### Mid-development recovery
+
+If the current handoff pointer or active `STATE.md` records an active feature branch / safe-push SHA:
+
+- recover that remote work first;
+- compare it with current `main`;
+- reuse recorded PASS evidence unless later changes invalidate it;
+- do not start a replacement branch or reimplement completed work merely because the session is new.
+
+If Work/session capacity ends, Section 2 must be completed before stopping so the next zero-context session can recover from GitHub.
+
+### Starting the next level
+
+If the latest level is recorded as **RELEASE COMPLETE / FROZEN** and no newer active level folder exists, a request to develop the next level means:
+
+1. determine the next numeric level from the released baseline;
+2. initialize `docs/levels/levelN/` from `docs/levels/_TEMPLATE/`;
+3. set the initial progression/scope gate;
+4. update the CURRENT HANDOFF POINTER in `docs/WORK_PROGRESS.md`;
+5. then proceed through the normal Chat-first stage gates.
+
+Do not ask the player for an old handoff prompt just to initialize the next level.
+
+### Release-state closure is mandatory documentation
+
+A release is not handoff-complete until repository docs are closed out after merge/deployment.
+
+After a verified release, update:
+- active level `STATE.md` to released/frozen status;
+- merged `main` SHA;
+- Pages/public verification state;
+- player-smoke status separately;
+- `docs/WORK_PROGRESS.md` CURRENT HANDOFF POINTER;
+- the singular next action (for example player smoke only, or initialize the next level).
+
+A stale `STATE.md` that still says implementation/release is pending after the code is deployed is a handoff defect and must be corrected before considering release cleanup complete.
+
+### No unnecessary player re-briefing
+
+Ask the player to repeat context only when:
+- required information is genuinely absent from repository canonical docs;
+- two canonical sources conflict and the conflict cannot be resolved from commits/runtime evidence;
+- an explicit new design choice is required.
+
+Otherwise proceed from GitHub state directly.

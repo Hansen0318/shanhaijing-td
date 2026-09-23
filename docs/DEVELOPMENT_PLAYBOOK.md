@@ -46,11 +46,13 @@ Interpretation:
 
 ## 2. Mandatory takeover/read order
 
+This is a **zero-context bootstrap**. A new Chat / Work / Codex session is expected to recover from GitHub without requiring the player to paste the prior conversation or a handoff prompt.
+
 A new owner must read in this order before substantial execution:
 
 1. `AGENTS.md`
 2. this `DEVELOPMENT_PLAYBOOK.md`
-3. `docs/WORK_PROGRESS.md`
+3. the **CURRENT HANDOFF POINTER** at the top of `docs/WORK_PROGRESS.md`, then the newest relevant progress entry
 4. active level `STATE.md`
 5. active level `SPEC.md`
 6. `GEOMETRY.md` if touching map/path/slots/zones/anchors
@@ -59,6 +61,8 @@ A new owner must read in this order before substantial execution:
 9. current branch / latest relevant SHA / diff
 
 Do not implement from a Work prompt or conversation transcript alone.
+
+If the pointer records an active remote feature branch/safe-push SHA, recover that work before starting a replacement branch. If the pointer says the latest level is RELEASE COMPLETE/FROZEN and no newer active level exists, a request to build the next level initializes the next numbered folder from `docs/levels/_TEMPLATE/` and updates the pointer before design begins.
 
 ## 3. Standard development lifecycle
 
@@ -169,7 +173,7 @@ Record:
 - final release SHA;
 - remaining known non-blocking note.
 
-Then mark the level released in `STATE.md`.
+Then mark the level released in `STATE.md`, record the merged main SHA / Pages-public verification / player-smoke state, and update the CURRENT HANDOFF POINTER in `WORK_PROGRESS.md`. A release with stale handoff docs is not closed.
 
 ### Gate K — Release cleanup
 After the release source is confirmed in `main` and Pages, and no unique unmerged work remains:

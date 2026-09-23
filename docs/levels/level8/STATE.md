@@ -4,25 +4,24 @@
 
 ## Active level
 - Level: **8**
-- Development phase: **RELEASE VERIFICATION**
-- Production implementation: **COMPLETE ON FEATURE BRANCH**
+- Development phase: **RELEASE COMPLETE / FROZEN**
+- Production implementation: **RELEASED ON MAIN**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**FINAL REVIEW / MERGE / PUBLIC VERIFICATION**
+**CLOSED — RELEASE COMPLETE**
 
 ### Allowed now
-- verify the implemented frozen Level8 contracts;
-- correct concrete runtime defects without changing approved gameplay or geometry;
-- complete `AGENTS.md` Section 8 release closure.
+- player phone/device smoke and narrow follow-up fixes only;
+- regression repair only when concrete evidence shows a shipped defect;
+- initialize Level9 from the project template when the player starts the next level.
 
 ### Forbidden until gate exit
-- no gameplay redesign, image regeneration, geometry remeasurement, or map recrop;
-- no redesign of the approved route shape / Spawn-Base arrangement / tower-pad composition;
-- no Work implementation handoff until 玄龜 VFX/Blessings, exact geometry, Environment Motion Lite anchors, and final asset audit are finalized.
+- gate is already closed; do not reopen Level8 design merely because a new session starts;
+- no regeneration/remeasurement/rebalancing without an explicit new request or concrete shipped defect.
 
 ### Gate exit condition
-Merge reviewed implementation to `main`, deploy GitHub Pages, and verify public Level8 dev and Level7→Level8 production flows.
+Already satisfied: reviewed implementation merged to `main` and release completed.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -56,21 +55,22 @@ Merge reviewed implementation to `main`, deploy GitHub Pages, and verify public 
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- final branch review
-- merge / GitHub Pages release
-- public browser verification
-- physical player-phone smoke, only if automated 390×700 evidence leaves a device-specific risk
+- optional physical player-phone smoke / any player-reported narrow visual correction
 
 ## Current branch / SHA
-- feature branch: `feat/level8-youming-marsh`
-- remote safe-push checkpoints: `dd2c63b`, `d113148`, `479f505`, `8935528`, `d8208d9`
+- released `main`: `e38711aa88641ad3c9cfea4c6e798291d8c77fd5`
+- merged PR: **#64**
+- implementation branch: `feat/level8-youming-marsh` (fully merged; recovery no longer depends on it)
+- historical safe-push checkpoints: `dd2c63b`, `d113148`, `479f505`, `8935528`, `d8208d9`, final head `3f3f46a`
 
 ## Verification status
-- ZIP checksum: PASS.
+- FINAL ASSET AUDIT / ZIP checksum: PASS.
 - Level8 targeted and affected shared regressions: PASS.
-- `npm test`: 233/233 PASS.
+- final pre-merge `npm test`: **237/237 PASS**.
 - `npm run check`, key JS syntax checks, and `git diff --check`: PASS.
-- local cloud-browser navigation is blocked from localhost by the browser boundary; public Pages runtime verification remains the release gate.
+- PR #64 merged to `main`.
+- Work release closure reported GitHub Pages/public Level8 verification complete, including dev entry and normal Level7→Level8 progression.
+- physical player-phone smoke is separate and is not claimed here.
 
 ## Do not redo
 - do not retest or redesign completed Level1–7 unless a Level8 change actually affects a shared contract.
@@ -79,4 +79,4 @@ Merge reviewed implementation to `main`, deploy GitHub Pages, and verify public 
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Next exact step
-**Perform final feature-branch review, merge to `main`, deploy GitHub Pages, then verify public Level8 dev and Level7→Level8 production flows.**
+**If continuing level development, initialize Level9 from `docs/levels/_TEMPLATE/`; otherwise only perform player-owned Level8 phone smoke or a narrow evidence-backed fix.**
