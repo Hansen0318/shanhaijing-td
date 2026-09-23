@@ -125,11 +125,16 @@ test('entry and style cache versions are fresh for this release', async () => {
   const enemy = await readFile(new URL('../src/entities/Enemy.js', import.meta.url), 'utf8');
   const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
   const progression = await readFile(new URL('../src/config/progressionData.js', import.meta.url), 'utf8');
-  for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css', 'src/main.js']) {
+  for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css']) {
     assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=level8-3`));
   }
-  for (const module of ['Game', 'Renderer', 'UIController', 'artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level8-3`));
-  for (const module of ['gameData', 'GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'BossSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData', 'TideSystem']) {
+  assert.match(html, /src\/main\.js\?v=level8-7/);
+  assert.match(main, /Game\.js\?v=level8-6/);
+  assert.match(main, /Renderer\.js\?v=level8-7/);
+  assert.match(main, /UIController\.js\?v=level8-5/);
+  for (const module of ['artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level8-3`));
+  for (const module of ['gameData', 'BossSystem', 'TideSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level8-6`));
+  for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
     assert.match(game, new RegExp(`${module}\\.js\\?v=level8-3`));
   }
   assert.match(enemy, /StatusSystem\.js\?v=level8-3/);

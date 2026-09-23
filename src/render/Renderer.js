@@ -98,10 +98,10 @@ export class Renderer {
 
     if (motion.fog) {
       const area = motion.fog;
-      const drift = Math.sin(time * 0.34) * 5;
+      const drift = Math.sin(time * 0.34) * 8;
       const fog = ctx.createRadialGradient(area.x + area.width / 2 + drift, area.y + area.height / 2, 2, area.x + area.width / 2 + drift, area.y + area.height / 2, area.width * 0.58);
-      fog.addColorStop(0, 'rgba(163, 207, 205, .105)');
-      fog.addColorStop(0.55, 'rgba(104, 165, 169, .065)');
+      fog.addColorStop(0, 'rgba(163, 207, 205, .16)');
+      fog.addColorStop(0.55, 'rgba(104, 165, 169, .10)');
       fog.addColorStop(1, 'rgba(104, 165, 169, 0)');
       ctx.fillStyle = fog;
       ctx.fillRect(area.x, area.y, area.width, area.height);
@@ -110,34 +110,34 @@ export class Renderer {
       const area = motion.ripple;
       const phase = (time * 0.35) % 1;
       ctx.save();
-      ctx.strokeStyle = `rgba(138, 226, 211, ${0.13 * (1 - phase)})`;
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = `rgba(138, 226, 211, ${0.24 * (1 - phase)})`;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.ellipse(area.x + area.width / 2, area.y + area.height / 2, 8 + phase * 28, 3 + phase * 12, -0.08, 0, Math.PI * 2);
+      ctx.ellipse(area.x + area.width / 2, area.y + area.height / 2, 7 + phase * 35, 3 + phase * 15, -0.08, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
     }
     if (motion.bubbles) {
       const area = motion.bubbles;
       ctx.save();
-      ctx.fillStyle = 'rgba(158, 233, 218, .17)';
-      for (let index = 0; index < 4; index += 1) {
-        const phase = (time * (0.22 + index * 0.025) + index * 0.23) % 1;
-        const x = area.x + 10 + (index * 17) % Math.max(18, area.width - 14);
+      ctx.fillStyle = 'rgba(158, 233, 218, .24)';
+      for (let index = 0; index < 5; index += 1) {
+        const phase = (time * (0.28 + index * 0.025) + index * 0.19) % 1;
+        const x = area.x + 9 + (index * 14) % Math.max(18, area.width - 14);
         const y = area.y + area.height * (1 - phase);
-        ctx.beginPath(); ctx.arc(x, y, 1.2 + index * 0.35, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 2.5 + index * 0.45, 0, Math.PI * 2); ctx.fill();
       }
       ctx.restore();
     }
     if (motion.reeds) {
       const area = motion.reeds;
       ctx.save();
-      ctx.strokeStyle = 'rgba(129, 171, 103, .32)';
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = 'rgba(129, 171, 103, .42)';
+      ctx.lineWidth = 1.5;
       for (let index = 0; index < 5; index += 1) {
         const x = area.x + 5 + index * 10;
-        const sway = Math.sin(time * 0.8 + index * 0.7) * 2;
-        ctx.beginPath(); ctx.moveTo(x, area.y + area.height); ctx.quadraticCurveTo(x + sway, area.y + area.height * 0.48, x + sway * 1.4, area.y + 6); ctx.stroke();
+        const sway = Math.sin(time * 0.65 + index * 0.7) * 5;
+        ctx.beginPath(); ctx.moveTo(x, area.y + area.height); ctx.quadraticCurveTo(x + sway, area.y + area.height * 0.48, x + sway, area.y + 6); ctx.stroke();
       }
       ctx.restore();
     }

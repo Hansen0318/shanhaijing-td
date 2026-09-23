@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-test('all six Boss HUDs use one variable-positioned code-driven fill without image masks', async () => {
+test('all seven Boss HUDs use one variable-positioned code-driven fill without image masks', async () => {
   const base = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const fixes = await readFile(new URL('../styles-fixes.css', import.meta.url), 'utf8');
   const css = await readFile(new URL('../styles-lineup.css', import.meta.url), 'utf8');
@@ -29,9 +29,9 @@ test('all six Boss HUDs use one variable-positioned code-driven fill without ima
   assert.match(html, /styles\.css\?v=level8-3/);
   assert.match(html, /styles-fixes\.css\?v=level8-3/);
   assert.match(html, /styles-lineup\.css\?v=level8-3/);
-  assert.match(html, /src\/main\.js\?v=level8-3/);
-  assert.match(main, /Renderer\.js\?v=level8-3/);
-  assert.match(main, /UIController\.js\?v=level8-3/);
+  assert.match(html, /src\/main\.js\?v=level8-7/);
+  assert.match(main, /Renderer\.js\?v=level8-7/);
+  assert.match(main, /UIController\.js\?v=level8-5/);
   assert.match(main, /artAssets\.js\?v=level8-3/);
   assert.match(ui, /artAssets\.js\?v=level8-3/);
   assert.match(renderer, /artAssets\.js\?v=level8-3/);

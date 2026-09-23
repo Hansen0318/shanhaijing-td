@@ -5,18 +5,18 @@ import { LEVELS, MAP_DATA, TOWER_DATA } from '../src/config/gameData.js';
 import { Tower } from '../src/entities/Tower.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], strokeRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [], ellipse: [], gradients: 0 };
-  const gradient = () => ({ addColorStop() {} });
-  return {
+  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], strokeRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], quadraticCurveTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [], ellipse: [], gradients: 0, radialGradients: [], strokes: [], fills: [] };
+  const context = {
     calls,
-    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo(...args) { calls.lineTo.push(args); }, stroke() {},
-    strokeRect(...args) { calls.strokeRect.push(args); }, setLineDash() {}, arc(...args) { calls.arc.push(args); }, fill() {}, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
-    quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); }, ellipse(...args) { calls.ellipse.push(args); },
-    createLinearGradient() { calls.gradients += 1; return gradient(); }, createRadialGradient() { calls.gradients += 1; return gradient(); },
+    setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo(...args) { calls.lineTo.push(args); }, stroke() { calls.strokes.push({ lineWidth: context.lineWidth, strokeStyle: context.strokeStyle }); },
+    strokeRect(...args) { calls.strokeRect.push(args); }, setLineDash() {}, arc(...args) { calls.arc.push(args); }, fill() { calls.fills.push({ fillStyle: context.fillStyle }); }, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
+    quadraticCurveTo(...args) { calls.quadraticCurveTo.push(args); }, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); }, ellipse(...args) { calls.ellipse.push(args); },
+    createLinearGradient() { calls.gradients += 1; return { addColorStop() {} }; }, createRadialGradient(...args) { const record = { args, stops: [] }; calls.gradients += 1; calls.radialGradients.push(record); return { addColorStop(offset, color) { record.stops.push([offset, color]); } }; },
     drawImage(...args) { calls.drawImage.push(args); },
     rotate(value) { calls.rotate.push(value); },
     scale(x, y) { calls.scale.push([x, y]); },
   };
+  return context;
 }
 
 function fakeArt(dimensions = {}) {
@@ -138,6 +138,41 @@ test('Level8 renderer uses the approved background crop, eight slots, wetlands a
   assert.ok(ctx.calls.clip >= 3, 'wetland polygons must clip low-luminance water motion to their exact shapes');
   assert.ok(ctx.calls.gradients >= 4, 'fog, ripple and active wetland motion require procedural gradients');
   assert.ok(ctx.calls.ellipse.length >= 2, 'ripple and bubble anchors must remain visibly animated');
+});
+
+test('Level8 Motion Lite stays inside frozen anchors while remaining readable at 390px', () => {
+  const motion = LEVELS[8].map.environmentMotion;
+  const gameFor = (environmentMotion, visualTime) => ({
+    level: { id: 8, map: { wetlandZones: [], environmentMotion } },
+    tide: { high: false, telegraph: false },
+    visualTime,
+  });
+
+  const fogFixture = rendererFixture();
+  fogFixture.renderer.drawLevelEightEnvironment(fogFixture.ctx, gameFor({ fog: motion.fog }, Math.PI / (2 * 0.34)));
+  const fog = fogFixture.ctx.calls.radialGradients[0];
+  assert.deepEqual(fog.args.slice(0, 2), [motion.fog.x + motion.fog.width / 2 + 8, motion.fog.y + motion.fog.height / 2]);
+  assert.deepEqual(fog.stops.slice(0, 2), [[0, 'rgba(163, 207, 205, .16)'], [0.55, 'rgba(104, 165, 169, .10)']]);
+
+  const rippleFixture = rendererFixture();
+  rippleFixture.renderer.drawLevelEightEnvironment(rippleFixture.ctx, gameFor({ ripple: motion.ripple, bubbles: motion.bubbles }, 0));
+  assert.equal(rippleFixture.ctx.calls.strokes[0].lineWidth, 2);
+  assert.equal(rippleFixture.ctx.calls.strokes[0].strokeStyle, 'rgba(138, 226, 211, 0.24)');
+
+  const expandedRippleFixture = rendererFixture();
+  expandedRippleFixture.renderer.drawLevelEightEnvironment(expandedRippleFixture.ctx, gameFor({ ripple: motion.ripple }, 0.9 / 0.35));
+  assert.ok(expandedRippleFixture.ctx.calls.ellipse[0][2] >= 38, 'ripple radius expansion must remain readable at phone width');
+
+  assert.equal(rippleFixture.ctx.calls.arc.length, 5, 'bubble anchor should render five sparse bubbles');
+  const bubbleRadii = rippleFixture.ctx.calls.arc.map(args => args[2]);
+  assert.ok(Math.min(...bubbleRadii) >= 2.5 && Math.max(...bubbleRadii) <= 4.5);
+
+  const reedFixture = rendererFixture();
+  reedFixture.renderer.drawLevelEightEnvironment(reedFixture.ctx, gameFor({ reeds: motion.reeds }, Math.PI / (2 * 0.65)));
+  const firstReedBase = reedFixture.ctx.calls.moveTo[0][0];
+  const firstReedTip = reedFixture.ctx.calls.quadraticCurveTo[0][2];
+  assert.ok(Math.abs(firstReedTip - firstReedBase) >= 4 && Math.abs(firstReedTip - firstReedBase) <= 6,
+    'reed tip sway must stay within the approved 4-6px readability band');
 });
 
 test('Level8 base label is centered below the canonical Base instead of the map corner', () => {
