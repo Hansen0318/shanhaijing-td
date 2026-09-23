@@ -1,5 +1,19 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-23：Level8 Environment Motion Lite anchors frozen
+
+- Frozen four low-frequency procedural motions from visible features on the approved clean background:
+  - M1 ground fog drift **(8,166,86,66)** around the left low basin / stone-head marsh;
+  - M2 sparse ripple arcs **(205,143,78,55)** in the central boat/lily pool;
+  - M3 occasional bubble clusters **(304,229,69,63)** in the right-middle bridge-side pool;
+  - M4 subtle reed micro-sway **(247,306,52,46)** beside the middle-lower road bend.
+- These anchors are presentation-only and are separate from the three gameplay wetland polygons.
+- No static image assets are required for Motion Lite.
+- Level8 planning / VFX / geometry / motion anchors are now frozen. Production implementation remains NOT STARTED.
+- Next exact gate: **FINAL ASSET AUDIT** using the player's concrete re-uploaded final files. Do not package the Work ZIP or start implementation until the actual approved source files are verified for version, role, format, dimensions/alpha, mapping and checksum.
+
+---
+
 ## 2026-09-23：Level8 exact geometry frozen
 
 - Re-verified the player-approved Geometry Guide V1 and clean background source pair at **1024×1536**.
