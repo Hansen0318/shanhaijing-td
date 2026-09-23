@@ -16,6 +16,7 @@ import { BlessingSystem } from '../src/systems/BlessingSystem.js';
 import { CombatSystem } from '../src/systems/CombatSystem.js';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { TideSystem } from '../src/systems/TideSystem.js';
+import { WaveManager } from '../src/systems/WaveManager.js';
 
 test('Level8 uses the frozen 幽冥沼澤 identity and exact runtime geometry', () => {
   const level = LEVELS[8];
@@ -81,7 +82,7 @@ test('Level8 W1-W10 and frozen enemy/tower values match canonical production dat
     { groups: [{ type: 'changyou', count: 10 }, { type: 'gudiao', count: 6 }], interval: 0.82, hpMultiplier: 1.18 },
     { groups: [{ type: 'changyou', count: 16 }, { type: 'gudiao', count: 6 }], interval: 0.7, hpMultiplier: 1.26 },
     { groups: [{ type: 'changyou', count: 18 }, { type: 'gudiao', count: 8 }], interval: 0.64, hpMultiplier: 1.34 },
-    { groups: [{ type: 'changyou', count: 8 }, { type: 'gudiao', count: 4 }, { type: 'huashe', count: 1 }], interval: 0.84, hpMultiplier: 1.2, bossHpMultiplier: 1.1 },
+    { groups: [{ type: 'huashe', count: 1 }, { type: 'changyou', count: 8 }, { type: 'gudiao', count: 4 }], interval: 0.84, hpMultiplier: 1.2, bossHpMultiplier: 1.1 },
   ]);
   assert.deepEqual(ENEMY_DATA.changyou, { id: 'changyou', name: '長右', emoji: '🐒', hp: 110, speed: 86, baseDamage: 1, reward: 15, radius: 12, marshLeapSpeedMultiplier: 1.3, marshLeapDuration: 1.6 });
   assert.deepEqual(ENEMY_DATA.gudiao, { id: 'gudiao', name: '蠱雕', emoji: '🦅', hp: 420, speed: 24, baseDamage: 3, reward: 32, radius: 18, marshArmorDamageMultiplier: 0.78, marshArmorLinger: 0.6 });
@@ -182,21 +183,40 @@ test('蠱雕 marsh armor mitigates by 0.78 in active wetland and lingers only 0.
   assert.equal(CombatSystem.resolveDamage(100, gudiao), 100);
 });
 
-test('化蛇 P1/P2 forced-tide cadence, phase transition and W10 effective HP are exact', () => {
+test('化蛇 opens W10 with a readable tide telegraph, then keeps exact P1/P2 cadence', () => {
   const game = new Game(() => 0.2, 8);
   game.wave.waveNumber = 10;
   const boss = game.spawnEnemy('huashe');
   assert.equal(boss.maxHp, 8360);
-  assert.deepEqual(BossSystem.update(boss, 6.99), []);
+
+  assert.deepEqual(BossSystem.update(boss, 0), [{ type: 'huasheTideTelegraph', duration: 0.8 }]);
+  game.handleBossEvent(boss, { type: 'huasheTideTelegraph', duration: 0.8 });
+  assert.equal(game.tide.telegraph, true);
+  assert.equal(game.tide.high, false);
+  assert.deepEqual(BossSystem.update(boss, 0.79), []);
   assert.deepEqual(BossSystem.update(boss, 0.01), [{ type: 'huasheForcedTide', duration: 2.4 }]);
   game.handleBossEvent(boss, { type: 'huasheForcedTide', duration: 2.4 });
   assert.equal(game.tide.forcedRemaining, 2.4);
+  assert.equal(game.tide.high, true);
+
+  assert.deepEqual(BossSystem.update(boss, 6.99), []);
+  assert.deepEqual(BossSystem.update(boss, 0.01), [{ type: 'huasheForcedTide', duration: 2.4 }]);
+
   boss.hp = boss.maxHp * 0.5;
   assert.deepEqual(BossSystem.update(boss, 0), [{ type: 'huashePhase2', phase: 2, duration: 0.8 }]);
   assert.equal(boss.speedMultiplier, 1.15);
   assert.deepEqual(BossSystem.update(boss, 4.99), []);
   assert.deepEqual(BossSystem.update(boss, 0.01), [{ type: 'huasheForcedTide', duration: 3 }]);
   assert.deepEqual(BossSystem.update(boss, 0), []);
+});
+
+test('Level8 W10 spawns 化蛇 before its 長右／蠱雕 escort', () => {
+  const wave = new WaveManager(LEVEL8_WAVE_DATA);
+  assert.equal(wave.start(10), true);
+  assert.equal(wave.queue[0], 'huashe');
+  assert.deepEqual(wave.queue.slice(0, 4), ['huashe', 'changyou', 'changyou', 'changyou']);
+  assert.equal(wave.queue.filter(type => type === 'changyou').length, 8);
+  assert.equal(wave.queue.filter(type => type === 'gudiao').length, 4);
 });
 
 test('Level8 victory waits for escort resolution, queue completion and 化蛇 death', () => {
