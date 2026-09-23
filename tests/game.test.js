@@ -160,6 +160,7 @@ test('wave ten presents the unified boss arrival and qiongqi frenzy banners in o
 test('escaped enemies visibly pass the endpoint before base damage and wave completion', () => {
   const game = new Game();
   game.state = 'combat';
+  game.time.setPaused(false);
   game.wave.waveNumber = 1;
   game.wave.active = true;
   game.wave.queue.length = 0;

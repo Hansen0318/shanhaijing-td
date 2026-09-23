@@ -10,6 +10,7 @@ export class Tower {
     this.facing = 1;
     this.lastTargetX = null;
     this.stunRemaining = 0;
+    this.successfulAttacks = 0;
   }
   faceTarget(targetX) {
     this.lastTargetX = targetX;
@@ -40,6 +41,11 @@ export class Tower {
       bossVulnerability: this.data.bossVulnerability,
       defensePierce: 0,
       illusionRevealDuration: 0.8,
+      shockEvery: this.data.shockEvery,
+      shockDelay: this.data.shockDelay,
+      shockRadius: this.data.shockRadius,
+      shockDamage: this.data.shockDamage,
+      shockPushback: this.data.shockPushback,
     };
     if (this.level === 3 && this.type === 'bifang') stats.explosionRadius *= this.data.level3.explosionRadiusMultiplier;
     if (this.type === 'bifang') stats.explosionRadius *= 1 + (modifiers.bifangRadius ?? 0);
@@ -60,6 +66,13 @@ export class Tower {
       stats.illusionRevealDuration = Math.max(0.4, 0.8 - (0.2 * sightStacks));
     }
     if (this.type === 'baize' && this.level >= 3) stats.defensePierce = this.data.level3.defensePierce;
+    if (this.type === 'xuangui') {
+      stats.shockDamage = Number((this.data.shockDamage
+        * (1 + (modifiers.allDamage ?? 0))
+        * (1 + (modifiers.xuanguiShockDamage ?? 0))).toFixed(3));
+      stats.shockRadius = this.data.shockRadius + (modifiers.xuanguiShockRadius ?? 0);
+      stats.shockPushback = this.data.shockPushback + (modifiers.xuanguiShockPushback ?? 0);
+    }
     return stats;
   }
 }

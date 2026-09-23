@@ -80,3 +80,24 @@ test('Kui HP fill stays inside the conservative empty channel after the real nin
     assert.ok(rendered.top + rendered.height <= channel.top + channel.height + 0.65);
   }
 });
+
+test('Huashe HP fill maps into the approved 768x183 transparent channel without changing HUD height', () => {
+  const sourceChannel = { left: 98, top: 106, width: 572, height: 23 };
+  const channel = {
+    left: sourceChannel.left / 768 * PANEL_WIDTH,
+    top: sourceChannel.top / 183 * PANEL_HEIGHT,
+    width: sourceChannel.width / 768 * PANEL_WIDTH,
+    height: sourceChannel.height / 183 * PANEL_HEIGHT,
+  };
+  const border = 6;
+  const geometry = BOSS_HUD_GEOMETRY.huashe;
+  const rendered = {
+    left: border + percent(geometry.left) * (PANEL_WIDTH - border * 2),
+    top: border + percent(geometry.top) * (PANEL_HEIGHT - border * 2),
+    width: percent(geometry.width) * (PANEL_WIDTH - border * 2),
+    height: percent(geometry.height) * (PANEL_HEIGHT - border * 2),
+  };
+  for (const key of ['left', 'top', 'width', 'height']) {
+    assert.ok(Math.abs(rendered[key] - channel[key]) <= 0.8, `huashe rendered ${key} misses its approved empty channel`);
+  }
+});

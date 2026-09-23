@@ -1,5 +1,5 @@
-import { StatusSystem } from '../systems/StatusSystem.js';
-import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level7-1';
+import { StatusSystem } from '../systems/StatusSystem.js?v=level8-2';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-2';
 
 const BASE_ARRIVAL_LINGER_SECONDS = 0.28;
 const BASE_ARRIVAL_EXIT_DISTANCE = 22;
@@ -86,7 +86,8 @@ export class Enemy {
   }
   updateBaseArrival(dt) {
     if (!this.reachedBase || this.baseArrivalRemaining <= 0) return false;
-    this.baseArrivalRemaining = Math.max(0, this.baseArrivalRemaining - Math.max(0, dt));
+    const remaining = this.baseArrivalRemaining - Math.max(0, dt);
+    this.baseArrivalRemaining = remaining <= Number.EPSILON * 8 ? 0 : remaining;
     const duration = this.baseArrivalDuration || BASE_ARRIVAL_LINGER_SECONDS;
     const progress = 1 - this.baseArrivalRemaining / duration;
     Object.assign(this, this.map.positionBeyondEnd(BASE_ARRIVAL_EXIT_DISTANCE * progress));

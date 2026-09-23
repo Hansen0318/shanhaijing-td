@@ -5,7 +5,7 @@ import { ENEMY_VISUALS, minimumEnemyPathSpacing } from '../src/config/enemyVisua
 import { Game } from '../src/core/Game.js';
 import { WaveManager } from '../src/systems/WaveManager.js';
 
-test('every enemy used by Levels 1–5 has shared visual geometry for spacing and anchoring', () => {
+test('every enemy used by every playable level has shared visual geometry for spacing and anchoring', () => {
   const usedTypes = new Set(
     Object.values(LEVELS).flatMap(level => level.waves.flatMap(wave => wave.groups.map(group => group.type))),
   );
@@ -44,6 +44,8 @@ test('the shared spawn gate applies size-aware path spacing in every playable le
     { levelId: 4, type: 'huanli' },
     { levelId: 5, type: 'lili' },
     { levelId: 6, type: 'fusangjiashou' },
+    { levelId: 7, type: 'zhuhuai' },
+    { levelId: 8, type: 'gudiao' },
   ];
 
   for (const { levelId, type } of cases) {
@@ -72,6 +74,8 @@ test('mixed-type followers use both rendered footprints at the spawn gate', () =
     { levelId: 4, leader: 'huanli', follower: 'meihu' },
     { levelId: 5, leader: 'lili', follower: 'zhuyan' },
     { levelId: 6, leader: 'jinwu', follower: 'yangyu' },
+    { levelId: 7, leader: 'kui', follower: 'qinyuan' },
+    { levelId: 8, leader: 'gudiao', follower: 'changyou' },
   ];
 
   for (const { levelId, leader, follower } of cases) {
@@ -103,6 +107,24 @@ test('Level7 mixed qinyuan, zhuhuai and kui use the shared real spawn gate', () 
   zhuhuai.pathDistance = zhuhuaiToKui;
   assert.equal(game.canSpawnEnemy('kui'), true);
   assert.equal(game.spawnEnemy('kui').type, 'kui');
+});
+
+test('Level8 mixed 長右, 蠱雕 and 化蛇 use the shared real spawn gate', () => {
+  const game = new Game(() => 0.2, 8);
+  assert.equal(game.canSpawnEnemy('changyou'), true);
+  const changyou = game.spawnEnemy('changyou');
+  const changyouToGudiao = minimumEnemyPathSpacing('changyou', 'gudiao');
+  changyou.pathDistance = changyouToGudiao - 0.01;
+  assert.equal(game.canSpawnEnemy('gudiao'), false);
+  changyou.pathDistance = changyouToGudiao;
+  assert.equal(game.canSpawnEnemy('gudiao'), true);
+  const gudiao = game.spawnEnemy('gudiao');
+  changyou.pathDistance += 200;
+  const gudiaoToHuashe = minimumEnemyPathSpacing('gudiao', 'huashe');
+  gudiao.pathDistance = gudiaoToHuashe - 0.01;
+  assert.equal(game.canSpawnEnemy('huashe'), false);
+  gudiao.pathDistance = gudiaoToHuashe;
+  assert.equal(game.canSpawnEnemy('huashe'), true);
 });
 
 test('spacing never slows an already spawned follower', () => {

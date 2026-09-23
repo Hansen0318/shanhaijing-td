@@ -19,13 +19,13 @@ function assertCompletePngWithAlpha(bytes, id) {
   assert.equal(hasAlpha, true, `${id} must retain alpha transparency`);
 }
 
-test('art catalog exposes all 102 asset IDs and every file is deployable', async () => {
+test('art catalog exposes all 109 asset IDs and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 102);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 101, 'only Jumang body reuse may share a path');
+  assert.equal(entries.length, 109);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 107, 'Jumang and Xuangui unlock/body pairs may share their approved paths');
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.jpg');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
   assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.jpg');
@@ -57,11 +57,43 @@ test('art catalog exposes all 102 asset IDs and every file is deployable', async
   assert.equal(ART_ASSETS.kuiBossPanel, 'assets/ui/ui_boss_kui_panel_v1.png');
   assert.equal(ART_ASSETS.jumangLeafblade, 'assets/effects/fx_jumang_leafblade_v1.png');
   assert.equal(ART_ASSETS.jumang, ART_ASSETS.jumangUnlock, 'deployed Jumang reuses the approved unlock visual');
+  assert.equal(ART_ASSETS.level8Background, 'assets/levels/level8/bg_level8_youming_marsh_v1.jpg');
+  assert.equal(ART_ASSETS.changyou, 'assets/enemies/enemy_changyou_v1.png');
+  assert.equal(ART_ASSETS.gudiao, 'assets/enemies/enemy_gudiao_v1.png');
+  assert.equal(ART_ASSETS.huashe, 'assets/bosses/boss_huashe_v1.png');
+  assert.equal(ART_ASSETS.huasheBossPanel, 'assets/ui/ui_boss_huashe_panel_v1.png');
+  assert.equal(ART_ASSETS.xuangui, 'assets/towers/tower_xuangui_v1.png');
+  assert.equal(ART_ASSETS.xuangui, ART_ASSETS.xuanguiUnlock, 'Xuangui unlock reuses the approved tower visual');
 
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level7-1$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level8-2$`));
+  }
+});
+
+test('level-eight runtime candidates are exact, alpha-safe, mobile-sized, and staged', async () => {
+  const { ART_ASSETS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
+  const alphaBudgets = {
+    changyou: [256, 228, 150_000], gudiao: [256, 244, 150_000], huashe: [512, 501, 400_000],
+    xuangui: [256, 216, 150_000], huasheBossPanel: [768, 183, 250_000],
+  };
+  for (const [id, [width, height, maxBytes]] of Object.entries(alphaBudgets)) {
+    const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
+    assertCompletePngWithAlpha(bytes, id);
+    assert.deepEqual(pngDimensions(bytes), { width, height });
+    assert.ok(bytes.length < maxBytes, `${id} exceeds ${maxBytes} bytes`);
+  }
+  const background = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS.level8Background}`, moduleUrl)));
+  assert.deepEqual([...background.subarray(0, 2)], [255, 216]);
+  assert.deepEqual([...background.subarray(-2)], [255, 217]);
+  assert.ok(background.length < 500_000);
+
+  for (const id of ['slotPlatform', 'level8Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'changyou']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[8].includes(id), true, `${id} must be ready for Level8 first paint`);
+  }
+  for (const id of ['gudiao', 'huashe', 'huasheBossPanel', 'xuangui', 'xuanguiUnlock']) {
+    assert.equal(LEVEL_DEFERRED_ART_IDS[8].includes(id), true, `${id} must remain deferred`);
   }
 });
 
@@ -240,7 +272,7 @@ test('level-five art catalog stages first-paint assets and defers Boss combat ar
   }
 });
 
-test('all six Boss HUD panels are optimized transparent empty-channel assets', async () => {
+test('all seven standard Boss HUD panels plus the approved fixed-footprint Huashe panel are optimized', async () => {
   const { ART_ASSETS } = await import(moduleUrl);
   for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel', 'xingtianBossPanel', 'jinwuBossPanel']) {
     const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
@@ -248,6 +280,10 @@ test('all six Boss HUD panels are optimized transparent empty-channel assets', a
     assert.deepEqual(pngDimensions(bytes), { width: 768, height: 256 }, `${id} must match the optimized HUD runtime size`);
     assert.ok(bytes.length < 500_000, `${id} is ${bytes.length} bytes; expected under 500000`);
   }
+  const huashe = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS.huasheBossPanel}`, moduleUrl)));
+  assertCompletePngWithAlpha(huashe, 'huasheBossPanel');
+  assert.deepEqual(pngDimensions(huashe), { width: 768, height: 183 });
+  assert.ok(huashe.length < 250_000);
 });
 
 test('mobile-rendered level-one and level-two art stays within source-pixel and transfer budgets', async () => {

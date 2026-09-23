@@ -1,4 +1,4 @@
-import { GAME_CONFIG } from '../config/gameData.js';
+import { GAME_CONFIG } from '../config/gameData.js?v=level8-2';
 
 const MAX_STACKS = 2;
 

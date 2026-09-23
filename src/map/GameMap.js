@@ -32,6 +32,18 @@ function smoothWaypoints(points, subdivisions = 1) {
   return result;
 }
 
+function pointInPolygon(point, vertices) {
+  let inside = false;
+  for (let index = 0, previous = vertices.length - 1; index < vertices.length; previous = index, index += 1) {
+    const currentPoint = vertices[index];
+    const previousPoint = vertices[previous];
+    const crosses = (currentPoint.y > point.y) !== (previousPoint.y > point.y)
+      && point.x < ((previousPoint.x - currentPoint.x) * (point.y - currentPoint.y)) / (previousPoint.y - currentPoint.y) + currentPoint.x;
+    if (crosses) inside = !inside;
+  }
+  return inside;
+}
+
 export class GameMap {
   constructor(data) {
     this.data = data;
@@ -82,6 +94,9 @@ export class GameMap {
       point.x >= zone.x && point.x <= zone.x + zone.width
       && point.y >= zone.y && point.y <= zone.y + zone.height
     ))?.id ?? null;
+  }
+  wetlandZoneAt(point) {
+    return (this.data.wetlandZones ?? []).find(zone => pointInPolygon(point, zone.points))?.id ?? null;
   }
   chargeCorridorAt(point) {
     const zone = this.data.chargeCorridor;

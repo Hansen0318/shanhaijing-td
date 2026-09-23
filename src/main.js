@@ -1,7 +1,8 @@
-import { Game } from './core/Game.js?v=level7-visualfix-1';
-import { Renderer } from './render/Renderer.js?v=level7-waterfall-3';
-import { UIController } from './ui/UIController.js?v=level7-1';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level7-1';
+import { Game } from './core/Game.js?v=level8-2';
+import { Renderer } from './render/Renderer.js?v=level8-2';
+import { UIController } from './ui/UIController.js?v=level8-2';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-2';
+import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level8-2';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }
@@ -29,6 +30,7 @@ function renderDevMenu() {
       <button data-dev-level="5">Level5</button>
       <button data-dev-level="6">Level6</button>
       <button data-dev-level="7">Level7</button>
+      <button data-dev-level="8">Level8</button>
     </main>`;
   document.querySelectorAll('[data-dev-level]').forEach(button => {
     button.addEventListener('click', () => {
@@ -39,7 +41,7 @@ function renderDevMenu() {
 }
 
 function drawPathDebug(renderer, game) {
-  if (params.get('devPath') !== '1' || ![3, 4, 5, 6, 7].includes(game.levelId)) return;
+  if (params.get('devPath') !== '1' || ![3, 4, 5, 6, 7, 8].includes(game.levelId)) return;
   const ctx = renderer.ctx;
   const runtime = game.map.waypoints;
   const anchors = game.level.map.waypoints;
@@ -81,6 +83,14 @@ function drawPathDebug(renderer, game) {
     ctx.strokeStyle = 'rgba(105, 224, 255, .95)';
     ctx.lineWidth = 2;
     ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
+  }
+  for (const zone of game.level.map.wetlandZones ?? []) {
+    ctx.strokeStyle = 'rgba(91, 231, 213, .95)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    zone.points.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
+    ctx.closePath();
+    ctx.stroke();
   }
   ctx.strokeStyle = 'rgba(255, 80, 120, .95)';
   ctx.lineWidth = 1.5;
@@ -203,7 +213,7 @@ function setupLevelFourDev(game, devLevel) {
 function initializeGame() {
   resetViewport();
   const devLevel = Number.parseInt(params.get('devLevel') ?? '', 10);
-  const initialLevelId = [1, 2, 3, 4, 5, 6, 7].includes(devLevel) ? devLevel : 1;
+  const initialLevelId = [1, 2, 3, 4, 5, 6, 7, 8].includes(devLevel) ? devLevel : 1;
   const canvas = document.querySelector('#game-canvas');
   const blockingStartedAt = performance.now();
   const game = new Game(Math.random, initialLevelId);
@@ -211,6 +221,7 @@ function initializeGame() {
   setupLevelFiveDev(game, devLevel);
   setupLevelSixDev(game, devLevel);
   setupLevelSevenDev(game, devLevel);
+  setupLevelEightDev(game, devLevel, params);
   const art = new ArtStore(Image, initialLevelId);
   const renderer = new Renderer(canvas, art);
   document.body.dataset.level = String(game.levelId);

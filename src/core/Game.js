@@ -1,25 +1,26 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level7-mapfix-1';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-2';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
-import { GameMap } from '../map/GameMap.js?v=base-arrival-1';
-import { Enemy } from '../entities/Enemy.js?v=base-arrival-1';
+import { GameMap } from '../map/GameMap.js?v=level8-2';
+import { Enemy } from '../entities/Enemy.js?v=level8-2';
 import { Illusion } from '../entities/Illusion.js';
-import { Tower } from '../entities/Tower.js?v=blessing-fix-1&tower-facing=1';
-import { Projectile } from '../entities/Projectile.js';
+import { Tower } from '../entities/Tower.js?v=level8-2';
+import { Projectile } from '../entities/Projectile.js?v=level8-2';
 import { Economy } from '../systems/Economy.js';
-import { CombatSystem } from '../systems/CombatSystem.js';
-import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-fix-1';
-import { WaveManager } from '../systems/WaveManager.js?v=level7-1';
-import { BossSystem } from '../systems/BossSystem.js';
-import { StatusSystem } from '../systems/StatusSystem.js';
-import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js';
-import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level7-visualfix-1';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level7-1';
-import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level7-1';
+import { CombatSystem } from '../systems/CombatSystem.js?v=level8-2';
+import { BlessingSystem } from '../systems/BlessingSystem.js?v=level8-2';
+import { WaveManager } from '../systems/WaveManager.js?v=level8-2';
+import { BossSystem } from '../systems/BossSystem.js?v=level8-2';
+import { StatusSystem } from '../systems/StatusSystem.js?v=level8-2';
+import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js?v=level8-2';
+import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js?v=level8-2';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level8-2';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level8-2';
+import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level8-2';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
+import { TideSystem } from '../systems/TideSystem.js?v=level8-2';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -52,6 +53,7 @@ export class Game {
     this.illusions = [];
     this.towers = Array(level.map.slots.length).fill(null);
     this.projectiles = [];
+    this.pendingShocks = [];
     this.effects = [];
     this.visualTime = 0;
     this.currentChoices = [];
@@ -65,6 +67,7 @@ export class Game {
     this.levelBossDefeated = false;
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     this.thunder = ThunderSystem.reset();
+    this.tide = TideSystem.reset();
     this.time.setPaused(true);
     return true;
   }
@@ -266,8 +269,10 @@ export class Game {
     if (this.state === 'preparation') return;
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
+    this.updatePendingShocks(dt);
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
     SunlightSystem.update(this, dt);
+    TideSystem.update(this, dt);
     this.enemies.forEach(enemy => {
       if (!enemy.alive && enemy.reachedBase && enemy.baseArrivalRemaining > 0) {
         enemy.updateBaseArrival(dt);
@@ -293,6 +298,7 @@ export class Game {
     });
     ThunderSystem.update(this, dt);
     SunlightSystem.update(this, 0);
+    TideSystem.update(this, 0);
     this.enemies.forEach(enemy => { if (enemy.shouldSpawnIllusions()) this.spawnIllusions(enemy); });
     this.illusions.forEach(illusion => illusion.update(dt));
     this.updateTowers(dt);
@@ -318,9 +324,18 @@ export class Game {
       }
     });
     this.enemies = this.enemies.filter(enemy => !enemy.processed);
-    if (this.state === 'combat' && this.wave.isComplete()) this.completeWave();
+    if (this.state === 'combat' && this.wave.isComplete() && this.pendingShocks.length === 0) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'huashePhase2') {
+      this.effects.push({ type: 'huashePhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
+    if (event.type === 'huasheForcedTide') {
+      TideSystem.forceHighTide(this, event.duration);
+      this.effects.push({ type: 'huasheForcedTide', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: 0.5, duration: 0.5 });
+      return;
+    }
     if (event.type === 'kuiPhase2') {
       this.thunder = ThunderSystem.reset({ phase2: true });
       this.effects.push({ type: 'kuiPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
@@ -433,8 +448,25 @@ export class Game {
           life: 0.2,
           duration: 0.2,
         });
-      } else this.projectiles.push(new Projectile(tower, target, stats, this.blessings.modifiers, this.effects));
+      } else this.projectiles.push(new Projectile(tower, target, stats, this.blessings.modifiers, this.effects, this.pendingShocks));
     }
+  }
+  updatePendingShocks(dt) {
+    for (const shock of this.pendingShocks) {
+      shock.remaining -= Math.max(0, dt);
+      if (shock.remaining > 1e-9) continue;
+      const hit = CombatSystem.areaDamage(this.enemies, shock, shock.radius, shock.damage);
+      for (const enemy of hit) {
+        if (enemy.isBoss) continue;
+        enemy.pathDistance = Math.max(0, enemy.pathDistance - shock.pushback);
+        Object.assign(enemy, enemy.map.positionAt(enemy.pathDistance));
+      }
+      this.effects.push({
+        type: 'xuanguiShock', x: shock.x, y: shock.y, radius: shock.radius,
+        hitCount: hit.length, life: 0.58, duration: 0.58,
+      });
+    }
+    this.pendingShocks = this.pendingShocks.filter(shock => shock.remaining > 1e-9);
   }
   completeWave() {
     const number = this.wave.waveNumber;

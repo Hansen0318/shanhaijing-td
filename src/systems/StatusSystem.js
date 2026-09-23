@@ -1,4 +1,4 @@
-import { CombatSystem } from './CombatSystem.js';
+import { CombatSystem } from './CombatSystem.js?v=level8-2';
 
 export class StatusSystem {
   static applyInsight(enemy, { duration, vulnerability, bossVulnerability, defensePierce }) {
@@ -24,7 +24,8 @@ export class StatusSystem {
     const bossStep = enemy.statuses.bossStep ? 0.25 : 0;
     const slowEffectiveness = (enemy.data?.slowEffectiveness ?? 1) * (enemy.slowEffectivenessMultiplier ?? 1);
     const thunderSprint = enemy.statuses.thunderSprint?.multiplier ?? 1;
-    return Math.max(0.2, 1 - slow * slowEffectiveness) * (1 + sprint + bossStep) * thunderSprint;
+    const marshLeap = enemy.statuses.marshLeap?.multiplier ?? 1;
+    return Math.max(0.2, 1 - slow * slowEffectiveness) * (1 + sprint + bossStep) * thunderSprint * marshLeap;
   }
   static update(enemy, dt) {
     const burn = enemy.statuses.burn;
@@ -35,7 +36,7 @@ export class StatusSystem {
     }
     const slow = enemy.statuses.slow;
     if (slow) { slow.remaining -= dt; if (slow.remaining <= 0) delete enemy.statuses.slow; }
-    for (const key of ['fogSprint', 'insight', 'thunderSprint', 'thunderShell']) {
+    for (const key of ['fogSprint', 'insight', 'thunderSprint', 'thunderShell', 'marshLeap', 'marshArmor']) {
       const status = enemy.statuses[key];
       if (!status) continue;
       status.remaining -= dt;

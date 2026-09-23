@@ -74,6 +74,15 @@
     <button data-state="kui25">夔 25%</button>
     <button data-state="level7victory">第7關 Victory</button>
     <button data-state="level7retry">第7關 Retry</button>
+    <button data-state="level8">第8關陣容</button>
+    <button data-state="level8wave1">第8關 Wave 1</button>
+    <button data-state="tideTelegraph">潮位預告</button>
+    <button data-state="tideHigh">高潮濕地</button>
+    <button data-state="huashe1">化蛇 P1</button>
+    <button data-state="huashe2">化蛇 P2</button>
+    <button data-state="xuanguiShock">玄龜潮震</button>
+    <button data-state="level8victory">第8關 Victory</button>
+    <button data-state="level8retry">第8關 Retry</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -81,7 +90,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level7-1"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level8-2"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -259,6 +268,44 @@
       game.wave.queue.length = 0;
       game.wave.spawnedAlive = 1;
       game.spawnEnemy('kui');
+    }
+
+    async function enterLevel8(game, confirm = false, includeXuangui = false) {
+      if (game.levelId === 8) {
+        game.restart();
+      } else {
+        await enterLevel7(game, true);
+        game.end('victory');
+        await twoFrames();
+        frame.contentDocument.querySelector('#next-level-button').click();
+        while (game.levelId !== 8 || frame.contentDocument.body.classList.contains('art-loading')) await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      if (includeXuangui) game.unlockedBeasts.add('xuangui');
+      if (confirm && game.state === 'lineup') {
+        const lineup = includeXuangui ? ['xuangui', 'bifang', 'jumang'] : ['bifang', 'baize', 'jumang'];
+        for (const type of lineup) game.toggleLineup(type);
+        game.confirmLineup();
+      }
+      await twoFrames();
+    }
+
+    async function configureLevel8Boss(game) {
+      await enterLevel8(game, true);
+      game.wave.waveNumber = 9;
+      game.startWaveNow();
+      game.wave.queue.length = 0;
+      game.wave.spawnedAlive = 1;
+      game.spawnEnemy('huashe');
+    }
+
+    function placeInWetland(game, enemy, zoneId = 'A') {
+      for (let distance = 0; distance <= game.map.totalLength; distance += 1) {
+        const point = game.map.positionAt(distance);
+        if (game.map.wetlandZoneAt(point) !== zoneId) continue;
+        enemy.pathDistance = distance;
+        Object.assign(enemy, point);
+        return;
+      }
     }
 
     function placeInThunder(game, enemy, zoneId) {
@@ -516,6 +563,48 @@
       }
       if (state === 'level7retry') {
         await enterLevel7(game, true);
+        game.restart();
+      }
+      if (state === 'level8') await enterLevel8(game, false);
+      if (state === 'level8wave1') {
+        await enterLevel8(game, true);
+        game.startWaveNow();
+      }
+      if (['tideTelegraph', 'tideHigh'].includes(state)) {
+        await enterLevel8(game, true);
+        game.state = 'combat';
+        game.time.setPaused(false);
+        const enemy = game.spawnEnemy(state === 'tideHigh' ? 'gudiao' : 'changyou');
+        placeInWetland(game, enemy);
+        if (state === 'tideTelegraph') game.tide.elapsed = 6.8;
+        else game.tide.forcedRemaining = 2.4;
+        game.update(0);
+      }
+      if (['huashe1', 'huashe2'].includes(state)) {
+        let boss = game.enemies.find(enemy => enemy.type === 'huashe');
+        if (!boss) { await configureLevel8Boss(game); boss = game.enemies.find(enemy => enemy.type === 'huashe'); }
+        if (state === 'huashe2') { boss.hp = boss.maxHp * 0.5; game.update(0); }
+      }
+      if (state === 'xuanguiShock') {
+        await enterLevel8(game, true, true);
+        game.economy.add(1000);
+        game.buildTower(0, 'xuangui');
+        const tower = game.towers[0];
+        tower.successfulAttacks = 3;
+        game.state = 'combat';
+        game.time.setPaused(false);
+        const enemy = game.spawnEnemy('gudiao');
+        Object.assign(enemy, { x: tower.x + 28, y: tower.y });
+        game.updateTowers(0);
+        game.projectiles.at(-1)?.impact(game.enemies);
+        game.updatePendingShocks(0.35);
+      }
+      if (state === 'level8victory') {
+        await enterLevel8(game, true);
+        game.end('victory');
+      }
+      if (state === 'level8retry') {
+        await enterLevel8(game, true);
         game.restart();
       }
       requestAnimationFrame(() => requestAnimationFrame(() => snapshot(button.textContent)));
