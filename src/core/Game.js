@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-5';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-6';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
 import { GameMap } from '../map/GameMap.js?v=level8-3';
@@ -10,7 +10,7 @@ import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js?v=level8-3';
 import { BlessingSystem } from '../systems/BlessingSystem.js?v=level8-3';
 import { WaveManager } from '../systems/WaveManager.js?v=level8-3';
-import { BossSystem } from '../systems/BossSystem.js?v=level8-3';
+import { BossSystem } from '../systems/BossSystem.js?v=level8-6';
 import { StatusSystem } from '../systems/StatusSystem.js?v=level8-3';
 import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js?v=level8-3';
 import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js?v=level8-3';
@@ -20,7 +20,7 @@ import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level8-3';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
-import { TideSystem } from '../systems/TideSystem.js?v=level8-3';
+import { TideSystem } from '../systems/TideSystem.js?v=level8-6';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -314,7 +314,13 @@ export class Game {
     this.projectiles = this.projectiles.filter(projectile => projectile.alive);
     this.illusions = this.illusions.filter(illusion => illusion.alive);
     this.enemies.forEach(enemy => {
-      const bossContext = { inFog: Boolean(this.map.fogZoneAt(enemy)), insightActive: Boolean(enemy.statuses.insight) };
+      const bossContext = {
+        inFog: Boolean(this.map.fogZoneAt(enemy)),
+        insightActive: Boolean(enemy.statuses.insight),
+        escortAlive: enemy.type === 'huashe' && this.enemies.some(other => (
+          other !== enemy && other.alive && (other.type === 'changyou' || other.type === 'gudiao')
+        )),
+      };
       for (const event of BossSystem.update(enemy, dt, bossContext)) this.handleBossEvent(enemy, event);
       if (!enemy.alive && !enemy.processed) {
         if (enemy.reachedBase && enemy.baseArrivalRemaining > 0) return;
@@ -327,6 +333,11 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete() && this.pendingShocks.length === 0) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'huasheTideTelegraph') {
+      TideSystem.telegraphHighTide(this);
+      this.effects.push({ type: 'huasheTideTelegraph', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'huashePhase2') {
       this.effects.push({ type: 'huashePhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
       return;

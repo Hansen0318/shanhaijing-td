@@ -156,7 +156,7 @@ export const LEVEL8_WAVE_DATA = Object.freeze([
   wave([{ type: 'changyou', count: 10 }, { type: 'gudiao', count: 6 }], 0.82, { hpMultiplier: 1.18 }),
   wave([{ type: 'changyou', count: 16 }, { type: 'gudiao', count: 6 }], 0.7, { hpMultiplier: 1.26 }),
   wave([{ type: 'changyou', count: 18 }, { type: 'gudiao', count: 8 }], 0.64, { hpMultiplier: 1.34 }),
-  wave([{ type: 'changyou', count: 8 }, { type: 'gudiao', count: 4 }, { type: 'huashe', count: 1 }], 0.84, { hpMultiplier: 1.2, bossHpMultiplier: 1.1 }),
+  wave([{ type: 'huashe', count: 1 }, { type: 'changyou', count: 8 }, { type: 'gudiao', count: 4 }], 0.84, { hpMultiplier: 1.2, bossHpMultiplier: 1.1 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([

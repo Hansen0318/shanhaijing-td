@@ -4,7 +4,7 @@ export class BossSystem {
     if (enemy.type === 'xingtian') return this.updateXingtian(enemy, dt);
     if (enemy.type === 'jinwu') return this.updateJinwu(enemy);
     if (enemy.type === 'kui') return this.updateKui(enemy);
-    if (enemy.type === 'huashe') return this.updateHuashe(enemy, dt);
+    if (enemy.type === 'huashe') return this.updateHuashe(enemy, dt, context);
     if (enemy.type !== 'jiuweihu') return this.check(enemy);
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
@@ -83,11 +83,29 @@ export class BossSystem {
     }
     return [];
   }
-  static updateHuashe(enemy, dt) {
+  static updateHuashe(enemy, dt, context = {}) {
     const mechanic = enemy.data.bossMechanic;
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
-      enemy.bossTimers = { tide: mechanic.phase1ForcedTideInterval };
+      enemy.bossTimers = {
+        tide: mechanic.phase1ForcedTideInterval,
+        openingTide: 0.8,
+        openingTelegraphSent: false,
+      };
+    }
+    if (enemy.bossTimers.openingTide != null) {
+      if (!enemy.bossTimers.openingTelegraphSent) {
+        // Wait until the first escort has entered so the opening tide actually changes the Boss fight.
+        if (!context.escortAlive) return [];
+        enemy.bossTimers.openingTelegraphSent = true;
+        return [{ type: 'huasheTideTelegraph', duration: 0.8 }];
+      }
+      enemy.bossTimers.openingTide -= Math.max(0, dt);
+      if (enemy.bossTimers.openingTide > 1e-9) return [];
+      delete enemy.bossTimers.openingTide;
+      delete enemy.bossTimers.openingTelegraphSent;
+      enemy.bossTimers.tide = mechanic.phase1ForcedTideInterval;
+      return [{ type: 'huasheForcedTide', duration: mechanic.phase1ForcedTideDuration }];
     }
     if (enemy.bossPhase === 1 && enemy.hp / enemy.maxHp <= mechanic.phase2Threshold) {
       enemy.bossPhase = 2;

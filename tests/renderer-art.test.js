@@ -147,6 +147,16 @@ test('Level8 base label is centered below the canonical Base instead of the map 
   assert.deepEqual(label, ['幽冥靈核', 231, 547]);
 });
 
+test('Huashe opening tide telegraph renders as two readable Boss-centered rings', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.drawEffects(ctx, {
+    enemies: [{ id: 'huashe-opening', x: 180, y: 120 }],
+    effects: [{ type: 'huasheTideTelegraph', sourceId: 'huashe-opening', x: 180, y: 120, life: 0.4, duration: 0.8 }],
+  });
+  const rings = ctx.calls.arc.filter(args => args[0] === 180 && args[1] === 120);
+  assert.ok(rings.length >= 2, '化蛇 opening warning must render two Boss-centered rings');
+});
+
 test('Xuangui projectile and delayed shock render procedurally without static VFX art', () => {
   const { renderer, ctx } = rendererFixture();
   renderer.drawProjectiles(ctx, { projectiles: [{ type: 'xuangui', x: 30, y: 40, targetPoint: { x: 70, y: 50 } }] });

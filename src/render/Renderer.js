@@ -1,4 +1,4 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-5';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-6';
 import { ArtStore } from '../config/artAssets.js?v=level8-3';
 import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
 import { MotionSystem } from '../systems/MotionSystem.js?v=level8-3';
@@ -625,6 +625,20 @@ export class Renderer {
       const mist = ctx.createRadialGradient(effect.x, effect.y - 4, 0, effect.x, effect.y - 4, effect.radius * 0.72);
       mist.addColorStop(0, 'rgba(181,255,245,.2)'); mist.addColorStop(1, 'rgba(67,190,188,0)');
       ctx.fillStyle = mist; ctx.fillRect(effect.x - effect.radius, effect.y - effect.radius, effect.radius * 2, effect.radius * 1.5);
+      ctx.restore();
+    });
+    game.effects.filter(effect => effect.type === 'huasheTideTelegraph').forEach(effect => {
+      const source = game.enemies?.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      ctx.strokeStyle = '#a8f5ea';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.arc(point.x, point.y, 28 + progress * 22, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = 'rgba(91, 221, 207, .7)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(point.x, point.y, 42 + progress * 28, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'huashePhase2').forEach(effect => {
