@@ -1,14 +1,14 @@
+# Shanhaijing TD Work Progress
+
 ## 2026-09-23：Level8 化蛇 boss-flow follow-up
 
 - Player confirmed the corrected Level8 map geometry is now good.
 - Remaining gameplay readability defect: old W10 queue spawned 長右 ×8 then 蠱雕 ×4 before 化蛇, so the escort was often dead before the tide-controlling Boss appeared.
 - Active branch: `fix/level8-huashe-boss-escort-20260923`.
-- Fix scope: W10 now spawns **化蛇 first**, followed by 長右 ×8 + 蠱雕 ×4; on initial 化蛇 appearance, show **0.8s tide telegraph → forced 2.4s high tide**. Existing P1 every-7s / P2 every-5s cadence, stats, geometry, HUD and progression are unchanged.
+- Fix scope: W10 now spawns **化蛇 first**, followed by 長右 ×8 + 蠱雕 ×4. Once the first escort enters, 化蛇 gives **0.8s tide telegraph → forced 2.4s high tide**. Existing P1 every-7s / P2 every-5s cadence, stats, geometry, HUD and progression are unchanged.
 - Next exact step: targeted/full verification → merge/deploy → public/player check.
 
 ---
-
-# Shanhaijing TD Work Progress
 
 ## 2026-09-23：Level8 canonical-guide recheck / Base label follow-up
 
