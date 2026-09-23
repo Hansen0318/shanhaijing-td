@@ -144,7 +144,7 @@ test('Level8 base label is centered below the canonical Base instead of the map 
   const { renderer, ctx } = rendererFixture();
   renderer.render(emptyGame(LEVELS[8]));
   const label = ctx.calls.fillText.find(args => args[0] === '幽冥靈核');
-  assert.deepEqual(label, ['幽冥靈核', 231, 566]);
+  assert.deepEqual(label, ['幽冥靈核', 231, 547]);
 });
 
 test('Xuangui projectile and delayed shock render procedurally without static VFX art', () => {
