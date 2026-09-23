@@ -24,6 +24,14 @@ export class TideSystem {
     };
   }
 
+  static telegraphHighTide(game) {
+    if (!(game.map?.data.wetlandZones?.length)) return [];
+    game.tide ??= this.reset();
+    game.tide.elapsed = NATURAL_HIGH_START - TELEGRAPH_SECONDS;
+    game.tide.forcedRemaining = 0;
+    return this.sync(game);
+  }
+
   static forceHighTide(game, duration) {
     if (!(game.map?.data.wetlandZones?.length)) return [];
     game.tide ??= this.reset();
