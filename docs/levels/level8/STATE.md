@@ -9,12 +9,12 @@
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**CLOSED — POST-RELEASE ALIGNMENT RELEASE COMPLETE**
+**NARROW POST-RELEASE GEOMETRY REGISTRATION FIX**
 
 ### Allowed now
-- player phone recheck of the released alignment correction;
-- later narrow follow-up only if new concrete device evidence identifies a remaining defect;
-- initialize Level9 from the project template when the player starts the next level.
+- correct the newly evidenced fixed vertical registration offset between Geometry Guide V1 and the clean runtime background;
+- update all background-registered Level8 geometry by the same Y correction;
+- keep 化蛇 HUD/ability readability out of scope until this geometry fix is player-checked.
 
 ### Forbidden until gate exit
 - gate is closed; do not reopen Level8 design, gameplay, geometry, or assets without new concrete evidence;
@@ -55,7 +55,9 @@ Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phon
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- player phone recheck of the three corrected presentation defects only.
+- merge/deploy the guide-to-clean Y-registration correction;
+- player phone recheck of Level8 path/tower/Base alignment;
+- 化蛇 readability follow-up remains intentionally deferred until geometry is confirmed.
 
 ## Current branch / SHA
 - released `main`: `16e32268838de8a39824383e649928f5b9a718b7` (PR #66)
