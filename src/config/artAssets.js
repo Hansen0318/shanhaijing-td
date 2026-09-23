@@ -101,6 +101,13 @@ export const ART_ASSETS = Object.freeze({
   kui: 'assets/bosses/boss_kui_v1.png',
   kuiBossPanel: 'assets/ui/ui_boss_kui_panel_v1.png',
   jumangLeafblade: 'assets/effects/fx_jumang_leafblade_v1.png',
+  level8Background: 'assets/levels/level8/bg_level8_youming_marsh_v1.jpg',
+  changyou: 'assets/enemies/enemy_changyou_v1.png',
+  gudiao: 'assets/enemies/enemy_gudiao_v1.png',
+  huashe: 'assets/bosses/boss_huashe_v1.png',
+  huasheBossPanel: 'assets/ui/ui_boss_huashe_panel_v1.png',
+  xuangui: 'assets/towers/tower_xuangui_v1.png',
+  xuanguiUnlock: 'assets/towers/tower_xuangui_v1.png',
 });
 
 // Inner channel geometry measured from each source panel, normalized after the
@@ -142,6 +149,7 @@ export const LEVEL_ART_IDS = Object.freeze({
   5: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'lili', 'xingtianPhase1', 'xingtianPhase2', 'zhuyanCharge', 'liliArmorBreak', 'xingtianShield', 'xingtianEvolution', 'xingtianEarthquake', 'xingtianBossPanel', 'level5Banner', 'level5BossWarning', 'level5Preview']),
   6: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'level6Background', 'yangyu', 'fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'sunlightZone', 'jinwuBossPanel', 'jumangUnlock']),
   7: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'jumang', 'level7Background', 'qinyuan', 'zhuhuai', 'kui', 'kuiBossPanel', 'jumangLeafblade']),
+  8: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'jumang', 'level8Background', 'changyou', 'gudiao', 'huashe', 'huasheBossPanel', 'xuangui', 'xuanguiUnlock']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
@@ -152,6 +160,7 @@ export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
   5: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'level5Banner', 'level5Preview']),
   6: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level6Background', 'yangyu', 'sunlightZone']),
   7: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level7Background', 'qinyuan']),
+  8: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level8Background', 'changyou']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
@@ -162,6 +171,7 @@ export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
   5: Object.freeze(LEVEL_ART_IDS[5].filter(id => !LEVEL_REQUIRED_ART_IDS[5].includes(id))),
   6: Object.freeze(LEVEL_ART_IDS[6].filter(id => !LEVEL_REQUIRED_ART_IDS[6].includes(id))),
   7: Object.freeze(LEVEL_ART_IDS[7].filter(id => !LEVEL_REQUIRED_ART_IDS[7].includes(id))),
+  8: Object.freeze(LEVEL_ART_IDS[8].filter(id => !LEVEL_REQUIRED_ART_IDS[8].includes(id))),
 });
 
 export function assetUrl(id) {

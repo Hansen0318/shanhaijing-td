@@ -16,14 +16,16 @@ import {
 } from '../src/config/progressionData.js';
 
 test('campaign progression is derived from playable levels and unlock data', () => {
-  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6, 7]);
-  assert.deepEqual(UNLOCK_BY_LEVEL, { 3: 'baize', 6: 'jumang' });
+  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.deepEqual(UNLOCK_BY_LEVEL, { 3: 'baize', 6: 'jumang', 8: 'xuangui' });
   assert.deepEqual(baseOwnedRoster(), ['bifang', 'fuzhu', 'yinglong']);
   assert.deepEqual(ownedRosterThrough(3), ['bifang', 'fuzhu', 'yinglong', 'baize']);
   assert.deepEqual(ownedRosterThrough(6), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
+  assert.deepEqual(ownedRosterThrough(8), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'xuangui']);
   assert.equal(nextPlayableLevelId(5), 6);
   assert.equal(nextPlayableLevelId(6), 7);
-  assert.equal(nextPlayableLevelId(7), null);
+  assert.equal(nextPlayableLevelId(7), 8);
+  assert.equal(nextPlayableLevelId(8), null);
 });
 
 test('Level5 victory enters an empty Level6 four-beast lineup', () => {
@@ -67,7 +69,35 @@ test('Level7 requires exactly three, remains valid without Jumang, and retry cle
   assert.equal(game.state, 'lineup');
   assert.deepEqual(game.lineupSelection, []);
   game.end('victory');
+  assert.equal(game.nextLevelId(), 8);
+});
+
+test('Level7 victory enters an empty Level8 five-beast exact-three lineup', () => {
+  const game = new Game(() => 0.2, 7);
+  game.end('victory');
+  assert.equal(game.enterLevel(8), true);
+  assert.equal(game.state, 'lineup');
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
+  assert.deepEqual(game.lineupSelection, []);
+  for (const type of ['bifang', 'baize']) game.toggleLineup(type);
+  assert.equal(game.confirmLineup(), false);
+  game.toggleLineup('jumang');
+  assert.equal(game.confirmLineup(), true);
+  game.end('defeat');
+  assert.equal(game.restart(), true);
+  assert.equal(game.state, 'lineup');
+  assert.deepEqual(game.lineupSelection, []);
+});
+
+test('Level8 victory unlocks Xuangui once and has no phantom next level', () => {
+  const game = new Game(() => 0.2, 8);
+  assert.equal(game.unlockedBeasts.has('xuangui'), false);
+  game.end('victory');
+  assert.equal(game.pendingUnlock, 'xuangui');
+  assert.equal(game.unlockedBeasts.has('xuangui'), true);
   assert.equal(game.nextLevelId(), null);
+  game.end('victory');
+  assert.equal(game.pendingUnlock, null);
 });
 
 test('blessing draw returns three distinct choices and weights deployed towers', () => {
