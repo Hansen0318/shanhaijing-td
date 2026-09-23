@@ -87,7 +87,23 @@ export class BossSystem {
     const mechanic = enemy.data.bossMechanic;
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
-      enemy.bossTimers = { tide: mechanic.phase1ForcedTideInterval };
+      enemy.bossTimers = {
+        tide: mechanic.phase1ForcedTideInterval,
+        openingTide: 0.8,
+        openingTelegraphSent: false,
+      };
+    }
+    if (enemy.bossTimers.openingTide != null) {
+      if (!enemy.bossTimers.openingTelegraphSent) {
+        enemy.bossTimers.openingTelegraphSent = true;
+        return [{ type: 'huasheTideTelegraph', duration: 0.8 }];
+      }
+      enemy.bossTimers.openingTide -= Math.max(0, dt);
+      if (enemy.bossTimers.openingTide > 1e-9) return [];
+      delete enemy.bossTimers.openingTide;
+      delete enemy.bossTimers.openingTelegraphSent;
+      enemy.bossTimers.tide = mechanic.phase1ForcedTideInterval;
+      return [{ type: 'huasheForcedTide', duration: mechanic.phase1ForcedTideDuration }];
     }
     if (enemy.bossPhase === 1 && enemy.hp / enemy.maxHp <= mechanic.phase2Threshold) {
       enemy.bossPhase = 2;
