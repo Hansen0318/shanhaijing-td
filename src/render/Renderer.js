@@ -1,8 +1,8 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-2';
-import { ArtStore } from '../config/artAssets.js?v=level8-2';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-2';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level8-2';
-import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level8-2';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-3';
+import { ArtStore } from '../config/artAssets.js?v=level8-3';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level8-3';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level8-3';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58], xuangui: [58, 56] });
 const LEVEL7_WATERFALLS = Object.freeze([
