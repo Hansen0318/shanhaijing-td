@@ -1,10 +1,10 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level7-1';
-import { ArtStore } from '../config/artAssets.js?v=level7-1';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level7-visualfix-1';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level7-visualfix-1';
-import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level7-1';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-1';
+import { ArtStore } from '../config/artAssets.js?v=level8-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level8-1';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level8-1';
 
-const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58] });
+const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58], xuangui: [58, 56] });
 const LEVEL7_WATERFALLS = Object.freeze([
   // Player-confirmed waterfall locations from phone smoke. Width follows the visible waterfall body.
   Object.freeze({ x: 48, y: 137, width: 22, height: 57, phase: 0.1 }),
@@ -43,6 +43,7 @@ export class Renderer {
     const map = game.level.map;
     ctx.clearRect(0, 0, map.width, map.height);
     this.drawBackground(ctx, game);
+    this.drawLevelEightEnvironment(ctx, game);
     this.drawLevelSevenWaterfalls(ctx, game);
     this.drawFogZones(ctx, game);
     this.drawSunlightZones(ctx, game);
@@ -54,6 +55,92 @@ export class Renderer {
     this.drawProjectiles(ctx, game);
     this.drawEffects(ctx, game);
     this.drawLabels(ctx, game);
+  }
+  drawLevelEightEnvironment(ctx, game) {
+    if (game.level.id !== 8) return;
+    const zones = game.level.map.wetlandZones ?? [];
+    const motion = game.level.map.environmentMotion ?? {};
+    const time = game.visualTime ?? 0;
+    const high = Boolean(game.tide?.high);
+    const telegraph = Boolean(game.tide?.telegraph);
+
+    for (const [index, zone] of zones.entries()) {
+      const xs = zone.points.map(point => point.x);
+      const ys = zone.points.map(point => point.y);
+      const left = Math.min(...xs); const right = Math.max(...xs);
+      const top = Math.min(...ys); const bottom = Math.max(...ys);
+      const centerX = (left + right) / 2; const centerY = (top + bottom) / 2;
+      const pulse = 0.5 + Math.sin(time * 2.2 + index * 1.3) * 0.5;
+      ctx.save();
+      ctx.beginPath();
+      zone.points.forEach((point, pointIndex) => pointIndex === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
+      ctx.closePath();
+      ctx.clip();
+      const water = ctx.createRadialGradient(centerX, centerY, 2, centerX, centerY, Math.max(right - left, bottom - top) * 0.72);
+      const alpha = high ? 0.17 + pulse * 0.055 : telegraph ? 0.075 + pulse * 0.025 : 0.025;
+      water.addColorStop(0, `rgba(91, 221, 207, ${alpha})`);
+      water.addColorStop(0.55, `rgba(47, 151, 151, ${alpha * 0.72})`);
+      water.addColorStop(1, 'rgba(22, 84, 92, 0)');
+      ctx.fillStyle = water;
+      ctx.fillRect(left, top, right - left, bottom - top);
+      if (high || telegraph) {
+        ctx.strokeStyle = `rgba(158, 239, 223, ${high ? 0.18 : 0.1})`;
+        ctx.lineWidth = 1;
+        for (let ripple = 0; ripple < 2; ripple += 1) {
+          const phase = (time * 0.42 + ripple * 0.5 + index * 0.17) % 1;
+          ctx.beginPath();
+          ctx.ellipse(centerX, centerY, 8 + phase * (right - left) * 0.42, 3 + phase * (bottom - top) * 0.28, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
+
+    if (motion.fog) {
+      const area = motion.fog;
+      const drift = Math.sin(time * 0.34) * 5;
+      const fog = ctx.createRadialGradient(area.x + area.width / 2 + drift, area.y + area.height / 2, 2, area.x + area.width / 2 + drift, area.y + area.height / 2, area.width * 0.58);
+      fog.addColorStop(0, 'rgba(163, 207, 205, .105)');
+      fog.addColorStop(0.55, 'rgba(104, 165, 169, .065)');
+      fog.addColorStop(1, 'rgba(104, 165, 169, 0)');
+      ctx.fillStyle = fog;
+      ctx.fillRect(area.x, area.y, area.width, area.height);
+    }
+    if (motion.ripple) {
+      const area = motion.ripple;
+      const phase = (time * 0.35) % 1;
+      ctx.save();
+      ctx.strokeStyle = `rgba(138, 226, 211, ${0.13 * (1 - phase)})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(area.x + area.width / 2, area.y + area.height / 2, 8 + phase * 28, 3 + phase * 12, -0.08, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    if (motion.bubbles) {
+      const area = motion.bubbles;
+      ctx.save();
+      ctx.fillStyle = 'rgba(158, 233, 218, .17)';
+      for (let index = 0; index < 4; index += 1) {
+        const phase = (time * (0.22 + index * 0.025) + index * 0.23) % 1;
+        const x = area.x + 10 + (index * 17) % Math.max(18, area.width - 14);
+        const y = area.y + area.height * (1 - phase);
+        ctx.beginPath(); ctx.arc(x, y, 1.2 + index * 0.35, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+    }
+    if (motion.reeds) {
+      const area = motion.reeds;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(129, 171, 103, .32)';
+      ctx.lineWidth = 1.2;
+      for (let index = 0; index < 5; index += 1) {
+        const x = area.x + 5 + index * 10;
+        const sway = Math.sin(time * 0.8 + index * 0.7) * 2;
+        ctx.beginPath(); ctx.moveTo(x, area.y + area.height); ctx.quadraticCurveTo(x + sway, area.y + area.height * 0.48, x + sway * 1.4, area.y + 6); ctx.stroke();
+      }
+      ctx.restore();
+    }
   }
   drawSunlightZones(ctx, game) {
     const zones = game.level.map.sunlightZones ?? [];
@@ -475,6 +562,9 @@ export class Renderer {
         if (enemy.statuses.thunderSprint) this.drawStateTag(ctx, '雷行', enemy.x, tagY, { fill: '#b8f3ff', background: 'rgba(13,45,72,.84)' });
         if (enemy.statuses.thunderShell) this.drawStateTag(ctx, '雷殼', enemy.x, tagY, { fill: '#d3f6ff', background: 'rgba(21,50,75,.86)' });
         if (enemy.type === 'kui' && (enemy.bossPhase ?? 1) >= 2) this.drawStateTag(ctx, '雷怒', enemy.x, tagY, { fill: '#ecfbff', background: 'rgba(15,49,84,.9)' });
+        if (enemy.statuses.marshLeap) this.drawStateTag(ctx, '泥躍', enemy.x, tagY, { fill: '#bff8e9', background: 'rgba(17,66,62,.86)' });
+        if (enemy.statuses.marshArmor) this.drawStateTag(ctx, '沼甲', enemy.x, tagY, { fill: '#d8efc4', background: 'rgba(40,68,34,.88)' });
+        if (enemy.type === 'huashe' && (enemy.bossPhase ?? 1) >= 2) this.drawStateTag(ctx, '洪潮', enemy.x, tagY, { fill: '#d5fffa', background: 'rgba(20,54,62,.9)' });
       }
       if (enemy.hitFlash > 0 && !enemy.isBoss && !enemy.isIllusion) this.healthBar(ctx, enemy.x - 17, enemy.y - enemy.radius - 10, 34, enemy.hp / enemy.maxHp);
     });
@@ -483,6 +573,20 @@ export class Renderer {
   drawProjectiles(ctx, game) {
     game.projectiles.forEach(p => {
       const angle = Math.atan2(p.targetPoint.y - p.y, p.targetPoint.x - p.x);
+      if (p.type === 'xuangui') {
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(94, 239, 226, .72)';
+        ctx.shadowBlur = 7;
+        ctx.strokeStyle = 'rgba(86, 215, 210, .58)';
+        ctx.lineWidth = 3.2;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - Math.cos(angle) * 14, p.y - Math.sin(angle) * 14); ctx.stroke();
+        const core = ctx.createRadialGradient(p.x - 1, p.y - 1, 0, p.x, p.y, 6);
+        core.addColorStop(0, '#e4fffa'); core.addColorStop(0.42, '#63e4dc'); core.addColorStop(1, 'rgba(24,126,140,0)');
+        ctx.fillStyle = core; ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        return;
+      }
       const id = p.type === 'bifang' ? 'bifangFireball' : p.type === 'jumang' ? 'jumangLeafblade' : 'fuzhuFrostshot';
       if (p.type === 'jumang') {
         ctx.save();
@@ -500,6 +604,37 @@ export class Renderer {
     });
   }
   drawEffects(ctx, game) {
+    game.effects.filter(effect => effect.type === 'xuanguiShockTelegraph').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      ctx.strokeStyle = '#82eee3'; ctx.lineWidth = 1.8;
+      ctx.beginPath(); ctx.arc(effect.x, effect.y, effect.radius * (0.7 - progress * 0.42), 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    });
+    game.effects.filter(effect => effect.type === 'xuanguiShock').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      for (let ring = 0; ring < 2; ring += 1) {
+        const ringProgress = Math.max(0, Math.min(1, progress * 1.35 - ring * 0.18));
+        ctx.strokeStyle = ring === 0 ? '#b5fff4' : '#57d7d1';
+        ctx.lineWidth = 3 - ring;
+        ctx.beginPath(); ctx.arc(effect.x, effect.y, 8 + ringProgress * effect.radius, 0, Math.PI * 2); ctx.stroke();
+      }
+      const mist = ctx.createRadialGradient(effect.x, effect.y - 4, 0, effect.x, effect.y - 4, effect.radius * 0.72);
+      mist.addColorStop(0, 'rgba(181,255,245,.2)'); mist.addColorStop(1, 'rgba(67,190,188,0)');
+      ctx.fillStyle = mist; ctx.fillRect(effect.x - effect.radius, effect.y - effect.radius, effect.radius * 2, effect.radius * 1.5);
+      ctx.restore();
+    });
+    game.effects.filter(effect => effect.type === 'huashePhase2').forEach(effect => {
+      const source = game.enemies?.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save(); ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      ctx.strokeStyle = '#a3eee5'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(point.x, point.y, 44 + progress * 28, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+    });
     game.effects.filter(effect => effect.type === 'kuiPhase2').forEach(effect => {
       const source = game.enemies?.find(enemy => enemy.id === effect.sourceId);
       const point = source ?? effect;

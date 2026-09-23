@@ -5,12 +5,14 @@ import { LEVELS, MAP_DATA, TOWER_DATA } from '../src/config/gameData.js';
 import { Tower } from '../src/entities/Tower.js';
 
 function fakeContext() {
-  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], strokeRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [] };
+  const calls = { drawImage: [], rotate: [], scale: [], translate: [], fillRect: [], strokeRect: [], fillText: [], strokeText: [], moveTo: [], lineTo: [], clip: 0, closePath: 0, bezierCurveTo: [], arc: [], ellipse: [], gradients: 0 };
+  const gradient = () => ({ addColorStop() {} });
   return {
     calls,
     setTransform() {}, clearRect() {}, fillRect(...args) { calls.fillRect.push(args); }, beginPath() {}, moveTo(...args) { calls.moveTo.push(args); }, lineTo(...args) { calls.lineTo.push(args); }, stroke() {},
     strokeRect(...args) { calls.strokeRect.push(args); }, setLineDash() {}, arc(...args) { calls.arc.push(args); }, fill() {}, fillText(...args) { calls.fillText.push(args); }, strokeText(...args) { calls.strokeText.push(args); }, save() {}, restore() {}, translate(...args) { calls.translate.push(args); },
-    quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); },
+    quadraticCurveTo() {}, closePath() { calls.closePath += 1; }, clip() { calls.clip += 1; }, bezierCurveTo(...args) { calls.bezierCurveTo.push(args); }, ellipse(...args) { calls.ellipse.push(args); },
+    createLinearGradient() { calls.gradients += 1; return gradient(); }, createRadialGradient() { calls.gradients += 1; return gradient(); },
     drawImage(...args) { calls.drawImage.push(args); },
     rotate(value) { calls.rotate.push(value); },
     scale(x, y) { calls.scale.push([x, y]); },
@@ -53,6 +55,8 @@ test('each enemy sprite visible center stays on its logical path anchor', () => 
     ['meihu', 'meihu', 256, 256, 127.5], ['huanli', 'huanli', 256, 256, 127.5],
     ['jiuweihu', 'jiuweihuPhase1', 512, 512, 255], ['zhuyan', 'zhuyan', 256, 256, 127.5],
     ['lili', 'lili', 256, 256, 127.5], ['xingtian', 'xingtianPhase1', 384, 384, 191.5],
+    ['changyou', 'changyou', 256, 228, 114], ['gudiao', 'gudiao', 256, 244, 122],
+    ['huashe', 'huashe', 512, 501, 250.5],
   ];
   const dimensions = Object.fromEntries(cases.map(([, artId, width, height]) => [artId, [width, height]]));
   const { renderer, ctx } = rendererFixture({ art: fakeArt(dimensions), motionEnabled: false });
@@ -63,7 +67,7 @@ test('each enemy sprite visible center stays on its logical path anchor', () => 
     const beforeTranslations = ctx.calls.translate.length;
     renderer.drawEnemies(ctx, { visualTime: 0, effects: [], illusions: [], enemies: [{
       type, bossPhase: 1, id: type, x: 100, y: 100, radius: 12, hp: 100, maxHp: 100,
-      isBoss: ['qiongqi', 'paoxiao', 'xiangliu', 'jiuweihu', 'xingtian'].includes(type),
+      isBoss: ['qiongqi', 'paoxiao', 'xiangliu', 'jiuweihu', 'xingtian', 'huashe'].includes(type),
       hitFlash: 0, visualHitFlash: 0, statuses: {}, map, pathDistance: 40,
     }] });
     const draw = ctx.calls.drawImage.slice(beforeDraws).find(args => args[0].id === artId);
@@ -104,6 +108,32 @@ test('renderer uses the active level map, crop, props and eight slots', () => {
   assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level2Spawn'), true);
   assert.equal(ctx.calls.drawImage.some(args => args[0].id === 'level2Base'), true);
+});
+
+test('Level8 renderer uses the approved background crop, eight slots, wetlands and Motion Lite anchors', () => {
+  const { renderer, ctx } = rendererFixture();
+  const game = emptyGame(LEVELS[8]);
+  game.visualTime = 1.25;
+  game.tide = { high: true, telegraph: false, activeZoneIds: ['A', 'B', 'C'] };
+  renderer.render(game);
+  assert.equal(ctx.calls.drawImage[0][0].id, 'level8Background');
+  assert.deepEqual(ctx.calls.drawImage[0].slice(1, 5), [0, 0, 780, 1220]);
+  assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
+  assert.ok(ctx.calls.clip >= 3, 'wetland polygons must clip low-luminance water motion to their exact shapes');
+  assert.ok(ctx.calls.gradients >= 4, 'fog, ripple and active wetland motion require procedural gradients');
+  assert.ok(ctx.calls.ellipse.length >= 2, 'ripple and bubble anchors must remain visibly animated');
+});
+
+test('Xuangui projectile and delayed shock render procedurally without static VFX art', () => {
+  const { renderer, ctx } = rendererFixture();
+  renderer.drawProjectiles(ctx, { projectiles: [{ type: 'xuangui', x: 30, y: 40, targetPoint: { x: 70, y: 50 } }] });
+  renderer.drawEffects(ctx, { enemies: [], effects: [
+    { type: 'xuanguiShockTelegraph', x: 80, y: 90, radius: 52, life: 0.2, duration: 0.35 },
+    { type: 'xuanguiShock', x: 80, y: 90, radius: 52, life: 0.4, duration: 0.58 },
+  ] });
+  assert.equal(ctx.calls.drawImage.some(args => /xuangui.*(?:projectile|shock)/i.test(args[0].id)), false);
+  assert.ok(ctx.calls.arc.length >= 4, 'water core plus contraction and two shock rings must be drawn');
+  assert.ok(ctx.calls.gradients >= 1, 'water-core projectile and mist accent use procedural gradients');
 });
 
 test('renderer uses level-three map art and draws both enemies plus Xiangliu', () => {

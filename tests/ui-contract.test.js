@@ -38,7 +38,7 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
   assert.match(main, /params\.get\('devMenu'\) === '1'/);
   assert.match(main, /renderDevMenu\(\)/);
   assert.match(main, /data-dev-level="1"[\s\S]*data-dev-level="2"[\s\S]*data-dev-level="3"[\s\S]*data-dev-level="4"[\s\S]*data-dev-level="5"[\s\S]*data-dev-level="6"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7\]\.includes\(devLevel\) \? devLevel : 1/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\) \? devLevel : 1/);
   assert.match(main, /new ArtStore\(Image, initialLevelId\)/);
   assert.match(main, /new Renderer\(canvas, art\)/);
 });
@@ -46,7 +46,7 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
 test('dev menu and guarded direct controls include level four', async () => {
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
   assert.match(main, /data-dev-level="4"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
   assert.match(main, /params\.get\('devWave'\)/);
   assert.match(main, /params\.get\('devBossPhase'\)/);
   assert.match(main, /devLevel !== 4/);
@@ -56,7 +56,7 @@ test('dev menu and guarded direct controls include level four', async () => {
 test('dev menu and guarded direct controls include level five path, wave, and Boss phases', async () => {
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
   assert.match(main, /data-dev-level="5"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
   assert.match(main, /function setupLevelFiveDev\(game, devLevel\)/);
   assert.match(main, /devLevel !== 5/);
   assert.match(main, /game\.level\.map\.chargeCorridor/);
@@ -69,7 +69,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /data-dev-level="6"/);
   assert.match(main, /data-dev-level="6"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
   assert.match(main, /function setupLevelSixDev\(game, devLevel\)/);
   assert.match(main, /devLevel !== 6/);
   assert.match(main, /game\.level\.map\.sunlightZones/);
@@ -78,7 +78,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   for (const state of ['level5', 'level6', 'level6wave1', 'sunlightA', 'sunlightB', 'jinwu1', 'jinwu2', 'jinwu25', 'level6victory', 'level6retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level7-1/);
+  assert.match(smoke, /index\.html\?v=level8-1/);
 });
 
 test('dev menu and guarded direct controls include Level7 thunder, Kui phases, victory, and retry', async () => {
@@ -87,7 +87,7 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /data-dev-level="7"/);
   assert.match(main, /data-dev-level="7"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
   assert.match(main, /function setupLevelSevenDev\(game, devLevel\)/);
   assert.match(main, /devLevel !== 7/);
   assert.match(main, /game\.level\.map\.thunderZones/);
@@ -96,17 +96,33 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   for (const state of ['level7', 'level7wave1', 'thunderA', 'thunderB', 'kui1', 'kui2', 'kui25', 'level7victory', 'level7retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level7-1/);
+  assert.match(smoke, /index\.html\?v=level8-1/);
+});
+
+test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory, and retry', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(html, /data-dev-level="8"/);
+  assert.match(main, /data-dev-level="8"/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
+  assert.match(main, /function setupLevelEightDev\(game, devLevel\)/);
+  assert.match(main, /game\.level\.map\.wetlandZones/);
+  assert.match(main, /game\.spawnEnemy\('huashe'\)/);
+  assert.match(main, /game\.unlockedBeasts\.add\('xuangui'\)/);
+  for (const state of ['level8', 'level8wave1', 'tideTelegraph', 'tideHigh', 'huashe1', 'huashe2', 'xuanguiShock', 'level8victory', 'level8retry']) {
+    assert.match(smoke, new RegExp(`data-state="${state}"`));
+  }
 });
 
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
-  assert.match(html, /styles\.css\?v=level7-1/);
-  assert.match(html, /styles-fixes\.css\?v=level7-1/);
-  assert.match(html, /styles-lineup\.css\?v=level7-1/);
-  assert.match(html, /src\/main\.js\?v=level7-1/);
-  assert.match(game, /WaveManager\.js\?v=level7-1/);
+  assert.match(html, /styles\.css\?v=level8-1/);
+  assert.match(html, /styles-fixes\.css\?v=level8-1/);
+  assert.match(html, /styles-lineup\.css\?v=level8-1/);
+  assert.match(html, /src\/main\.js\?v=level8-1/);
+  assert.match(game, /WaveManager\.js\?v=level8-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

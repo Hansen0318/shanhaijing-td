@@ -277,6 +277,18 @@ test('Level7 units and Jumang reuse shared Motion Lite profiles', () => {
   assert.ok(UNIT_MOTION_CONFIG.towers.jumang.recoilPixels > 0);
 });
 
+test('Level8 units and Xuangui use distinct shared Motion Lite profiles', () => {
+  const { changyou, gudiao, huashe } = UNIT_MOTION_CONFIG.enemies;
+  assert.ok(changyou.bobPixels > gudiao.bobPixels);
+  assert.ok(changyou.bobHz > gudiao.bobHz);
+  assert.equal(changyou.deathSeconds, 0.18);
+  assert.equal(gudiao.deathSeconds, 0.24);
+  assert.deepEqual(Object.keys(huashe.phases), ['1', '2']);
+  assert.ok(huashe.phases[2].idleScale > huashe.phases[1].idleScale);
+  assert.equal(huashe.deathSeconds, 0.45);
+  assert.ok(UNIT_MOTION_CONFIG.towers.xuangui.recoilPixels > 0);
+});
+
 test('first-level enemy hit and death visuals use configured durations', () => {
   const game = new Game(() => 0, 1);
   for (const [type, expectedDeath] of [['minion', 0.18], ['swift', 0.16], ['giant', 0.22]]) {

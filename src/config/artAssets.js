@@ -120,9 +120,10 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   xingtian: Object.freeze({ left: '9.7%', top: '52.3%', width: '80.8%', height: '17%' }),
   jinwu: Object.freeze({ left: '3.7%', top: '43.8%', width: '92.5%', height: '21.9%' }),
   kui: Object.freeze({ left: '9.9%', top: '52.6%', width: '80.4%', height: '14.2%' }),
+  huashe: Object.freeze({ left: '11.6%', top: '60.9%', width: '76.7%', height: '17.3%' }),
 });
 
-const ASSET_CACHE_VERSION = 'level7-1';
+const ASSET_CACHE_VERSION = 'level8-1';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',

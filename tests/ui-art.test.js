@@ -123,6 +123,45 @@ test('first Level7 lineup marks newly unlocked Jumang and keeps the five-choice 
   assert.equal((ui.dom['lineup-choices'].innerHTML.match(/data-action="toggle-lineup"/g) ?? []).length, 5);
 });
 
+test('Level8 lineup renders exactly the five owned beasts and excludes locked Xuangui', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[8], levelId: 8, state: 'lineup', lineupSelection: [], lineupNewType: null,
+    lineupRoster: () => ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang'],
+  };
+  ui.dom = {
+    'lineup-overlay': { hidden: true }, 'lineup-choices': { innerHTML: '' },
+    'confirm-lineup-button': { disabled: true }, 'lineup-count': { textContent: '' },
+    'lineup-eyebrow': { textContent: '' }, 'lineup-title': { textContent: '' }, 'lineup-help': { innerHTML: '' },
+    'lineup-banner': { hidden: true, src: '' }, 'lineup-preview': { hidden: true, src: '' },
+  };
+  ui.renderLineup();
+  assert.equal((ui.dom['lineup-choices'].innerHTML.match(/data-action="toggle-lineup"/g) ?? []).length, 5);
+  assert.doesNotMatch(ui.dom['lineup-choices'].innerHTML, /data-type="xuangui"/);
+  assert.equal(ui.dom['lineup-title'].textContent, '第8關・幽冥沼澤');
+  assert.match(ui.dom['lineup-help'].innerHTML, /長右與蠱雕/);
+});
+
+test('Level8 wave preview and Huashe HUD use approved art and empty-channel geometry', () => {
+  const ui = Object.create(UIController.prototype);
+  ui.game = {
+    level: LEVELS[8], levelId: 8, state: 'preparation', enemies: [], effects: [],
+    wave: { waveNumber: 9, queue: [], getWaveGroups: () => LEVELS[8].waves[9].groups },
+  };
+  ui.dom = bossSlotDom();
+  ui.renderBossSlot();
+  for (const file of ['enemy_changyou_v1.png', 'enemy_gudiao_v1.png', 'boss_huashe_v1.png']) assert.match(ui.dom['wave-preview-enemies'].innerHTML, new RegExp(file));
+  ui.game.state = 'combat';
+  ui.game.enemies = [{ isBoss: true, type: 'huashe', hp: 4180, maxHp: 8360, data: { name: '化蛇' } }];
+  ui.renderBossSlot();
+  assert.match(ui.dom['boss-hud'].style.borderImageSource, /ui_boss_huashe_panel_v1\.png/);
+  assert.deepEqual([
+    ui.dom['boss-hud'].style['--boss-track-left'], ui.dom['boss-hud'].style['--boss-track-top'],
+    ui.dom['boss-hud'].style['--boss-track-width'], ui.dom['boss-hud'].style['--boss-track-height'],
+  ], ['11.6%', '60.9%', '76.7%', '17.3%']);
+  assert.equal(ui.dom['boss-hp-fill'].style.width, '50%');
+});
+
 test('Level7 wave preview and Kui HUD use packaged art and measured track geometry', () => {
   const ui = Object.create(UIController.prototype);
   ui.game = {
@@ -310,6 +349,7 @@ test('each Boss HUD applies its measured track geometry and follows 100, 50 and 
     { levelId: 5, type: 'xingtian', name: '刑天', panel: /ui_boss_xingtian_panel_v1\.png/, rect: ['9.7%', '52.3%', '80.8%', '17%'] },
     { levelId: 6, type: 'jinwu', name: '金烏', panel: /ui_boss_jinwu_panel_v1\.png/, rect: ['3.7%', '43.8%', '92.5%', '21.9%'] },
     { levelId: 7, type: 'kui', name: '夔', panel: /ui_boss_kui_panel_v1\.png/, rect: ['9.9%', '52.6%', '80.4%', '14.2%'] },
+    { levelId: 8, type: 'huashe', name: '化蛇', panel: /ui_boss_huashe_panel_v1\.png/, rect: ['11.6%', '60.9%', '76.7%', '17.3%'] },
   ];
 
   for (const { levelId, type, name, panel, rect } of cases) {

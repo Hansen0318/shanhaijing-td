@@ -59,6 +59,16 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
       hitRecoilPixels: 4,
       deathSeconds: 0.45,
     }),
+    changyou: Object.freeze({ bobPixels: 2.8, bobHz: 2.7, deathSeconds: 0.18 }),
+    gudiao: Object.freeze({ bobPixels: 1.5, bobHz: 0.92, stridePixels: 1.1, strideHz: 0.92, idleScale: 0.018, idleHz: 0.92, hitRecoilPixels: 2.8, deathSeconds: 0.24 }),
+    huashe: Object.freeze({
+      phases: Object.freeze({
+        1: Object.freeze({ idleScale: 0.02, idleHz: 0.66, bobPixels: 1.4, bobHz: 0.7 }),
+        2: Object.freeze({ idleScale: 0.04, idleHz: 0.88, bobPixels: 2.5, bobHz: 1.02 }),
+      }),
+      hitRecoilPixels: 4,
+      deathSeconds: 0.45,
+    }),
   }),
   towers: Object.freeze({
     bifang: Object.freeze({ idleScale: 0.01, idleHz: 1.15, recoilPixels: 2.5, recoilSeconds: 0.09 }),
@@ -66,5 +76,6 @@ export const UNIT_MOTION_CONFIG = Object.freeze({
     yinglong: Object.freeze({ idleScale: 0.005, idleHz: 0.8, recoilPixels: 2.25, recoilSeconds: 0.09 }),
     baize: Object.freeze({ idleScale: 0.012, idleHz: 0.9, recoilPixels: 2, recoilSeconds: 0.1 }),
     jumang: Object.freeze({ idleScale: 0.012, idleHz: 0.88, recoilPixels: 2, recoilSeconds: 0.1 }),
+    xuangui: Object.freeze({ idleScale: 0.014, idleHz: 0.76, recoilPixels: 2.2, recoilSeconds: 0.11 }),
   }),
 });

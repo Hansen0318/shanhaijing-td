@@ -1,5 +1,5 @@
-import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level7-1';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level7-1';
+import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-1';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level8-1';
 import { Economy } from '../systems/Economy.js';
 import { BEAST_NAMES } from '../config/progressionData.js';
 
@@ -99,6 +99,8 @@ export class UIController {
           ? `洞察 ${stats.insightDuration}秒 / 易傷 ${Math.round(stats.vulnerability * 100)}%`
           : tower.type === 'jumang'
             ? `全隊攻擊間隔 ×${intervalMultiplier.toFixed(2)}`
+          : tower.type === 'xuangui'
+            ? `每 ${stats.shockEvery} 次命中潮震：${stats.shockDamage} 傷害／範圍 ${Math.round(stats.shockRadius)}／擊退 ${stats.shockPushback}`
           : `穿透 ${stats.penetration}`;
     panel.innerHTML = `<div class="tower-info"><div><h2><img class="tower-info-art" src="${assetUrl(tower.type)}" alt="">${tower.data.name} <span>Lv.${tower.level}</span></h2><p>傷害 ${Math.round(stats.damage * 10) / 10}　間隔 ${stats.interval.toFixed(2)}秒　射程 ${Math.round(stats.range)}</p><p>${special}</p></div><div class="tower-actions"><button data-action="upgrade" ${tower.level >= 3 || !this.game.economy.canAfford(cost) || !this.game.canManageTowers() ? 'disabled' : ''}>${tower.level >= 3 ? '已滿級' : `升級 ${cost} G`}</button><button class="sell" data-action="sell" ${!this.game.canManageTowers() ? 'disabled' : ''}>${this.game.pendingSellSlot === index ? `再次點擊確認 +${Economy.sellValue(tower.invested)} G` : `出售 +${Economy.sellValue(tower.invested)} G`}</button></div></div>`;
   }

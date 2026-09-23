@@ -68,7 +68,7 @@ test('art catalog exposes all 109 asset IDs and every file is deployable', async
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level7-1$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level8-1$`));
   }
 });
 
@@ -272,7 +272,7 @@ test('level-five art catalog stages first-paint assets and defers Boss combat ar
   }
 });
 
-test('all six Boss HUD panels are optimized transparent empty-channel assets', async () => {
+test('all seven standard Boss HUD panels plus the approved fixed-footprint Huashe panel are optimized', async () => {
   const { ART_ASSETS } = await import(moduleUrl);
   for (const id of ['bossPanel', 'paoxiaoBossPanel', 'xiangliuBossPanel', 'jiuweihuBossPanel', 'xingtianBossPanel', 'jinwuBossPanel']) {
     const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
@@ -280,6 +280,10 @@ test('all six Boss HUD panels are optimized transparent empty-channel assets', a
     assert.deepEqual(pngDimensions(bytes), { width: 768, height: 256 }, `${id} must match the optimized HUD runtime size`);
     assert.ok(bytes.length < 500_000, `${id} is ${bytes.length} bytes; expected under 500000`);
   }
+  const huashe = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS.huasheBossPanel}`, moduleUrl)));
+  assertCompletePngWithAlpha(huashe, 'huasheBossPanel');
+  assert.deepEqual(pngDimensions(huashe), { width: 768, height: 183 });
+  assert.ok(huashe.length < 250_000);
 });
 
 test('mobile-rendered level-one and level-two art stays within source-pixel and transfer budgets', async () => {
