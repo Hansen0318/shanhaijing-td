@@ -53,6 +53,7 @@ export class Game {
     this.illusions = [];
     this.towers = Array(level.map.slots.length).fill(null);
     this.projectiles = [];
+    this.pendingShocks = [];
     this.effects = [];
     this.visualTime = 0;
     this.currentChoices = [];
@@ -268,6 +269,7 @@ export class Game {
     if (this.state === 'preparation') return;
     if (this.state !== 'combat') return;
     const dt = this.time.step(realDelta);
+    this.updatePendingShocks(dt);
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
     SunlightSystem.update(this, dt);
     TideSystem.update(this, dt);
@@ -446,8 +448,25 @@ export class Game {
           life: 0.2,
           duration: 0.2,
         });
-      } else this.projectiles.push(new Projectile(tower, target, stats, this.blessings.modifiers, this.effects));
+      } else this.projectiles.push(new Projectile(tower, target, stats, this.blessings.modifiers, this.effects, this.pendingShocks));
     }
+  }
+  updatePendingShocks(dt) {
+    for (const shock of this.pendingShocks) {
+      shock.remaining -= Math.max(0, dt);
+      if (shock.remaining > 1e-9) continue;
+      const hit = CombatSystem.areaDamage(this.enemies, shock, shock.radius, shock.damage);
+      for (const enemy of hit) {
+        if (enemy.isBoss) continue;
+        enemy.pathDistance = Math.max(0, enemy.pathDistance - shock.pushback);
+        Object.assign(enemy, enemy.map.positionAt(enemy.pathDistance));
+      }
+      this.effects.push({
+        type: 'xuanguiShock', x: shock.x, y: shock.y, radius: shock.radius,
+        hitCount: hit.length, life: 0.58, duration: 0.58,
+      });
+    }
+    this.pendingShocks = this.pendingShocks.filter(shock => shock.remaining > 1e-9);
   }
   completeWave() {
     const number = this.wave.waveNumber;

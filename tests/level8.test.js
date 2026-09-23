@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  BLESSING_DATA,
   ENEMY_DATA,
   LEVEL8_MAP_DATA,
   LEVEL8_WAVE_DATA,
@@ -8,7 +9,10 @@ import {
   TOWER_DATA,
 } from '../src/config/gameData.js';
 import { Game } from '../src/core/Game.js';
+import { Projectile } from '../src/entities/Projectile.js';
+import { Tower } from '../src/entities/Tower.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
+import { BlessingSystem } from '../src/systems/BlessingSystem.js';
 import { CombatSystem } from '../src/systems/CombatSystem.js';
 import { StatusSystem } from '../src/systems/StatusSystem.js';
 import { TideSystem } from '../src/systems/TideSystem.js';
@@ -178,4 +182,75 @@ test('Level8 victory waits for escort resolution, queue completion and 化蛇 de
   ordinary.takeDamage(ordinary.maxHp);
   game.update(0);
   assert.equal(game.state, 'victory');
+});
+
+test('玄龜 Blessings filter by lineup, cap at two, and modify only 潮震 values', () => {
+  const blessings = BLESSING_DATA.filter(item => item.tower === 'xuangui');
+  assert.deepEqual(blessings.map(item => item.id), ['xuanguiWave', 'xuanguiBroadTide', 'xuanguiReturnTide']);
+  const system = new BlessingSystem(blessings, () => 0);
+  assert.deepEqual(system.drawChoices([], ['bifang']), []);
+  assert.equal(system.drawChoices([], ['xuangui']).length, 3);
+  for (const blessing of blessings) {
+    assert.equal(system.select(blessing.id), true);
+    assert.equal(system.select(blessing.id), true);
+    assert.equal(system.select(blessing.id), false);
+  }
+  const tower = new Tower('xuangui', TOWER_DATA.xuangui, { x: 100, y: 100 });
+  const stats = tower.getStats(system.modifiers);
+  assert.equal(stats.damage, 13);
+  assert.equal(stats.interval, 1.2);
+  assert.equal(stats.shockDamage, 25.2);
+  assert.equal(stats.shockRadius, 68);
+  assert.equal(stats.shockPushback, 28);
+  assert.equal(stats.shockEvery, 4);
+  assert.equal(stats.shockDelay, 0.35);
+});
+
+test('玄龜 schedules one delayed 潮震 after every four successful projectile hits', () => {
+  const game = new Game(() => 0.2, 8);
+  const tower = new Tower('xuangui', TOWER_DATA.xuangui, { x: 100, y: 100 });
+  const stats = tower.getStats();
+  for (let index = 0; index < 4; index += 1) {
+    const target = game.spawnEnemy('changyou');
+    Object.assign(target, { x: 120 + index, y: 100 });
+    new Projectile(tower, target, stats, {}, game.effects, game.pendingShocks).impact([target]);
+    assert.equal(game.pendingShocks.length, index === 3 ? 1 : 0);
+  }
+  assert.equal(tower.successfulAttacks, 4);
+  assert.deepEqual(game.pendingShocks[0], {
+    x: 123, y: 100, remaining: 0.35, radius: 52, damage: 18, pushback: 18,
+  });
+  assert.equal(game.effects.filter(effect => effect.type === 'xuanguiShockTelegraph').length, 1);
+
+  const defeated = game.spawnEnemy('changyou');
+  defeated.alive = false;
+  new Projectile(tower, defeated, stats, {}, game.effects, game.pendingShocks).impact([defeated]);
+  assert.equal(tower.successfulAttacks, 4, 'a projectile without a living target is not a successful attack');
+});
+
+test('潮震 waits 0.35s, damages the area, pushes only non-Boss path distance, and clamps at Spawn', () => {
+  const game = new Game(() => 0.2, 8);
+  const nearSpawn = game.spawnEnemy('changyou');
+  const normal = game.spawnEnemy('gudiao');
+  const boss = game.spawnEnemy('huashe');
+  nearSpawn.pathDistance = 8;
+  normal.pathDistance = 80;
+  boss.pathDistance = 70;
+  for (const enemy of [nearSpawn, normal, boss]) Object.assign(enemy, game.map.positionAt(enemy.pathDistance));
+  const center = { x: normal.x, y: normal.y };
+  Object.assign(nearSpawn, center);
+  Object.assign(boss, center);
+  game.pendingShocks.push({ ...center, remaining: 0.35, radius: 52, damage: 18, pushback: 18 });
+
+  game.updatePendingShocks(0.34);
+  assert.equal(normal.hp, normal.maxHp);
+  game.updatePendingShocks(0.01);
+  assert.equal(nearSpawn.hp, nearSpawn.maxHp - 18);
+  assert.equal(normal.hp, normal.maxHp - 18);
+  assert.equal(boss.hp, boss.maxHp - 18);
+  assert.equal(nearSpawn.pathDistance, 0);
+  assert.equal(normal.pathDistance, 62);
+  assert.equal(boss.pathDistance, 70, 'Boss receives damage but is push-immune');
+  assert.deepEqual({ x: normal.x, y: normal.y }, game.map.positionAt(62));
+  assert.equal(game.effects.filter(effect => effect.type === 'xuanguiShock').length, 1);
 });

@@ -2,8 +2,9 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { StatusSystem } from '../systems/StatusSystem.js';
 
 export class Projectile {
-  constructor(tower, target, stats, modifiers, effects = []) {
+  constructor(tower, target, stats, modifiers, effects = [], pendingShocks = []) {
     this.type = tower.type;
+    this.sourceTower = tower;
     this.x = tower.x;
     this.y = tower.y;
     this.target = target;
@@ -11,6 +12,7 @@ export class Projectile {
     this.stats = stats;
     this.modifiers = modifiers;
     this.effects = effects;
+    this.pendingShocks = pendingShocks;
     this.alive = true;
   }
   update(dt, enemies) {
@@ -40,6 +42,27 @@ export class Projectile {
           type: 'jumangImpact', x: this.targetPoint.x, y: this.targetPoint.y,
           life: 0.3, duration: 0.3,
         });
+      }
+      if (this.type === 'xuangui') {
+        this.effects.push({
+          type: 'xuanguiImpact', x: this.targetPoint.x, y: this.targetPoint.y,
+          life: 0.24, duration: 0.24,
+        });
+        this.sourceTower.successfulAttacks += 1;
+        if (this.sourceTower.successfulAttacks % this.stats.shockEvery === 0) {
+          this.pendingShocks.push({
+            x: this.targetPoint.x,
+            y: this.targetPoint.y,
+            remaining: this.stats.shockDelay,
+            radius: this.stats.shockRadius,
+            damage: this.stats.shockDamage,
+            pushback: this.stats.shockPushback,
+          });
+          this.effects.push({
+            type: 'xuanguiShockTelegraph', x: this.targetPoint.x, y: this.targetPoint.y,
+            radius: this.stats.shockRadius, life: this.stats.shockDelay, duration: this.stats.shockDelay,
+          });
+        }
       }
     }
     this.alive = false;
