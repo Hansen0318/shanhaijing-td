@@ -86,5 +86,11 @@ Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phon
 - do not regenerate or replace 長右、蠱雕、化蛇、化蛇 Boss HUD、玄龜; their canonical source-art decisions are already frozen.
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
+## Latest narrow follow-up
+- Player reconfirmed Geometry Guide V1 as the sole source of truth. Pixel re-audit showed the existing Spawn/path/Base/T1–T8 coordinates already match the guide; no gameplay geometry was moved.
+- PR #68 merged to `main` at `12435e8c5820a8dafc50ab7ec92f12f0ae6f616b`.
+- Level8 base-name text now renders centered below the canonical Base waypoint instead of the lower-right map corner.
+- 化蛇 follow-up remains intentionally deferred until the player rechecks the map/base presentation.
+
 ## Next exact step
-**Player rechecks the three reported presentation defects on the physical phone; otherwise Level8 remains frozen and the next development step is Level9 initialization.**
+**Player rechecks Level8 map/base presentation on phone; only after that, review 化蛇 ability/HUD readability if still requested.**
