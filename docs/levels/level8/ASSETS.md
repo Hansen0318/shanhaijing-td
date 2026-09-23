@@ -80,3 +80,26 @@
 - M4 middle-lower reed micro-sway: **(247,306,52,46)**.
 - No static VFX image is required for these motions.
 - Motion Lite remains presentation-only and must not change tide timing, wetland polygons, path geometry, tower slots, targeting, or combat values.
+
+
+## Final fileset audit — PASS (2026-09-23)
+- Player re-uploaded the concrete approved Level8 source set and Chat verified role/version against the frozen ledger.
+- **Source policy is intentional:** the battlefield background remains JPEG; character/Boss/HUD approved source files may remain JPEG and do **not** need player-side PNG conversion.
+- Chat owns technical runtime normalization for approved source art: white-background removal where applicable, alpha PNG conversion, trim/resize/compress, while preserving internal pale/cream details.
+- Runtime candidates prepared and visually checked on both dark/light backgrounds:
+  - `bg_level8_youming_marsh_v1.jpg` — 780×1220 JPEG, normalized from the 1024×1536 approved background.
+  - `enemy_changyou_v1.png` — 256×228 RGBA PNG.
+  - `enemy_gudiao_v1.png` — 256×244 RGBA PNG.
+  - `boss_huashe_v1.png` — 512×501 RGBA PNG.
+  - `tower_xuangui_v1.png` — 256×216 RGBA PNG.
+  - `ui_boss_huashe_panel_v1.png` — 768×183 RGBA PNG; outer white background and HP channel transparent, upper dark name panel retained.
+- No white-background rectangle was observed on the alpha candidates; no approved character identity was redrawn or replaced.
+- Approximate runtime file sizes:
+  - background 373.9 KB;
+  - 長右 94.8 KB;
+  - 蠱雕 105.3 KB;
+  - 化蛇 329.5 KB;
+  - 玄龜 96.7 KB;
+  - 化蛇 HUD 172.8 KB.
+- FINAL ASSET AUDIT status: **PASS**.
+- The Work handoff package must use these runtime candidates and retain the approved sources only as audit/canonical references.
