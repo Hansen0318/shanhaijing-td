@@ -5,24 +5,23 @@
 ## Active level
 - Level: **8**
 - Development phase: **RELEASE COMPLETE / FROZEN**
-- Production implementation: **POST-RELEASE 化蛇 FLOW FIX MERGED TO MAIN**
+- Production implementation: **POST-RELEASE MOTION LITE READABILITY PASS RELEASED**
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**PLAYER PHONE VERIFICATION — 化蛇 BOSS-FLOW**
+**PLAYER PHONE VERIFICATION — MOTION LITE READABILITY**
 
 ### Allowed now
-- preserve the now player-confirmed Level8 geometry;
-- change only W10 spawn sequencing so 化蛇 leads the escort;
-- add the 0.8s opening tide telegraph and opening forced high tide;
-- preserve all existing stats, P1/P2 cadence, HUD, progression and tower systems.
+- verify the released fog / ripple / bubbles / reeds readability on a physical 390px-class phone;
+- report concrete visual evidence if one of the four existing regions is still unreadable;
+- preserve all anchors, geometry, map, 化蛇, HUD, waves, stats, tide timing, progression and tower systems.
 
 ### Forbidden until gate exit
 - gate is closed; do not reopen Level8 design, gameplay, geometry, or assets without new concrete evidence;
 - no unrelated Level1–7 work.
 
 ### Gate exit condition
-Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phone-size verification passed.
+Player confirms all four existing Motion Lite regions are directly recognizable on a physical phone without competing with enemies, projectiles, tide or Boss.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -56,15 +55,23 @@ Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phon
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
+- physical-phone acceptance of direct fog / ripple / bubbles / reeds readability after PR #73.
 - physical-phone confirmation that W10 now reads as 化蛇 + escort, with the opening tide visibly affecting 長右／蠱雕.
-- automated suite execution for PR #71 was not available from this Chat environment; regression coverage was added but execution is not claimed here.
 
 ## Current branch / SHA
-- current `main`: `f592c541cc51a5a83e60bd86dc6c54eb903453de` (PR #71)
+- current `main`: `f4205f7cb255e87e443ba7d47386d2f609d6bb28` (PR #73)
+- completed Motion Lite branch: `fix/level8-motion-lite-readability-20260924`
 - completed boss-flow branch: `fix/level8-huashe-boss-escort-20260923`
 - previous alignment branch: `fix/level8-post-release-alignment-20260923`
 
 ## Verification status
+- Motion Lite targeted tests: **57/57 PASS**.
+- affected shared regressions: **75/75 PASS**.
+- full `npm test`: **244/244 PASS** for PR #73.
+- `npm run check`, changed-JS syntax and release-diff whitespace checks: PASS for PR #73.
+- fresh PR #73 final review: **Ready to merge: Yes**, no Critical/Important/Minor findings.
+- GitHub Pages deployment: PASS; public entry serves `level8-7` from main `f4205f7`.
+- public exact 390×700 smoke: Level8 Wave 1, high-tide wetland and 化蛇 P1 states load successfully; four Motion Lite anchors remain fixed and supporting effects remain visually subordinate to combat.
 - FINAL ASSET AUDIT / ZIP checksum: PASS.
 - background normalization re-audit: PASS; runtime asset matches canonical center-crop/resize pipeline.
 - canonical Spawn/Base/path anchors and T1–T8: unchanged.
@@ -89,10 +96,11 @@ Satisfied: PR #66 merged, Pages serves `level8-3`, and public Level8/Level7 phon
 - rejected 玄龜 / frog-type drafts must never be promoted merely because a file exists.
 
 ## Latest narrow follow-up
+- PR #73 released the approved phone-readability-only Motion Lite tuning: fog alpha/drift 0.16 / 8 px; ripple 2 px with stronger expansion; five 2.5–4.3 px bubbles with clearer rise; reeds at 5 px low-frequency sway. No anchor or gameplay position changed.
 - Player reconfirmed Geometry Guide V1 as the sole source of truth. Pixel re-audit showed the existing Spawn/path/Base/T1–T8 coordinates already match the guide; no gameplay geometry was moved.
 - PR #68 merged to `main` at `12435e8c5820a8dafc50ab7ec92f12f0ae6f616b`.
 - Level8 base-name text now renders centered below the canonical Base waypoint instead of the lower-right map corner.
 - 化蛇 follow-up remains intentionally deferred until the player rechecks the map/base presentation.
 
 ## Next exact step
-**Player rechecks Level8 map/base presentation on phone; only after that, review 化蛇 ability/HUD readability if still requested.**
+**Player performs a physical-phone acceptance pass for direct visibility of fog / ripple / bubbles / reeds. No implementation work remains unless that evidence shows a concrete readability defect.**

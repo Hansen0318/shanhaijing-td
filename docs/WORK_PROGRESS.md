@@ -1,5 +1,17 @@
 # Shanhaijing TD Work Progress
 
+## 2026-09-24：Level8 Environment Motion Lite readability pass released
+
+- PR #73 merged to `main` at **`f4205f7cb255e87e443ba7d47386d2f609d6bb28`**; Pages now serves cache version `level8-7`.
+- Kept all four canonical anchors and all Level8 geometry, map, 化蛇, Boss HUD, waves, stats, tide timing, progression and Level1–7 behavior unchanged.
+- Phone-readability tuning only: fog alpha/drift **0.16 / 8 px**; ripple line width **2 px** with stronger 7→42 px expansion; bubbles **5** at **2.5–4.3 px** with slightly clearer rise; reeds **5 px** low-frequency sway.
+- Safe-push checkpoint: `cdde1774cfd8fdc294507de098538ffc2269bc30` on `fix/level8-motion-lite-readability-20260924` (local source commit `4bbe873`).
+- Verification PASS: targeted **57/57**, affected regressions **75/75**, full `npm test` **244/244**, `npm run check`, JS syntax and diff checks. Fresh review reported no Critical/Important/Minor findings.
+- Public Pages PASS: `?devMenu=1` exposes Level8; public browser smoke loaded Level8 Wave 1, high-tide wetland and 化蛇 P1 states in an exact **390×700** iframe. Motion remains subordinate to enemies, tide and Boss presentation.
+- Next exact step: player physical-phone acceptance of direct visibility for fog / ripple / bubbles / reeds; no further code work is pending unless that evidence identifies a concrete defect.
+
+---
+
 ## 2026-09-23：Level8 化蛇 boss-flow follow-up
 
 - Player confirmed the corrected Level8 map geometry is now good.
@@ -25,11 +37,10 @@
 
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
-- **2026-09-23 narrow active fix:** player phone evidence showed Level8 path/tower/Base presentation is uniformly low against the clean background.
-- Root cause confirmed by image registration: Geometry Guide V1 map content is ~48 source px lower than the clean approved background = ~19 logical px at 390×610.
-- Active branch: `fix/level8-guide-clean-registration-20260923`.
-- Scope: apply **Y -19** to all guide-derived background-registered Level8 geometry; X unchanged. Base-name label follows corrected Base. 化蛇 follow-up is deferred.
-- Next exact step: merge/deploy this narrow correction, then player phone recheck.
+- **Released baseline:** `main` = **`f4205f7cb255e87e443ba7d47386d2f609d6bb28`** (PR #73), Pages cache `level8-7`.
+- Current product state: **Level1–8 released; Level8 Motion Lite readability pass RELEASE COMPLETE / FROZEN**.
+- Active implementation branch: none. The completed branch is `fix/level8-motion-lite-readability-20260924`.
+- Next exact step: **player physical-phone acceptance of the four existing Motion Lite regions only; otherwise initialize Level9 when requested**.
 
 ## PREVIOUS RELEASE POINTER
 
