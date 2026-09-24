@@ -846,9 +846,12 @@ For **every future level after Level8** (Level9, Level10, Level11, and onward), 
 
 Before production implementation / Work handoff:
 
-1. freeze the **exact production background file**, source dimensions, crop, logical/runtime dimensions and source→logical transform;
-2. generate or inspect one overlay on that exact production background containing path, Spawn/Base, T1–T8, gameplay zones and Motion Lite anchors;
-3. obtain player approval of that registered overlay before freezing geometry;
+1. **Gameplay geometry comes before background art.** Define a logical Gameplay Geometry Guide first (normally 390×610) containing the intended path centerline, road width, Spawn/Base, T1–T8 and any gameplay-critical landmark/special-zone anchors.
+2. Statically validate that guide for path continuity/turns, tower-road clearance, tower spacing/useful coverage, Spawn/Base/UI clearance and special-anchor clearance.
+3. Create/select the production background so its visible road, buildable pads/ground and gameplay landmarks **follow the approved guide**. Do not let an attractive AI-generated background redefine the gameplay layout after the fact.
+4. Freeze the **exact production background file**, source dimensions, crop, logical/runtime dimensions and source→logical transform.
+5. Overlay the unchanged Gameplay Geometry Guide on that exact production background. If the background materially misses the guide, reject/regenerate/correct the background rather than moving gameplay geometry for convenience.
+6. Obtain player approval of the registered overlay before freezing final geometry;
 4. compare any new Boss HUD against an already released Boss HUD outer footprint; name panel + empty HP channel must fit inside the established footprint unless the player explicitly approves a layout change;
 5. validate the W10/Boss **timeline**, including exact spawn order and whether the Boss signature mechanic actually overlaps the enemies/terrain it is intended to affect;
 6. check required ambient/VFX readability at ~390 px width before release; subtle is acceptable, effectively invisible is not.
@@ -867,3 +870,12 @@ Before final release closure, verify the player-visible integration checklist fr
 Automated tests must cover internal contracts, but **visual geometry truth must also be tied to the approved production background transform**. A test that only matches hard-coded coordinates cannot prove visible alignment.
 
 When a guide image and clean production background are separate files, never assume identical pixel registration. Measure/derive the transform explicitly before freezing any guide-derived coordinates.
+
+### Geometry-source precedence is permanent
+For every future level, the source-of-truth order is:
+**approved gameplay geometry guide → production background constrained to that guide → exact registration overlay → final geometry freeze**.
+
+Never use:
+**AI background first → eyeball/trace a route afterward → move gameplay to match art**.
+
+If a generated background cannot represent the approved route/pads/anchors accurately, the background is the rejected artifact, not the gameplay guide.

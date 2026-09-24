@@ -106,23 +106,31 @@ Output:
 - approved numerical contract in `SPEC.md`.
 
 ### Gate D — Map concept / canonical geometry
-First approve the map concept/background direction, then establish:
-- the **exact production background file**, source dimensions and crop;
-- one explicit source→390×610 logical transform;
-- ordered path;
-- Spawn/Base;
-- tower slots;
-- special zones;
-- Motion Lite / other visual anchors where applicable.
+First approve the map concept/direction.
 
-Before freezing coordinates, overlay all of those elements on the **actual production background** using the recorded transform and obtain player approval. If the guide and clean background are different files, measure their registration explicitly; never assume they share identical pixels.
+Then use this order:
+
+1. **Gameplay Geometry Guide first** — define the intended 390×610 path centerline, road width, Spawn/Base, T1–T8 and gameplay-critical special/visual anchors without depending on decorative background art.
+2. Run static checks on that guide: route continuity/turn quality, road clearance, tower spacing/useful coverage, Spawn/Base/UI clearance and special-anchor clearance.
+3. **Production background second** — create/select art whose visible road, pad surfaces and landmarks conform to the approved guide.
+4. Record the exact production background file, source dimensions/crop and explicit source→390×610 transform.
+5. Overlay the unchanged guide on the exact production background and measure registration.
+6. If art materially misses the guide, regenerate/correct the art; do not redesign gameplay just to fit the image.
+7. Obtain player approval of the registered overlay.
+8. Only then freeze final canonical geometry.
+
+Motion Lite anchors may remain pending until the real background exists because they must attach to visible art features.
 
 Output:
-- `GEOMETRY.md`;
-- reproducible transform/registration notes;
+- `GEOMETRY.md` with the gameplay guide and final registered coordinates;
+- static geometry-check notes;
+- reproducible production-background transform/registration notes;
 - approved runtime-background overlay evidence.
 
-Do not reverse the order by guessing geometry before the background contract is ready.
+Forbidden shortcut:
+> generate an attractive AI background first, then eyeball/trace a route and tower points from it.
+
+The production background serves gameplay geometry, not the reverse.
 
 ### Gate E — Asset/VFX planning
 For every visual:

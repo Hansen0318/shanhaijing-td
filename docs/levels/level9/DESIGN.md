@@ -333,3 +333,18 @@ Player approval is needed for:
 - Motion Lite candidate family.
 
 After approval, the next action is to create/select the exact production background, then perform registration and overlay measurement before any geometry freeze.
+
+
+## Gate D workflow correction — player approved 2026-09-25
+The first generated background proved that a visually attractive AI map cannot safely define tower-defense geometry after the fact.
+
+Level9 therefore adopts a gameplay-first sequence:
+1. define the 390×610 Gameplay Geometry Guide;
+2. statically validate path turns, road clearance, slot spacing/coverage and special-anchor clearance;
+3. make production background art follow that guide;
+4. register the exact production image back to the same guide;
+5. reject/regenerate art when mismatch is material;
+6. freeze only after registered overlay approval.
+
+Gameplay Geometry Guide V1 is now recorded in `GEOMETRY.md`.
+The old generated background/blue overlay is non-canonical and must not drive implementation.
