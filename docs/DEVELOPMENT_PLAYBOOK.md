@@ -97,7 +97,8 @@ Freeze enough to implement later:
 - enemy stats/abilities;
 - tower/new unit stats;
 - Boss phase thresholds/mechanics;
-- W1–W10;
+- W1–W10 **including exact order when order affects gameplay**;
+- a Boss encounter timeline proving the signature mechanic overlaps the enemies/terrain it is intended to affect;
 - victory conditions;
 - Blessing/unlock decisions.
 
@@ -106,16 +107,20 @@ Output:
 
 ### Gate D — Map concept / canonical geometry
 First approve the map concept/background direction, then establish:
-- exact runtime background/crop;
-- 390×610 logical geometry;
+- the **exact production background file**, source dimensions and crop;
+- one explicit source→390×610 logical transform;
 - ordered path;
 - Spawn/Base;
 - tower slots;
 - special zones;
-- anchors/footprints where applicable.
+- Motion Lite / other visual anchors where applicable.
+
+Before freezing coordinates, overlay all of those elements on the **actual production background** using the recorded transform and obtain player approval. If the guide and clean background are different files, measure their registration explicitly; never assume they share identical pixels.
 
 Output:
-- `GEOMETRY.md`.
+- `GEOMETRY.md`;
+- reproducible transform/registration notes;
+- approved runtime-background overlay evidence.
 
 Do not reverse the order by guessing geometry before the background contract is ready.
 
@@ -124,7 +129,9 @@ For every visual:
 - decide existing reuse vs new asset;
 - classify Procedural-first / PNG-first / Hybrid;
 - decide whether a concept/mockup is needed;
-- decide exact final production inventory.
+- decide exact final production inventory;
+- for Boss HUDs, compare the proposed source/runtime aspect against a released Boss HUD and preserve the fixed outer footprint;
+- for required ambient effects, define a minimum phone-readable presentation target rather than only "subtle".
 
 Output:
 - `ASSETS.md`.
@@ -156,7 +163,10 @@ Run fresh:
 - `npm run check`;
 - syntax/diff checks as applicable;
 - required browser/runtime smoke;
-- regression for affected completed levels.
+- regression for affected completed levels;
+- a visual-integration preflight at target phone width covering path/tower registration, Spawn/Base labels, sprite anchors, Boss HUD footprint, Boss-mechanic timeline readability, special-zone readability and Motion Lite visibility.
+
+Green tests prove code contracts; they do not by themselves prove that player-visible geometry matches the background art.
 
 ### Gate I — Release
 Unless explicitly overridden:
