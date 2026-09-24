@@ -36,3 +36,12 @@ Per the Level8 retrospective, Level9 geometry cannot be frozen from a guide-only
 
 ## Approval / runtime verification
 - pending.
+
+
+## Gate D approved concept — not yet geometric freeze
+- Composition: **斷環天壇 / broken-ring switchback**.
+- Spawn macro location: upper-left edge.
+- Base macro location: lower-right edge.
+- Central celestial shrine: principal visual landmark and future 晝夜 cue anchor.
+- Exact path/Spawn/Base/T1–T8 coordinates: **UNSET / FORBIDDEN TO GUESS** until the exact production background file is player-approved.
+- Next required geometry action after background approval: record source dimensions/crop/runtime normalization, derive explicit source→390×610 transform, then overlay path/Spawn/Base/T1–T8/state anchor on that exact image.
