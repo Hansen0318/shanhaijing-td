@@ -818,11 +818,11 @@ Ask the player to repeat context only when:
 Otherwise proceed from GitHub state directly.
 
 
-## 23. Pre-release visual integration gate is mandatory for new levels
+## 23. Pre-release visual integration gate is mandatory for every future level
 
 The Level8 retrospective in `docs/retrospectives/LEVEL8_RETROSPECTIVE.md` is a permanent source for why this gate exists.
 
-For Level9 and later, do **not** treat internally consistent coordinates, green unit tests, or a visually plausible source image as sufficient proof of player-visible alignment.
+For **every future level after Level8** (Level9, Level10, Level11, and onward), do **not** treat internally consistent coordinates, green unit tests, or a visually plausible source image as sufficient proof of player-visible alignment. This is a permanent project-wide rule, not a Level9-specific exception.
 
 Before production implementation / Work handoff:
 

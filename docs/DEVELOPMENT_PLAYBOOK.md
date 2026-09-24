@@ -286,7 +286,7 @@ If any of those are missing, the handoff is incomplete.
 
 ## 10. Future-level initialization
 
-For Level8 and later:
+For every future level after the currently released baseline:
 
 1. copy the templates under `docs/levels/_TEMPLATE/`;
 2. rename/fill the new level folder;

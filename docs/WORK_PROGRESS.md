@@ -10,7 +10,7 @@
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
-- Level8 retrospective / permanent Level9+ guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
+- Level8 retrospective / permanent **all-future-level** guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
 - Active documentation branch: **`docs/level9-init-gate-a-20260924`**.
 - Latest Level9 initialization checkpoint before pointer update: `2e90d57e6703df19b4187748573238c7e28e3815`.
 - Production implementation: **NOT STARTED**; no Work handoff is valid at this gate.
@@ -26,7 +26,7 @@
 - Final accepted corrections included production-background geometry registration, path/tower/Base presentation, Base label placement, enemy visual anchoring, Huashe HUD fixed footprint, Huashe-first W10 escort/tide interaction, and Motion Lite phone readability.
 - Root-cause review is preserved in `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
 - Permanent prevention rules were promoted into `AGENTS.md` and `DEVELOPMENT_PLAYBOOK.md`.
-- Main conclusion for Level9+: freeze against the exact production background/runtime transform, validate Boss encounter order as a timeline, preserve shared HUD footprint before asset approval, and perform phone-scale visual integration preflight before release.
+- Main conclusion for every future level: freeze against the exact production background/runtime transform, validate Boss encounter order as a timeline, preserve shared HUD footprint before asset approval, and perform phone-scale visual integration preflight before release.
 - Next exact step: **Level9 initialization only when requested**.
 
 ---

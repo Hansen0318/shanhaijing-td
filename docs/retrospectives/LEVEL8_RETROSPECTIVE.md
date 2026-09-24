@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Level8 is now player-accepted. This retrospective converts the repeated Level8 corrections into permanent development safeguards so Level9+ should reach player acceptance with materially fewer post-release edits.
+Level8 is now player-accepted. This retrospective converts the repeated Level8 corrections into permanent development safeguards so **all future levels** should reach player acceptance with materially fewer post-release edits.
 
 This file is not a bug log. It is a reusable pre-production and verification contract.
 
@@ -52,7 +52,7 @@ Static asset approval, code tests and browser smoke all passed, but the most imp
 
 **Root lesson:** move visual integration validation earlier. The final phone pass should catch device-specific nuance, not foundational coordinate/layout/mechanic mismatches.
 
-## Permanent guardrails for Level9+
+## Permanent guardrails for every future level
 
 ### A. Production Background Registration Gate — before geometry freeze
 
@@ -144,4 +144,4 @@ Level8 is accepted after:
 - Huashe-first W10 escort/tide interaction correction;
 - Motion Lite readability tuning.
 
-The objective for Level9 is not "no iteration". It is to catch these classes of defects **before production release**, so post-release edits are narrow rather than structural.
+The objective for **every future level** is not "no iteration". It is to catch these classes of defects **before production release**, so post-release edits are narrow rather than structural. These guardrails apply cumulatively to Level9, Level10, Level11, and every later level unless the player explicitly changes a project-wide contract.
