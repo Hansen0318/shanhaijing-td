@@ -9,19 +9,18 @@
 - Active canonical folder: `docs/levels/level8/`
 
 ## Current gate
-**PLAYER PHONE VERIFICATION — MOTION LITE READABILITY**
+**CLOSED — PLAYER VERIFIED / RELEASE COMPLETE**
 
 ### Allowed now
-- verify the released fog / ripple / bubbles / reeds readability on a physical 390px-class phone;
-- report concrete visual evidence if one of the four existing regions is still unreadable;
-- preserve all anchors, geometry, map, 化蛇, HUD, waves, stats, tide timing, progression and tower systems.
+- Level8 is frozen; only reopen for a new concrete player-reported defect.
+- Next campaign development should initialize Level9 from the repository template and follow the new visual-integration guardrails.
 
 ### Forbidden until gate exit
 - gate is closed; do not reopen Level8 design, gameplay, geometry, or assets without new concrete evidence;
 - no unrelated Level1–7 work.
 
 ### Gate exit condition
-Player confirms all four existing Motion Lite regions are directly recognizable on a physical phone without competing with enemies, projectiles, tide or Boss.
+Satisfied: player confirmed Level8 is complete on 2026-09-24.
 
 ## Confirmed / approved
 - Level1–7 remain frozen unless later evidence shows a shared regression.
@@ -55,11 +54,11 @@ Player confirms all four existing Motion Lite regions are directly recognizable 
 - FINAL ASSET AUDIT PASS: approved JPEG sources retained; Chat-generated alpha PNG/runtime candidates verified for Level8 integration.
 
 ## Not completed
-- physical-phone acceptance of direct fog / ripple / bubbles / reeds readability after PR #73.
-- physical-phone confirmation that W10 now reads as 化蛇 + escort, with the opening tide visibly affecting 長右／蠱雕.
+- none for Level8 release acceptance.
 
 ## Current branch / SHA
-- current `main`: `f4205f7cb255e87e443ba7d47386d2f609d6bb28` (PR #73)
+- released gameplay/code baseline: `f4205f7cb255e87e443ba7d47386d2f609d6bb28` (PR #73)
+- release-closure docs baseline: `841c66da6c251980e5f9ab21055fbb32009e9443` (PR #74)
 - completed Motion Lite branch: `fix/level8-motion-lite-readability-20260924`
 - completed boss-flow branch: `fix/level8-huashe-boss-escort-20260923`
 - previous alignment branch: `fix/level8-post-release-alignment-20260923`
@@ -87,7 +86,7 @@ Player confirms all four existing Motion Lite regions are directly recognizable 
 - public 390×700: Level8 pads, Changyou/Gudiao road-center presentation, wetlands/Motion Lite and Huashe P1/P2 PASS.
 - public HUD footprint comparison: Level8 Huashe and Level7 Kui both **44 px** Boss slot/HUD and **426 px** battlefield; no battlefield compression.
 - Level8 victory/retry/progression logic was unchanged and remains covered by the green suite; historical public production-flow evidence remains valid.
-- physical player-phone recheck is not claimed by Work.
+- player physical-phone acceptance: **PASS / PLAYER VERIFIED** on 2026-09-24; player stated Level8 is complete.
 
 ## Do not redo
 - do not retest or redesign completed Level1–7 unless a Level8 change actually affects a shared contract.
@@ -103,4 +102,4 @@ Player confirms all four existing Motion Lite regions are directly recognizable 
 - 化蛇 follow-up remains intentionally deferred until the player rechecks the map/base presentation.
 
 ## Next exact step
-**Player performs a physical-phone acceptance pass for direct visibility of fog / ripple / bubbles / reeds. No implementation work remains unless that evidence shows a concrete readability defect.**
+**Initialize Level9 when requested. Read `docs/retrospectives/LEVEL8_RETROSPECTIVE.md` before freezing Level9 geometry/Boss flow/visual presentation.**
