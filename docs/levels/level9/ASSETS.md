@@ -40,3 +40,10 @@ Do not generate final assets during Gate B. Only explicitly player-approved item
 
 ## Runtime optimization / preload
 - pending after final approved files exist.
+
+
+## Gate D background generation exception
+- Approved now for generation/selection: **one Level9 production-background candidate only** for the frozen 斷環天壇 concept.
+- This exception does **not** open the Gate E final asset batch.
+- Do not generate enemies, Boss, 帝江, HUD, VFX or Motion Lite assets yet.
+- Background must contain no text, no path overlay, no tower-slot markers and no baked gameplay telegraph.
