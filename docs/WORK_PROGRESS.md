@@ -11,11 +11,12 @@
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
 - Level8 retrospective / permanent **all-future-level** guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
-- Active documentation branch: **`docs/level9-gate-c-freeze-gate-d-20260924`**.
+- Active documentation branch: **`docs/level9-gate-d-background-20260924`**.
 - Gate C approved/frozen: 玄龜 first-playable verification; 天狗 120/90; 猙 450/24; normal 晝夜 8s; 燭龍 8200 HP with P1 6s/P2 4.5s state cadence; 帝江 future unlock kit; exact W1–W10 and W10 timeline.
 - Production implementation: **NOT STARTED**; no Work handoff is valid at this gate.
 - Gate B approved/frozen: **鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty**.
-- Next exact step: **player reviews Gate D concept: broken-ring switchback / upper-left Spawn / lower-right Base / central celestial shrine / black-red high-altitude mountain shrine. If approved, create/select the exact production background and perform registration overlay before geometry freeze.**
+- Gate D concept approved: **斷環天壇 / upper-left Spawn / lower-right Base / central celestial shrine / black-red high-altitude mountain shrine**.
+- Next exact step: **create/select the exact production background candidate; after player approval, measure the source→390×610 transform and create the registration overlay before any geometry freeze.**
 - Final asset batches and production implementation remain forbidden until later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
