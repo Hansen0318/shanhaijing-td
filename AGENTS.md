@@ -816,3 +816,34 @@ Ask the player to repeat context only when:
 - an explicit new design choice is required.
 
 Otherwise proceed from GitHub state directly.
+
+
+## 23. Pre-release visual integration gate is mandatory for new levels
+
+The Level8 retrospective in `docs/retrospectives/LEVEL8_RETROSPECTIVE.md` is a permanent source for why this gate exists.
+
+For Level9 and later, do **not** treat internally consistent coordinates, green unit tests, or a visually plausible source image as sufficient proof of player-visible alignment.
+
+Before production implementation / Work handoff:
+
+1. freeze the **exact production background file**, source dimensions, crop, logical/runtime dimensions and source→logical transform;
+2. generate or inspect one overlay on that exact production background containing path, Spawn/Base, T1–T8, gameplay zones and Motion Lite anchors;
+3. obtain player approval of that registered overlay before freezing geometry;
+4. compare any new Boss HUD against an already released Boss HUD outer footprint; name panel + empty HP channel must fit inside the established footprint unless the player explicitly approves a layout change;
+5. validate the W10/Boss **timeline**, including exact spawn order and whether the Boss signature mechanic actually overlaps the enemies/terrain it is intended to affect;
+6. check required ambient/VFX readability at ~390 px width before release; subtle is acceptable, effectively invisible is not.
+
+Before final release closure, verify the player-visible integration checklist from the retrospective:
+- background/geometry registration;
+- path and tower-pad centering;
+- Spawn/Base and labels;
+- sprite visual anchors;
+- Boss HUD footprint;
+- Boss mechanic readability in the actual encounter timeline;
+- environment/special-zone readability;
+- Motion Lite visibility;
+- progression/unlock presentation.
+
+Automated tests must cover internal contracts, but **visual geometry truth must also be tied to the approved production background transform**. A test that only matches hard-coded coordinates cannot prove visible alignment.
+
+When a guide image and clean production background are separate files, never assume identical pixel registration. Measure/derive the transform explicitly before freezing any guide-derived coordinates.
