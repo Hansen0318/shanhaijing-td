@@ -49,9 +49,11 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 
 ## Current proposals — not yet frozen
 - Gate C proposal is documented in `DESIGN.md` and remains **PLAYER_APPROVAL_PENDING**.
+- Level9 is explicitly the **first playable level for 玄龜**; its Level8-approved stats/ability/VFX are inherited and must be verified in Level9, not redesigned.
 - Proposed baselines: 天狗 120 HP / 90 speed; 猙 450 HP / 24 speed; 燭龍 8200 HP / 15 speed.
 - Proposed 晝夜: normal 8 s cadence; Boss P1 6 s, P2 4.5 s; 0.8 s telegraph.
-- Proposed 帝江: 150 cost, short movement-lock pulse every 5th successful attack.
+- Inherited 玄龜 first-use contract: 145 cost / 13 damage / 1.20s interval / every 4 hits triggers 0.35s-delayed 潮震 (52 radius / 18 damage / 18 non-Boss pushback), with procedural cyan projectile + water-shock rings.
+- Proposed 帝江: 150 cost, short movement-lock pulse every 5th successful attack; 帝江 is a Level9-clear unlock and is **not playable until Level10**.
 - Proposed W10 order: 燭龍 first → 天狗 ×8 → 猙 ×4.
 
 ## Completed
@@ -87,4 +89,4 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Player reviews the Gate C proposal in `DESIGN.md`. If approved, promote L9-R101–L9-R108 into `SPEC.md` and advance to Gate D. If any item is rejected, revise only the affected Gate C contract before advancing.**
+**Player reviews the Gate C proposal in `DESIGN.md`, including the inherited L9-R100 玄龜 first-playable verification. If approved, promote L9-R101–L9-R108 into `SPEC.md`; retain L9-R100 as an inherited verification contract, then advance to Gate D.**
