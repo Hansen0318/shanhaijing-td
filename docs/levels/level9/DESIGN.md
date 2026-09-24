@@ -78,6 +78,55 @@ No alternate is approved and no downstream work should use them.
 - Gate B is closed; later changes require explicit change control / impact analysis.
 
 
+
+
+## L9-R100 — 玄龜 first-playable-level carry-over verification
+Status: **INHERITED / MUST VERIFY IN LEVEL9**
+
+Level9 is the first level in which 玄龜 is selectable after being unlocked by the first Level8 clear. Do **not** redesign or rebalance 玄龜 here; its Level8-approved production contract is inherited:
+
+- cost **145**
+- damage **13**
+- attack interval **1.20s**
+- range **140**
+- projectile speed **360**
+- every **4 successful attacks** triggers 潮震
+- 潮震 delay **0.35s**
+- 潮震 radius **52**
+- 潮震 damage **18**
+- non-Boss path pushback **18**
+- Boss receives pulse damage but is immune to pushback
+
+Inherited procedural VFX:
+- base attack = compact cyan/teal water-core projectile with short trail
+- 潮震 = local contraction telegraph → two expanding water-shock rings → brief mist/splash accent
+- no static VFX image is required unless runtime evidence shows a concrete readability failure
+
+Inherited Blessings:
+- 玄波: 潮震 damage +20% / layer
+- 闊潮: 潮震 radius +8 / layer
+- 回瀾: non-Boss pushback +5 / layer
+- max 2 layers each
+
+Level9-specific verification requirement:
+- lineup must visibly include 玄龜 as one of the six owned beasts
+- first placement must use the approved 玄龜 sprite and facing rules
+- base projectile must be visible on a ~390px phone viewport
+- the 4-hit → 0.35s → 潮震 sequence must be visually recognizable
+- non-Boss pushback must be visible without breaking path spacing/facing
+- Boss must take 潮震 damage without being pushed
+- Blessing filtering must include only 玄龜 Blessings when 玄龜 is selected, following the existing lineup filter architecture
+
+This is a **carry-over verification**, not a new Level9 balance design.
+
+## Unlock sequencing rule clarified
+- A beast unlocked by clearing Level N is **not playable during that same first-clear run**.
+- It joins the owned roster starting with the **next playable level**.
+- Therefore:
+  - Level8 clear → unlock 玄龜 → first playable in **Level9**
+  - Level9 clear → unlock 帝江 → first playable in **Level10** (once Level10 exists)
+- Future levels should preserve this sequence unless the player explicitly changes progression architecture.
+
 # Gate C — Numerical / Gameplay Proposal
 
 Status: **PLAYER_APPROVAL_PENDING**
