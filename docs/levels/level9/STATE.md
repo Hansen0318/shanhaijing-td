@@ -4,23 +4,27 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **NUMERICAL BASELINE**
+- Development phase: **MAP CONCEPT / CANONICAL GEOMETRY**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE C — NUMERICAL BASELINE**
+**GATE D — MAP CONCEPT / CANONICAL GEOMETRY**
 
 ### Allowed now
-- freeze enemy stats/abilities;
-- freeze exact 晝相／夜相 gameplay effects;
-- define 帝江's concrete combat/support kit and Blessings;
-- freeze Boss phase thresholds/mechanics;
-- freeze W1–W10 including exact spawn order where order matters;
-- write a Boss encounter timeline proving 燭龍's signature mechanic overlaps its intended supporting enemies / battlefield state;
-- freeze victory conditions.
+- approve Level9 map composition / visual direction;
+- create/select the exact production background;
+- record source dimensions and exact normalization/crop;
+- establish explicit source→390×610 transform;
+- measure ordered path, Spawn/Base, T1–T8 and gameplay-relevant visual anchors from that exact background;
+- produce a registration overlay and obtain player approval before freezing coordinates.
 
 ### Forbidden until gate exit
+- no guessed/final coordinates before the exact production background exists;
+- no geometry freeze before player-approved overlay;
+- no final asset batch or image-generation batch beyond the Gate D production-background task;
+- no production implementation;
+- no Work implementation handoff.
 - no canonical geometry or coordinate guessing;
 - no production-background freeze;
 - no final asset batch or image-generation allowlist;
@@ -34,7 +38,7 @@
 - no Work implementation handoff.
 
 ### Gate exit condition
-Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1–W10 and the W10 Boss encounter timeline.
+Exact production background + transform + player-approved overlay exist, and `GEOMETRY.md` contains the reproducible frozen geometry contract.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -48,7 +52,9 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- Gate C numerical baseline: pending proposal.
+- Gate D Proposal: **斷環天壇 / broken-ring switchback**, upper-left Spawn, lower-right Base, central celestial shrine as the main 晝夜 anchor, black-red high-altitude mountain-shrine art direction.
+- Motion Lite candidates: cloud drift, banner/ribbon sway where visible, celestial-disc breathing, sparse ember/star drift.
+- All Gate D items remain **PLAYER_APPROVAL_PENDING**.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -56,10 +62,10 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - read Level8 retrospective and permanent development rules;
 - initialized `docs/levels/level9/` from repository template;
 - Gate A progression/scope contract completed and frozen;
-- Gate B core design approved and frozen: 鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty.
+- Gate B core design approved and frozen: 鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty;
+- Gate C numerical/gameplay contract approved and frozen, including 玄龜 first-playable verification and exact W1–W10/Boss timeline.
 
 ## Not completed
-- numerical baseline;
 - production background / geometry;
 - assets / VFX planning and production;
 - implementation;
@@ -83,4 +89,4 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Gate C: prepare a concrete numerical/gameplay proposal for 天狗、猙、晝夜輪轉、帝江、燭龍 phases, W1–W10 exact order and the W10 Boss encounter timeline for player approval.**
+**Player reviews Gate D map/background concept. If approved, create/select the exact Level9 production background, then perform source→logical registration and overlay path/Spawn/Base/T1–T8/state anchor before freezing any coordinates.**
