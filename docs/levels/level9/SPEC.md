@@ -5,7 +5,7 @@
 ## Entry progression
 - **L9-R001 — FROZEN:** Level9 becomes reachable from the Level8 victory flow once Level9 production implementation exists.
 - **L9-R002 — FROZEN:** entering Level9 opens the persistent lineup screen before preparation/combat.
-- **L9-R003 — FROZEN:** the owned Level9 roster is **畢方／夫諸／應龍／白澤／句芒／玄龜**.
+- **L9-R003 — FROZEN:** the owned Level9 roster is **畢方／夫諸／應龍／白澤／句芒／玄龜**. Level9 is the **first playable level for 玄龜**, because 玄龜 is unlocked only after the first Level8 clear.
 - **L9-R004 — FROZEN:** lineup selection requires exactly **3** owned beasts before confirmation.
 
 ## Core gameplay
@@ -22,7 +22,7 @@
 ## Victory / retry / next-level
 - **L9-R005 — FROZEN:** retry clears the lineup and returns to an empty selection state; exactly 3 must be chosen again.
 - **L9-R006 — FROZEN:** while Level10 is not implemented, Level9 victory must not show a dead/nonfunctional Level10 button.
-- Level9 clear unlock / reward: **帝江**, per L9-D005.
+- Level9 clear unlock / reward: **帝江**, per L9-D005. 帝江 is an unlock presentation/reward on Level9 clear and does **not** join the active roster until the next playable level (Level10 once implemented).
 
 ## Shared inherited requirements
 - follow `AGENTS.md`, `docs/DEVELOPMENT_PLAYBOOK.md`, and `docs/DEVELOPMENT_GOVERNANCE.md`;
