@@ -70,7 +70,7 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 ## Current branch / SHA
 - initialization branch: `docs/level9-init-gate-a-20260924`
 - branch base: `07e83d001cc21ed88ec647721408dc1ff3268232`
-- latest initialization SHA: update after documentation commit sequence.
+- latest initialization SHA: `13687afa1f8ef1e208d057288588aa83b04609f0`.
 
 ## Verification status
 - documentation-only initialization; no production code changed.
