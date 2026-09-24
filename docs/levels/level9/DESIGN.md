@@ -276,7 +276,7 @@ Not part of Gate C:
 
 # Gate D — Map Concept / Production Background Proposal
 
-Status: **PLAYER_APPROVAL_PENDING**
+Status: **PLAYER_APPROVED / BACKGROUND PRODUCTION NEXT**
 
 ## L9-G001 — battlefield composition proposal
 - Working composition: **斷環天壇 / broken-ring switchback**.
@@ -333,3 +333,11 @@ Player approval is needed for:
 - Motion Lite candidate family.
 
 After approval, the next action is to create/select the exact production background, then perform registration and overlay measurement before any geometry freeze.
+
+
+## Gate D concept approval
+- Player approved the Gate D concept on 2026-09-24 by continuing from the recorded review step.
+- Approved composition: **斷環天壇 / broken-ring switchback**.
+- Approved macro anchors: Spawn upper-left, Base lower-right, central celestial shrine as main 晝夜 visual anchor.
+- Approved art direction: high-altitude black/charcoal mountain stone + restrained dark-crimson shrine architecture.
+- Next dependency: create/select the exact production background candidate before any geometry measurement/freeze.
