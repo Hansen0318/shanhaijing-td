@@ -7,7 +7,7 @@
 
 ## Proposal A — 鐘山極夜 / 燭龍
 
-Status: **PLAYER_APPROVAL_PENDING**
+Status: **PLAYER_APPROVED / PROMOTED TO SPEC**
 
 ### Level identity
 - Working level name: **第9關・鐘山極夜**
@@ -70,3 +70,9 @@ No alternate is approved and no downstream work should use them.
 
 ## Rejected / superseded ideas
 - none yet.
+
+
+## Gate B closure
+- Player approved Proposal A on 2026-09-24.
+- L9-D001–L9-D006 were promoted to `SPEC.md`.
+- Gate B is closed; later changes require explicit change control / impact analysis.
