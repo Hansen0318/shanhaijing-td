@@ -1,5 +1,29 @@
 # Shanhaijing TD Work Progress
 
+## CURRENT HANDOFF POINTER — READ THIS FIRST
+
+- Released baseline: **Level1–8 complete and player-verified**.
+- Level8 final gameplay/code baseline: `f4205f7cb255e87e443ba7d47386d2f609d6bb28` (PR #73); release-closure docs reached `841c66da6c251980e5f9ab21055fbb32009e9443` (PR #74).
+- Player confirmed Level8 complete on **2026-09-24**. No Level8 implementation work remains.
+- Level8 retrospective / permanent Level9+ guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
+- Active implementation branch: **none**.
+- Level9: **not initialized yet**.
+- Next exact step when campaign development continues: initialize `docs/levels/level9/` from `docs/levels/_TEMPLATE/`, then follow the visual-registration / Boss-timeline preflight before Work implementation.
+- New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
+
+---
+
+## 2026-09-24：Level8 player acceptance + retrospective closure
+
+- Player confirmed: **Level8 is complete**.
+- Final accepted corrections included production-background geometry registration, path/tower/Base presentation, Base label placement, enemy visual anchoring, Huashe HUD fixed footprint, Huashe-first W10 escort/tide interaction, and Motion Lite phone readability.
+- Root-cause review is preserved in `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
+- Permanent prevention rules were promoted into `AGENTS.md` and `DEVELOPMENT_PLAYBOOK.md`.
+- Main conclusion for Level9+: freeze against the exact production background/runtime transform, validate Boss encounter order as a timeline, preserve shared HUD footprint before asset approval, and perform phone-scale visual integration preflight before release.
+- Next exact step: **Level9 initialization only when requested**.
+
+---
+
 ## 2026-09-24：Level8 Environment Motion Lite readability pass released
 
 - PR #73 merged to `main` at **`f4205f7cb255e87e443ba7d47386d2f609d6bb28`**; Pages now serves cache version `level8-7`.
@@ -34,13 +58,6 @@
 - Next exact step: player rechecks map/base presentation; then address 化蛇 readability only if still needed.
 
 ---
-
-## CURRENT HANDOFF POINTER — READ THIS FIRST
-
-- **Released baseline:** `main` = **`f4205f7cb255e87e443ba7d47386d2f609d6bb28`** (PR #73), Pages cache `level8-7`.
-- Current product state: **Level1–8 released; Level8 Motion Lite readability pass RELEASE COMPLETE / FROZEN**.
-- Active implementation branch: none. The completed branch is `fix/level8-motion-lite-readability-20260924`.
-- Next exact step: **player physical-phone acceptance of the four existing Motion Lite regions only; otherwise initialize Level9 when requested**.
 
 ## PREVIOUS RELEASE POINTER
 
