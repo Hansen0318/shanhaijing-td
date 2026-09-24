@@ -4,23 +4,28 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **CORE DESIGN**
+- Development phase: **NUMERICAL BASELINE**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE B — CORE DESIGN**
+**GATE C — NUMERICAL BASELINE**
 
 ### Allowed now
-- define Level9 theme / level name;
-- define normal enemies;
-- define Boss identity;
-- define the level's signature mechanic;
-- define whether Level9 introduces a new deployable/unlock;
-- define broad difficulty intent;
-- record proposals in `DESIGN.md` and promote only accepted decisions to `SPEC.md`.
+- freeze enemy stats/abilities;
+- freeze exact 晝相／夜相 gameplay effects;
+- define 帝江's concrete combat/support kit and Blessings;
+- freeze Boss phase thresholds/mechanics;
+- freeze W1–W10 including exact spawn order where order matters;
+- write a Boss encounter timeline proving 燭龍's signature mechanic overlaps its intended supporting enemies / battlefield state;
+- freeze victory conditions.
 
 ### Forbidden until gate exit
+- no canonical geometry or coordinate guessing;
+- no production-background freeze;
+- no final asset batch or image-generation allowlist;
+- no production implementation;
+- no Work implementation handoff.
 - no numerical gameplay baseline;
 - no W1–W10 freeze;
 - no canonical geometry or coordinate guessing;
@@ -29,7 +34,7 @@
 - no Work implementation handoff.
 
 ### Gate exit condition
-Record the approved Level9 core-design decisions in `SPEC.md` and leave no unresolved core-design blocker.
+Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1–W10 and the W10 Boss encounter timeline.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -43,22 +48,17 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- Level9 theme/name: pending.
-- normal enemies: pending.
-- Boss: pending.
-- signature mechanic: pending.
-- Level9 clear unlock/new deployable: pending.
-- broad difficulty intent: pending.
+- Gate C numerical baseline: pending proposal.
 
 ## Completed
 - zero-context takeover from latest `main`;
 - read CURRENT HANDOFF POINTER;
 - read Level8 retrospective and permanent development rules;
 - initialized `docs/levels/level9/` from repository template;
-- Gate A progression/scope contract completed and frozen.
+- Gate A progression/scope contract completed and frozen;
+- Gate B core design approved and frozen: 鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty.
 
 ## Not completed
-- Gate B core design;
 - numerical baseline;
 - production background / geometry;
 - assets / VFX planning and production;
@@ -68,9 +68,9 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 - player smoke.
 
 ## Current branch / SHA
-- initialization branch: `docs/level9-init-gate-a-20260924`
-- branch base: `07e83d001cc21ed88ec647721408dc1ff3268232`
-- latest initialization SHA: `13687afa1f8ef1e208d057288588aa83b04609f0`.
+- active documentation branch: `docs/level9-gate-b-proposal-20260924`
+- branch base: `6070b4592aac70eb9e39586b72eee81fc073647b`
+- latest Gate B proposal checkpoint: `7f1e190b612f85c469a0112aeabdb1e93e6dddbe`.
 
 ## Verification status
 - documentation-only initialization; no production code changed.
@@ -83,4 +83,4 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Gate B: propose the Level9 theme/name, normal-enemy set, Boss, signature mechanic, Level9-clear unlock/new deployable decision, and broad difficulty intent for player approval.**
+**Gate C: prepare a concrete numerical/gameplay proposal for 天狗、猙、晝夜輪轉、帝江、燭龍 phases, W1–W10 exact order and the W10 Boss encounter timeline for player approval.**

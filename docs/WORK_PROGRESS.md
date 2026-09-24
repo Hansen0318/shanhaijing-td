@@ -3,18 +3,19 @@
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
 - Released baseline: **Level1–8 complete and player-verified**.
-- Latest `main` takeover baseline: `07e83d001cc21ed88ec647721408dc1ff3268232` (Level8 retrospective / Level9 guardrails merged).
+- Latest `main` takeover baseline: `6070b4592aac70eb9e39586b72eee81fc073647b` (all-future-level guardrails merged).
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
-- Current gate: **Gate B — CORE DESIGN**.
+- Current gate: **Gate C — NUMERICAL BASELINE**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
 - Level8 retrospective / permanent **all-future-level** guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
-- Active documentation branch: **`docs/level9-init-gate-a-20260924`**.
-- Latest Level9 initialization checkpoint before pointer update: `2e90d57e6703df19b4187748573238c7e28e3815`.
+- Active documentation branch: **`docs/level9-gate-b-proposal-20260924`**.
+- Latest Gate B proposal checkpoint: `83e1124c7f7305594d82765d72635bfc4de7fae4`.
 - Production implementation: **NOT STARTED**; no Work handoff is valid at this gate.
-- Next exact step: **Gate B — propose and obtain player approval for Level9 theme/name, normal enemies, Boss, signature mechanic, Level9-clear unlock/new deployable decision, and broad difficulty intent.**
+- Gate B approved/frozen: **鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty**.
+- Next exact step: **Gate C — prepare and obtain player approval for enemy/帝江 stats and abilities, exact 晝夜 effects, 燭龍 phases, W1–W10 exact order, and a W10 Boss timeline proving the signature interaction is observable.**
 - Geometry, final asset batches, numerical baseline and production implementation are forbidden until their later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
