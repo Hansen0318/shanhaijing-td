@@ -43,12 +43,13 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- Level9 theme/name: pending.
-- normal enemies: pending.
-- Boss: pending.
-- signature mechanic: pending.
-- Level9 clear unlock/new deployable: pending.
-- broad difficulty intent: pending.
+- Proposal A — **第9關・鐘山極夜**.
+- normal enemies: **天狗／猙**.
+- Boss: **燭龍**.
+- signature mechanic: **晝夜輪轉**.
+- Level9 clear unlock/new deployable: **帝江**.
+- broad difficulty intent: harder through state-reading/timing rather than large stat inflation.
+- all items above remain **PLAYER_APPROVAL_PENDING** and are not yet frozen.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -68,9 +69,9 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 - player smoke.
 
 ## Current branch / SHA
-- initialization branch: `docs/level9-init-gate-a-20260924`
-- branch base: `07e83d001cc21ed88ec647721408dc1ff3268232`
-- latest initialization SHA: `13687afa1f8ef1e208d057288588aa83b04609f0`.
+- active documentation branch: `docs/level9-gate-b-proposal-20260924`
+- branch base: `6070b4592aac70eb9e39586b72eee81fc073647b`
+- latest Gate B proposal checkpoint: `7f1e190b612f85c469a0112aeabdb1e93e6dddbe`.
 
 ## Verification status
 - documentation-only initialization; no production code changed.
@@ -83,4 +84,4 @@ Record the approved Level9 core-design decisions in `SPEC.md` and leave no unres
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Gate B: propose the Level9 theme/name, normal-enemy set, Boss, signature mechanic, Level9-clear unlock/new deployable decision, and broad difficulty intent for player approval.**
+**Player reviews Proposal A in `DESIGN.md`. If approved, promote L9-D001–L9-D006 into `SPEC.md` and advance to Gate C. If any item is rejected, revise only Gate B design before advancing.**
