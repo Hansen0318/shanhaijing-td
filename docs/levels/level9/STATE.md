@@ -54,7 +54,7 @@ Exact production background + transform + player-approved overlay exist, and `GE
 ## Current proposals — not yet frozen
 - Gate D Proposal: **斷環天壇 / broken-ring switchback**, upper-left Spawn, lower-right Base, central celestial shrine as the main 晝夜 anchor, black-red high-altitude mountain-shrine art direction.
 - Motion Lite candidates: cloud drift, banner/ribbon sway where visible, celestial-disc breathing, sparse ember/star drift.
-- All Gate D items remain **PLAYER_APPROVAL_PENDING**.
+- Gate D map/background concept is **PLAYER_APPROVED**; exact production background file is the current unresolved dependency.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -89,4 +89,4 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Player reviews Gate D map/background concept. If approved, create/select the exact Level9 production background, then perform source→logical registration and overlay path/Spawn/Base/T1–T8/state anchor before freezing any coordinates.**
+**Create/select the exact Level9 production background candidate for the approved 斷環天壇 concept. After player approval of that exact image, record its dimensions/crop/transform and build the registration overlay before freezing coordinates.**
