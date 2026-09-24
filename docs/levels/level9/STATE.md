@@ -48,7 +48,11 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- Gate C numerical baseline: pending proposal.
+- Gate C proposal is documented in `DESIGN.md` and remains **PLAYER_APPROVAL_PENDING**.
+- Proposed baselines: 天狗 120 HP / 90 speed; 猙 450 HP / 24 speed; 燭龍 8200 HP / 15 speed.
+- Proposed 晝夜: normal 8 s cadence; Boss P1 6 s, P2 4.5 s; 0.8 s telegraph.
+- Proposed 帝江: 150 cost, short movement-lock pulse every 5th successful attack.
+- Proposed W10 order: 燭龍 first → 天狗 ×8 → 猙 ×4.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -68,9 +72,9 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - player smoke.
 
 ## Current branch / SHA
-- active documentation branch: `docs/level9-gate-b-proposal-20260924`
-- branch base: `6070b4592aac70eb9e39586b72eee81fc073647b`
-- latest Gate B proposal checkpoint: `7f1e190b612f85c469a0112aeabdb1e93e6dddbe`.
+- active documentation branch: `docs/level9-gate-c-proposal-20260924`
+- branch base: `fba696cc6967e55711c2d26b737343d8494c82e7`
+- latest Gate C proposal checkpoint: pending current documentation commit.
 
 ## Verification status
 - documentation-only initialization; no production code changed.
@@ -83,4 +87,4 @@ Record the approved numerical/gameplay contract in `SPEC.md`, including exact W1
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Gate C: prepare a concrete numerical/gameplay proposal for 天狗、猙、晝夜輪轉、帝江、燭龍 phases, W1–W10 exact order and the W10 Boss encounter timeline for player approval.**
+**Player reviews the Gate C proposal in `DESIGN.md`. If approved, promote L9-R101–L9-R108 into `SPEC.md` and advance to Gate D. If any item is rejected, revise only the affected Gate C contract before advancing.**
