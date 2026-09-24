@@ -102,6 +102,26 @@ Starting with Level4, every playable level must use the persistent roster-select
 
 This progression rule is gameplay architecture, not optional UI polish. Future Work prompts and asset-integration packages should assume it unless the user explicitly changes the rule.
 
+### Unlock → first-playable sequencing is permanent
+
+For every future level, a deployable beast unlocked by clearing Level N is a **post-clear reward**, not a unit that becomes usable during that same first-clear run.
+
+- Level N clear presents/unlocks the new beast.
+- The newly unlocked beast joins the owned roster starting with the **next playable level (Level N+1)**.
+- Therefore the first playable level for a newly unlocked beast is Level N+1, unless the player explicitly defines a different progression rule.
+- The Level N+1 development contract must include a **first-playable verification** for that inherited beast:
+  - roster/lineup inclusion;
+  - approved sprite and facing;
+  - inherited ability and frozen numbers;
+  - attack/VFX readability at target phone width;
+  - special-mechanic behavior against normal enemies/Bosses as applicable;
+  - Blessing/filter integration;
+  - no unintended rebalance merely because this is the first live-use level.
+- Do not redesign or silently retune a previously frozen unlock when it first becomes playable. If the prior level already froze its kit, Level N+1 inherits that contract and verifies it.
+- Example progression: Level8 clear unlocks 玄龜 → 玄龜 first playable in Level9; Level9 clear unlocks 帝江 → 帝江 first playable in Level10.
+
+Future level specs, Work handoffs, progression tests and player smoke must preserve this sequence unless the player explicitly changes the architecture.
+
 ## 8. Default delivery flow: Work completion means released to main + Pages
 
 Unless the user explicitly says **feature branch only**, **do not merge**, **do not deploy**, or otherwise asks for a review checkpoint before release, a substantial Work/Codex implementation is **not complete at feature-branch PASS**.
