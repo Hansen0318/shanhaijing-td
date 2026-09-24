@@ -284,6 +284,22 @@ The next owner should not need the old Chat to know:
 
 If any of those are missing, the handoff is incomplete.
 
+## 9.1 Unlock / first-playable carry-over check
+
+When initializing or entering Gate A–C for any future level:
+
+1. identify whether the previous level unlocked a deployable beast;
+2. if yes, mark the current level as that beast's **first playable level**;
+3. inherit the prior frozen stats/ability/VFX/Blessing contract instead of redesigning it;
+4. add a first-playable verification item covering lineup inclusion, sprite/facing, attack/VFX readability, special-mechanic behavior, Boss exception behavior where relevant, and Blessing filtering;
+5. separately define the current level's new clear unlock, which becomes playable only in the next playable level.
+
+Canonical sequence:
+
+> Level N clear unlock → Level N+1 first playable.
+
+A newly unlocked beast must not enter the same first-clear run unless the player explicitly changes the progression architecture.
+
 ## 10. Future-level initialization
 
 For every future level after the currently released baseline:
