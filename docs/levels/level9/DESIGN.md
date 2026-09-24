@@ -76,3 +76,144 @@ No alternate is approved and no downstream work should use them.
 - Player approved Proposal A on 2026-09-24.
 - L9-D001–L9-D006 were promoted to `SPEC.md`.
 - Gate B is closed; later changes require explicit change control / impact analysis.
+
+
+# Gate C — Numerical / Gameplay Proposal
+
+Status: **PLAYER_APPROVAL_PENDING**
+
+This proposal is calibrated against released Level7/8 baselines rather than using a large raw-stat jump:
+- Level7: 欽原 100 HP / 88 speed, 諸懷 390 HP / 25 speed, 夔 7000 HP.
+- Level8: 長右 110 HP / 86 speed, 蠱雕 420 HP / 24 speed, 化蛇 7600 HP.
+- Level9 therefore increases pressure mostly through 晝夜 state-reading, not HP inflation.
+
+## L9-R101 — 天狗 baseline
+- HP: **120**
+- Speed: **90**
+- Base damage: **1**
+- Reward: **16**
+- Radius target: **11–12**
+- State interaction:
+  - **晝相:** movement speed × **1.20**
+  - **夜相:** no speed bonus
+- Readability goal: during 晝相 the speed change must be visually obvious without making the sprite appear to teleport.
+
+## L9-R102 — 猙 baseline
+- HP: **450**
+- Speed: **24**
+- Base damage: **3**
+- Reward: **34**
+- Radius target: **18**
+- State interaction:
+  - **夜相:** incoming normal attack damage × **0.82** (“夜甲”)
+  - **晝相:** no armor bonus
+- Damage-over-time / special mechanics remain unaffected unless a later implementation contract explicitly says otherwise.
+
+## L9-R103 — 晝夜輪轉
+- Normal Level9 combat begins in **晝相**.
+- Outside the Boss fight, state alternates every **8 seconds**.
+- Transition telegraph: **0.8 seconds** before each state switch.
+- Required presentation:
+  - 晝相 and 夜相 must each have a localized battlefield cue plus an overall state cue;
+  - the state may not rely on subtle full-screen tint alone;
+  - transition cue must remain recognizable at ~390px width.
+- Only one state is active at a time.
+- State effects are limited to the species-specific rules above; no additional global player-tower buff/debuff is proposed.
+
+## L9-R104 — 帝江 deployable baseline
+Role: **混沌干擾／短暫定身節奏控制**
+
+Proposed base tower:
+- Cost: **150**
+- Damage: **12**
+- Attack interval: **1.10 s**
+- Range: **145**
+- Projectile speed: **380**
+- Every **5th** successful attack triggers **混沌震** around the target:
+  - radius: **46**
+  - non-Boss enemies: movement lock **0.35 s**
+  - Boss: movement lock **0.12 s**
+  - no path pushback
+  - no stacking extension from overlapping 帝江 pulses in the same instant
+
+This distinguishes 帝江 from:
+- 夫諸 = sustained slow;
+- 玄龜 = delayed AOE + path pushback;
+- 白澤 = vulnerability support;
+- 句芒 = team attack-speed support.
+
+Proposed Blessings, max 2 layers each:
+- **亂流** — 混沌震 radius **+7** per layer
+- **凝滯** — non-Boss movement lock **+0.07 s** per layer; Boss lock **+0.03 s** per layer
+- **回響** — trigger cadence improves by **1 attack** per layer, floor **3 attacks** per 混沌震
+
+## L9-R105 — 燭龍 Boss baseline
+- HP: **8200**
+- Speed: **15**
+- Base damage: **20**
+- Reward: **0**
+- Boss radius target: **30**
+- Phase 2 threshold: **50% HP**
+- Boss victory gate remains: W10 cannot complete until 燭龍 is dead and all escort enemies are cleared.
+
+### Phase 1
+- 燭龍 owns the battlefield state controller.
+- State starts in **晝相** when 燭龍 enters.
+- Switch interval: **6.0 s**
+- Transition telegraph: **0.8 s**
+- 天狗／猙 receive their normal state-specific bonuses.
+
+### Phase 2
+- Trigger at 50% HP with a distinct visual transition.
+- Boss movement speed × **1.12**.
+- State switch interval tightens to **4.5 s**.
+- Transition telegraph remains **0.8 s**.
+- No extra third environmental system is added.
+
+## L9-R106 — W1–W10 proposal
+Exact group order matters and is part of the proposal.
+
+- **W1:** 天狗 ×6 — interval 1.10
+- **W2:** 天狗 ×8 — interval 1.00
+- **W3:** 天狗 ×6 → 猙 ×2 — interval 1.00
+- **W4:** 猙 ×4 — interval 1.05
+- **W5:** 天狗 ×10 → 猙 ×3 — interval 0.90, HP multiplier 1.06
+- **W6:** 天狗 ×14 → 猙 ×4 — interval 0.78, HP multiplier 1.12
+- **W7:** 天狗 ×10 → 猙 ×6 — interval 0.82, HP multiplier 1.18
+- **W8:** 天狗 ×16 → 猙 ×6 — interval 0.70, HP multiplier 1.26
+- **W9:** 天狗 ×18 → 猙 ×8 — interval 0.64, HP multiplier 1.34
+- **W10:** **燭龍 ×1 first → 天狗 ×8 → 猙 ×4** — interval **0.84**, escort HP multiplier **1.20**, Boss HP multiplier **1.10**
+
+W10 therefore targets an effective Boss HP of **9020** before any future implementation-only rounding/representation decisions.
+
+## L9-R107 — W10 Boss encounter timeline preflight
+This timeline is mandatory because Level8 proved aggregate wave counts are insufficient.
+
+At nominal 1× game time:
+1. **t=0.0:** 燭龍 spawns first; battlefield enters 晝相.
+2. **t≈0.8:** first 天狗 escort begins spawning.
+3. **t=5.2:** 0.8 s telegraph begins for the first Boss-controlled switch.
+4. **t=6.0:** battlefield enters 夜相 while escorts are still active.
+5. **t≈7.6–10.1:** later 天狗 / first 猙 escorts are present during or shortly after the 夜相 transition.
+6. Subsequent switches continue every 6.0 s in P1.
+7. At 50% Boss HP, P2 telegraphs distinctly and the switch cadence becomes 4.5 s.
+
+Acceptance intent:
+- the first 晝→夜 switch must occur while a meaningful portion of the escort is still alive/present;
+- both 天狗's 晝相 speed bonus and 猙's 夜相 armor must be observable during W10;
+- if later executable simulation shows normal combat kills escorts before these overlaps are visible, adjust W10 timing/order before implementation freeze rather than shipping an invisible Boss mechanic.
+
+## L9-R108 — Victory / progression
+- W10 victory requires: wave queue exhausted + all normal enemies defeated + 燭龍 defeated.
+- First Level9 clear presents **帝江 unlock**.
+- Retry clears lineup and returns to empty 6-select-3.
+- Until Level10 exists, Level9 victory shows no next-level button.
+
+## Gate C scope boundary
+Not part of Gate C:
+- production background;
+- path / Spawn / Base / T1–T8;
+- special visual-anchor coordinates;
+- final art/VFX inventory;
+- image generation;
+- production implementation.
