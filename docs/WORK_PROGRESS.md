@@ -15,8 +15,9 @@
 - Latest Gate C proposal checkpoint: e8bac85deea641dd17cd168eb31f5b9d6b5b32fc.
 - Production implementation: **NOT STARTED**; no Work handoff is valid at this gate.
 - Gate B approved/frozen: **鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty**.
-- Gate C proposal ready for player review: **天狗/猙 baselines, 晝夜 state effects, 帝江 kit, 燭龍 P1/P2, exact W1–W10 order, and explicit W10 Boss/escort timeline**.
-- Next exact step: **player reviews Gate C. If approved, promote L9-R101–L9-R108 to `SPEC.md` and advance to Gate D; otherwise revise only rejected Gate C items.**
+- Gate C proposal ready for player review: **玄龜 first-playable verification, 天狗/猙 baselines, 晝夜 state effects, 帝江 kit, 燭龍 P1/P2, exact W1–W10 order, and explicit W10 Boss/escort timeline**.
+- Unlock sequencing clarified: Level8 clear unlocks 玄龜 → first playable Level9; Level9 clear unlocks 帝江 → first playable Level10. 玄龜 uses its already-frozen Level8 ability/numbers/VFX and receives explicit first-use verification in Level9.
+- Next exact step: **player reviews Gate C. If approved, promote L9-R101–L9-R108 to `SPEC.md`, retain the inherited 玄龜 verification contract, and advance to Gate D.**
 - Geometry, final asset batches, numerical baseline and production implementation are forbidden until their later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
