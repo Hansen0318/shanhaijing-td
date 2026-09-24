@@ -3,12 +3,19 @@
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
 - Released baseline: **Level1–8 complete and player-verified**.
-- Level8 final gameplay/code baseline: `f4205f7cb255e87e443ba7d47386d2f609d6bb28` (PR #73); release-closure docs reached `841c66da6c251980e5f9ab21055fbb32009e9443` (PR #74).
-- Player confirmed Level8 complete on **2026-09-24**. No Level8 implementation work remains.
+- Latest `main` takeover baseline: `07e83d001cc21ed88ec647721408dc1ff3268232` (Level8 retrospective / Level9 guardrails merged).
+- Active level: **Level9**.
+- Active canonical folder: `docs/levels/level9/`.
+- Current gate: **Gate B — CORE DESIGN**.
+- Gate A progression/scope is complete and frozen from inherited campaign rules.
+- Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
+- Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
 - Level8 retrospective / permanent Level9+ guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
-- Active implementation branch: **none**.
-- Level9: **not initialized yet**.
-- Next exact step when campaign development continues: initialize `docs/levels/level9/` from `docs/levels/_TEMPLATE/`, then follow the visual-registration / Boss-timeline preflight before Work implementation.
+- Active documentation branch: **`docs/level9-init-gate-a-20260924`**.
+- Latest Level9 initialization checkpoint before pointer update: `2e90d57e6703df19b4187748573238c7e28e3815`.
+- Production implementation: **NOT STARTED**; no Work handoff is valid at this gate.
+- Next exact step: **Gate B — propose and obtain player approval for Level9 theme/name, normal enemies, Boss, signature mechanic, Level9-clear unlock/new deployable decision, and broad difficulty intent.**
+- Geometry, final asset batches, numerical baseline and production implementation are forbidden until their later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
 ---
