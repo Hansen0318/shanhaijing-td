@@ -203,6 +203,14 @@ After the release source is confirmed in `main` and Pages, and no unique unmerge
 
 This gate is cleanup-only and must not change shipped gameplay or reopen completed design.
 
+
+### Dynamic released baseline
+Before planning regression, compatibility, visual comparison or "do not redo prior work" scope, resolve the product's **currently released baseline** from the current repository/release state.
+
+Do not encode a permanent rule as a fixed range such as `Level1–8`. If development later reaches Level20, the baseline for Level20 work is whatever levels are already released then (normally Level1–19), subject to impact-driven narrowing for tests and review.
+
+Historical progress entries may preserve the range that was true when they were written; do not reinterpret those historical ranges as future constraints.
+
 ## 4. Before every substantial action
 
 Even within the same conversation/session:
