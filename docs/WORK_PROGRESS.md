@@ -20,16 +20,24 @@
 - Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
 - Gate D CLOSED: player-approved registered 390×610 geometry + clean 1024×1536 background; runtime candidate `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 539,574 bytes / SHA-256 `c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99`.
 - Gate E/F complete: five new image assets were sequentially approved; all six concrete final source files were re-uploaded and exact-byte audited. Chat-side PNG transparency/size optimization, background JPG conversion, checksums and registration recheck are complete. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
-- Next exact step: **give Work `shanhaijing_td_level9_minimal_handoff.zip`; Work performs only production integration + executable verification/release.**
+- Next exact step: **give Work `shanhaijing_td_level9_minimal_handoff_v2.zip`; Work performs only production integration + executable verification/release.**
 - Production implementation remains forbidden until later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
+
+## 2026-09-25：Level9 v2 canonical-filename correction
+
+- Player noticed UUID/random-looking names in `source/`; those were exact attachment names, not runtime paths, but they were too easy to misuse.
+- Corrected ZIP keeps exact source bytes while normalizing ZIP-internal source aliases to semantic names.
+- Work must integrate only `runtime_candidates/`: five character/UI files are RGBA PNG; battlefield remains JPG by project rule.
+- Valid ZIP is now `shanhaijing_td_level9_minimal_handoff_v2.zip`, SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
+- The earlier non-v2 handoff is SUPERSEDED.
 
 ## 2026-09-25：Level9 final re-upload audit PASS / minimal Work handoff ready
 
 - Player re-uploaded all six concrete final Level9 files; exact attachment bytes, dimensions, formats and SHA-256 are frozen in `docs/levels/level9/ASSETS.md`.
 - Exact re-uploaded background was re-registered against canonical path / Spawn / Base / T1–T8 / shrine anchor: PASS.
 - Chat completed its maximum static scope: transparent-PNG conversion for JPEG character sources, crop/resize/PNG optimization, 780×1220 runtime JPG background, HUD normalization, manifest, checksums, reference registration image and minimal Work prompt.
-- Valid Work ZIP: `shanhaijing_td_level9_minimal_handoff.zip`, SHA-256 `d09e5d2f052da0ee7da16485a809487b9108bad3efbf37705e67733b18a6322e`.
+- Valid Work ZIP: `shanhaijing_td_level9_minimal_handoff_v2.zip`, SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
 - ZIP structure: `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`.
 - Work-only remaining delta: production integration, procedural runtime effects, targeted/full executable tests, runtime smoke, merge, Pages deploy and public verification.
 - The earlier premature Level9 ZIP remains INVALID / SUPERSEDED.
