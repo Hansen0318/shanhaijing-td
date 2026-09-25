@@ -36,7 +36,7 @@
 | L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FOR_GENERATION | transparent; lean fast silhouette; simplified large color blocks; readable ~36–44px |
 | L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FOR_GENERATION | transparent; visibly heavier than 天狗; no silhouette confusion at 390px |
 | L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FOR_GENERATION | transparent; long-dragon identity but compact readable silhouette; no baked aura/state tint |
-| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | APPROVED_FOR_GENERATION | fixed released outer footprint; name area + empty HP channel; no baked HP fill |
+| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | PLAYER_APPROVED | wide/flat released footprint; fixed 44px runtime slot; clear upper-center program-name reserve; one middle/lower empty HP channel aligned to runtime track; no baked text/HP fill |
 | L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FOR_GENERATION | transparent; simplified recognizable silhouette; this is unlock art, not Level9 playable tower art |
 
 ## C. Gameplay VFX — no static image unless runtime evidence fails
@@ -99,3 +99,16 @@ Player must approve or revise:
 - Procedural-first decisions for 晝夜 / enemy state cues / 燭龍 P2;
 - Motion Lite family;
 - three generation sub-batches.
+
+
+## H. Level9 Boss HUD runtime-alignment decision — FROZEN
+- The accepted 燭龍 HUD direction follows the shared runtime overlay architecture rather than artwork-only layout.
+- Runtime outer slot: **44 px high**, unchanged.
+- Runtime Boss name: program text, upper center, approximately **top 2px / left 20% / width 60%**.
+- Runtime HP track: separate middle/lower rectangle supplied by `BOSS_HUD_GEOMETRY`; Level9 implementation must choose/tune the Level9 track rectangle so it lands inside the accepted visible empty channel.
+- Source-art proportion reference: released Level7 夔 HUD **1152×351 (~3.28:1)** wide/flat footprint.
+- PNG contains frame/background only: **no baked 燭龍 text, no HP fill, no HP number**.
+- Decorative dragon/flame shapes must stay outside the practical text/track read zones.
+- The previously generated two-large-box HUD concepts are **REJECTED / SUPERSEDED**.
+- The latest player-accepted HUD with a small upper-center name reserve and one long central/lower empty HP channel is the canonical visual direction for `L9-A013`.
+- Final exact file still enters the final-fileset audit later; visual approval does not bypass dimensions/alpha/checksum reconciliation.
