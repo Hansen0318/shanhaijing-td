@@ -33,11 +33,11 @@
 
 | ID | Proposed filename | Subject | Classification | Status | Requirements |
 |---|---|---|---|---|---|
-| L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FOR_GENERATION | transparent; lean fast silhouette; simplified large color blocks; readable ~36–44px |
-| L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FOR_GENERATION | transparent; visibly heavier than 天狗; no silhouette confusion at 390px |
-| L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FOR_GENERATION | transparent; long-dragon identity but compact readable silhouette; no baked aura/state tint |
-| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | PLAYER_APPROVED | wide/flat released footprint; fixed 44px runtime slot; clear upper-center program-name reserve; one middle/lower empty HP channel aligned to runtime track; no baked text/HP fill |
-| L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FOR_GENERATION | transparent; simplified recognizable silhouette; this is unlock art, not Level9 playable tower art |
+| L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FINAL | 512×365 RGBA; 138,441 bytes; SHA-256 `8f00d39cd242ffb7be8e279b96bb86dd2fe74329c1ca21a0073c5ef7010ffa2b`; simplified white-head/charcoal/red blocks; phone-readable |
+| L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FINAL | 512×382 RGBA; 160,089 bytes; SHA-256 `aab0d8e90decd535b74912f6f946472fa085b5d7f7a2da7ca00c329c1cea7680`; red heavy feline / five-tail / single-horn silhouette |
+| L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FINAL | 640×445 RGBA; 271,978 bytes; SHA-256 `e9aab92330528ca99048fe2b2944eaf96733f307f836775a24e067b37d7390d9`; simplified red/black/ivory blocks; no baked aura/state tint |
+| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | APPROVED_FINAL | 1152×324 RGBA; 264,018 bytes; SHA-256 `eddea739a9a2f661baf1910965fc7a14348a097f7408871a93e7e7d1cff36960`; fixed 44px runtime slot; upper-center name reserve + one middle/lower empty HP channel; no baked text/fill |
+| L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FINAL | 512×375 RGBA; 166,729 bytes; SHA-256 `3813ae7912511c94eb53a5546923d43a9b21325f700bbe778196a51a80764cc2`; simplified unlock-only presentation, not Level9 playable tower art |
 
 ## C. Gameplay VFX — no static image unless runtime evidence fails
 
@@ -93,12 +93,13 @@ Before Work implementation:
 4. procedural VFX remain specifications/code requirements, not fake PNG placeholders;
 5. only after **FINAL FILESET AUDIT PASS** may Chat produce the minimal Work ZIP.
 
-## Gate E exit decision
-Player must approve or revise:
-- the 5-image new PNG inventory;
-- Procedural-first decisions for 晝夜 / enemy state cues / 燭龍 P2;
-- Motion Lite family;
-- three generation sub-batches.
+## Gate E / Gate F closure
+- Player approved the complete five-image inventory and each image sequentially.
+- Final static audit PASS: all five production PNGs are RGBA with real transparency; phone-scale silhouette audit passed; HUD 390×44 footprint preview remained readable.
+- Procedural-first decisions for 晝夜 / enemy state cues / 燭龍 P2 / Motion Lite remain frozen as code requirements rather than fake PNGs.
+- Gate E inventory planning is CLOSED.
+- Gate F asset production/static audit is COMPLETE.
+- Exact final file identities/dimensions/byte sizes/checksums above are the canonical final-fileset contract for packaging.
 
 
 ## H. Level9 Boss HUD runtime-alignment decision — FROZEN
