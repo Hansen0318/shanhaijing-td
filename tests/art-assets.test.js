@@ -68,7 +68,77 @@ test('art catalog exposes all 115 asset IDs and every file is deployable', async
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\\?v=asset-load-2$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=asset-load-2import test from 'node:test';
+import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+
+const moduleUrl = new URL('../src/config/artAssets.js', import.meta.url);
+
+function pngDimensions(bytes) {
+  assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+}
+
+function assertCompletePngWithAlpha(bytes, id) {
+  pngDimensions(bytes);
+  assert.equal(bytes.subarray(-8, -4).toString('ascii'), 'IEND', `${id} PNG is truncated`);
+  const colorType = bytes[25];
+  const hasAlpha = colorType === 4 || colorType === 6 || bytes.indexOf(Buffer.from('tRNS')) >= 0;
+  assert.equal(hasAlpha, true, `${id} must retain alpha transparency`);
+}
+
+test('art catalog exposes all 115 asset IDs and every file is deployable', async () => {
+  assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
+  const { ART_ASSETS, assetUrl } = await import(moduleUrl);
+  const entries = Object.entries(ART_ASSETS);
+
+  assert.equal(entries.length, 115);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 113, 'Jumang and Xuangui unlock/body pairs may share their approved paths');
+  assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.jpg');
+  assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
+  assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.jpg');
+  assert.equal(ART_ASSETS.chiyu, 'assets/enemies/enemy_chiyu_v1.png');
+  assert.equal(ART_ASSETS.yanjia, 'assets/enemies/enemy_yanjia_v1.png');
+  assert.equal(ART_ASSETS.paoxiao, 'assets/bosses/boss_paoxiao_v1.png');
+  assert.equal(ART_ASSETS.level3Background, 'assets/levels/level3/bg_ruoshui_valley_v1.jpg');
+  assert.equal(ART_ASSETS.shuixiao, 'assets/enemies/enemy_shuixiao_v1.png');
+  assert.equal(ART_ASSETS.xuanjiashou, 'assets/enemies/enemy_xuanjiashou_v1.png');
+  assert.equal(ART_ASSETS.xiangliu, 'assets/bosses/boss_xiangliu_v1.png');
+  assert.equal(ART_ASSETS.level4Background, 'assets/levels/level4/bg_qingqiu_realm_v1.jpg');
+  assert.equal(ART_ASSETS.baize, 'assets/towers/tower_baize_v1.png');
+  assert.equal(ART_ASSETS.jiuweihuPhase3, 'assets/bosses/boss_jiuweihu_phase3_v1.png');
+  assert.equal(ART_ASSETS.bossPanel, 'assets/ui/ui_boss_qiongqi_panel_v2.png');
+  assert.equal(ART_ASSETS.paoxiaoBossPanel, 'assets/ui/ui_boss_paoxiao_panel_v2.png');
+  assert.equal(ART_ASSETS.xiangliuBossPanel, 'assets/ui/ui_boss_xiangliu_panel_v2.png');
+  assert.equal(ART_ASSETS.jiuweihuBossPanel, 'assets/ui/ui_boss_jiuweihu_panel_v2.png');
+  assert.equal(ART_ASSETS.xingtianBossPanel, 'assets/ui/ui_boss_xingtian_panel_v1.png');
+  assert.equal(ART_ASSETS.level6Background, 'assets/levels/level6/bg_fusang_realm_v1.jpg');
+  assert.equal(ART_ASSETS.yangyu, 'assets/enemies/enemy_yangyu_v1.png');
+  assert.equal(ART_ASSETS.fusangjiashou, 'assets/enemies/enemy_fusangjiashou_v1.png');
+  assert.equal(ART_ASSETS.jinwu, 'assets/bosses/boss_jinwu_v1.png');
+  assert.equal(ART_ASSETS.jinwuBossPanel, 'assets/ui/ui_boss_jinwu_panel_v1.png');
+  assert.equal(ART_ASSETS.jumangUnlock, 'assets/ui/unlock_jumang_v1.png');
+  assert.equal(ART_ASSETS.level7Background, 'assets/levels/level7/bg_leize_tianye_v1.jpg');
+  assert.equal(ART_ASSETS.qinyuan, 'assets/enemies/enemy_qinyuan_v1.png');
+  assert.equal(ART_ASSETS.zhuhuai, 'assets/enemies/enemy_zhuhuai_v1.png');
+  assert.equal(ART_ASSETS.kui, 'assets/bosses/boss_kui_v1.png');
+  assert.equal(ART_ASSETS.kuiBossPanel, 'assets/ui/ui_boss_kui_panel_v1.png');
+  assert.equal(ART_ASSETS.jumangLeafblade, 'assets/effects/fx_jumang_leafblade_v1.png');
+  assert.equal(ART_ASSETS.jumang, ART_ASSETS.jumangUnlock, 'deployed Jumang reuses the approved unlock visual');
+  assert.equal(ART_ASSETS.level8Background, 'assets/levels/level8/bg_level8_youming_marsh_v1.jpg');
+  assert.equal(ART_ASSETS.changyou, 'assets/enemies/enemy_changyou_v1.png');
+  assert.equal(ART_ASSETS.gudiao, 'assets/enemies/enemy_gudiao_v1.png');
+  assert.equal(ART_ASSETS.huashe, 'assets/bosses/boss_huashe_v1.png');
+  assert.equal(ART_ASSETS.huasheBossPanel, 'assets/ui/ui_boss_huashe_panel_v1.png');
+  assert.equal(ART_ASSETS.xuangui, 'assets/towers/tower_xuangui_v1.png');
+  assert.equal(ART_ASSETS.xuangui, ART_ASSETS.xuanguiUnlock, 'Xuangui unlock reuses the approved tower visual');
+
+  for (const [id, path] of entries) {
+    const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
+    assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
+    assert.match(assetUrl(id), ));
   }
 });
 
@@ -89,10 +159,10 @@ test('level-eight runtime candidates are exact, alpha-safe, mobile-sized, and st
   assert.deepEqual([...background.subarray(-2)], [255, 217]);
   assert.ok(background.length < 500_000);
 
-  for (const id of ['slotPlatform', 'level8Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'changyou']) {
-    assert.equal(LEVEL_REQUIRED_ART_IDS[8].includes(id), true, `${id} must be ready for Level8 first paint`);
+  for (const id of ['level8Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[8].includes(id), true, `${id} must be ready for Level8 lineup first paint`);
   }
-  for (const id of ['gudiao', 'huashe', 'huasheBossPanel', 'xuangui', 'xuanguiUnlock']) {
+  for (const id of ['slotPlatform', 'changyou', 'gudiao', 'huashe', 'huasheBossPanel', 'xuangui', 'xuanguiUnlock']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[8].includes(id), true, `${id} must remain deferred`);
   }
 });
@@ -104,10 +174,10 @@ test('level-nine audited art is staged for first paint and deferred combat use',
     const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
     assertCompletePngWithAlpha(bytes, id);
   }
-  for (const id of ['slotPlatform', 'level9Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'xuangui', 'tiangou']) {
-    assert.equal(LEVEL_REQUIRED_ART_IDS[9].includes(id), true, `${id} must be ready for Level9 first paint`);
+  for (const id of ['level9Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'xuangui']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[9].includes(id), true, `${id} must be ready for Level9 lineup first paint`);
   }
-  for (const id of ['zheng', 'zhulong', 'zhulongBossPanel', 'dijiangUnlock']) {
+  for (const id of ['slotPlatform', 'tiangou', 'zheng', 'zhulong', 'zhulongBossPanel', 'dijiangUnlock']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[9].includes(id), true, `${id} must remain deferred`);
   }
 });
@@ -129,10 +199,10 @@ test('level-seven runtime art is alpha-safe, mobile-sized, and staged', async ()
   assert.deepEqual([...background.subarray(-2)], [255, 217]);
   assert.ok(background.length < 800_000);
 
-  for (const id of ['slotPlatform', 'level7Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'qinyuan']) {
-    assert.equal(LEVEL_REQUIRED_ART_IDS[7].includes(id), true, `${id} must be ready for Level7 first paint`);
+  for (const id of ['level7Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[7].includes(id), true, `${id} must be ready for Level7 lineup first paint`);
   }
-  for (const id of ['zhuhuai', 'kui', 'kuiBossPanel', 'jumangLeafblade']) {
+  for (const id of ['slotPlatform', 'qinyuan', 'zhuhuai', 'kui', 'kuiBossPanel', 'jumangLeafblade']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[7].includes(id), true, `${id} must remain deferred`);
   }
 });
@@ -157,10 +227,10 @@ test('level-six runtime art is complete, alpha-safe, mobile-sized, and staged', 
   assert.deepEqual([...background.subarray(-2)], [255, 217]);
   assert.ok(background.length < 800_000);
 
-  for (const id of ['slotPlatform', 'level6Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'yangyu', 'sunlightZone']) {
-    assert.equal(LEVEL_REQUIRED_ART_IDS[6].includes(id), true, `${id} must be ready for Level6 first paint`);
+  for (const id of ['level6Background', 'bifang', 'fuzhu', 'yinglong', 'baize']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[6].includes(id), true, `${id} must be ready for Level6 lineup first paint`);
   }
-  for (const id of ['fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'jinwuBossPanel', 'jumangUnlock']) {
+  for (const id of ['slotPlatform', 'yangyu', 'sunlightZone', 'fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'jinwuBossPanel', 'jumangUnlock']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[6].includes(id), true, `${id} must remain deferred`);
   }
 });
@@ -279,10 +349,10 @@ test('level-five art catalog stages first-paint assets and defers Boss combat ar
       level5Preview: 'assets/ui/ui_level5_preview_v1.jpg',
     },
   );
-  for (const id of ['level5Background', 'level5Spawn', 'level5Base', 'bifang', 'fuzhu', 'yinglong', 'baize', 'zhuyan', 'level5Banner', 'level5Preview']) {
-    assert.equal(LEVEL_REQUIRED_ART_IDS[5].includes(id), true, `${id} must be ready for Level5 first paint`);
+  for (const id of ['level5Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'level5Banner', 'level5Preview']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[5].includes(id), true, `${id} must be ready for Level5 lineup first paint`);
   }
-  for (const id of ['lili', 'xingtianPhase1', 'xingtianPhase2', 'xingtianBossPanel', 'level5BossWarning', 'zhuyanCharge', 'liliArmorBreak', 'xingtianShield', 'xingtianEvolution', 'xingtianEarthquake']) {
+  for (const id of ['slotPlatform', 'level5Spawn', 'level5Base', 'zhuyan', 'lili', 'xingtianPhase1', 'xingtianPhase2', 'xingtianBossPanel', 'level5BossWarning', 'zhuyanCharge', 'liliArmorBreak', 'xingtianShield', 'xingtianEvolution', 'xingtianEarthquake']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[5].includes(id), true, `${id} must remain deferred`);
   }
 });
@@ -403,7 +473,7 @@ test('UI frames never block the loading overlay and lineup roster stays first-pa
   const directLevelThree = new ArtStore(FakeImage, 3);
   assert.ok(directLevelThree.images.level3Background);
   assert.ok(directLevelThree.images.shuixiao);
-  assert.ok(directLevelThree.images.resourcePanel);
+  assert.equal(directLevelThree.images.resourcePanel, undefined, 'decorative UI frame must not block direct Level3');
   assert.equal(directLevelThree.images.background, undefined, 'direct Level3 must not begin Level1 unique preload');
   assert.equal(directLevelThree.images.xiangliu, undefined, 'boss remains deferred');
   assert.equal(directLevelThree.images.xiangliuBossPanel, undefined, 'boss frame remains deferred');
