@@ -130,7 +130,7 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   zhulong: Object.freeze({ left: '12.8%', top: '79.8%', width: '74.5%', height: '20.2%' }),
 });
 
-const ASSET_CACHE_VERSION = 'level8-3';
+const ASSET_CACHE_VERSION = 'level9-1';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',

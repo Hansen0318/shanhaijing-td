@@ -38,7 +38,7 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
   assert.match(main, /params\.get\('devMenu'\) === '1'/);
   assert.match(main, /renderDevMenu\(\)/);
   assert.match(main, /data-dev-level="1"[\s\S]*data-dev-level="2"[\s\S]*data-dev-level="3"[\s\S]*data-dev-level="4"[\s\S]*data-dev-level="5"[\s\S]*data-dev-level="6"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\) \? devLevel : 1/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\) \? devLevel : 1/);
   assert.match(main, /new ArtStore\(Image, initialLevelId\)/);
   assert.match(main, /new Renderer\(canvas, art\)/);
 });
@@ -46,7 +46,7 @@ test('dev menu is opt-in only and direct level initialization selects the ArtSto
 test('dev menu and guarded direct controls include level four', async () => {
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
   assert.match(main, /data-dev-level="4"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\)/);
   assert.match(main, /params\.get\('devWave'\)/);
   assert.match(main, /params\.get\('devBossPhase'\)/);
   assert.match(main, /devLevel !== 4/);
@@ -56,7 +56,7 @@ test('dev menu and guarded direct controls include level four', async () => {
 test('dev menu and guarded direct controls include level five path, wave, and Boss phases', async () => {
   const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
   assert.match(main, /data-dev-level="5"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\)/);
   assert.match(main, /function setupLevelFiveDev\(game, devLevel\)/);
   assert.match(main, /devLevel !== 5/);
   assert.match(main, /game\.level\.map\.chargeCorridor/);
@@ -69,7 +69,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /data-dev-level="6"/);
   assert.match(main, /data-dev-level="6"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\)/);
   assert.match(main, /function setupLevelSixDev\(game, devLevel\)/);
   assert.match(main, /devLevel !== 6/);
   assert.match(main, /game\.level\.map\.sunlightZones/);
@@ -78,7 +78,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   for (const state of ['level5', 'level6', 'level6wave1', 'sunlightA', 'sunlightB', 'jinwu1', 'jinwu2', 'jinwu25', 'level6victory', 'level6retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level8-3/);
+  assert.match(smoke, /index\.html\?v=level9-1/);
 });
 
 test('dev menu and guarded direct controls include Level7 thunder, Kui phases, victory, and retry', async () => {
@@ -87,7 +87,7 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /data-dev-level="7"/);
   assert.match(main, /data-dev-level="7"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\)/);
   assert.match(main, /function setupLevelSevenDev\(game, devLevel\)/);
   assert.match(main, /devLevel !== 7/);
   assert.match(main, /game\.level\.map\.thunderZones/);
@@ -96,7 +96,7 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   for (const state of ['level7', 'level7wave1', 'thunderA', 'thunderB', 'kui1', 'kui2', 'kui25', 'level7victory', 'level7retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level8-3/);
+  assert.match(smoke, /index\.html\?v=level9-1/);
 });
 
 test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory, and retry', async () => {
@@ -106,7 +106,7 @@ test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory,
   const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /data-dev-level="8"/);
   assert.match(main, /data-dev-level="8"/);
-  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8\]\.includes\(devLevel\)/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\)/);
   assert.match(main, /setupLevelEightDev\(game, devLevel, params\)/);
   assert.match(main, /game\.level\.map\.wetlandZones/);
   assert.match(dev, /game\.spawnEnemy\('huashe'\)/);
@@ -118,6 +118,28 @@ test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory,
   }
 });
 
+test('guarded Level9 controls cover lineup, path, day/night cues, Zhulong, Xuangui and terminal victory', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const main = await readFile(new URL('../src/main.js', import.meta.url), 'utf8');
+  const dev = await readFile(new URL('../src/dev/LevelNineDev.js', import.meta.url), 'utf8');
+  const smoke = await readFile(new URL('./browser-smoke.html', import.meta.url), 'utf8');
+  const responsive = await readFile(new URL('./responsive.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(html, /data-dev-level="9"/);
+  assert.match(main, /data-dev-level="9"/);
+  assert.match(main, /\[1, 2, 3, 4, 5, 6, 7, 8, 9\]\.includes\(devLevel\)/);
+  assert.match(main, /setupLevelNineDev\(game, devLevel, params\)/);
+  assert.match(dev, /devLevel !== 9/);
+  assert.match(dev, /game\.spawnEnemy\('zhulong'\)/);
+  assert.match(dev, /game\.unlockedBeasts\.add\('xuangui'\)/);
+  assert.match(dev, /params\.get\('devState'\)/);
+  for (const state of ['level9', 'level9wave1', 'level9day', 'level9night', 'level9telegraph', 'tiangouDay', 'zhengNight', 'zhulong1', 'zhulong2', 'level9Xuangui', 'level9victory', 'level9retry']) {
+    assert.match(smoke, new RegExp(`data-state="${state}"`));
+  }
+  for (const title of ['Level9 lineup 390x700', 'Level9 path 390x700', 'Level9 night 390x700', 'Level9 Zhulong P2 390x700', 'Level9 victory 390x700']) {
+    assert.match(responsive, new RegExp(`title="${title}"`));
+  }
+});
+
 test('entry and style cache versions are fresh for this release', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
@@ -126,21 +148,21 @@ test('entry and style cache versions are fresh for this release', async () => {
   const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
   const progression = await readFile(new URL('../src/config/progressionData.js', import.meta.url), 'utf8');
   for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css']) {
-    assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=level8-3`));
+    assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=level8-7/);
-  assert.match(main, /Game\.js\?v=level8-6/);
-  assert.match(main, /Renderer\.js\?v=level8-7/);
-  assert.match(main, /UIController\.js\?v=level8-5/);
-  for (const module of ['artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level8-3`));
-  for (const module of ['gameData', 'BossSystem', 'TideSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level8-6`));
+  assert.match(html, /src\/main\.js\?v=level9-1/);
+  assert.match(main, /Game\.js\?v=level9-1/);
+  assert.match(main, /Renderer\.js\?v=level9-1/);
+  assert.match(main, /UIController\.js\?v=level9-1/);
+  for (const module of ['artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level9-1`));
+  for (const module of ['gameData', 'BossSystem', 'TideSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
-    assert.match(game, new RegExp(`${module}\\.js\\?v=level8-3`));
+    assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   }
-  assert.match(enemy, /StatusSystem\.js\?v=level8-3/);
-  assert.match(projectile, /CombatSystem\.js\?v=level8-3/);
-  assert.match(projectile, /StatusSystem\.js\?v=level8-3/);
-  assert.match(progression, /gameData\.js\?v=level8-3/);
+  assert.match(enemy, /StatusSystem\.js\?v=level9-1/);
+  assert.match(projectile, /CombatSystem\.js\?v=level9-1/);
+  assert.match(projectile, /StatusSystem\.js\?v=level9-1/);
+  assert.match(progression, /gameData\.js\?v=level9-1/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {

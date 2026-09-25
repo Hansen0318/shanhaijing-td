@@ -1,4 +1,4 @@
-import { CombatSystem } from './CombatSystem.js?v=level8-3';
+import { CombatSystem } from './CombatSystem.js?v=level9-1';
 
 export class StatusSystem {
   static applyInsight(enemy, { duration, vulnerability, bossVulnerability, defensePierce }) {

@@ -1,8 +1,9 @@
-import { Game } from './core/Game.js?v=level8-6';
-import { Renderer } from './render/Renderer.js?v=level8-7';
-import { UIController } from './ui/UIController.js?v=level8-5';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level8-3';
-import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level8-3';
+import { Game } from './core/Game.js?v=level9-1';
+import { Renderer } from './render/Renderer.js?v=level9-1';
+import { UIController } from './ui/UIController.js?v=level9-1';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level9-1';
+import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level9-1';
+import { setupLevelNineDev } from './dev/LevelNineDev.js?v=level9-1';
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetViewport() { window.scrollTo(0, 0); }
@@ -31,6 +32,7 @@ function renderDevMenu() {
       <button data-dev-level="6">Level6</button>
       <button data-dev-level="7">Level7</button>
       <button data-dev-level="8">Level8</button>
+      <button data-dev-level="9">Level9</button>
     </main>`;
   document.querySelectorAll('[data-dev-level]').forEach(button => {
     button.addEventListener('click', () => {
@@ -41,7 +43,7 @@ function renderDevMenu() {
 }
 
 function drawPathDebug(renderer, game) {
-  if (params.get('devPath') !== '1' || ![3, 4, 5, 6, 7, 8].includes(game.levelId)) return;
+  if (params.get('devPath') !== '1' || ![3, 4, 5, 6, 7, 8, 9].includes(game.levelId)) return;
   const ctx = renderer.ctx;
   const runtime = game.map.waypoints;
   const anchors = game.level.map.waypoints;
@@ -213,7 +215,7 @@ function setupLevelFourDev(game, devLevel) {
 function initializeGame() {
   resetViewport();
   const devLevel = Number.parseInt(params.get('devLevel') ?? '', 10);
-  const initialLevelId = [1, 2, 3, 4, 5, 6, 7, 8].includes(devLevel) ? devLevel : 1;
+  const initialLevelId = [1, 2, 3, 4, 5, 6, 7, 8, 9].includes(devLevel) ? devLevel : 1;
   const canvas = document.querySelector('#game-canvas');
   const blockingStartedAt = performance.now();
   const game = new Game(Math.random, initialLevelId);
@@ -222,6 +224,7 @@ function initializeGame() {
   setupLevelSixDev(game, devLevel);
   setupLevelSevenDev(game, devLevel);
   setupLevelEightDev(game, devLevel, params);
+  setupLevelNineDev(game, devLevel, params);
   const art = new ArtStore(Image, initialLevelId);
   const renderer = new Renderer(canvas, art);
   document.body.dataset.level = String(game.levelId);

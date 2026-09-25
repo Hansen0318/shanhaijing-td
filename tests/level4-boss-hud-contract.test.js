@@ -27,15 +27,15 @@ test('all seven Boss HUDs use one variable-positioned code-driven fill without i
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /boss-hud\[data-boss-type="(?:qiongqi|paoxiao|xiangliu|jiuweihu|xingtian|jinwu)"\]::before/);
   assert.doesNotMatch(`${base}\n${fixes}\n${css}`, /background:\s*#202638/);
   assert.equal((html.match(/id="boss-hp-fill"/g) ?? []).length, 1);
-  assert.match(html, /styles\.css\?v=level8-3/);
-  assert.match(html, /styles-fixes\.css\?v=level8-3/);
-  assert.match(html, /styles-lineup\.css\?v=level8-3/);
-  assert.match(html, /src\/main\.js\?v=level8-7/);
-  assert.match(main, /Renderer\.js\?v=level8-7/);
-  assert.match(main, /UIController\.js\?v=level8-5/);
-  assert.match(main, /artAssets\.js\?v=level8-3/);
-  assert.match(ui, /artAssets\.js\?v=level8-3/);
-  assert.match(renderer, /artAssets\.js\?v=level8-3/);
+  assert.match(html, /styles\.css\?v=level9-1/);
+  assert.match(html, /styles-fixes\.css\?v=level9-1/);
+  assert.match(html, /styles-lineup\.css\?v=level9-1/);
+  assert.match(html, /src\/main\.js\?v=level9-1/);
+  assert.match(main, /Renderer\.js\?v=level9-1/);
+  assert.match(main, /UIController\.js\?v=level9-1/);
+  assert.match(main, /artAssets\.js\?v=level9-1/);
+  assert.match(ui, /artAssets\.js\?v=level9-1/);
+  assert.match(renderer, /artAssets\.js\?v=level9-1/);
   assert.match(ui, /boss-hp-fill'\]\.style\.width = `\$\{boss\.hp \/ boss\.maxHp \* 100\}%`/);
 });
 

@@ -83,6 +83,18 @@
     <button data-state="xuanguiShock">玄龜潮震</button>
     <button data-state="level8victory">第8關 Victory</button>
     <button data-state="level8retry">第8關 Retry</button>
+    <button data-state="level9">第9關陣容</button>
+    <button data-state="level9wave1">第9關 Wave 1</button>
+    <button data-state="level9day">晝相</button>
+    <button data-state="level9night">夜相</button>
+    <button data-state="level9telegraph">晝夜預告</button>
+    <button data-state="tiangouDay">天狗晝馳</button>
+    <button data-state="zhengNight">猙夜甲</button>
+    <button data-state="zhulong1">燭龍 P1</button>
+    <button data-state="zhulong2">燭龍 P2</button>
+    <button data-state="level9Xuangui">第9關玄龜</button>
+    <button data-state="level9victory">第9關 Victory</button>
+    <button data-state="level9retry">第9關 Retry</button>
     <button data-width="320">320px</button>
     <button data-width="375">375px</button>
     <button data-width="390">390px</button>
@@ -90,7 +102,7 @@
     <button data-height="700">高度 700px</button>
     <p id="status">等待遊戲載入</p>
   </div>
-  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level8-3"></iframe>
+  <iframe id="game-frame" title="Shanhaijing TD smoke target" src="../index.html?v=level9-1"></iframe>
   <script type="module">
     const frame = document.querySelector('#game-frame');
     const status = document.querySelector('#status');
@@ -344,6 +356,23 @@
       await ready();
       const game = frame.contentWindow.__SHANHAIJING_TD__;
       const state = button.dataset.state;
+      const levelNineFixtures = {
+        level9: 'devLevel=9', level9wave1: 'devLevel=9&devWave=1',
+        level9day: 'devLevel=9&devState=day', level9night: 'devLevel=9&devState=night',
+        level9telegraph: 'devLevel=9&devState=telegraph',
+        tiangouDay: 'devLevel=9&devState=day&devEnemy=tiangou',
+        zhengNight: 'devLevel=9&devState=night&devEnemy=zheng',
+        zhulong1: 'devLevel=9&devBossPhase=1', zhulong2: 'devLevel=9&devBossPhase=2',
+        level9Xuangui: 'devLevel=9&devXuangui=1', level9victory: 'devLevel=9&devVictory=1',
+        level9retry: 'devLevel=9&devRetry=1',
+      };
+      if (levelNineFixtures[state]) {
+        frame.src = `../index.html?${levelNineFixtures[state]}`;
+        await new Promise(resolve => frame.addEventListener('load', resolve, { once: true }));
+        await twoFrames();
+        snapshot(button.textContent);
+        return;
+      }
       if (state === 'reset') game.restart();
       if (state === 'empty') { game.restart(); game.selectedSlot = 0; }
       if (state === 'tower') { game.restart(); game.buildTower(0, 'bifang'); game.selectedSlot = 0; }

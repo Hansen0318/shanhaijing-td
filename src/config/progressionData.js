@@ -1,4 +1,4 @@
-import { LEVELS } from './gameData.js?v=level8-3';
+import { LEVELS } from './gameData.js?v=level9-1';
 
 export const BASE_OWNED_ROSTER = Object.freeze(['bifang', 'fuzhu', 'yinglong']);
 export const UNLOCK_BY_LEVEL = Object.freeze({ 3: 'baize', 6: 'jumang', 8: 'xuangui', 9: 'dijiang' });

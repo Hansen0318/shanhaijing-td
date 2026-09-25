@@ -12,6 +12,7 @@ import { CombatSystem } from '../src/systems/CombatSystem.js';
 import { BossSystem } from '../src/systems/BossSystem.js';
 import { DayNightSystem } from '../src/systems/DayNightSystem.js';
 import { WaveManager } from '../src/systems/WaveManager.js';
+import { setupLevelNineDev } from '../src/dev/LevelNineDev.js';
 
 const expectedWaypoints = [
   { x: 39, y: 68 }, { x: 45, y: 77 }, { x: 50, y: 89 }, { x: 64, y: 101 },
@@ -185,4 +186,38 @@ test('Level9 victory waits for queue, escorts, and Zhulong death', () => {
   ordinary.takeDamage(ordinary.maxHp);
   game.update(0);
   assert.equal(game.state, 'victory');
+});
+
+test('guarded Level9 fixtures expose day, night, telegraph, enemy cues, Boss phases and end states', () => {
+  const fixture = query => {
+    const game = new Game(() => 0.2, 9);
+    assert.equal(setupLevelNineDev(game, 9, new URLSearchParams(query)), true);
+    return game;
+  };
+
+  const day = fixture('devState=day&devEnemy=tiangou');
+  assert.equal(day.dayNight.state, 'day');
+  assert.equal(day.enemies.some(enemy => enemy.type === 'tiangou'), true);
+
+  const night = fixture('devState=night&devEnemy=zheng');
+  assert.equal(night.dayNight.state, 'night');
+  assert.equal(night.enemies.find(enemy => enemy.type === 'zheng').dayNightState, 'night');
+
+  const telegraph = fixture('devState=telegraph');
+  assert.equal(telegraph.dayNight.telegraph, true);
+
+  const phase2 = fixture('devBossPhase=2');
+  assert.equal(phase2.enemies.find(enemy => enemy.type === 'zhulong').bossPhase, 2);
+  assert.equal(phase2.dayNight.switchInterval, 4.5);
+
+  const xuangui = fixture('devXuangui=1');
+  assert.equal(xuangui.towers.some(tower => tower?.type === 'xuangui'), true);
+
+  const victory = fixture('devVictory=1');
+  assert.equal(victory.state, 'victory');
+  assert.equal(victory.pendingUnlock, 'dijiang');
+  assert.equal(victory.nextLevelId(), null);
+
+  assert.equal(fixture('devRetry=1').state, 'defeat');
+  assert.equal(setupLevelNineDev(new Game(() => 0.2, 8), 8, new URLSearchParams('devVictory=1')), false);
 });
