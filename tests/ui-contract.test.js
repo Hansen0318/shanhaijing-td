@@ -132,9 +132,11 @@ test('guarded Level9 controls cover lineup, path, day/night cues, Zhulong, Xuang
   assert.match(dev, /game\.spawnEnemy\('zhulong'\)/);
   assert.match(dev, /game\.unlockedBeasts\.add\('xuangui'\)/);
   assert.match(dev, /params\.get\('devState'\)/);
-  for (const state of ['level9', 'level9wave1', 'level9day', 'level9night', 'level9telegraph', 'tiangouDay', 'zhengNight', 'zhulong1', 'zhulong2', 'level9Xuangui', 'level9victory', 'level9retry']) {
+  for (const state of ['level8To9', 'level9', 'level9wave1', 'level9day', 'level9night', 'level9telegraph', 'tiangouDay', 'zhengNight', 'zhulong1', 'zhulong2', 'level9Xuangui', 'level9victory', 'level9retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
+  assert.match(smoke, /devLevel=8&devVictory=1/);
+  assert.match(smoke, /next-level-button/);
   for (const title of ['Level9 lineup 390x700', 'Level9 path 390x700', 'Level9 night 390x700', 'Level9 Zhulong P2 390x700', 'Level9 victory 390x700']) {
     assert.match(responsive, new RegExp(`title="${title}"`));
   }
@@ -155,7 +157,7 @@ test('entry and style cache versions are fresh for this release', async () => {
   assert.match(main, /Renderer\.js\?v=level9-1/);
   assert.match(main, /UIController\.js\?v=level9-1/);
   for (const module of ['artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level9-1`));
-  for (const module of ['gameData', 'BossSystem', 'TideSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
+  for (const module of ['gameData', 'BossSystem', 'TideSystem', 'DayNightSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
     assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   }

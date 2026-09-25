@@ -50,8 +50,15 @@ export function setupLevelNineDev(game, devLevel, params) {
   if (devXuangui) {
     game.economy.add(1000);
     game.buildTower(0, 'xuangui');
+    const tower = game.towers[0];
+    tower.successfulAttacks = 3;
     const enemy = game.spawnEnemy('zheng');
-    Object.assign(enemy, { x: game.towers[0].x + 28, y: game.towers[0].y });
+    Object.assign(enemy, { x: tower.x + 28, y: tower.y });
+    game.updateTowers(0);
+    game.projectiles.at(-1)?.impact(game.enemies);
+    game.updatePendingShocks(0.35);
+    const shock = game.effects.find(effect => effect.type === 'xuanguiShock');
+    if (shock) Object.assign(shock, { life: 3600, duration: 3600 });
   }
   game.update(0);
   return true;

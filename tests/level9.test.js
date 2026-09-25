@@ -44,6 +44,27 @@ test('Level9 uses the frozen 鐘山極夜 identity and registered geometry', () 
   assert.deepEqual(GameData.LEVEL9_MAP_DATA.celestialAnchor, { x: 203, y: 251 });
 });
 
+test('Level9 runtime interpolation preserves every frozen anchor and removes phone-visible hairpin kinks', () => {
+  const game = new Game(() => 0.2, 9);
+  for (const anchor of expectedWaypoints) {
+    assert.equal(game.map.waypoints.some(point => point.x === anchor.x && point.y === anchor.y), true,
+      `runtime path dropped frozen anchor ${anchor.x},${anchor.y}`);
+  }
+  let maximumTurn = 0;
+  for (let index = 1; index < game.map.waypoints.length - 1; index += 1) {
+    const previous = game.map.waypoints[index - 1];
+    const point = game.map.waypoints[index];
+    const next = game.map.waypoints[index + 1];
+    const incoming = Math.atan2(point.y - previous.y, point.x - previous.x);
+    const outgoing = Math.atan2(next.y - point.y, next.x - point.x);
+    let turn = Math.abs(outgoing - incoming);
+    if (turn > Math.PI) turn = Math.PI * 2 - turn;
+    maximumTurn = Math.max(maximumTurn, turn);
+  }
+  assert.ok(maximumTurn * 180 / Math.PI <= 20,
+    `runtime path contains a ${Math.round(maximumTurn * 180 / Math.PI)}° phone-visible kink`);
+});
+
 test('Level9 frozen waves and enemies preserve Boss-first W10', () => {
   assert.deepEqual(GameData.LEVEL9_WAVE_DATA, [
     { groups: [{ type: 'tiangou', count: 6 }], interval: 1.1 },
@@ -169,6 +190,26 @@ test('Zhulong forces daylight and controls exact P1/P2 switch cadence', () => {
   assert.equal(BossSystem.update(boss, 0).length, 0, 'P2 transition is one-shot');
 });
 
+test('Level9 W10 preserves the Boss-first escort timeline through the size-aware spawn gate', () => {
+  const game = new Game(() => 0.2, 9);
+  for (const type of ['bifang', 'xuangui', 'jumang']) game.toggleLineup(type);
+  game.confirmLineup();
+  game.wave.waveNumber = 9;
+  game.startWaveNow();
+  const firstSeen = {};
+  for (let step = 1; step <= 110; step += 1) {
+    game.update(0.1);
+    for (const type of ['zhulong', 'tiangou', 'zheng']) {
+      if (firstSeen[type] == null && game.enemies.some(enemy => enemy.type === type)) firstSeen[type] = step / 10;
+    }
+  }
+  assert.ok(firstSeen.zhulong <= 0.1);
+  assert.ok(firstSeen.tiangou >= 0.8 && firstSeen.tiangou <= 1, `first Tiangou entered at ${firstSeen.tiangou}s`);
+  assert.ok(firstSeen.zheng >= 7.6 && firstSeen.zheng <= 10.1, `first Zheng entered at ${firstSeen.zheng}s`);
+  assert.equal(game.enemies.some(enemy => enemy.type === 'tiangou'), true, 'day→night switch needs a live Tiangou escort');
+  assert.equal(game.enemies.find(enemy => enemy.type === 'zheng').dayNightState, 'night');
+});
+
 test('Level9 victory waits for queue, escorts, and Zhulong death', () => {
   const game = new Game(() => 0.2, 9);
   game.state = 'combat';
@@ -212,6 +253,8 @@ test('guarded Level9 fixtures expose day, night, telegraph, enemy cues, Boss pha
 
   const xuangui = fixture('devXuangui=1');
   assert.equal(xuangui.towers.some(tower => tower?.type === 'xuangui'), true);
+  assert.equal(xuangui.pendingShocks.length, 0);
+  assert.equal(xuangui.effects.some(effect => effect.type === 'xuanguiShock' && effect.life > 3000), true);
 
   const victory = fixture('devVictory=1');
   assert.equal(victory.state, 'victory');

@@ -83,6 +83,7 @@
     <button data-state="xuanguiShock">玄龜潮震</button>
     <button data-state="level8victory">第8關 Victory</button>
     <button data-state="level8retry">第8關 Retry</button>
+    <button data-state="level8To9">第8關勝利 → 第9關</button>
     <button data-state="level9">第9關陣容</button>
     <button data-state="level9wave1">第9關 Wave 1</button>
     <button data-state="level9day">晝相</button>
@@ -356,6 +357,19 @@
       await ready();
       const game = frame.contentWindow.__SHANHAIJING_TD__;
       const state = button.dataset.state;
+      if (state === 'level8To9') {
+        frame.src = '../index.html?devLevel=8&devVictory=1';
+        await new Promise(resolve => frame.addEventListener('load', resolve, { once: true }));
+        await twoFrames();
+        frame.contentDocument.querySelector('#next-level-button').click();
+        while (frame.contentWindow.__SHANHAIJING_TD__?.levelId !== 9
+          || frame.contentDocument.body.classList.contains('art-loading')) {
+          await new Promise(resolve => setTimeout(resolve, 25));
+        }
+        await twoFrames();
+        snapshot(button.textContent);
+        return;
+      }
       const levelNineFixtures = {
         level9: 'devLevel=9', level9wave1: 'devLevel=9&devWave=1',
         level9day: 'devLevel=9&devState=day', level9night: 'devLevel=9&devState=night',

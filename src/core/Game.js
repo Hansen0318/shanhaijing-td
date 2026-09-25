@@ -21,7 +21,7 @@ import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
 import { TideSystem } from '../systems/TideSystem.js?v=level9-1';
-import { DayNightSystem } from '../systems/DayNightSystem.js';
+import { DayNightSystem } from '../systems/DayNightSystem.js?v=level9-1';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -66,6 +66,7 @@ export class Game {
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
     this.levelBossDefeated = false;
+    this.levelBossEscortStarted = false;
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     this.thunder = ThunderSystem.reset();
     this.tide = TideSystem.reset();
@@ -229,6 +230,8 @@ export class Game {
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
     const enemy = new Enemy(type, enemyData, this.map);
     this.enemies.push(enemy);
+    if (this.levelId === 9 && this.wave.waveNumber === 10 && type === 'tiangou'
+      && this.enemies.some(other => other.type === 'zhulong')) this.levelBossEscortStarted = true;
     if (type === 'zhulong') {
       DayNightSystem.configure(this, {
         state: 'day',
@@ -240,12 +243,19 @@ export class Game {
     return enemy;
   }
   canSpawnEnemy(type) {
+    const bossEscortStream = this.levelId === 9 && this.wave.waveNumber === 10
+      && type !== 'zhulong' && this.levelBossEscortStarted;
     const nearest = this.enemies
-      .filter(enemy => enemy.alive)
+      .filter(enemy => enemy.alive && !(bossEscortStream && enemy.type === 'zhulong'))
       .reduce((candidate, enemy) => (
         !candidate || enemy.pathDistance < candidate.pathDistance ? enemy : candidate
     ), null);
     if (!nearest) return true;
+    // The frozen W10 timeline calls for the first escort at ~0.8s. Allow only
+    // that Boss-to-escort boundary through; all remaining escorts retain the
+    // shared size-aware spawn spacing.
+    if (this.levelId === 9 && this.wave.waveNumber === 10 && type === 'tiangou'
+      && nearest.type === 'zhulong' && !this.levelBossEscortStarted) return true;
     return nearest.pathDistance >= minimumEnemyPathSpacing(nearest.type, type);
   }
   spawnIllusions(source, count = 2, duration = source.statuses.insight ? 0.8 : 1.6) {
