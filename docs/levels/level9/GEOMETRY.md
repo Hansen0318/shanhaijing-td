@@ -1,7 +1,7 @@
 # Level9 — Geometry Contract
 
 ## Status
-**PLAYER-APPROVED REGISTERED GEOMETRY / PROGRAM COORDINATE SOURCE**
+**GATE D CLOSED / PLAYER-APPROVED REGISTERED GEOMETRY + CLEAN BACKGROUND CONTRACT**
 
 This file is the canonical coordinate source for Level9 map implementation.
 
@@ -183,11 +183,17 @@ The accepted route therefore supersedes all earlier Level9 Guide V1 path values.
 
 ## L9-G140 — Runtime registration acceptance
 
-Before Gate D is considered fully closed for production art:
-- create/retain a **clean background** with the same composition but without debug route/coordinate labels;
-- overlay these exact program coordinates on that clean file deterministically;
-- verify road-center / pad-center / Spawn / Base / shrine registration remains visually matched;
-- any cleanup/edit that materially shifts the composition invalidates the clean runtime candidate and must be redone.
+Gate D clean-background registration is complete:
+- approved clean source candidate: **1024×1536**, no debug route/coordinate labels;
+- runtime candidate filename: **`bg_zhongshan_extreme_night_v1.jpg`**;
+- runtime candidate dimensions: **780×1220**;
+- runtime logical display: **390×610**;
+- transform remains the canonical direct registration recorded above;
+- deterministic overlay using the frozen path / Spawn / Base / T1–T8 / celestial anchor was reviewed and accepted by the player;
+- runtime JPEG candidate SHA-256: **`c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99`**;
+- runtime JPEG candidate size: **539,574 bytes**.
+
+Any later edit/re-generation that shifts road, tower pads, Spawn/Base structures or celestial shrine invalidates this registration and must return to Gate D registration before implementation.
 
 Production implementation later must use this file as the source of truth.
 

@@ -6,7 +6,7 @@
 - Latest `main` takeover baseline: `6070b4592aac70eb9e39586b72eee81fc073647b` (all-future-level guardrails merged).
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
-- Current gate: **Gate D — MAP CONCEPT / CANONICAL GEOMETRY**.
+- Current gate: **Gate E — ASSET / VFX PLANNING**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
@@ -18,8 +18,10 @@
 - Gate D map concept approved. Gameplay Geometry Guide V1 is now defined first, independently of background art.
 - Final registered geometry supersedes Guide V1: Spawn **(39,68)**, Base **(343,516)**, shrine anchor **(203,251)**, T1–T8 **(125,106), (264,142), (292,233), (352,333), (216,324), (106,250), (88,374), (288,461)**; full corrected path is canonical in `docs/levels/level9/GEOMETRY.md`.
 - Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
-- Next exact step: **produce/retain a clean runtime background with the same approved composition but without debug labels/route graphics, then overlay the final canonical coordinates deterministically. If registration remains matched, close Gate D and advance to Gate E.**
-- Final asset batches and production implementation remain forbidden until later gates.
+- Gate D CLOSED: player-approved registered 390×610 geometry + clean 1024×1536 background; runtime candidate `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 539,574 bytes / SHA-256 `c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99`.
+- Current Gate E proposal: **5 new PNGs** (天狗、猙、燭龍、燭龍 HUD、帝江 unlock); 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
+- Next exact step: **player reviews Gate E inventory; if approved, freeze ASSETS.md and generate Batch 1 only (天狗、猙).**
+- Production implementation remains forbidden until later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
 ---
