@@ -90,12 +90,15 @@ on the exact runtime background candidate.
 
 If the overlay is not visibly correct, Work implementation must not start.
 
-### D. Boss HUD fixed-footprint preflight
+### D. Boss HUD fixed-footprint + runtime-overlay preflight
 
 Before approving a new Boss HUD:
 - compare its source aspect and intended runtime box to a released Boss HUD;
-- preserve the established outer runtime footprint;
-- place Boss-name panel and empty HP channel **inside** that footprint;
+- preserve the established **44 px** outer runtime footprint;
+- inspect the real runtime overlay contract before drawing the source art: Boss name is program text in the upper center, while HP fill uses a separate `BOSS_HUD_GEOMETRY` track rectangle in the middle/lower area;
+- place the visual name reserve and empty HP channel **inside** that footprint and make them align with those runtime rectangles;
+- use a released wide/flat source ratio as the reference (Level7 夔: **1152×351, ~3.28:1**) rather than inventing a taller stacked-panel ratio;
+- never bake Boss name, HP fill or HP numbers into the source PNG;
 - reject any asset/layout that requires extra battlefield height unless the player explicitly approves a layout change.
 
 ### E. Boss encounter timeline preflight
