@@ -11,15 +11,14 @@
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
 - Level8 retrospective / permanent **all-future-level** guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
-- Active documentation branch: **`docs/level9-geometry-guide-v1-hardrule-20260925`**.
+- Active documentation branch: **`docs/level9-final-registered-geometry-20260925`**.
 - Gate C approved/frozen: 玄龜 first-playable verification; 天狗 120/90; 猙 450/24; normal 晝夜 8s; 燭龍 8200 HP with P1 6s/P2 4.5s state cadence; 帝江 future unlock kit; exact W1–W10 and W10 timeline.
 - Production implementation: **NOT STARTED**; no Work handoff is valid at this gate.
 - Gate B approved/frozen: **鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty**.
 - Gate D map concept approved. Gameplay Geometry Guide V1 is now defined first, independently of background art.
-- Guide V1: Spawn (20,70), Base (375,550), road width 54, central shrine (220,260), T1–T8 recorded in `docs/levels/level9/GEOMETRY.md`.
-- Static checks PASS: ~997px path length; tower-road clearance ~51–74px; nearest tower pair ~72px; shrine-road clearance ~105px.
-- Previous generated background/blue overlay is explicitly non-canonical.
-- Next exact step: **generate/select the production background so its road, pads and shrine follow Guide V1; then perform exact registration overlay and obtain player approval before geometry freeze.**
+- Final registered geometry supersedes Guide V1: Spawn **(39,68)**, Base **(343,516)**, shrine anchor **(203,251)**, T1–T8 **(125,106), (264,142), (292,233), (352,333), (216,324), (106,250), (88,374), (288,461)**; full corrected path is canonical in `docs/levels/level9/GEOMETRY.md`.
+- Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
+- Next exact step: **produce/retain a clean runtime background with the same approved composition but without debug labels/route graphics, then overlay the final canonical coordinates deterministically. If registration remains matched, close Gate D and advance to Gate E.**
 - Final asset batches and production implementation remain forbidden until later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
