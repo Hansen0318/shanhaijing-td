@@ -160,8 +160,8 @@ Runtime background:
 - SHA-256 `bab355fb7c323f8d150e4bb55237f9cd63dfccb50c36622262300d1473c179ec`
 
 Valid Work handoff:
-- filename: `shanhaijing_td_level9_minimal_handoff_v2.zip`
-- SHA-256: `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`
+- filename: `shanhaijing_td_level9_minimal_handoff_v3.zip`
+- SHA-256: `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`
 - structure: `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`
 - the earlier premature Level9 ZIP remains **INVALID / SUPERSEDED**.
 
@@ -190,6 +190,15 @@ Work must wire **only these files** into runtime asset paths:
 All five character/UI runtime assets are RGBA PNG. The battlefield is intentionally JPG, matching the project background convention.
 
 Valid corrected handoff:
-- filename: `shanhaijing_td_level9_minimal_handoff_v2.zip`
-- SHA-256: `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`
+- filename: `shanhaijing_td_level9_minimal_handoff_v3.zip`
+- SHA-256: `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`
 - previous non-v2 handoff is **SUPERSEDED**.
+
+
+## L. Dynamic released-baseline handoff rule
+- Work must resolve the protected/reference baseline from the **currently released product state at execution time**.
+- Do not interpret historical phrases such as `Level1–8` as permanent future scope.
+- At this Level9 handoff, Level1–8 happen to be the released baseline; after later releases, the protected/reference baseline expands automatically.
+- Regression remains impact-driven: do not rerun or alter unaffected released levels merely because they are part of the baseline.
+- Valid handoff is now `shanhaijing_td_level9_minimal_handoff_v3.zip`, SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
+- v2 is superseded.

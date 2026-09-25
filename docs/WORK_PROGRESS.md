@@ -2,14 +2,14 @@
 
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
-- Released baseline: **Level1–8 complete and player-verified**.
+- Released baseline: **resolve dynamically from current release state**; as of this Level9 handoff, Level1–8 are complete and player-verified.
 - Latest `main` takeover baseline: `6070b4592aac70eb9e39586b72eee81fc073647b` (all-future-level guardrails merged).
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
 - Current gate: **Gate G — PRODUCTION IMPLEMENTATION HANDOFF READY**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
-- Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
+- All currently released levels remain frozen; do not redo them unless the actual Level9 shared-system change creates an identified regression risk. Do not hard-code `Level1–8` as a permanent future baseline.
 - Level8 retrospective / permanent **all-future-level** guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
 - Active documentation branch: **`docs/level9-final-registered-geometry-20260925`**.
 - Gate C approved/frozen: 玄龜 first-playable verification; 天狗 120/90; 猙 450/24; normal 晝夜 8s; 燭龍 8200 HP with P1 6s/P2 4.5s state cadence; 帝江 future unlock kit; exact W1–W10 and W10 timeline.
@@ -20,16 +20,25 @@
 - Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
 - Gate D CLOSED: player-approved registered 390×610 geometry + clean 1024×1536 background; runtime candidate `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 539,574 bytes / SHA-256 `c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99`.
 - Gate E/F complete: five new image assets were sequentially approved; all six concrete final source files were re-uploaded and exact-byte audited. Chat-side PNG transparency/size optimization, background JPG conversion, checksums and registration recheck are complete. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
-- Next exact step: **give Work `shanhaijing_td_level9_minimal_handoff_v2.zip`; Work performs only production integration + executable verification/release.**
+- Next exact step: **give Work `shanhaijing_td_level9_minimal_handoff_v3.zip`; Work performs only production integration + executable verification/release.**
 - Production implementation remains forbidden until later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
+
+## 2026-09-25：Dynamic released-baseline rule correction
+
+- Corrected a future-facing logic error: permanent rules must not freeze the comparison/protection baseline to a historical range such as `Level1–8`.
+- New rule: resolve the currently released/deployed/player-verified baseline from repository state at execution time; later development automatically includes all levels released by then.
+- Historical progress entries retain the level ranges that were true when written and are not rewritten.
+- Level9 Work handoff prompt now carries the same dynamic-baseline rule plus runtime-truth geometry diagnostics.
+- Valid handoff: `shanhaijing_td_level9_minimal_handoff_v3.zip`, SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
+- v2 is superseded.
 
 ## 2026-09-25：Level9 v2 canonical-filename correction
 
 - Player noticed UUID/random-looking names in `source/`; those were exact attachment names, not runtime paths, but they were too easy to misuse.
 - Corrected ZIP keeps exact source bytes while normalizing ZIP-internal source aliases to semantic names.
 - Work must integrate only `runtime_candidates/`: five character/UI files are RGBA PNG; battlefield remains JPG by project rule.
-- Valid ZIP is now `shanhaijing_td_level9_minimal_handoff_v2.zip`, SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
+- Valid ZIP is now `shanhaijing_td_level9_minimal_handoff_v3.zip`, SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 - The earlier non-v2 handoff is SUPERSEDED.
 
 ## 2026-09-25：Level9 final re-upload audit PASS / minimal Work handoff ready
@@ -37,7 +46,7 @@
 - Player re-uploaded all six concrete final Level9 files; exact attachment bytes, dimensions, formats and SHA-256 are frozen in `docs/levels/level9/ASSETS.md`.
 - Exact re-uploaded background was re-registered against canonical path / Spawn / Base / T1–T8 / shrine anchor: PASS.
 - Chat completed its maximum static scope: transparent-PNG conversion for JPEG character sources, crop/resize/PNG optimization, 780×1220 runtime JPG background, HUD normalization, manifest, checksums, reference registration image and minimal Work prompt.
-- Valid Work ZIP: `shanhaijing_td_level9_minimal_handoff_v2.zip`, SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
+- Valid Work ZIP: `shanhaijing_td_level9_minimal_handoff_v3.zip`, SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 - ZIP structure: `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`.
 - Work-only remaining delta: production integration, procedural runtime effects, targeted/full executable tests, runtime smoke, merge, Pages deploy and public verification.
 - The earlier premature Level9 ZIP remains INVALID / SUPERSEDED.

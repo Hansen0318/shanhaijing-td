@@ -12,7 +12,7 @@
 **GATE F — FINAL FILESET AUDIT COMPLETE / GATE G HANDOFF READY**
 
 ### Allowed now
-- use the audited `shanhaijing_td_level9_minimal_handoff_v2.zip` for Work production integration;
+- use the audited `shanhaijing_td_level9_minimal_handoff_v3.zip` for Work production integration;
 - Work may perform only the irreducible execution-environment delta listed in `WORK_INTEGRATION_PROMPT.txt`;
 - update implementation branch/SHA/test/release state as Work progresses.
 
@@ -20,7 +20,7 @@
 - no production gameplay implementation in Chat;
 - no asset redesign/regeneration unless a concrete audit mismatch appears;
 - no geometry changes;
-- no Level1–8 changes.
+- no changes to any currently released level unless the actual Level9 implementation creates a concrete shared-system regression risk.
 - no production gameplay implementation;
 - no Work implementation handoff;
 - no generated asset may be treated as final before player approval;
@@ -60,7 +60,7 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - Player selects exactly **3** beasts.
 - Retry returns to an empty lineup and requires choosing 3 again.
 - Level9 victory must not expose a dead Level10 action while Level10 is not implemented.
-- Level1–8 remain frozen; do not redo or rebalance them for Level9 development.
+- the currently released product baseline remains frozen; as of this Level9 handoff that baseline is Level1–8, but future sessions must resolve the released baseline dynamically rather than treating `Level1–8` as a permanent rule.
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
@@ -85,7 +85,7 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - Chat-side conversion/optimization complete: five runtime RGBA PNG assets + one 780×1220 JPG background;
 - minimal Work handoff ZIP built with `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`;
 - `source/` filenames are canonical semantic aliases while preserving the exact re-uploaded bytes; `runtime_candidates/` is the only program-integration source.
-- handoff ZIP SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
+- handoff ZIP SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 
 ## Not completed
 - production implementation;
@@ -105,10 +105,10 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - no production gameplay code has changed yet; executable tests belong to Gate G Work.
 
 ## Do not redo
-- Level1–8 released content;
+- all currently released content; resolve the released baseline dynamically from repository/release state rather than hard-coding a historical range;
 - Level8 retrospective analysis;
 - inherited roster/progression architecture;
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Hand the audited `shanhaijing_td_level9_minimal_handoff_v2.zip` to Work. Work must do only the remaining production integration + executable verification/release delta.**
+**Hand the audited `shanhaijing_td_level9_minimal_handoff_v3.zip` to Work. Work must do only the remaining production integration + executable verification/release delta.**
