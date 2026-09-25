@@ -68,7 +68,7 @@ test('art catalog exposes all 115 asset IDs and every file is deployable', async
   for (const [id, path] of entries) {
     const diskPath = fileURLToPath(new URL(`../../${path}`, moduleUrl));
     assert.equal(existsSync(diskPath), true, `${id} is missing at ${path}`);
-    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\?v=level9-1$`));
+    assert.match(assetUrl(id), new RegExp(`${path.replaceAll('/', '\\/')}\\\?v=asset-load-2$`));
   }
 });
 
@@ -353,26 +353,29 @@ test('art store returns a drawable image only after that image has loaded', asyn
   assert.equal(store.get('unknown'), null);
 });
 
-test('art store reveals a level when required art settles, including failed assets', async () => {
+test('art store retries transient failures before terminal fallback', async () => {
   const { ArtStore } = await import(moduleUrl);
   class FakeImage {
     constructor() { this.complete = false; this.naturalWidth = 0; }
   }
   const store = new ArtStore(FakeImage);
   assert.equal(store.isReady(), false);
-  for (const image of Object.values(store.images)) image.onerror();
-  await Promise.resolve();
-  assert.equal(store.isReady(), true, 'failed images count as settled so fallback can render');
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    for (const id of Object.keys(store.pending)) store.images[id].onerror();
+    await Promise.resolve();
+  }
+  assert.equal(store.isReady(), true, 'terminal failures settle after retries so fallback can render');
+  assert.deepEqual(new Set(store.failedForLevel(1)), new Set(['slotPlatform','background','spawnRift','baseSeal','minion']));
 });
 
-test('UI frame preload is staged so first paint is complete without blocking later overlays', async () => {
+test('UI frames never block the loading overlay and lineup roster stays first-paint ready', async () => {
   const { ArtStore, LEVEL_ART_IDS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
   const shellUi = ['resourcePanel', 'hudButton', 'wavePreviewPanel', 'contextPanel', 'actionButton'];
   const laterUi = ['buildCard', 'blessingCard', 'victoryOverlay', 'defeatOverlay'];
 
   for (const levelId of [1, 2, 3]) {
-    for (const id of shellUi) assert.ok(LEVEL_REQUIRED_ART_IDS[levelId].includes(id), `${id} must be ready with first paint`);
-    for (const id of ['bifang', 'fuzhu', 'yinglong']) assert.ok(LEVEL_REQUIRED_ART_IDS[levelId].includes(id), `${id} must be ready before the first build menu can open`);
+    for (const id of shellUi) assert.equal(LEVEL_REQUIRED_ART_IDS[levelId].includes(id), false, `${id} must not block first paint`);
+    for (const id of ['bifang', 'fuzhu', 'yinglong']) assert.equal(LEVEL_REQUIRED_ART_IDS[levelId].includes(id), false, `${id} should background-preload before the first build interaction`);
     for (const id of laterUi) assert.ok(LEVEL_DEFERRED_ART_IDS[levelId].includes(id), `${id} should load after first paint`);
   }
   assert.ok(LEVEL_DEFERRED_ART_IDS[1].includes('bossPanel'));
