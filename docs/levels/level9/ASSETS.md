@@ -25,7 +25,8 @@
 - clean source: **1024×1536**
 - runtime: **780×1220 JPG**
 - logical display: **390×610**
-- SHA-256: **c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99**
+- runtime JPG bytes: **516,931**
+- runtime SHA-256: **bab355fb7c323f8d150e4bb55237f9cd63dfccb50c36622262300d1473c179ec**
 - registration must remain exactly aligned to Level9 `GEOMETRY.md`.
 - no labels/debug route/T1–T8 are baked into runtime art.
 
@@ -159,7 +160,36 @@ Runtime background:
 - SHA-256 `bab355fb7c323f8d150e4bb55237f9cd63dfccb50c36622262300d1473c179ec`
 
 Valid Work handoff:
-- filename: `shanhaijing_td_level9_minimal_handoff.zip`
-- SHA-256: `d09e5d2f052da0ee7da16485a809487b9108bad3efbf37705e67733b18a6322e`
+- filename: `shanhaijing_td_level9_minimal_handoff_v2.zip`
+- SHA-256: `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`
 - structure: `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`
 - the earlier premature Level9 ZIP remains **INVALID / SUPERSEDED**.
+
+
+## K. Canonical handoff filenames — v2 correction
+The valid Work ZIP uses semantic filenames in both audit and integration folders to prevent UUID attachment names from being mistaken for runtime paths.
+
+### Canonical source aliases inside the valid handoff ZIP
+These files preserve the **exact re-uploaded bytes**; only the ZIP-internal filename is normalized:
+- `source/enemy_tiangou_v1.jpeg` ← exact 天狗 JPEG bytes
+- `source/enemy_zheng_v1.jpeg` ← exact 猙 JPEG bytes
+- `source/boss_zhulong_v1.jpeg` ← exact 燭龍 JPEG bytes
+- `source/ui_boss_zhulong_panel_v1.png` ← exact HUD PNG bytes
+- `source/unlock_dijiang_v1.jpeg` ← exact 帝江 JPEG bytes
+- `source/bg_zhongshan_extreme_night_v1.jpeg` ← exact clean-background JPEG bytes
+
+### Program-ready runtime filenames
+Work must wire **only these files** into runtime asset paths:
+- `runtime_candidates/enemy_tiangou_v1.png`
+- `runtime_candidates/enemy_zheng_v1.png`
+- `runtime_candidates/boss_zhulong_v1.png`
+- `runtime_candidates/ui_boss_zhulong_panel_v1.png`
+- `runtime_candidates/unlock_dijiang_v1.png`
+- `runtime_candidates/bg_zhongshan_extreme_night_v1.jpg`
+
+All five character/UI runtime assets are RGBA PNG. The battlefield is intentionally JPG, matching the project background convention.
+
+Valid corrected handoff:
+- filename: `shanhaijing_td_level9_minimal_handoff_v2.zip`
+- SHA-256: `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`
+- previous non-v2 handoff is **SUPERSEDED**.

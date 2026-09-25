@@ -12,7 +12,7 @@
 **GATE F — FINAL FILESET AUDIT COMPLETE / GATE G HANDOFF READY**
 
 ### Allowed now
-- use the audited `shanhaijing_td_level9_minimal_handoff.zip` for Work production integration;
+- use the audited `shanhaijing_td_level9_minimal_handoff_v2.zip` for Work production integration;
 - Work may perform only the irreducible execution-environment delta listed in `WORK_INTEGRATION_PROMPT.txt`;
 - update implementation branch/SHA/test/release state as Work progresses.
 
@@ -84,7 +84,8 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - exact re-uploaded background re-registration PASS against the canonical 390×610 path / Spawn / Base / T1–T8 / shrine anchor;
 - Chat-side conversion/optimization complete: five runtime RGBA PNG assets + one 780×1220 JPG background;
 - minimal Work handoff ZIP built with `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`;
-- handoff ZIP SHA-256 `d09e5d2f052da0ee7da16485a809487b9108bad3efbf37705e67733b18a6322e`.
+- `source/` filenames are canonical semantic aliases while preserving the exact re-uploaded bytes; `runtime_candidates/` is the only program-integration source.
+- handoff ZIP SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
 
 ## Not completed
 - production implementation;
@@ -110,4 +111,4 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Hand the audited `shanhaijing_td_level9_minimal_handoff.zip` to Work. Work must do only the remaining production integration + executable verification/release delta.**
+**Hand the audited `shanhaijing_td_level9_minimal_handoff_v2.zip` to Work. Work must do only the remaining production integration + executable verification/release delta.**
