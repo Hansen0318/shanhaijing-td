@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level9-1';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=level9-1';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=asset-load-2';
 import { Economy } from '../systems/Economy.js';
 import { BEAST_NAMES } from '../config/progressionData.js?v=level9-1';
 
@@ -9,6 +9,7 @@ export class UIController {
     this.contextKey = null;
     this.lineupKey = null;
     this.blessingKey = null;
+    this.prefetchedNextLevelId = null;
     this.dom = Object.fromEntries([...document.querySelectorAll('[id]')].map(el => [el.id, el]));
     this.bind(); this.render();
   }
@@ -164,6 +165,10 @@ export class UIController {
     const nextLevelId = this.game.state === 'victory' ? this.game.nextLevelId() : null;
     this.dom['next-level-button'].hidden = nextLevelId == null;
     if (!this.dom['next-level-button'].hidden) this.dom['next-level-button'].textContent = `前往第${nextLevelId}關`;
+    if (nextLevelId != null && this.prefetchedNextLevelId !== nextLevelId) {
+      this.prefetchedNextLevelId = nextLevelId;
+      this.renderer.art.ensureLevel(nextLevelId);
+    }
   }
   renderBossSlot() {
     const boss = this.game.enemies.find(enemy => enemy.isBoss);

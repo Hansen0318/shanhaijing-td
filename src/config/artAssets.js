@@ -130,7 +130,7 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   zhulong: Object.freeze({ left: '12.8%', top: '79.8%', width: '74.5%', height: '20.2%' }),
 });
 
-const ASSET_CACHE_VERSION = 'level9-1';
+const ASSET_CACHE_VERSION = 'asset-load-2';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
@@ -162,15 +162,19 @@ export const LEVEL_ART_IDS = Object.freeze({
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
-  1: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
-  2: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
-  3: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
-  4: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level4Background', 'level4Spawn', 'level4Base', 'meihu', 'level4LineupPanel']),
-  5: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level5Background', 'level5Spawn', 'level5Base', 'zhuyan', 'level5Banner', 'level5Preview']),
-  6: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level6Background', 'yangyu', 'sunlightZone']),
-  7: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level7Background', 'qinyuan']),
-  8: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level8Background', 'changyou']),
-  9: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'xuangui', 'slotPlatform', 'level9Background', 'tiangou']),
+  // Preparation levels block only on actual battlefield essentials. Large decorative UI frames
+  // are CSS-loaded and must never hold the entire game behind the loading overlay.
+  1: Object.freeze(['slotPlatform', 'background', 'spawnRift', 'baseSeal', 'minion']),
+  2: Object.freeze(['slotPlatform', 'level2Background', 'level2Spawn', 'level2Base', 'minion']),
+  3: Object.freeze(['slotPlatform', 'level3Background', 'level3Spawn', 'level3Base', 'shuixiao']),
+  // Lineup levels block on the visible roster + background only. Battlefield/combat art preloads
+  // immediately after first paint while the player chooses the lineup.
+  4: Object.freeze([...SHARED_BUILD_READY_ART_IDS, 'baize', 'level4Background', 'level4LineupPanel']),
+  5: Object.freeze([...SHARED_BUILD_READY_ART_IDS, 'baize', 'level5Background', 'level5Banner', 'level5Preview']),
+  6: Object.freeze([...SHARED_BUILD_READY_ART_IDS, 'baize', 'level6Background']),
+  7: Object.freeze([...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'level7Background']),
+  8: Object.freeze([...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'level8Background']),
+  9: Object.freeze([...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'xuangui', 'level9Background']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
@@ -190,33 +194,61 @@ export function assetUrl(id) {
   return path ? `${new URL(`../../${path}`, import.meta.url).href}?v=${ASSET_CACHE_VERSION}` : '';
 }
 
+const ASSET_LOAD_MAX_ATTEMPTS = 3;
+
 export class ArtStore {
   constructor(ImageConstructor = Image, initialLevelId = 1) {
     this.ImageConstructor = ImageConstructor;
     this.images = {};
     this.pending = {};
     this.settled = new Set();
+    this.loaded = new Set();
+    this.failed = new Set();
+    this.attempts = {};
     this.initialLevelId = initialLevelId;
     this.loadIds(LEVEL_REQUIRED_ART_IDS[initialLevelId]);
   }
 
   loadIds(ids = []) {
-    return Promise.all(ids.map(id => {
-      if (this.pending[id]) return this.pending[id];
-      const image = new this.ImageConstructor();
-      this.images[id] = image;
-      this.pending[id] = new Promise(resolve => {
-        const settle = () => {
+    return Promise.all(ids.map(id => this.loadId(id)));
+  }
+
+  loadId(id) {
+    if (this.pending[id]) return this.pending[id];
+    this.pending[id] = new Promise(resolve => {
+      const attempt = () => {
+        const attemptNumber = (this.attempts[id] ?? 0) + 1;
+        this.attempts[id] = attemptNumber;
+        const image = new this.ImageConstructor();
+        this.images[id] = image;
+        let finished = false;
+        const finish = ok => {
+          if (finished) return;
+          finished = true;
+          if (ok) {
+            this.loaded.add(id);
+            this.failed.delete(id);
+            this.settled.add(id);
+            resolve(true);
+            return;
+          }
+          if (attemptNumber < ASSET_LOAD_MAX_ATTEMPTS) {
+            attempt();
+            return;
+          }
+          this.failed.add(id);
           this.settled.add(id);
-          resolve();
+          resolve(false);
         };
-        image.onload = settle;
-        image.onerror = settle;
-        image.src = assetUrl(id);
-        if (image.complete) settle();
-      });
-      return this.pending[id];
-    }));
+        image.onload = () => finish(image.naturalWidth !== 0);
+        image.onerror = () => finish(false);
+        const retrySuffix = attemptNumber > 1 ? `&retry=${attemptNumber}` : '';
+        image.src = `${assetUrl(id)}${retrySuffix}`;
+        if (image.complete) finish(image.naturalWidth > 0);
+      };
+      attempt();
+    });
+    return this.pending[id];
   }
 
   ensureLevel(levelId) {
@@ -229,6 +261,10 @@ export class ArtStore {
 
   isLevelReady(levelId) {
     return (LEVEL_REQUIRED_ART_IDS[levelId] ?? []).every(id => this.settled.has(id));
+  }
+
+  failedForLevel(levelId) {
+    return (LEVEL_REQUIRED_ART_IDS[levelId] ?? []).filter(id => this.failed.has(id));
   }
 
   isReady() {
