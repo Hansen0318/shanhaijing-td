@@ -4,17 +4,16 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **ENGINEERING VERIFIED / RELEASE PENDING**
-- Production implementation: **COMPLETE ON FEATURE BRANCH**
+- Development phase: **RELEASED / PLAYER PHONE SMOKE PENDING**
+- Production implementation: **MERGED TO `main`**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE H — ENGINEERING VERIFICATION COMPLETE / RELEASE PENDING**
+**GATE H — EXITED / PUBLIC RELEASE VERIFIED**
 
 ### Allowed now
-- merge the verified feature branch through the repository release flow;
-- deploy from `main`, wait for Pages, and run public dev/progression smoke;
-- perform player-owned phone visual acceptance after deployment.
+- perform player-owned phone visual acceptance on the deployed build;
+- open a follow-up only for a concrete deployed defect.
 
 ### Forbidden until gate exit
 - no asset redesign/regeneration without a concrete deployed defect;
@@ -22,8 +21,8 @@
 - no Level1–8 rebalance;
 - no claim of player phone acceptance before the player confirms it.
 
-### Gate exit condition
-Gate H exits after the verified branch is merged, Pages serves the release, and public dev/progression smoke passes or an exact release blocker is recorded.
+### Gate exit evidence
+PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level9 in `?devMenu=1`, and the deployed 390×700 smoke fixture confirms the real Level8 victory button enters Level9 lineup.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -61,13 +60,11 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 - handoff ZIP SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 
 ## Not completed
-- release;
 - player smoke.
 
 ## Current branch / SHA
-- production implementation branch: `feat/level9-zhongshan-20260925`.
-- reviewed feature tree is pushed remotely at `b42ed87ca58f8d8c4578e65af205fd29d146d972` and opened as PR #90.
-- latest `main` reconciliation baseline: `6b54fcd3242ee3cb633d9125b6ddd32d21ecad77`.
+- merged implementation PR: #90.
+- release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847`.
 
 ## Verification status
 - Chat-side Final Fileset Audit: **PASS**.
@@ -79,7 +76,9 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 - `npm run check`, all `src/` + `tests/` JavaScript syntax, `git diff --check`, asset decode/checksum and stale-cache scan: **PASS**.
 - independent pre-merge review found no Critical issue; its four Important findings were addressed by W10 observed-timeline coverage/escort staging, Level9 runtime path smoothing acceptance, deterministic Level9 玄龜潮震 + Level8→9 smoke fixtures, cache identity, and this canonical state closure.
 - W10 impact analysis: the shared nearest-enemy spawn gate originally held the first escort behind slow 燭龍 until 4.4s. Level9 W10 now exempts only the Boss-to-first-escort boundary and ignores 燭龍 for the already-started escort stream; escort-to-escort spacing remains size-aware. Executable evidence verifies Boss first, first 天狗 at 0.8–1.0s, first 猙 within 7.6–10.1s, and the intended day/night overlap.
-- local cloud browser cannot open `127.0.0.1:4173` (`net::ERR_BLOCKED_BY_CLIENT`); public Pages browser smoke remains part of release closure and is not yet claimed.
+- local cloud browser could not open `127.0.0.1:4173` (`net::ERR_BLOCKED_BY_CLIENT`), so runtime smoke was completed against public Pages instead.
+- public dev entry PASS: `?devMenu=1` visibly exposes Level1–Level9.
+- public production progression PASS at 390×700: deployed fixture used the actual Level8 victory next-level button and reached `level 9 鐘山極夜 / state lineup / wave 0`; the six-beast roster and NEW 玄龜 are visible.
 
 ## Do not redo
 - all currently released content; resolve the released baseline dynamically from repository/release state rather than hard-coding a historical range;
@@ -88,4 +87,4 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Complete the latest-`main` reconciliation, rerun affected/full verification, update PR #90, merge, then verify public Pages `?devMenu=1` and normal Level8 victory → Level9.**
+**Player performs the separate physical-phone visual smoke; no engineering or release work remains unless that smoke finds a concrete defect.**
