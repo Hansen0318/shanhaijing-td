@@ -101,3 +101,25 @@ test('Huashe HP fill maps into the approved 768x183 transparent channel without 
     assert.ok(Math.abs(rendered[key] - channel[key]) <= 0.8, `huashe rendered ${key} misses its approved empty channel`);
   }
 });
+
+test('Zhulong HP fill maps into the measured long lower channel inside the fixed 44px HUD', () => {
+  const sourceChannel = { left: 199, top: 204, width: 754, height: 34 };
+  const border = 6;
+  const sourceSlice = 70;
+  const geometry = BOSS_HUD_GEOMETRY.zhulong;
+  const channel = {
+    left: border + (sourceChannel.left - sourceSlice) / (1152 - sourceSlice * 2) * (PANEL_WIDTH - border * 2),
+    top: border + (sourceChannel.top - sourceSlice) / (308 - sourceSlice * 2) * (PANEL_HEIGHT - border * 2),
+    width: sourceChannel.width / (1152 - sourceSlice * 2) * (PANEL_WIDTH - border * 2),
+    height: sourceChannel.height / (308 - sourceSlice * 2) * (PANEL_HEIGHT - border * 2),
+  };
+  const rendered = {
+    left: border + percent(geometry.left) * (PANEL_WIDTH - border * 2),
+    top: border + percent(geometry.top) * (PANEL_HEIGHT - border * 2),
+    width: percent(geometry.width) * (PANEL_WIDTH - border * 2),
+    height: percent(geometry.height) * (PANEL_HEIGHT - border * 2),
+  };
+  for (const key of ['left', 'top', 'width', 'height']) {
+    assert.ok(Math.abs(rendered[key] - channel[key]) <= 0.8, `zhulong rendered ${key} misses its measured empty channel`);
+  }
+});

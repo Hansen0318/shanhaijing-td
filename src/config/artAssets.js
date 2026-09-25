@@ -127,6 +127,7 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   jinwu: Object.freeze({ left: '3.7%', top: '43.8%', width: '92.5%', height: '21.9%' }),
   kui: Object.freeze({ left: '9.9%', top: '52.6%', width: '80.4%', height: '14.2%' }),
   huashe: Object.freeze({ left: '11.6%', top: '60.9%', width: '76.7%', height: '17.3%' }),
+  zhulong: Object.freeze({ left: '12.8%', top: '79.8%', width: '74.5%', height: '20.2%' }),
 });
 
 const ASSET_CACHE_VERSION = 'level8-3';

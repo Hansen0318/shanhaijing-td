@@ -17,6 +17,7 @@ test('all seven Boss HUDs use one variable-positioned code-driven fill without i
   assert.match(art, /jiuweihuBossPanel:\s*'assets\/ui\/ui_boss_jiuweihu_panel_v2\.png'/);
   assert.match(art, /xingtianBossPanel:\s*'assets\/ui\/ui_boss_xingtian_panel_v1\.png'/);
   assert.match(art, /jinwuBossPanel:\s*'assets\/ui\/ui_boss_jinwu_panel_v1\.png'/);
+  assert.match(art, /zhulongBossPanel:\s*'assets\/ui\/ui_boss_zhulong_panel_v1\.png'/);
   assert.match(base, /left:\s*var\(--boss-track-left\)/);
   assert.match(base, /top:\s*var\(--boss-track-top\)/);
   assert.match(base, /width:\s*var\(--boss-track-width\)/);
@@ -44,4 +45,10 @@ test('Huashe preserves its panel proportions inside the same fixed Boss HUD foot
   const huasheRule = css.match(/\.boss-hud\[data-boss-type="huashe"\]\s*\{([^}]*)\}/)?.[1] ?? '';
   assert.match(huasheRule, /border-image-slice:\s*25 fill/);
   assert.doesNotMatch(huasheRule, /(?:height|min-height|padding)\s*:/, 'Huashe cannot enlarge the shared HUD footprint');
+});
+
+test('Zhulong keeps the shared 44px Boss HUD footprint and programmatic text/fill', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  const rule = css.match(/\.boss-hud\[data-boss-type="zhulong"\]\s*\{([^}]*)\}/)?.[1] ?? '';
+  assert.doesNotMatch(rule, /(?:height|min-height|padding)\s*:/, 'Zhulong cannot enlarge the shared HUD footprint');
 });
