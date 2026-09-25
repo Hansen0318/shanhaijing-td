@@ -4,23 +4,27 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **MAP CONCEPT / CANONICAL GEOMETRY**
+- Development phase: **ASSET / VFX PLANNING**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE D — MAP CONCEPT / CANONICAL GEOMETRY**
+**GATE E — ASSET / VFX PLANNING**
 
 ### Allowed now
-- use the approved Level9 Gameplay Geometry Guide V1 as the controlling map skeleton;
-- create/select a production background that follows the frozen guide composition;
-- record source dimensions and normalization/crop;
-- derive explicit source→390×610 registration;
-- overlay the unchanged guide on that exact background;
-- reject/regenerate background art if it materially misses the guide;
-- after player approval, freeze the registered geometry.
+- classify each Level9 visual as reuse / PNG-first / Procedural-first / Hybrid;
+- freeze exact production asset inventory and filenames;
+- define phone-readability requirements for each gameplay VFX;
+- define Boss HUD source/runtime footprint contract;
+- define image-generation order/sub-batches;
+- mark only explicitly approved items as APPROVED_FOR_GENERATION.
 
 ### Forbidden until gate exit
+- no production gameplay implementation;
+- no Work implementation handoff;
+- no generated asset may be treated as final before player approval;
+- no geometry changes unless new visual evidence proves a concrete mismatch;
+- do not regenerate the approved background unless registration is intentionally reopened.
 - do not derive the gameplay path from an AI-generated background;
 - do not move Spawn/Base/T1–T8/central shrine merely to fit an attractive background;
 - no geometry freeze before the exact production-background overlay is approved;
@@ -45,7 +49,7 @@
 - no Work implementation handoff.
 
 ### Gate exit condition
-Exact production background + transform + player-approved overlay exist, and `GEOMETRY.md` contains the reproducible frozen geometry contract.
+`ASSETS.md` contains the exact final production inventory/classification, generation allowlist and acceptance criteria, with no unresolved asset-planning blocker.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -59,8 +63,8 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- clean runtime-background cleanup is still pending; it must preserve the player-approved registered geometry.
-- Motion Lite anchors remain pending final clean background.
+- Gate E asset/VFX ledger is being finalized.
+- No character/Boss/HUD image has been player-approved yet.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -73,10 +77,10 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - Gate D map concept approved;
 - Gameplay Geometry Guide V1 defined and static-check PASS;
 - player corrected the route against the background;
-- final registered path / Spawn / Base / T1–T8 / celestial anchor measured into 390×610 logical coordinates and player-approved.
+- final registered path / Spawn / Base / T1–T8 / celestial anchor measured into 390×610 logical coordinates and player-approved;
+- clean 1024×1536 background registration PASS; runtime 780×1220 JPG candidate recorded with checksum; Gate D closed.
 
 ## Not completed
-- clean production-background candidate preserving the approved registration;
 - assets / VFX planning and production;
 - implementation;
 - engineering verification;
@@ -98,4 +102,4 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Create/retain the clean Level9 runtime background without debug labels/route graphics while preserving the approved composition. Overlay the final `GEOMETRY.md` coordinates deterministically; if registration remains matched, Gate D can close and advance to Gate E asset/VFX planning.**
+**Gate E: review/freeze the exact Level9 asset and VFX inventory in `ASSETS.md`. After the inventory is approved, generate only the first approved sub-batch; do not start implementation yet.**
