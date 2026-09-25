@@ -1,26 +1,27 @@
-import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level8-6';
+import { GAME_CONFIG, TOWER_DATA, ENEMY_DATA, BLESSING_DATA, getLevelData } from '../config/gameData.js?v=level9-1';
 import { LEVEL4_BAIZE_BLESSINGS } from '../config/level4Blessings.js?v=blessing-fix-1';
 import { GameTime } from './Time.js';
-import { GameMap } from '../map/GameMap.js?v=level8-3';
-import { Enemy } from '../entities/Enemy.js?v=level8-3';
+import { GameMap } from '../map/GameMap.js?v=level9-1';
+import { Enemy } from '../entities/Enemy.js?v=level9-1';
 import { Illusion } from '../entities/Illusion.js';
-import { Tower } from '../entities/Tower.js?v=level8-3';
-import { Projectile } from '../entities/Projectile.js?v=level8-3';
+import { Tower } from '../entities/Tower.js?v=level9-1';
+import { Projectile } from '../entities/Projectile.js?v=level9-1';
 import { Economy } from '../systems/Economy.js';
-import { CombatSystem } from '../systems/CombatSystem.js?v=level8-3';
-import { BlessingSystem } from '../systems/BlessingSystem.js?v=level8-3';
-import { WaveManager } from '../systems/WaveManager.js?v=level8-3';
-import { BossSystem } from '../systems/BossSystem.js?v=level8-6';
-import { StatusSystem } from '../systems/StatusSystem.js?v=level8-3';
-import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js?v=level8-3';
-import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js?v=level8-3';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level8-3';
-import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level8-3';
-import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level8-3';
+import { CombatSystem } from '../systems/CombatSystem.js?v=level9-1';
+import { BlessingSystem } from '../systems/BlessingSystem.js?v=level9-1';
+import { WaveManager } from '../systems/WaveManager.js?v=level9-1';
+import { BossSystem } from '../systems/BossSystem.js?v=level9-1';
+import { StatusSystem } from '../systems/StatusSystem.js?v=level9-1';
+import { isValidLineup, normalizeLineup } from '../systems/LineupSystem.js?v=level9-1';
+import { UNLOCK_BY_LEVEL, nextPlayableLevelId, ownedRosterThrough } from '../config/progressionData.js?v=level9-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level9-1';
+import { ENABLE_UNIT_MOTION } from '../config/motionData.js?v=level9-1';
+import { minimumEnemyPathSpacing } from '../config/enemyVisuals.js?v=level9-1';
 import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
-import { TideSystem } from '../systems/TideSystem.js?v=level8-6';
+import { TideSystem } from '../systems/TideSystem.js?v=level9-1';
+import { DayNightSystem } from '../systems/DayNightSystem.js?v=level9-1';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -65,9 +66,11 @@ export class Game {
     this.bannerQueue = [];
     this.stats = { kills: 0, built: 0 };
     this.levelBossDefeated = false;
+    this.levelBossEscortStarted = false;
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     this.thunder = ThunderSystem.reset();
     this.tide = TideSystem.reset();
+    this.dayNight = level.id === 9 ? DayNightSystem.reset() : null;
     this.time.setPaused(true);
     return true;
   }
@@ -227,16 +230,32 @@ export class Game {
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
     const enemy = new Enemy(type, enemyData, this.map);
     this.enemies.push(enemy);
+    if (this.levelId === 9 && this.wave.waveNumber === 10 && type === 'tiangou'
+      && this.enemies.some(other => other.type === 'zhulong')) this.levelBossEscortStarted = true;
+    if (type === 'zhulong') {
+      DayNightSystem.configure(this, {
+        state: 'day',
+        interval: baseData.bossMechanic.phase1SwitchInterval,
+        bossControlled: true,
+      });
+    }
     if (baseData.isBoss) this.queueBanner(`Boss現身：${baseData.name}`, 1.1);
     return enemy;
   }
   canSpawnEnemy(type) {
+    const bossEscortStream = this.levelId === 9 && this.wave.waveNumber === 10
+      && type !== 'zhulong' && this.levelBossEscortStarted;
     const nearest = this.enemies
-      .filter(enemy => enemy.alive)
+      .filter(enemy => enemy.alive && !(bossEscortStream && enemy.type === 'zhulong'))
       .reduce((candidate, enemy) => (
         !candidate || enemy.pathDistance < candidate.pathDistance ? enemy : candidate
     ), null);
     if (!nearest) return true;
+    // The frozen W10 timeline calls for the first escort at ~0.8s. Allow only
+    // that Boss-to-escort boundary through; all remaining escorts retain the
+    // shared size-aware spawn spacing.
+    if (this.levelId === 9 && this.wave.waveNumber === 10 && type === 'tiangou'
+      && nearest.type === 'zhulong' && !this.levelBossEscortStarted) return true;
     return nearest.pathDistance >= minimumEnemyPathSpacing(nearest.type, type);
   }
   spawnIllusions(source, count = 2, duration = source.statuses.insight ? 0.8 : 1.6) {
@@ -271,6 +290,7 @@ export class Game {
     const dt = this.time.step(realDelta);
     this.updatePendingShocks(dt);
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
+    DayNightSystem.update(this, dt);
     SunlightSystem.update(this, dt);
     TideSystem.update(this, dt);
     this.enemies.forEach(enemy => {
@@ -333,6 +353,14 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete() && this.pendingShocks.length === 0) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'zhulongPhase2') {
+      DayNightSystem.configure(this, {
+        interval: event.switchInterval,
+        bossControlled: true,
+      });
+      this.effects.push({ type: 'zhulongPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'huasheTideTelegraph') {
       TideSystem.telegraphHighTide(this);
       this.effects.push({ type: 'huasheTideTelegraph', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });

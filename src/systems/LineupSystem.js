@@ -1,4 +1,4 @@
-import { ownedRosterThrough } from '../config/progressionData.js?v=level8-3';
+import { ownedRosterThrough } from '../config/progressionData.js?v=level9-1';
 
 export function normalizeLineup(types = [], eligibleRoster = ownedRosterThrough(Infinity)) {
   return [...new Set(types)].filter(type => eligibleRoster.includes(type));

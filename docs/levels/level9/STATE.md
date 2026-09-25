@@ -4,53 +4,26 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **PRODUCTION IMPLEMENTATION HANDOFF READY**
-- Production implementation: **NOT STARTED**
+- Development phase: **ENGINEERING VERIFIED / RELEASE PENDING**
+- Production implementation: **COMPLETE ON FEATURE BRANCH**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE F — FINAL FILESET AUDIT COMPLETE / GATE G HANDOFF READY**
+**GATE H — ENGINEERING VERIFICATION COMPLETE / RELEASE PENDING**
 
 ### Allowed now
-- use the audited `shanhaijing_td_level9_minimal_handoff_v3.zip` for Work production integration;
-- Work may perform only the irreducible execution-environment delta listed in `WORK_INTEGRATION_PROMPT.txt`;
-- update implementation branch/SHA/test/release state as Work progresses.
+- merge the verified feature branch through the repository release flow;
+- deploy from `main`, wait for Pages, and run public dev/progression smoke;
+- perform player-owned phone visual acceptance after deployment.
 
 ### Forbidden until gate exit
-- no production gameplay implementation in Chat;
-- no asset redesign/regeneration unless a concrete audit mismatch appears;
-- no geometry changes;
-- no changes to any currently released level unless the actual Level9 implementation creates a concrete shared-system regression risk.
-- no production gameplay implementation;
-- no Work implementation handoff;
-- no generated asset may be treated as final before player approval;
-- no geometry changes unless new visual evidence proves a concrete mismatch;
-- do not regenerate the approved background unless registration is intentionally reopened.
-- do not derive the gameplay path from an AI-generated background;
-- do not move Spawn/Base/T1–T8/central shrine merely to fit an attractive background;
-- no geometry freeze before the exact production-background overlay is approved;
-- no final asset batch beyond the Gate D background task;
-- no production implementation;
-- no Work implementation handoff.
-- no guessed/final coordinates before the exact production background exists;
-- no geometry freeze before player-approved overlay;
-- no final asset batch or image-generation batch beyond the Gate D production-background task;
-- no production implementation;
-- no Work implementation handoff.
-- no canonical geometry or coordinate guessing;
-- no production-background freeze;
-- no final asset batch or image-generation allowlist;
-- no production implementation;
-- no Work implementation handoff.
-- no numerical gameplay baseline;
-- no W1–W10 freeze;
-- no canonical geometry or coordinate guessing;
-- no final asset batch or image generation allowlist;
-- no production implementation;
-- no Work implementation handoff.
+- no asset redesign/regeneration without a concrete deployed defect;
+- no movement of frozen Spawn/Base/T1–T8/shrine/path anchors;
+- no Level1–8 rebalance;
+- no claim of player phone acceptance before the player confirms it.
 
 ### Gate exit condition
-Gate F is satisfied. Gate G exits only when production implementation is integrated and the required engineering verification is complete.
+Gate H exits after the verified branch is merged, Pages serves the release, and public dev/progression smoke passes or an exact release blocker is recorded.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -88,21 +61,25 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - handoff ZIP SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 
 ## Not completed
-- production implementation;
-- engineering verification;
 - release;
 - player smoke.
 
 ## Current branch / SHA
-- canonical docs branch for this final-audit closure: `docs/level9-final-reupload-pass-20260925`.
-- production implementation branch: **not started yet**.
+- production implementation branch: `feat/level9-zhongshan-20260925`.
+- reviewed feature tree is pushed remotely at `b42ed87ca58f8d8c4578e65af205fd29d146d972` and opened as PR #90.
+- latest `main` reconciliation baseline: `6b54fcd3242ee3cb633d9125b6ddd32d21ecad77`.
 
 ## Verification status
 - Chat-side Final Fileset Audit: **PASS**.
 - exact user-uploaded source bytes recorded in `ASSETS.md`.
 - runtime candidates decode PASS; monster/Boss/unlock/HUD candidates are RGBA with real transparency; background is optimized JPG.
 - deterministic registration check against the exact re-uploaded background: **PASS**.
-- no production gameplay code has changed yet; executable tests belong to Gate G Work.
+- Level9 target suite: **110/110 PASS** after review fixes.
+- full `npm test`: **265/265 PASS** after review fixes.
+- `npm run check`, all `src/` + `tests/` JavaScript syntax, `git diff --check`, asset decode/checksum and stale-cache scan: **PASS**.
+- independent pre-merge review found no Critical issue; its four Important findings were addressed by W10 observed-timeline coverage/escort staging, Level9 runtime path smoothing acceptance, deterministic Level9 玄龜潮震 + Level8→9 smoke fixtures, cache identity, and this canonical state closure.
+- W10 impact analysis: the shared nearest-enemy spawn gate originally held the first escort behind slow 燭龍 until 4.4s. Level9 W10 now exempts only the Boss-to-first-escort boundary and ignores 燭龍 for the already-started escort stream; escort-to-escort spacing remains size-aware. Executable evidence verifies Boss first, first 天狗 at 0.8–1.0s, first 猙 within 7.6–10.1s, and the intended day/night overlap.
+- local cloud browser cannot open `127.0.0.1:4173` (`net::ERR_BLOCKED_BY_CLIENT`); public Pages browser smoke remains part of release closure and is not yet claimed.
 
 ## Do not redo
 - all currently released content; resolve the released baseline dynamically from repository/release state rather than hard-coding a historical range;
@@ -111,4 +88,4 @@ Gate F is satisfied. Gate G exits only when production implementation is integra
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Hand the audited `shanhaijing_td_level9_minimal_handoff_v3.zip` to Work. Work must do only the remaining production integration + executable verification/release delta.**
+**Complete the latest-`main` reconciliation, rerun affected/full verification, update PR #90, merge, then verify public Pages `?devMenu=1` and normal Level8 victory → Level9.**

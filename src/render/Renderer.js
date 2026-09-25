@@ -1,8 +1,8 @@
-import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level8-6';
-import { ArtStore } from '../config/artAssets.js?v=level8-3';
-import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
-import { MotionSystem } from '../systems/MotionSystem.js?v=level8-3';
-import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level8-3';
+import { MAP_DATA, TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level9-1';
+import { ArtStore } from '../config/artAssets.js?v=level9-1';
+import { ENABLE_UNIT_MOTION, UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level9-1';
+import { MotionSystem } from '../systems/MotionSystem.js?v=level9-1';
+import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level9-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58], xuangui: [58, 56] });
 const LEVEL7_WATERFALLS = Object.freeze([
@@ -44,6 +44,7 @@ export class Renderer {
     ctx.clearRect(0, 0, map.width, map.height);
     this.drawBackground(ctx, game);
     this.drawLevelEightEnvironment(ctx, game);
+    this.drawLevelNineEnvironment(ctx, game);
     this.drawLevelSevenWaterfalls(ctx, game);
     this.drawFogZones(ctx, game);
     this.drawSunlightZones(ctx, game);
@@ -141,6 +142,66 @@ export class Renderer {
       }
       ctx.restore();
     }
+  }
+  drawLevelNineEnvironment(ctx, game) {
+    if (game.level.id !== 9) return;
+    const time = game.visualTime ?? 0;
+    const state = game.dayNight?.state ?? 'day';
+    const telegraph = Boolean(game.dayNight?.telegraph);
+    const anchor = game.level.map.celestialAnchor;
+    const warm = state === 'day';
+
+    // The global tint makes the active state readable at a glance without obscuring the approved background.
+    ctx.save();
+    ctx.fillStyle = warm ? 'rgba(154,45,18,.075)' : 'rgba(28,42,112,.105)';
+    ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
+
+    // Slow cloud drift stays in the existing upper-right mist bank.
+    const cloudX = 286 + Math.sin(time * 0.22) * 7;
+    const cloud = ctx.createRadialGradient(cloudX, 115, 4, cloudX, 115, 78);
+    cloud.addColorStop(0, warm ? 'rgba(232,174,139,.09)' : 'rgba(145,161,221,.12)');
+    cloud.addColorStop(1, 'rgba(80,92,137,0)');
+    ctx.fillStyle = cloud;
+    ctx.fillRect(205, 64, 164, 105);
+
+    // Two visible hanging banners receive a restrained 3-4px tip sway.
+    ctx.strokeStyle = 'rgba(245,104,61,.25)';
+    ctx.lineWidth = 2;
+    for (const [x, y, height, phase] of [[66, 194, 76, 0], [321, 157, 74, 1.2]]) {
+      const sway = Math.sin(time * 0.7 + phase) * 4;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.quadraticCurveTo(x + sway * 0.45, y + height * 0.52, x + sway, y + height);
+      ctx.stroke();
+    }
+
+    // Corona breathing is localized at the frozen celestial shrine anchor.
+    const breath = 0.5 + Math.sin(time * 0.8) * 0.5;
+    const corona = ctx.createRadialGradient(anchor.x, anchor.y, 3, anchor.x, anchor.y, 31 + breath * 5);
+    corona.addColorStop(0, warm ? 'rgba(255,223,126,.23)' : 'rgba(169,204,255,.22)');
+    corona.addColorStop(0.55, warm ? 'rgba(255,103,45,.10)' : 'rgba(91,117,219,.11)');
+    corona.addColorStop(1, 'rgba(85,44,62,0)');
+    ctx.fillStyle = corona;
+    ctx.fillRect(anchor.x - 40, anchor.y - 40, 80, 80);
+
+    // Four sparse embers/stars keep ambient motion subordinate to combat cues.
+    ctx.fillStyle = warm ? 'rgba(255,182,90,.34)' : 'rgba(184,205,255,.3)';
+    for (let index = 0; index < 4; index += 1) {
+      const phase = (time * (0.13 + index * 0.018) + index * 0.23) % 1;
+      const x = 147 + index * 47 + Math.sin(time * 0.5 + index) * 3;
+      const y = 358 - phase * 170;
+      ctx.beginPath(); ctx.arc(x, y, 1.5 + index * 0.35, 0, Math.PI * 2); ctx.fill();
+    }
+
+    if (telegraph) {
+      const pulse = 0.5 + Math.sin(time * 9) * 0.5;
+      ctx.strokeStyle = warm ? `rgba(255,218,133,${0.55 + pulse * 0.25})` : `rgba(182,211,255,${0.55 + pulse * 0.25})`;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.arc(anchor.x, anchor.y, 30 + pulse * 7, 0, Math.PI * 2); ctx.stroke();
+      ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.arc(anchor.x, anchor.y, 43 + pulse * 9, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.restore();
   }
   drawSunlightZones(ctx, game) {
     const zones = game.level.map.sunlightZones ?? [];
@@ -484,6 +545,34 @@ export class Renderer {
   }
   drawEnemies(ctx, game) {
     [...game.enemies, ...(game.illusions ?? [])].forEach(enemy => {
+      if (enemy.type === 'tiangou' && enemy.dayNightState === 'day' && !enemy.isIllusion) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255,174,78,.72)';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        for (let streak = 0; streak < 3; streak += 1) {
+          ctx.beginPath();
+          ctx.moveTo(enemy.x - 13 - streak * 5, enemy.y - 5 + streak * 5);
+          ctx.lineTo(enemy.x - 25 - streak * 7, enemy.y - 5 + streak * 5);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+      if (enemy.type === 'zheng' && enemy.dayNightState === 'night' && !enemy.isIllusion) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(159,202,255,.84)';
+        ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 7, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
+      if (enemy.type === 'zhulong' && (enemy.bossPhase ?? 1) >= 2) {
+        const pulse = 0.5 + Math.sin((game.visualTime ?? 0) * 2.4) * 0.5;
+        ctx.save();
+        ctx.strokeStyle = `rgba(211,180,255,${0.5 + pulse * 0.28})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 12 + pulse * 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
       if (enemy.map?.isWeakWater?.(enemy)) {
         const size = (enemy.radius + 12) * 2;
         if (!this.drawContained(ctx, 'waterRing', enemy.x, enemy.y + 5, size, size, { alpha: 0.46 })) {
@@ -565,6 +654,9 @@ export class Renderer {
         if (enemy.statuses.marshLeap) this.drawStateTag(ctx, '泥躍', enemy.x, tagY, { fill: '#bff8e9', background: 'rgba(17,66,62,.86)' });
         if (enemy.statuses.marshArmor) this.drawStateTag(ctx, '沼甲', enemy.x, tagY, { fill: '#d8efc4', background: 'rgba(40,68,34,.88)' });
         if (enemy.type === 'huashe' && (enemy.bossPhase ?? 1) >= 2) this.drawStateTag(ctx, '洪潮', enemy.x, tagY, { fill: '#d5fffa', background: 'rgba(20,54,62,.9)' });
+        if (enemy.type === 'tiangou' && enemy.dayNightState === 'day') this.drawStateTag(ctx, '晝馳', enemy.x, tagY, { fill: '#ffe7a2', background: 'rgba(91,42,12,.88)' });
+        if (enemy.type === 'zheng' && enemy.dayNightState === 'night') this.drawStateTag(ctx, '夜甲', enemy.x, tagY, { fill: '#d9e8ff', background: 'rgba(25,38,79,.9)' });
+        if (enemy.type === 'zhulong' && (enemy.bossPhase ?? 1) >= 2) this.drawStateTag(ctx, '極夜', enemy.x, tagY, { fill: '#f0dcff', background: 'rgba(53,22,80,.92)' });
       }
       if (enemy.hitFlash > 0 && !enemy.isBoss && !enemy.isIllusion) this.healthBar(ctx, enemy.x - 17, enemy.y - enemy.radius - 10, 34, enemy.hp / enemy.maxHp);
     });
@@ -648,6 +740,19 @@ export class Renderer {
       ctx.save(); ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
       ctx.strokeStyle = '#a3eee5'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.arc(point.x, point.y, 44 + progress * 28, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+    });
+    game.effects.filter(effect => effect.type === 'zhulongPhase2').forEach(effect => {
+      const source = game.enemies?.find(enemy => enemy.id === effect.sourceId);
+      const point = source ?? effect;
+      const progress = 1 - effect.life / effect.duration;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      for (let ring = 0; ring < 3; ring += 1) {
+        ctx.strokeStyle = ring === 0 ? '#fff0bd' : 'rgba(190,147,255,.82)';
+        ctx.lineWidth = 4 - ring;
+        ctx.beginPath(); ctx.arc(point.x, point.y, 34 + ring * 12 + progress * 28, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'kuiPhase2').forEach(effect => {
       const source = game.enemies?.find(enemy => enemy.id === effect.sourceId);
@@ -886,8 +991,10 @@ export class Renderer {
   }
   drawLabels(ctx, game) {
     const map = game.level.map;
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = 'bold 11px system-ui'; ctx.fillStyle = '#d7e7d8'; ctx.fillText('敵人入口', 10, 38);
-    if (game.level.id === 8) {
+    const spawn = map.waypoints[0];
+    ctx.textAlign = game.level.id === 9 ? 'center' : 'left'; ctx.textBaseline = 'middle'; ctx.font = 'bold 11px system-ui'; ctx.fillStyle = '#d7e7d8';
+    ctx.fillText('敵人入口', game.level.id === 9 ? spawn.x : 10, game.level.id === 9 ? Math.max(14, spawn.y - 28) : 38);
+    if (game.level.id === 8 || game.level.id === 9) {
       const base = map.waypoints.at(-1);
       ctx.textAlign = 'center';
       ctx.fillText(game.level.baseName, base.x, Math.min(map.height - 12, base.y + 28));

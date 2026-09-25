@@ -52,6 +52,9 @@ export const ENEMY_DATA = Object.freeze({
   changyou: { id: 'changyou', name: '長右', emoji: '🐒', hp: 110, speed: 86, baseDamage: 1, reward: 15, radius: 12, marshLeapSpeedMultiplier: 1.3, marshLeapDuration: 1.6 },
   gudiao: { id: 'gudiao', name: '蠱雕', emoji: '🦅', hp: 420, speed: 24, baseDamage: 3, reward: 32, radius: 18, marshArmorDamageMultiplier: 0.78, marshArmorLinger: 0.6 },
   huashe: { id: 'huashe', name: '化蛇', emoji: '🐍', hp: 7600, speed: 15, baseDamage: 20, reward: 0, radius: 30, isBoss: true, bossMechanic: { type: 'huashe', phase2Threshold: 0.5, phase2SpeedMultiplier: 1.15, phase1ForcedTideInterval: 7, phase1ForcedTideDuration: 2.4, phase2ForcedTideInterval: 5, phase2ForcedTideDuration: 3 } },
+  tiangou: { id: 'tiangou', name: '天狗', emoji: '🐕', hp: 120, speed: 90, baseDamage: 1, reward: 16, radius: 12, daylightSpeedMultiplier: 1.2 },
+  zheng: { id: 'zheng', name: '猙', emoji: '🐆', hp: 450, speed: 24, baseDamage: 3, reward: 34, radius: 18, nightNormalDamageMultiplier: 0.82 },
+  zhulong: { id: 'zhulong', name: '燭龍', emoji: '🐉', hp: 8200, speed: 15, baseDamage: 20, reward: 0, radius: 30, isBoss: true, bossMechanic: { type: 'zhulong', phase2Threshold: 0.5, phase2SpeedMultiplier: 1.12, phase1SwitchInterval: 6, phase2SwitchInterval: 4.5, telegraphDuration: 0.8 } },
 });
 
 const wave = (groups, interval, modifiers = {}) => ({ groups, interval, ...modifiers });
@@ -157,6 +160,19 @@ export const LEVEL8_WAVE_DATA = Object.freeze([
   wave([{ type: 'changyou', count: 16 }, { type: 'gudiao', count: 6 }], 0.7, { hpMultiplier: 1.26 }),
   wave([{ type: 'changyou', count: 18 }, { type: 'gudiao', count: 8 }], 0.64, { hpMultiplier: 1.34 }),
   wave([{ type: 'huashe', count: 1 }, { type: 'changyou', count: 8 }, { type: 'gudiao', count: 4 }], 0.84, { hpMultiplier: 1.2, bossHpMultiplier: 1.1 }),
+]);
+
+export const LEVEL9_WAVE_DATA = Object.freeze([
+  wave([{ type: 'tiangou', count: 6 }], 1.1),
+  wave([{ type: 'tiangou', count: 8 }], 1),
+  wave([{ type: 'tiangou', count: 6 }, { type: 'zheng', count: 2 }], 1),
+  wave([{ type: 'zheng', count: 4 }], 1.05),
+  wave([{ type: 'tiangou', count: 10 }, { type: 'zheng', count: 3 }], 0.9, { hpMultiplier: 1.06 }),
+  wave([{ type: 'tiangou', count: 14 }, { type: 'zheng', count: 4 }], 0.78, { hpMultiplier: 1.12 }),
+  wave([{ type: 'tiangou', count: 10 }, { type: 'zheng', count: 6 }], 0.82, { hpMultiplier: 1.18 }),
+  wave([{ type: 'tiangou', count: 16 }, { type: 'zheng', count: 6 }], 0.7, { hpMultiplier: 1.26 }),
+  wave([{ type: 'tiangou', count: 18 }, { type: 'zheng', count: 8 }], 0.64, { hpMultiplier: 1.34 }),
+  wave([{ type: 'zhulong', count: 1 }, { type: 'tiangou', count: 8 }, { type: 'zheng', count: 4 }], 0.84, { hpMultiplier: 1.2, bossHpMultiplier: 1.1 }),
 ]);
 
 export const BLESSING_DATA = Object.freeze([
@@ -382,6 +398,31 @@ export const LEVEL8_MAP_DATA = Object.freeze({
   ],
 });
 
+export const LEVEL9_MAP_DATA = Object.freeze({
+  width: 390,
+  height: 610,
+  pathWidth: 54,
+  pathSmoothing: 10,
+  clampPathSmoothing: false,
+  waypoints: [
+    { x: 39, y: 68 }, { x: 45, y: 77 }, { x: 50, y: 89 }, { x: 64, y: 101 },
+    { x: 77, y: 113 }, { x: 101, y: 125 }, { x: 166, y: 137 }, { x: 228, y: 149 },
+    { x: 261, y: 161 }, { x: 284, y: 173 }, { x: 298, y: 185 }, { x: 314, y: 197 },
+    { x: 323, y: 208 }, { x: 329, y: 220 }, { x: 336, y: 232 }, { x: 340, y: 244 },
+    { x: 343, y: 256 }, { x: 344, y: 268 }, { x: 344, y: 280 }, { x: 342, y: 292 },
+    { x: 340, y: 304 }, { x: 335, y: 316 }, { x: 329, y: 328 }, { x: 318, y: 340 },
+    { x: 309, y: 351 }, { x: 287, y: 363 }, { x: 252, y: 375 }, { x: 171, y: 387 },
+    { x: 120, y: 399 }, { x: 117, y: 411 }, { x: 123, y: 423 }, { x: 143, y: 435 },
+    { x: 175, y: 447 }, { x: 214, y: 459 }, { x: 247, y: 471 }, { x: 264, y: 483 },
+    { x: 285, y: 494 }, { x: 309, y: 506 }, { x: 327, y: 518 }, { x: 343, y: 516 },
+  ],
+  celestialAnchor: { x: 203, y: 251 },
+  slots: [
+    { x: 125, y: 106 }, { x: 264, y: 142 }, { x: 292, y: 233 }, { x: 352, y: 333 },
+    { x: 216, y: 324 }, { x: 106, y: 250 }, { x: 88, y: 374 }, { x: 288, y: 461 },
+  ],
+});
+
 const levelOne = Object.freeze({
   ...LEVEL_DATA,
   map: MAP_DATA,
@@ -513,7 +554,25 @@ const levelEight = Object.freeze({
   }),
 });
 
-export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive, 6: levelSix, 7: levelSeven, 8: levelEight });
+const levelNine = Object.freeze({
+  id: 9,
+  name: '鐘山極夜',
+  baseName: '鐘山天門',
+  bossType: 'zhulong',
+  bossVictoryRequiresWaveClear: true,
+  map: LEVEL9_MAP_DATA,
+  waves: LEVEL9_WAVE_DATA,
+  art: Object.freeze({
+    background: 'level9Background', backgroundCrop: { x: 0, y: 0, width: 780, height: 1220 },
+    bossPanel: 'zhulongBossPanel',
+  }),
+  lineup: Object.freeze({
+    eyebrow: '第九關・鐘山極夜', title: '第9關・鐘山極夜',
+    help: '本關從已擁有異獸中選擇三隻出戰<br>敵情：天狗與猙隨晝夜輪轉改變攻勢，燭龍掌控戰場光相<br>推薦職能：控制／洞察／範圍攻擊',
+  }),
+});
+
+export const LEVELS = Object.freeze({ 1: levelOne, 2: levelTwo, 3: levelThree, 4: levelFour, 5: levelFive, 6: levelSix, 7: levelSeven, 8: levelEight, 9: levelNine });
 
 export function getLevelData(levelId) {
   return LEVELS[levelId] ?? null;

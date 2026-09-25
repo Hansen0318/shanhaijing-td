@@ -46,6 +46,7 @@ test('the shared spawn gate applies size-aware path spacing in every playable le
     { levelId: 6, type: 'fusangjiashou' },
     { levelId: 7, type: 'zhuhuai' },
     { levelId: 8, type: 'gudiao' },
+    { levelId: 9, type: 'zheng' },
   ];
 
   for (const { levelId, type } of cases) {
@@ -76,6 +77,7 @@ test('mixed-type followers use both rendered footprints at the spawn gate', () =
     { levelId: 6, leader: 'jinwu', follower: 'yangyu' },
     { levelId: 7, leader: 'kui', follower: 'qinyuan' },
     { levelId: 8, leader: 'gudiao', follower: 'changyou' },
+    { levelId: 9, leader: 'zhulong', follower: 'tiangou' },
   ];
 
   for (const { levelId, leader, follower } of cases) {
@@ -125,6 +127,23 @@ test('Level8 mixed 長右, 蠱雕 and 化蛇 use the shared real spawn gate', ()
   assert.equal(game.canSpawnEnemy('huashe'), false);
   gudiao.pathDistance = gudiaoToHuashe;
   assert.equal(game.canSpawnEnemy('huashe'), true);
+});
+
+test('Level9 mixed 燭龍, 天狗 and 猙 use the shared real spawn gate', () => {
+  const game = new Game(() => 0.2, 9);
+  const zhulong = game.spawnEnemy('zhulong');
+  const bossToTiangou = minimumEnemyPathSpacing('zhulong', 'tiangou');
+  zhulong.pathDistance = bossToTiangou - 0.01;
+  assert.equal(game.canSpawnEnemy('tiangou'), false);
+  zhulong.pathDistance = bossToTiangou;
+  assert.equal(game.canSpawnEnemy('tiangou'), true);
+  const tiangou = game.spawnEnemy('tiangou');
+  zhulong.pathDistance += 200;
+  const tiangouToZheng = minimumEnemyPathSpacing('tiangou', 'zheng');
+  tiangou.pathDistance = tiangouToZheng - 0.01;
+  assert.equal(game.canSpawnEnemy('zheng'), false);
+  tiangou.pathDistance = tiangouToZheng;
+  assert.equal(game.canSpawnEnemy('zheng'), true);
 });
 
 test('spacing never slows an already spawned follower', () => {

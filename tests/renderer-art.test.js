@@ -175,6 +175,44 @@ test('Level8 Motion Lite stays inside frozen anchors while remaining readable at
     'reed tip sway must stay within the approved 4-6px readability band');
 });
 
+test('Level9 renders the approved crop, frozen anchors, state cue and four restrained Motion Lite families', () => {
+  const { renderer, ctx } = rendererFixture();
+  const game = emptyGame(LEVELS[9]);
+  game.visualTime = 1.2;
+  game.dayNight = { state: 'day', telegraph: true };
+  renderer.render(game);
+
+  assert.equal(ctx.calls.drawImage[0][0].id, 'level9Background');
+  assert.deepEqual(ctx.calls.drawImage[0].slice(1, 5), [0, 0, 780, 1220]);
+  assert.equal(ctx.calls.drawImage.filter(args => args[0].id === 'slotPlatform').length, 8);
+  assert.ok(ctx.calls.radialGradients.some(({ args }) => args[0] === 203 && args[1] === 251), 'celestial cue must stay registered at (203,251)');
+  assert.ok(ctx.calls.fillRect.some(args => args[0] === 0 && args[1] === 0 && args[2] === 390 && args[3] === 610), 'day/night needs a restrained overall battlefield cue');
+  assert.ok(ctx.calls.arc.filter(args => args[0] === 203 && args[1] === 251).length >= 2, 'telegraph must add phone-readable shrine rings');
+  assert.ok(ctx.calls.quadraticCurveTo.length >= 2, 'banner micro-sway must be visibly procedural');
+  assert.ok(ctx.calls.arc.length >= 6, 'corona plus sparse embers must remain recognizable at 390px');
+  assert.deepEqual(ctx.calls.fillText.find(args => args[0] === '敵人入口'), ['敵人入口', 39, 40]);
+  assert.deepEqual(ctx.calls.fillText.find(args => args[0] === '鐘山天門'), ['鐘山天門', 343, 544]);
+});
+
+test('Level9 enemy cues distinguish daylight speed, night armor and Zhulong P2', () => {
+  const { renderer, ctx } = rendererFixture({ motionEnabled: false });
+  const map = { totalLength: 100, positionAt: () => ({ x: 121, y: 100 }), isWeakWater: () => false };
+  const enemy = (type, extra = {}) => ({
+    type, id: type, x: 100, y: 100, radius: type === 'zhulong' ? 30 : 16,
+    hp: 100, maxHp: 100, isBoss: type === 'zhulong', hitFlash: 0, visualHitFlash: 0,
+    statuses: {}, map, pathDistance: 40, ...extra,
+  });
+  renderer.drawEnemies(ctx, {
+    visualTime: 0.4, effects: [], illusions: [],
+    enemies: [enemy('tiangou', { dayNightState: 'day' }), enemy('zheng', { dayNightState: 'night' }), enemy('zhulong', { bossPhase: 2, dayNightState: 'night' })],
+  });
+
+  assert.ok(ctx.calls.lineTo.length >= 3, 'daylight Tiangou needs short warm speed streaks');
+  assert.ok(ctx.calls.arc.some(args => args[2] >= 22 && args[2] <= 26), 'night Zheng needs a cold armor rim');
+  for (const label of ['晝馳', '夜甲', '極夜']) assert.ok(ctx.calls.fillText.some(args => args[0] === label), `${label} state tag missing`);
+  assert.ok(ctx.calls.arc.some(args => args[2] >= 38), 'Zhulong P2 needs a strong procedural overlay');
+});
+
 test('Level8 base label is centered below the canonical Base instead of the map corner', () => {
   const { renderer, ctx } = rendererFixture();
   renderer.render(emptyGame(LEVELS[8]));

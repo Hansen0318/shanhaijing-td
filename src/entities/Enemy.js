@@ -1,5 +1,5 @@
-import { StatusSystem } from '../systems/StatusSystem.js?v=level8-3';
-import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level8-3';
+import { StatusSystem } from '../systems/StatusSystem.js?v=level9-1';
+import { UNIT_MOTION_CONFIG } from '../config/motionData.js?v=level9-1';
 
 const BASE_ARRIVAL_LINGER_SECONDS = 0.28;
 const BASE_ARRIVAL_EXIT_DISTANCE = 22;
@@ -34,6 +34,7 @@ export class Enemy {
     this.chargeConsumed = false;
     this.chargeTelegraphRemaining = 0;
     this.chargeRemaining = 0;
+    this.dayNightState = null;
     Object.assign(this, map.positionAt(0));
   }
   update(dt) {
@@ -63,7 +64,10 @@ export class Enemy {
       : 1;
     const chargeMultiplier = this.chargeRemaining > 0 ? 1.65 : 1;
     const sunlightMultiplier = this.type === 'yangyu' && this.inSunlight ? 1.28 : 1;
-    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * chargeMultiplier * sunlightMultiplier * dt;
+    const daylightMultiplier = this.type === 'tiangou' && this.dayNightState === 'day'
+      ? (this.data.daylightSpeedMultiplier ?? 1)
+      : 1;
+    this.pathDistance += this.data.speed * this.speedMultiplier * StatusSystem.speedMultiplier(this) * terrainMultiplier * chargeMultiplier * sunlightMultiplier * daylightMultiplier * dt;
     Object.assign(this, this.map.positionAt(this.pathDistance));
     if (this.chargeTelegraphRemaining > 0) {
       this.chargeTelegraphRemaining = Math.max(0, this.chargeTelegraphRemaining - dt);

@@ -3,26 +3,38 @@
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
 - Released baseline: **resolve dynamically from current release state**; as of this Level9 handoff, Level1–8 are complete and player-verified.
-- Latest `main` takeover baseline: `6070b4592aac70eb9e39586b72eee81fc073647b` (all-future-level guardrails merged).
+- Latest `main` reconciliation baseline: `6b54fcd3242ee3cb633d9125b6ddd32d21ecad77` (dynamic-baseline and future-level guardrails merged).
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
-- Current gate: **Gate G — PRODUCTION IMPLEMENTATION HANDOFF READY**.
+- Current gate: **Gate H — ENGINEERING VERIFIED / RELEASE PENDING**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - All currently released levels remain frozen; do not redo them unless the actual Level9 shared-system change creates an identified regression risk. Do not hard-code `Level1–8` as a permanent future baseline.
 - Level8 retrospective / permanent **all-future-level** guardrails: `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
-- Active documentation branch: **`docs/level9-final-registered-geometry-20260925`**.
+- Active implementation branch: **`feat/level9-zhongshan-20260925`**.
 - Gate C approved/frozen: 玄龜 first-playable verification; 天狗 120/90; 猙 450/24; normal 晝夜 8s; 燭龍 8200 HP with P1 6s/P2 4.5s state cadence; 帝江 future unlock kit; exact W1–W10 and W10 timeline.
-- Production implementation: **NOT STARTED**; audited Work handoff is now valid.
+- Production implementation: **COMPLETE**; review fixes and canonical state are awaiting the final verification commit.
 - Gate B approved/frozen: **鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty**.
 - Gate D map concept approved. Gameplay Geometry Guide V1 is now defined first, independently of background art.
 - Final registered geometry supersedes Guide V1: Spawn **(39,68)**, Base **(343,516)**, shrine anchor **(203,251)**, T1–T8 **(125,106), (264,142), (292,233), (352,333), (216,324), (106,250), (88,374), (288,461)**; full corrected path is canonical in `docs/levels/level9/GEOMETRY.md`.
 - Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
-- Gate D CLOSED: player-approved registered 390×610 geometry + clean 1024×1536 background; runtime candidate `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 539,574 bytes / SHA-256 `c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99`.
+- Gate D CLOSED: player-approved registered 390×610 geometry + clean background; final runtime `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 516,931 bytes / SHA-256 `bab355fb7c323f8d150e4bb55237f9cd63dfccb50c36622262300d1473c179ec`.
 - Gate E/F complete: five new image assets were sequentially approved; all six concrete final source files were re-uploaded and exact-byte audited. Chat-side PNG transparency/size optimization, background JPG conversion, checksums and registration recheck are complete. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
-- Next exact step: **give Work `shanhaijing_td_level9_minimal_handoff_v3.zip`; Work performs only production integration + executable verification/release.**
-- Production implementation remains forbidden until later gates.
+- Next exact step: **finish latest-`main` reconciliation, rerun verification, update and merge PR #90, then verify public dev and normal progression flows.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
+
+## 2026-09-25：Level9 production implementation / Gate H engineering PASS
+
+- Implemented Level9 鐘山極夜 on `feat/level9-zhongshan-20260925`; reviewed tree is pushed at remote `b42ed87ca58f8d8c4578e65af205fd29d146d972` and opened as PR #90.
+- Integrated only audited `runtime_candidates/` bytes; six runtime assets match the frozen sizes and SHA-256 values in `docs/levels/level9/ASSETS.md`.
+- Added the frozen 40-point path, 8 tower slots, W1–W10, 天狗／猙／燭龍, Level8→9 lineup progression, Level9→帝江 terminal unlock, and no Level10 action.
+- Implemented normal 8.0s and Boss 6.0s/4.5s 晝夜輪轉, 0.8s telegraphs, 天狗晝馳, 猙 direct-hit-only夜甲, 燭龍 one-shot P2 and wave-clear victory gate.
+- Added Level9 state cues, four restrained Motion Lite families, enemy state overlays, P2 effect and measured fixed-44px 燭龍 HUD.
+- Independent review found no Critical issue. Important findings were fixed with executable W10 spawn/state timing, anchor-preserving `pathSmoothing: 10` plus max-turn ≤20° acceptance, deterministic Level9 玄龜潮震, real Level8 victory→Level9 UI fixture, and unified DayNight cache identity.
+- W10 spacing impact: only the Boss→first-escort boundary is exempted so the frozen first escort timing remains observable; after the escort stream begins, 燭龍 is excluded from the entrance gate while all escort-to-escort pairs continue to use measured size-aware spacing.
+- Fresh verification after fixes: targeted **110/110 PASS**; full `npm test` **265/265 PASS**; `npm run check` PASS; every `src/` and `tests/` JS file passes `node --check`.
+- Local browser smoke is environment-blocked because the cloud browser returns `net::ERR_BLOCKED_BY_CLIENT` for `127.0.0.1:4173`; no local visual PASS is claimed. Public Pages smoke is the remaining engineering-owned release check.
+- Player physical-phone smoke remains separate and is not claimed.
 
 ## 2026-09-25：Dynamic released-baseline rule correction
 

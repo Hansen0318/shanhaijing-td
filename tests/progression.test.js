@@ -16,8 +16,8 @@ import {
 } from '../src/config/progressionData.js';
 
 test('campaign progression is derived from playable levels and unlock data', () => {
-  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6, 7, 8]);
-  assert.deepEqual(UNLOCK_BY_LEVEL, { 3: 'baize', 6: 'jumang', 8: 'xuangui' });
+  assert.deepEqual(PLAYABLE_LEVEL_IDS, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  assert.deepEqual(UNLOCK_BY_LEVEL, { 3: 'baize', 6: 'jumang', 8: 'xuangui', 9: 'dijiang' });
   assert.deepEqual(baseOwnedRoster(), ['bifang', 'fuzhu', 'yinglong']);
   assert.deepEqual(ownedRosterThrough(3), ['bifang', 'fuzhu', 'yinglong', 'baize']);
   assert.deepEqual(ownedRosterThrough(6), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang']);
@@ -25,7 +25,8 @@ test('campaign progression is derived from playable levels and unlock data', () 
   assert.equal(nextPlayableLevelId(5), 6);
   assert.equal(nextPlayableLevelId(6), 7);
   assert.equal(nextPlayableLevelId(7), 8);
-  assert.equal(nextPlayableLevelId(8), null);
+  assert.equal(nextPlayableLevelId(8), 9);
+  assert.equal(nextPlayableLevelId(9), null);
 });
 
 test('Level5 victory enters an empty Level6 four-beast lineup', () => {
@@ -89,12 +90,31 @@ test('Level7 victory enters an empty Level8 five-beast exact-three lineup', () =
   assert.deepEqual(game.lineupSelection, []);
 });
 
-test('Level8 victory unlocks Xuangui once and has no phantom next level', () => {
+test('Level8 victory unlocks Xuangui once and enters Level9 six-beast lineup', () => {
   const game = new Game(() => 0.2, 8);
   assert.equal(game.unlockedBeasts.has('xuangui'), false);
   game.end('victory');
   assert.equal(game.pendingUnlock, 'xuangui');
   assert.equal(game.unlockedBeasts.has('xuangui'), true);
+  assert.equal(game.nextLevelId(), 9);
+  assert.equal(game.enterLevel(9), true);
+  assert.deepEqual(game.lineupRoster(), ['bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'xuangui']);
+  assert.deepEqual(game.lineupSelection, []);
+});
+
+test('Level9 requires exactly three, unlocks Dijiang once, and has no phantom Level10', () => {
+  const game = new Game(() => 0.2, 9);
+  for (const type of ['xuangui', 'bifang']) game.toggleLineup(type);
+  assert.equal(game.confirmLineup(), false);
+  game.toggleLineup('jumang');
+  assert.equal(game.confirmLineup(), true);
+  game.end('defeat');
+  assert.equal(game.restart(), true);
+  assert.deepEqual(game.lineupSelection, []);
+  game.end('victory');
+  assert.equal(game.pendingUnlock, 'dijiang');
+  assert.equal(game.unlockedBeasts.has('dijiang'), true);
+  assert.equal(game.lineupRoster().includes('dijiang'), false, 'future-only Dijiang has no Level9 tower data');
   assert.equal(game.nextLevelId(), null);
   game.end('victory');
   assert.equal(game.pendingUnlock, null);
