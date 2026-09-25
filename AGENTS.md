@@ -911,3 +911,19 @@ Never use:
 **AI background first → eyeball/trace a route afterward → move gameplay to match art**.
 
 If a generated background cannot represent the approved route/pads/anchors accurately, the background is the rejected artifact, not the gameplay guide.
+
+
+## 31. Scalable asset-loading reliability
+
+This rule applies to all current and future levels.
+
+1. The blocking loading gate must be **state-specific and minimal**. It may wait only for assets required to render the immediately visible entry state (for example battlefield essentials for Preparation, or visible roster art for Lineup).
+2. Do not hard-code a preload policy whose blocking set grows monotonically with every future unlocked beast, level, Boss, VFX, or UI asset. Newly released content must not make every later level wait for the whole historical asset catalog.
+3. Decorative UI frames, later-wave enemies, Boss art, Boss HUDs, unlock art, and combat VFX belong in deferred/background preload unless the current first-visible state genuinely needs them.
+4. A transient image network error must not become an immediate permanent fallback. Required/deferred assets must receive a bounded retry policy before terminal failure.
+5. Terminal failures must remain observable: expose the failed asset IDs/URLs through debug/load metrics or equivalent release diagnostics.
+6. Failure handling must never create an infinite loading screen. After bounded retries, allow the existing fallback renderer to continue while preserving failure evidence.
+7. When a next level is known at a victory/result screen, prefetch that next level's minimal required entry assets while the player is still on the result screen.
+8. Public release verification must check not only that the page opens, but that representative real assets are present: production background, lineup/tower art, and any current-level first-paint asset. A fallback road or `?` placeholder is a release defect.
+9. Use the currently released product state dynamically. Do not encode today's level range or roster size as a permanent preload assumption.
+
