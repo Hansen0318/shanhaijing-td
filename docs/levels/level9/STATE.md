@@ -33,7 +33,7 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 - Player selects exactly **3** beasts.
 - Retry returns to an empty lineup and requires choosing 3 again.
 - Level9 victory must not expose a dead Level10 action while Level10 is not implemented.
-- Level1–8 remain frozen; do not redo or rebalance them for Level9 development.
+- the currently released product baseline remains frozen; as of this Level9 handoff that baseline is Level1–8, but future sessions must resolve the released baseline dynamically rather than treating `Level1–8` as a permanent rule.
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
@@ -58,7 +58,7 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 - Chat-side conversion/optimization complete: five runtime RGBA PNG assets + one 780×1220 JPG background;
 - minimal Work handoff ZIP built with `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`;
 - `source/` filenames are canonical semantic aliases while preserving the exact re-uploaded bytes; `runtime_candidates/` is the only program-integration source.
-- handoff ZIP SHA-256 `bc462fbece789edd863da21fd96ab4f128274685461fc4380c3d7a56a30bcb6f`.
+- handoff ZIP SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 
 ## Not completed
 - release;
@@ -66,8 +66,8 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 
 ## Current branch / SHA
 - production implementation branch: `feat/level9-zhongshan-20260925`.
-- local verified head before this state update: `5ccab94d62708cfdd8d1109a5fe52f6535a0b644` plus review-fix worktree changes.
-- remote safe checkpoint before review fixes: `8429a5d60738904d3edfab2bb7af5066ebe50e2f` (same tree as local `5ccab94`).
+- reviewed feature tree is pushed remotely at `b42ed87ca58f8d8c4578e65af205fd29d146d972` and opened as PR #90.
+- latest `main` reconciliation baseline: `6b54fcd3242ee3cb633d9125b6ddd32d21ecad77`.
 
 ## Verification status
 - Chat-side Final Fileset Audit: **PASS**.
@@ -82,10 +82,10 @@ Gate H exits after the verified branch is merged, Pages serves the release, and 
 - local cloud browser cannot open `127.0.0.1:4173` (`net::ERR_BLOCKED_BY_CLIENT`); public Pages browser smoke remains part of release closure and is not yet claimed.
 
 ## Do not redo
-- Level1–8 released content;
+- all currently released content; resolve the released baseline dynamically from repository/release state rather than hard-coding a historical range;
 - Level8 retrospective analysis;
 - inherited roster/progression architecture;
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Commit and push the review fixes/state evidence, merge the verified branch, rerun on merged `main`, then verify public Pages `?devMenu=1` and normal Level8 victory → Level9.**
+**Complete the latest-`main` reconciliation, rerun affected/full verification, update PR #90, merge, then verify public Pages `?devMenu=1` and normal Level8 victory → Level9.**

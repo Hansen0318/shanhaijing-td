@@ -432,6 +432,20 @@ For a substantial session, update `STATE.md` before handoff or interruption even
 - If runtime evidence contradicts a canonical document, record the discrepancy in `STATE.md`, preserve the last known-good source, and resolve it explicitly before changing the spec.
 - Work handoffs should reference these files rather than restating large permanent context blocks.
 
+
+## Dynamic released-baseline rule
+
+Future-facing rules must **never hard-code a historical level range** such as `Level1–8`, `Level1–10`, etc. as the permanent comparison, regression, protection, or architecture baseline.
+
+For any new level or shared-system change:
+- resolve the **currently released / deployed / player-verified product baseline** from repository state at execution time;
+- every level already released at that time is part of the protected/reference baseline unless the concrete change impact proves a narrower regression scope is sufficient;
+- historical documents may state the exact released range that was true at that date; those historical ranges are evidence of past state, **not future-facing scope limits**;
+- instructions such as "do not redo old levels", "compare against released HUDs", "preserve prior behavior", and "run affected regressions" always refer to the dynamically resolved released baseline;
+- when a new level is released, the baseline automatically expands for all later development without requiring this rule to be rewritten.
+
+Use specific level numbers only when the rule genuinely concerns those particular levels as historical facts or explicitly scoped exceptions.
+
 ### Level closure
 
 When a level is fully released:
