@@ -78,7 +78,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   for (const state of ['level5', 'level6', 'level6wave1', 'sunlightA', 'sunlightB', 'jinwu1', 'jinwu2', 'jinwu25', 'level6victory', 'level6retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=asset-load-2/);
+  assert.match(smoke, /index\.html\?v=level9-1/);
 });
 
 test('dev menu and guarded direct controls include Level7 thunder, Kui phases, victory, and retry', async () => {
