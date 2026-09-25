@@ -4,22 +4,24 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **ASSET / VFX PLANNING**
+- Development phase: **FINAL FILESET / IMPLEMENTATION HANDOFF PREP**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE E — ASSET / VFX PLANNING**
+**GATE F — ASSET PRODUCTION / STATIC AUDIT — COMPLETE; HANDOFF PREP NEXT**
 
 ### Allowed now
-- classify each Level9 visual as reuse / PNG-first / Procedural-first / Hybrid;
-- freeze exact production asset inventory and filenames;
-- define phone-readability requirements for each gameplay VFX;
-- define Boss HUD source/runtime footprint contract;
-- define image-generation order/sub-batches;
-- mark only explicitly approved items as APPROVED_FOR_GENERATION.
+- reconcile/package the exact final approved Level9 files;
+- create final asset manifest/checksums and compact Work integration handoff;
+- include canonical background, geometry/reference overlay and relevant docs;
+- keep procedural VFX as implementation requirements, not image placeholders.
 
 ### Forbidden until gate exit
+- no production gameplay implementation in Chat;
+- no asset redesign/regeneration unless a concrete audit mismatch appears;
+- no geometry changes;
+- no Level1–8 changes.
 - no production gameplay implementation;
 - no Work implementation handoff;
 - no generated asset may be treated as final before player approval;
@@ -49,7 +51,7 @@
 - no Work implementation handoff.
 
 ### Gate exit condition
-`ASSETS.md` contains the exact final production inventory/classification, generation allowlist and acceptance criteria, with no unresolved asset-planning blocker.
+Final-fileset reconciliation and ZIP packaging complete with no missing/stale/unapproved files; then the minimal Work implementation handoff may begin.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -63,8 +65,7 @@
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- Gate E asset/VFX ledger is being finalized.
-- No character/Boss/HUD image has been player-approved yet.
+- none; five new PNGs are player-approved and static-audit PASS.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -81,7 +82,6 @@
 - clean 1024×1536 background registration PASS; runtime 780×1220 JPG candidate recorded with checksum; Gate D closed.
 
 ## Not completed
-- assets / VFX planning and production;
 - implementation;
 - engineering verification;
 - release;
@@ -102,4 +102,4 @@
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Gate E: review/freeze the exact Level9 asset and VFX inventory in `ASSETS.md`. After the inventory is approved, generate only the first approved sub-batch; do not start implementation yet.**
+**Create the Level9 final-fileset package/manifest from the exact approved files, then hand only the unresolved production integration + executable verification delta to Work.**
