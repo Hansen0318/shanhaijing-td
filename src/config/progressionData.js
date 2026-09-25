@@ -1,9 +1,9 @@
 import { LEVELS } from './gameData.js?v=level8-3';
 
 export const BASE_OWNED_ROSTER = Object.freeze(['bifang', 'fuzhu', 'yinglong']);
-export const UNLOCK_BY_LEVEL = Object.freeze({ 3: 'baize', 6: 'jumang', 8: 'xuangui' });
+export const UNLOCK_BY_LEVEL = Object.freeze({ 3: 'baize', 6: 'jumang', 8: 'xuangui', 9: 'dijiang' });
 export const BEAST_NAMES = Object.freeze({
-  bifang: '畢方', fuzhu: '夫諸', yinglong: '應龍', baize: '白澤', jumang: '句芒', xuangui: '玄龜',
+  bifang: '畢方', fuzhu: '夫諸', yinglong: '應龍', baize: '白澤', jumang: '句芒', xuangui: '玄龜', dijiang: '帝江',
 });
 export const PLAYABLE_LEVEL_IDS = Object.freeze(
   Object.keys(LEVELS).map(Number).sort((a, b) => a - b),

@@ -19,13 +19,13 @@ function assertCompletePngWithAlpha(bytes, id) {
   assert.equal(hasAlpha, true, `${id} must retain alpha transparency`);
 }
 
-test('art catalog exposes all 109 asset IDs and every file is deployable', async () => {
+test('art catalog exposes all 115 asset IDs and every file is deployable', async () => {
   assert.equal(existsSync(fileURLToPath(moduleUrl)), true, 'art asset catalog is missing');
   const { ART_ASSETS, assetUrl } = await import(moduleUrl);
   const entries = Object.entries(ART_ASSETS);
 
-  assert.equal(entries.length, 109);
-  assert.equal(new Set(entries.map(([, path]) => path)).size, 107, 'Jumang and Xuangui unlock/body pairs may share their approved paths');
+  assert.equal(entries.length, 115);
+  assert.equal(new Set(entries.map(([, path]) => path)).size, 113, 'Jumang and Xuangui unlock/body pairs may share their approved paths');
   assert.equal(ART_ASSETS.background, 'assets/backgrounds/bg_kunlun_gate_v1.jpg');
   assert.equal(ART_ASSETS.qiongqiFrenzy, 'assets/bosses/boss_qiongqi_frenzy_v1.png');
   assert.equal(ART_ASSETS.level2Background, 'assets/levels/level2/bg_chishui_wasteland_v1.jpg');
@@ -94,6 +94,21 @@ test('level-eight runtime candidates are exact, alpha-safe, mobile-sized, and st
   }
   for (const id of ['gudiao', 'huashe', 'huasheBossPanel', 'xuangui', 'xuanguiUnlock']) {
     assert.equal(LEVEL_DEFERRED_ART_IDS[8].includes(id), true, `${id} must remain deferred`);
+  }
+});
+
+test('level-nine audited art is staged for first paint and deferred combat use', async () => {
+  const { ART_ASSETS, LEVEL_REQUIRED_ART_IDS, LEVEL_DEFERRED_ART_IDS } = await import(moduleUrl);
+  assert.equal(ART_ASSETS.level9Background, 'assets/levels/level9/bg_zhongshan_extreme_night_v1.jpg');
+  for (const id of ['tiangou', 'zheng', 'zhulong', 'zhulongBossPanel', 'dijiangUnlock']) {
+    const bytes = await readFile(fileURLToPath(new URL(`../../${ART_ASSETS[id]}`, moduleUrl)));
+    assertCompletePngWithAlpha(bytes, id);
+  }
+  for (const id of ['slotPlatform', 'level9Background', 'bifang', 'fuzhu', 'yinglong', 'baize', 'jumang', 'xuangui', 'tiangou']) {
+    assert.equal(LEVEL_REQUIRED_ART_IDS[9].includes(id), true, `${id} must be ready for Level9 first paint`);
+  }
+  for (const id of ['zheng', 'zhulong', 'zhulongBossPanel', 'dijiangUnlock']) {
+    assert.equal(LEVEL_DEFERRED_ART_IDS[9].includes(id), true, `${id} must remain deferred`);
   }
 });
 

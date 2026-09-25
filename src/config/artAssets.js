@@ -108,6 +108,12 @@ export const ART_ASSETS = Object.freeze({
   huasheBossPanel: 'assets/ui/ui_boss_huashe_panel_v1.png',
   xuangui: 'assets/towers/tower_xuangui_v1.png',
   xuanguiUnlock: 'assets/towers/tower_xuangui_v1.png',
+  level9Background: 'assets/levels/level9/bg_zhongshan_extreme_night_v1.jpg',
+  tiangou: 'assets/enemies/enemy_tiangou_v1.png',
+  zheng: 'assets/enemies/enemy_zheng_v1.png',
+  zhulong: 'assets/bosses/boss_zhulong_v1.png',
+  zhulongBossPanel: 'assets/ui/ui_boss_zhulong_panel_v1.png',
+  dijiangUnlock: 'assets/ui/unlock_dijiang_v1.png',
 });
 
 // Inner channel geometry measured from each source panel, normalized after the
@@ -151,6 +157,7 @@ export const LEVEL_ART_IDS = Object.freeze({
   6: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'level6Background', 'yangyu', 'fusangjiashou', 'jinwu', 'yangyuSunboost', 'yangmuArmorOn', 'yangmuArmorBreak', 'jinwuSunshield', 'jinwuPhase2', 'sunlightZone', 'jinwuBossPanel', 'jumangUnlock']),
   7: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'jumang', 'level7Background', 'qinyuan', 'zhuhuai', 'kui', 'kuiBossPanel', 'jumangLeafblade']),
   8: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'jumang', 'level8Background', 'changyou', 'gudiao', 'huashe', 'huasheBossPanel', 'xuangui', 'xuanguiUnlock']),
+  9: Object.freeze([...SHARED_RUNTIME_ART_IDS, ...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_DEFERRED_UI_IDS, 'baize', 'jumang', 'xuangui', 'level9Background', 'tiangou', 'zheng', 'zhulong', 'zhulongBossPanel', 'dijiangUnlock']),
 });
 
 export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
@@ -162,6 +169,7 @@ export const LEVEL_REQUIRED_ART_IDS = Object.freeze({
   6: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'slotPlatform', 'level6Background', 'yangyu', 'sunlightZone']),
   7: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level7Background', 'qinyuan']),
   8: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'slotPlatform', 'level8Background', 'changyou']),
+  9: Object.freeze([...SHARED_FIRST_PAINT_UI_IDS, ...SHARED_BUILD_READY_ART_IDS, 'baize', 'jumang', 'xuangui', 'slotPlatform', 'level9Background', 'tiangou']),
 });
 
 export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
@@ -173,6 +181,7 @@ export const LEVEL_DEFERRED_ART_IDS = Object.freeze({
   6: Object.freeze(LEVEL_ART_IDS[6].filter(id => !LEVEL_REQUIRED_ART_IDS[6].includes(id))),
   7: Object.freeze(LEVEL_ART_IDS[7].filter(id => !LEVEL_REQUIRED_ART_IDS[7].includes(id))),
   8: Object.freeze(LEVEL_ART_IDS[8].filter(id => !LEVEL_REQUIRED_ART_IDS[8].includes(id))),
+  9: Object.freeze(LEVEL_ART_IDS[9].filter(id => !LEVEL_REQUIRED_ART_IDS[9].includes(id))),
 });
 
 export function assetUrl(id) {

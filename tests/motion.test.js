@@ -289,6 +289,12 @@ test('Level8 units and Xuangui use distinct shared Motion Lite profiles', () => 
   assert.ok(UNIT_MOTION_CONFIG.towers.xuangui.recoilPixels > 0);
 });
 
+test('Level9 enemies and Zhulong inherit distinct shared Motion Lite profiles', () => {
+  assert.deepEqual(UNIT_MOTION_CONFIG.enemies.tiangou, { bobPixels: 2.8, bobHz: 2.75, deathSeconds: 0.18 });
+  assert.deepEqual(UNIT_MOTION_CONFIG.enemies.zheng, { bobPixels: 1.4, bobHz: 0.9, stridePixels: 1.2, strideHz: 0.9, idleScale: 0.018, idleHz: 0.9, hitRecoilPixels: 2.8, deathSeconds: 0.24 });
+  assert.deepEqual(UNIT_MOTION_CONFIG.enemies.zhulong.phases[2], { idleScale: 0.045, idleHz: 0.92, bobPixels: 2.6, bobHz: 1.05 });
+});
+
 test('first-level enemy hit and death visuals use configured durations', () => {
   const game = new Game(() => 0, 1);
   for (const [type, expectedDeath] of [['minion', 0.18], ['swift', 0.16], ['giant', 0.22]]) {
