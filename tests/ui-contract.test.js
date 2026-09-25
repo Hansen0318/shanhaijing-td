@@ -78,7 +78,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   for (const state of ['level5', 'level6', 'level6wave1', 'sunlightA', 'sunlightB', 'jinwu1', 'jinwu2', 'jinwu25', 'level6victory', 'level6retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level9-1/);
+  assert.match(smoke, /index\.html\?v=asset-load-2/);
 });
 
 test('dev menu and guarded direct controls include Level7 thunder, Kui phases, victory, and retry', async () => {
@@ -96,7 +96,7 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   for (const state of ['level7', 'level7wave1', 'thunderA', 'thunderB', 'kui1', 'kui2', 'kui25', 'level7victory', 'level7retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level9-1/);
+  assert.match(smoke, /index\.html\?v=asset-load-2/);
 });
 
 test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory, and retry', async () => {
@@ -150,21 +150,21 @@ test('entry and style cache versions are fresh for this release', async () => {
   const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
   const progression = await readFile(new URL('../src/config/progressionData.js', import.meta.url), 'utf8');
   for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css']) {
-    assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=level9-1`));
+    assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=asset-load-2`));
   }
-  assert.match(html, /src\/main\.js\?v=level9-1/);
-  assert.match(main, /Game\.js\?v=level9-1/);
-  assert.match(main, /Renderer\.js\?v=level9-1/);
-  assert.match(main, /UIController\.js\?v=level9-1/);
-  for (const module of ['artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=level9-1`));
-  for (const module of ['gameData', 'BossSystem', 'TideSystem', 'DayNightSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
+  assert.match(html, /src\/main\.js\?v=asset-load-2/);
+  assert.match(main, /Game\.js\?v=asset-load-2/);
+  assert.match(main, /Renderer\.js\?v=asset-load-2/);
+  assert.match(main, /UIController\.js\?v=asset-load-2/);
+  for (const module of ['artAssets', 'LevelEightDev']) assert.match(main, new RegExp(`${module}\\.js\\?v=asset-load-2`));
+  for (const module of ['gameData', 'BossSystem', 'TideSystem', 'DayNightSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=asset-load-2`));
   for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
-    assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
+    assert.match(game, new RegExp(`${module}\\.js\\?v=asset-load-2`));
   }
-  assert.match(enemy, /StatusSystem\.js\?v=level9-1/);
-  assert.match(projectile, /CombatSystem\.js\?v=level9-1/);
-  assert.match(projectile, /StatusSystem\.js\?v=level9-1/);
-  assert.match(progression, /gameData\.js\?v=level9-1/);
+  assert.match(enemy, /StatusSystem\.js\?v=asset-load-2/);
+  assert.match(projectile, /CombatSystem\.js\?v=asset-load-2/);
+  assert.match(projectile, /StatusSystem\.js\?v=asset-load-2/);
+  assert.match(progression, /gameData\.js\?v=asset-load-2/);
 });
 
 test('context panel is not rebuilt when its state signature is unchanged', () => {
