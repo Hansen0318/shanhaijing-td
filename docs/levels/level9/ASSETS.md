@@ -33,11 +33,11 @@
 
 | ID | Proposed filename | Subject | Classification | Status | Requirements |
 |---|---|---|---|---|---|
-| L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FINAL | 512×365 RGBA; 138,441 bytes; SHA-256 `8f00d39cd242ffb7be8e279b96bb86dd2fe74329c1ca21a0073c5ef7010ffa2b`; simplified white-head/charcoal/red blocks; phone-readable |
-| L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FINAL | 512×382 RGBA; 160,089 bytes; SHA-256 `aab0d8e90decd535b74912f6f946472fa085b5d7f7a2da7ca00c329c1cea7680`; red heavy feline / five-tail / single-horn silhouette |
-| L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FINAL | 640×445 RGBA; 271,978 bytes; SHA-256 `e9aab92330528ca99048fe2b2944eaf96733f307f836775a24e067b37d7390d9`; simplified red/black/ivory blocks; no baked aura/state tint |
-| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | APPROVED_FINAL | 1152×324 RGBA; 264,018 bytes; SHA-256 `eddea739a9a2f661baf1910965fc7a14348a097f7408871a93e7e7d1cff36960`; fixed 44px runtime slot; upper-center name reserve + one middle/lower empty HP channel; no baked text/fill |
-| L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FINAL | 512×375 RGBA; 166,729 bytes; SHA-256 `3813ae7912511c94eb53a5546923d43a9b21325f700bbe778196a51a80764cc2`; simplified unlock-only presentation, not Level9 playable tower art |
+| L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 512×365 RGBA; 138,441 bytes; SHA-256 `8f00d39cd242ffb7be8e279b96bb86dd2fe74329c1ca21a0073c5ef7010ffa2b`; simplified white-head/charcoal/red blocks; phone-readable |
+| L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 512×382 RGBA; 160,089 bytes; SHA-256 `aab0d8e90decd535b74912f6f946472fa085b5d7f7a2da7ca00c329c1cea7680`; red heavy feline / five-tail / single-horn silhouette |
+| L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 640×445 RGBA; 271,978 bytes; SHA-256 `e9aab92330528ca99048fe2b2944eaf96733f307f836775a24e067b37d7390d9`; simplified red/black/ivory blocks; no baked aura/state tint |
+| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 1152×324 RGBA; 264,018 bytes; SHA-256 `eddea739a9a2f661baf1910965fc7a14348a097f7408871a93e7e7d1cff36960`; fixed 44px runtime slot; upper-center name reserve + one middle/lower empty HP channel; no baked text/fill |
+| L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 512×375 RGBA; 166,729 bytes; SHA-256 `3813ae7912511c94eb53a5546923d43a9b21325f700bbe778196a51a80764cc2`; simplified unlock-only presentation, not Level9 playable tower art |
 
 ## C. Gameplay VFX — no static image unless runtime evidence fails
 
@@ -113,3 +113,18 @@ Before Work implementation:
 - The previously generated two-large-box HUD concepts are **REJECTED / SUPERSEDED**.
 - The latest player-accepted HUD with a small upper-center name reserve and one long central/lower empty HP channel is the canonical visual direction for `L9-A013`.
 - Final exact file still enters the final-fileset audit later; visual approval does not bypass dimensions/alpha/checksum reconciliation.
+
+
+## I. Level9 handoff packaging correction — 2026-09-25
+- The previously created Level9 ZIP was produced too early and is **INVALID FOR WORK HANDOFF**.
+- Reason: the permanent Final Fileset rule requires the player to re-upload the exact accepted/downloaded final files before Chat may claim FINAL FILESET AUDIT PASS or create the implementation ZIP.
+- Visual approval of an image in Chat is not equivalent to proof that the exact player-held file is the packaged source.
+- After re-upload, Chat must compare the concrete files against this ledger, then create runtime candidates/checksums.
+- Handoff structure should follow the established prior-level convention:
+  - `source/` = player's exact re-uploaded approved source files;
+  - `runtime_candidates/` = Chat-normalized/optimized integration copies;
+  - `reference/` = geometry/registration evidence only when needed, never runtime assets;
+  - `ASSET_MANIFEST.json`;
+  - `SHA256SUMS.txt`;
+  - `WORK_INTEGRATION_PROMPT.txt`.
+- Work receives only the irreducible production integration/tests/release delta after Chat finishes all static preparation.

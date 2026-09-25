@@ -6,7 +6,7 @@
 - Latest `main` takeover baseline: `6070b4592aac70eb9e39586b72eee81fc073647b` (all-future-level guardrails merged).
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
-- Current gate: **Gate F COMPLETE — FINAL FILESET / WORK HANDOFF PREP**.
+- Current gate: **Gate F — FINAL FILESET AUDIT / PLAYER RE-UPLOAD PENDING**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - Level1–8 remain frozen; do not redo them unless a Level9 shared-system change creates an identified regression risk.
@@ -19,10 +19,18 @@
 - Final registered geometry supersedes Guide V1: Spawn **(39,68)**, Base **(343,516)**, shrine anchor **(203,251)**, T1–T8 **(125,106), (264,142), (292,233), (352,333), (216,324), (106,250), (88,374), (288,461)**; full corrected path is canonical in `docs/levels/level9/GEOMETRY.md`.
 - Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
 - Gate D CLOSED: player-approved registered 390×610 geometry + clean 1024×1536 background; runtime candidate `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 539,574 bytes / SHA-256 `c7efc42eeca17c494d6b53c551ad0fc6e783358dc221409730ea3ff0ec5fee99`.
-- Gate E/F complete: five new PNGs sequentially player-approved and static-audit PASS; exact dimensions/bytes/SHA-256 frozen in `docs/levels/level9/ASSETS.md`. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
+- Gate E visual decisions complete: five new PNGs were sequentially player-approved. **Gate F is not complete** because the exact player-downloaded final source files have not yet been re-uploaded/reconciled. Existing dimensions/bytes/SHA-256 are provisional working-copy data only. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
 - Next exact step: **final-fileset package + minimal Work implementation handoff only; no more image generation unless audit finds a concrete mismatch.**
 - Production implementation remains forbidden until later gates.
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
+
+## 2026-09-25：Level9 final-fileset correction
+
+- The previously generated Level9 ZIP is **INVALID FOR WORK HANDOFF** and must not be used.
+- Root cause: Chat packaged generated working copies before the required player final-file re-upload audit.
+- Permanent rule reaffirmed: player re-uploads the exact accepted files → Chat verifies exact identity/role/format/dimensions/alpha/checksum → Chat completes all remaining static preparation → only then builds the minimal Work ZIP.
+- Established handoff structure from prior levels: `source/`, `runtime_candidates/`, optional `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`.
+- Next exact step: **player re-uploads the exact accepted Level9 final files; Chat performs FINAL FILESET AUDIT.**
 
 ---
 
