@@ -23,6 +23,16 @@
 - Next exact step: **player performs physical-phone visual smoke; engineering resumes only for a concrete defect.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-25：Global asset-loading reliability hotfix
+
+- Player physical-phone smoke exposed a shared release defect: multiple levels waited a long time, then displayed fallback battlefield art and `?` lineup placeholders.
+- Repository inspection confirmed the referenced background/tower assets exist; this was not a missing-file handoff problem.
+- Root cause in shared loader: `image.onerror` immediately counted as settled with no retry; large decorative UI frames also participated in the blocking ArtStore gate.
+- PR #92 merged at `9608d264b629041943f1966dd0193fafe3de5b6a`.
+- Shared fix: bounded 3-attempt image retry, minimal state-specific blocking sets, deferred/background preload for non-first-paint art, next-level required-art prefetch at victory, terminal failed IDs exposed in load metrics, cache identity bumped to `asset-load-2`.
+- No gameplay/balance/progression/geometry/asset-identity changes.
+- Player must repeat physical-phone smoke after Pages refresh; representative acceptance is Level1 preparation + one lineup level + Level9. No need to replay every wave/level if those shared-path checks pass.
+
 ## 2026-09-25：Level9 production implementation / Gate H engineering PASS
 
 - PR #90 merged to `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847`.
