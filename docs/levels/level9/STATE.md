@@ -4,16 +4,18 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **FINAL FILESET / IMPLEMENTATION HANDOFF PREP**
+- Development phase: **FINAL FILESET RE-UPLOAD AUDIT**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE F — ASSET PRODUCTION / STATIC AUDIT — COMPLETE; HANDOFF PREP NEXT**
+**GATE F — FINAL FILESET AUDIT — PLAYER RE-UPLOAD PENDING**
 
 ### Allowed now
-- reconcile/package the exact final approved Level9 files;
-- create final asset manifest/checksums and compact Work integration handoff;
+- receive the player's exact re-uploaded final Level9 source files;
+- reconcile those concrete files against the approved visual decisions;
+- verify role/version/format/dimensions/alpha/checksum;
+- only after FINAL FILESET AUDIT PASS, create optimized runtime candidates and the compact Work ZIP;
 - include canonical background, geometry/reference overlay and relevant docs;
 - keep procedural VFX as implementation requirements, not image placeholders.
 
@@ -51,7 +53,7 @@
 - no Work implementation handoff.
 
 ### Gate exit condition
-Final-fileset reconciliation and ZIP packaging complete with no missing/stale/unapproved files; then the minimal Work implementation handoff may begin.
+Player re-uploads the exact accepted final files; Chat verifies the concrete sources and produces a FINAL FILESET AUDIT PASS. Only then may Chat build the minimal Work ZIP.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -65,7 +67,7 @@ Final-fileset reconciliation and ZIP packaging complete with no missing/stale/un
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- none; five new PNGs are player-approved and static-audit PASS.
+- **Blocker:** exact player-downloaded final source files have not yet been re-uploaded and reconciled. Visual approval exists, but final-file identity is not yet proven.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -102,4 +104,4 @@ Final-fileset reconciliation and ZIP packaging complete with no missing/stale/un
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Create the Level9 final-fileset package/manifest from the exact approved files, then hand only the unresolved production integration + executable verification delta to Work.**
+**Player re-uploads the exact accepted Level9 final files. Chat then performs FINAL FILESET AUDIT; only after PASS may Chat build the minimal Work handoff ZIP.**
