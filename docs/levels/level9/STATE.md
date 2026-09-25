@@ -4,20 +4,17 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **FINAL FILESET RE-UPLOAD AUDIT**
+- Development phase: **PRODUCTION IMPLEMENTATION HANDOFF READY**
 - Production implementation: **NOT STARTED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE F — FINAL FILESET AUDIT — PLAYER RE-UPLOAD PENDING**
+**GATE F — FINAL FILESET AUDIT COMPLETE / GATE G HANDOFF READY**
 
 ### Allowed now
-- receive the player's exact re-uploaded final Level9 source files;
-- reconcile those concrete files against the approved visual decisions;
-- verify role/version/format/dimensions/alpha/checksum;
-- only after FINAL FILESET AUDIT PASS, create optimized runtime candidates and the compact Work ZIP;
-- include canonical background, geometry/reference overlay and relevant docs;
-- keep procedural VFX as implementation requirements, not image placeholders.
+- use the audited `shanhaijing_td_level9_minimal_handoff.zip` for Work production integration;
+- Work may perform only the irreducible execution-environment delta listed in `WORK_INTEGRATION_PROMPT.txt`;
+- update implementation branch/SHA/test/release state as Work progresses.
 
 ### Forbidden until gate exit
 - no production gameplay implementation in Chat;
@@ -53,7 +50,7 @@
 - no Work implementation handoff.
 
 ### Gate exit condition
-Player re-uploads the exact accepted final files; Chat verifies the concrete sources and produces a FINAL FILESET AUDIT PASS. Only then may Chat build the minimal Work ZIP.
+Gate F is satisfied. Gate G exits only when production implementation is integrated and the required engineering verification is complete.
 
 ## Confirmed / approved
 - Gate A progression/scope is frozen from inherited campaign rules.
@@ -67,7 +64,7 @@ Player re-uploads the exact accepted final files; Chat verifies the concrete sou
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- **Blocker:** exact player-downloaded final source files have not yet been re-uploaded and reconciled. Visual approval exists, but final-file identity is not yet proven.
+- none for final fileset; all six player re-uploaded source files have been reconciled.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -81,21 +78,30 @@ Player re-uploads the exact accepted final files; Chat verifies the concrete sou
 - Gameplay Geometry Guide V1 defined and static-check PASS;
 - player corrected the route against the background;
 - final registered path / Spawn / Base / T1–T8 / celestial anchor measured into 390×610 logical coordinates and player-approved;
-- clean 1024×1536 background registration PASS; runtime 780×1220 JPG candidate recorded with checksum; Gate D closed.
+- clean 1024×1536 background registration PASS; runtime 780×1220 JPG candidate recorded; Gate D closed.
+- player re-uploaded all six exact accepted Level9 source files;
+- exact uploaded-byte audit PASS;
+- exact re-uploaded background re-registration PASS against the canonical 390×610 path / Spawn / Base / T1–T8 / shrine anchor;
+- Chat-side conversion/optimization complete: five runtime RGBA PNG assets + one 780×1220 JPG background;
+- minimal Work handoff ZIP built with `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`;
+- handoff ZIP SHA-256 `d09e5d2f052da0ee7da16485a809487b9108bad3efbf37705e67733b18a6322e`.
 
 ## Not completed
-- implementation;
+- production implementation;
 - engineering verification;
 - release;
 - player smoke.
 
 ## Current branch / SHA
-- active documentation branch: `docs/level9-geometry-guide-v1-hardrule-20260925`
-- branch base: `2d5e8f647e36369c95e3c4371223d02eaab61549`
+- canonical docs branch for this final-audit closure: `docs/level9-final-reupload-pass-20260925`.
+- production implementation branch: **not started yet**.
 
 ## Verification status
-- documentation-only initialization; no production code changed.
-- no gameplay/browser tests required for this initialization step.
+- Chat-side Final Fileset Audit: **PASS**.
+- exact user-uploaded source bytes recorded in `ASSETS.md`.
+- runtime candidates decode PASS; monster/Boss/unlock/HUD candidates are RGBA with real transparency; background is optimized JPG.
+- deterministic registration check against the exact re-uploaded background: **PASS**.
+- no production gameplay code has changed yet; executable tests belong to Gate G Work.
 
 ## Do not redo
 - Level1–8 released content;
@@ -104,4 +110,4 @@ Player re-uploads the exact accepted final files; Chat verifies the concrete sou
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Player re-uploads the exact accepted Level9 final files. Chat then performs FINAL FILESET AUDIT; only after PASS may Chat build the minimal Work handoff ZIP.**
+**Hand the audited `shanhaijing_td_level9_minimal_handoff.zip` to Work. Work must do only the remaining production integration + executable verification/release delta.**
