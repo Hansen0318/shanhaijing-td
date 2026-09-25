@@ -1,7 +1,7 @@
 # Level9 — Asset / VFX Ledger
 
 ## Status
-**GATE E — PLAYER REVIEW / INVENTORY PROPOSAL**
+**GATE F — FINAL FILESET AUDIT PASS / GATE G HANDOFF READY**
 
 ## Generation status vocabulary
 - APPROVED_FOR_GENERATION
@@ -33,11 +33,11 @@
 
 | ID | Proposed filename | Subject | Classification | Status | Requirements |
 |---|---|---|---|---|---|
-| L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 512×365 RGBA; 138,441 bytes; SHA-256 `8f00d39cd242ffb7be8e279b96bb86dd2fe74329c1ca21a0073c5ef7010ffa2b`; simplified white-head/charcoal/red blocks; phone-readable |
-| L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 512×382 RGBA; 160,089 bytes; SHA-256 `aab0d8e90decd535b74912f6f946472fa085b5d7f7a2da7ca00c329c1cea7680`; red heavy feline / five-tail / single-horn silhouette |
-| L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 640×445 RGBA; 271,978 bytes; SHA-256 `e9aab92330528ca99048fe2b2944eaf96733f307f836775a24e067b37d7390d9`; simplified red/black/ivory blocks; no baked aura/state tint |
-| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 1152×324 RGBA; 264,018 bytes; SHA-256 `eddea739a9a2f661baf1910965fc7a14348a097f7408871a93e7e7d1cff36960`; fixed 44px runtime slot; upper-center name reserve + one middle/lower empty HP channel; no baked text/fill |
-| L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | PLAYER_APPROVED / FINAL_SOURCE_REUPLOAD_PENDING | 512×375 RGBA; 166,729 bytes; SHA-256 `3813ae7912511c94eb53a5546923d43a9b21325f700bbe778196a51a80764cc2`; simplified unlock-only presentation, not Level9 playable tower art |
+| L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FINAL | runtime 512×364 RGBA; 149,653 bytes; SHA-256 `d0f8b77457a2d55f3c225ec14d268ac74838bc9f10cede9ddc1da8c2f586cc55`; exact re-upload source recorded below |
+| L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FINAL | runtime 512×376 RGBA; 184,120 bytes; SHA-256 `330cbaae04bd40ed2952f1af45e5fbe152fe0f3ef1d5ea33b7eadb4539960b61`; exact re-upload source recorded below |
+| L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FINAL | runtime 640×442 RGBA; 324,156 bytes; SHA-256 `9e152e176cbd6ff2da90d6e735d77479fe13244553dee903b30fc4f6446984ee`; exact re-upload source recorded below |
+| L9-A013 | `ui_boss_zhulong_panel_v1.png` | 燭龍 Boss HUD frame | PNG-first | APPROVED_FINAL | runtime 1152×308 RGBA; 273,070 bytes; SHA-256 `d5ba9f32fd2c5f5060c252f684c20e8e50212ccb6ee4ae97720a8972d7030ab6`; fixed 44px runtime slot |
+| L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FINAL | runtime 512×382 RGBA; 196,178 bytes; SHA-256 `4234e1b087399e9886e51cd44f77855d58ed074f9e7c825b4adc16c9f067591a`; unlock-only presentation |
 
 ## C. Gameplay VFX — no static image unless runtime evidence fails
 
@@ -94,13 +94,14 @@ Before Work implementation:
 5. only after **FINAL FILESET AUDIT PASS** may Chat produce the minimal Work ZIP.
 
 ## Gate E / Gate F closure
-- Player approved the complete five-image inventory and each image sequentially.
-- Final static audit PASS: all five production PNGs are RGBA with real transparency; phone-scale silhouette audit passed; HUD 390×44 footprint preview remained readable.
-- Procedural-first decisions for 晝夜 / enemy state cues / 燭龍 P2 / Motion Lite remain frozen as code requirements rather than fake PNGs.
 - Gate E inventory planning is CLOSED.
-- Gate F asset production/static audit is COMPLETE.
-- Exact final file identities/dimensions/byte sizes/checksums above are the canonical final-fileset contract for packaging.
-
+- Player approved each required image sequentially.
+- Player re-uploaded all six concrete final source files.
+- FINAL FILESET AUDIT PASS against those exact uploaded bytes.
+- Chat-side transparent-PNG conversion, trimming/resizing/optimization, background-JPG conversion, checksum generation and registration recheck are complete.
+- Procedural-first decisions for 晝夜 / enemy state cues / 燭龍 P2 / Motion Lite remain frozen as code requirements rather than fake PNGs.
+- Gate F is COMPLETE.
+- Gate G production implementation handoff is now valid.
 
 ## H. Level9 Boss HUD runtime-alignment decision — FROZEN
 - The accepted 燭龍 HUD direction follows the shared runtime overlay architecture rather than artwork-only layout.
@@ -112,7 +113,7 @@ Before Work implementation:
 - Decorative dragon/flame shapes must stay outside the practical text/track read zones.
 - The previously generated two-large-box HUD concepts are **REJECTED / SUPERSEDED**.
 - The latest player-accepted HUD with a small upper-center name reserve and one long central/lower empty HP channel is the canonical visual direction for `L9-A013`.
-- Final exact file still enters the final-fileset audit later; visual approval does not bypass dimensions/alpha/checksum reconciliation.
+- Final exact HUD source was re-uploaded and reconciled in Section J; dimensions/alpha/checksum audit is complete.
 
 
 ## I. Level9 handoff packaging correction — 2026-09-25
@@ -128,3 +129,37 @@ Before Work implementation:
   - `SHA256SUMS.txt`;
   - `WORK_INTEGRATION_PROMPT.txt`.
 - Work receives only the irreducible production integration/tests/release delta after Chat finishes all static preparation.
+
+
+## J. Exact player re-upload audit — FINAL FILESET AUDIT PASS
+
+The six files below are the exact player re-uploaded attachments used as the final source-of-truth for packaging:
+
+| Role | Exact uploaded filename | Format / dimensions | Bytes | SHA-256 |
+|---|---|---:|---:|---|
+| 天狗 | `F171A2C9-332B-4550-9E5C-60EFE89D31DD.jpeg` | JPEG RGB 1536×1024 | 237,533 | `3865f2e0e6db43de0e922117358c5fdee919160d15c6161d8025a0bd272c156c` |
+| 猙 | `A8380094-1B6D-461A-963F-66910DC06A44.jpeg` | JPEG RGB 1536×1024 | 282,834 | `d642fe61dce08f2fb21ea84d075eeaefeb1c0a418c455069051ff3cea0d7d040` |
+| 燭龍 | `F2DD871A-D2E5-4454-92D5-523A58553EB0.jpeg` | JPEG RGB 1536×1024 | 407,416 | `4011d35f729e16bf84f4f7ea0240978f96767a026646fd6189182ed7132b2392` |
+| 燭龍 HUD | `042B5FE8-70D0-405D-A5B6-BA42C6265785.png` | PNG RGBA 2172×724 | 832,929 | `7109c77c05e616039d22339de95eb74bae182e329401c46f16ff75adc8419e4f` |
+| 帝江 unlock | `775EBE9E-4F5C-4C54-8F8D-BB268ECB2C29.jpeg` | JPEG RGB 1536×1024 | 323,067 | `35b5a8cbebd3d79a00729960dbcf907a5c5518d7e7b62efd08c8544591d24dd4` |
+| Level9 background | `EA953F84-13E0-47B5-8489-52FDD8F12788.jpeg` | JPEG RGB 1024×1536 | 996,503 | `525202e10eec34f0a54c1ac477c9a6302ca5f0a31a1306d92f5a7304bdc43324` |
+
+Chat-owned runtime preparation completed:
+- four JPEG character/unlock sources were background-removed and converted to transparent RGBA PNG;
+- HUD retained source alpha and was cropped/normalized without redesign;
+- background was resized/optimized to `780×1220` JPG;
+- exact re-uploaded background was rechecked with canonical geometry and registration PASS;
+- all runtime candidates decode successfully;
+- procedural-first effects remain code requirements and no redundant VFX PNGs were added.
+
+Runtime background:
+- `bg_zhongshan_extreme_night_v1.jpg`
+- 780×1220 RGB
+- 516,931 bytes
+- SHA-256 `bab355fb7c323f8d150e4bb55237f9cd63dfccb50c36622262300d1473c179ec`
+
+Valid Work handoff:
+- filename: `shanhaijing_td_level9_minimal_handoff.zip`
+- SHA-256: `d09e5d2f052da0ee7da16485a809487b9108bad3efbf37705e67733b18a6322e`
+- structure: `source/`, `runtime_candidates/`, `reference/`, `ASSET_MANIFEST.json`, `SHA256SUMS.txt`, `WORK_INTEGRATION_PROMPT.txt`
+- the earlier premature Level9 ZIP remains **INVALID / SUPERSEDED**.
