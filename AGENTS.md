@@ -739,12 +739,30 @@ Approval of one creature does not approve adjacent creatures, Boss HUDs, project
 
 For every Boss HUD source asset:
 - reserve a distinct **Boss-name panel above the health channel**; the runtime writes the Boss name there;
-- the name panel may use a dark solid or near-solid fill so the existing yellow Boss-name text stays readable over bright maps/VFX;
+- the name panel may use a dark solid or near-solid fill so the existing Boss-name text stays readable over bright maps/VFX;
 - keep the health channel itself visually separate and empty; runtime HP remains the only dynamic fill;
+- **do not guess the visual slot placement from the artwork alone**. Before asset approval, inspect the actual runtime contract in `index.html`, `styles.css`, `UIController` and `BOSS_HUD_GEOMETRY`;
+- the current shared runtime contract uses a fixed **44 px Boss slot height**. The Boss name is program text in the upper center (`top: 2px; left: 20%; width: 60%`), while the HP track is a separate runtime rectangle positioned in the middle/lower portion by `BOSS_HUD_GEOMETRY`;
+- therefore source art must visually support **one upper-center name reserve + one middle/lower empty HP channel**, both inside the same fixed outer HUD footprint. Do not create two large independent stacked boxes;
+- compare the proposed source aspect ratio against a released HUD before approval. A released reference is Level7 夔 at **1152×351 (~3.28:1)**; use an equivalent wide/flat footprint unless a layout change is explicitly approved;
+- keep decorative Boss art away from the reserved runtime name/track rectangles so program text/fill remains readable and centered;
 - do **not** increase the HUD's overall runtime footprint merely to add the name panel if the existing Boss-HUD container can accommodate it;
-- prefer integrating the name panel inside the same fixed HUD image/container height so battlefield/map height is not compressed;
+- prefer integrating the name reserve inside the same fixed HUD image/container height so battlefield/map height is not compressed;
 - any HUD source-art redesign must preserve the established runtime outer bounds/aspect contract unless a layout change is explicitly approved;
 - if a proposed HUD would require a taller runtime container or shift the battlefield, stop and treat that as a player-visible layout change rather than a cosmetic asset edit.
+
+### Boss HUD approval preflight
+
+Before calling a Boss HUD image `PLAYER_APPROVED` / `APPROVED_FINAL`, verify all of the following:
+1. source aspect is consistent with a released Boss HUD;
+2. intended runtime box remains the shared 44 px slot;
+3. upper-center runtime Boss-name rectangle is visually unobstructed;
+4. the intended `BOSS_HUD_GEOMETRY` HP track lands inside the visible empty channel;
+5. HP text remains readable within/adjacent to that track;
+6. no baked Boss name, HP fill, HP number, or debug marker exists in the PNG;
+7. no extra vertical height or battlefield compression is introduced.
+
+When generating a new HUD, the source art is a **frame/background for runtime overlays**, not the final composed HUD screenshot.
 
 This rule applies project-wide to future Boss HUDs unless the player explicitly changes the UI contract.
 
