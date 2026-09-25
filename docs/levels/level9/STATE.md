@@ -59,13 +59,8 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - Level8 retrospective guardrails apply to Level9 geometry, Boss timeline, HUD footprint, Motion Lite/readability, and visual-integration preflight.
 
 ## Current proposals — not yet frozen
-- Gameplay Geometry Guide V1 is defined and statically validated:
-  - Spawn **(20,70)**
-  - Base **(375,550)**
-  - T1–T8 = **(110,150), (250,95), (285,265), (375,365), (230,330), (165,300), (90,410), (330,430)**
-  - central 晝夜 anchor **(220,260)**
-  - road width **54**
-- The exact production background and registration overlay remain pending.
+- clean runtime-background cleanup is still pending; it must preserve the player-approved registered geometry.
+- Motion Lite anchors remain pending final clean background.
 
 ## Completed
 - zero-context takeover from latest `main`;
@@ -76,10 +71,12 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - Gate B core design approved and frozen: 鐘山極夜 / 天狗・猙 / 燭龍 / 晝夜輪轉 / 帝江 / state-reading difficulty;
 - Gate C numerical/gameplay contract approved and frozen, including 玄龜 first-playable verification and exact W1–W10/Boss timeline;
 - Gate D map concept approved;
-- Gameplay Geometry Guide V1 defined and static-check PASS.
+- Gameplay Geometry Guide V1 defined and static-check PASS;
+- player corrected the route against the background;
+- final registered path / Spawn / Base / T1–T8 / celestial anchor measured into 390×610 logical coordinates and player-approved.
 
 ## Not completed
-- production background / geometry;
+- clean production-background candidate preserving the approved registration;
 - assets / VFX planning and production;
 - implementation;
 - engineering verification;
@@ -101,4 +98,4 @@ Exact production background + transform + player-approved overlay exist, and `GE
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Create the Level9 production background from Gameplay Geometry Guide V1. The road/pads/shrine must follow the guide. Then register that exact image to 390×610 and overlay the unchanged guide for player approval before final geometry freeze.**
+**Create/retain the clean Level9 runtime background without debug labels/route graphics while preserving the approved composition. Overlay the final `GEOMETRY.md` coordinates deterministically; if registration remains matched, Gate D can close and advance to Gate E asset/VFX planning.**
