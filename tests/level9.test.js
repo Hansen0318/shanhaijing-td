@@ -8,6 +8,9 @@ import { ART_ASSETS } from '../src/config/artAssets.js';
 import { ENEMY_VISUALS, minimumEnemyPathSpacing } from '../src/config/enemyVisuals.js';
 import { UNIT_MOTION_CONFIG } from '../src/config/motionData.js';
 import { Game } from '../src/core/Game.js';
+import { CombatSystem } from '../src/systems/CombatSystem.js';
+import { BossSystem } from '../src/systems/BossSystem.js';
+import { DayNightSystem } from '../src/systems/DayNightSystem.js';
 import { WaveManager } from '../src/systems/WaveManager.js';
 
 const expectedWaypoints = [
@@ -92,4 +95,94 @@ test('Level9 runtime assets match the audited v2 files', async () => {
     assert.equal(body.length, bytes);
     assert.equal(createHash('sha256').update(body).digest('hex'), sha256);
   }
+});
+
+test('Level9 normal combat telegraphs at 7.2s and switches at 8.0s', () => {
+  const game = new Game(() => 0.2, 9);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.wave.active = true;
+  game.wave.spawnedAlive = 1;
+  game.spawnEnemy('zheng');
+  for (let step = 0; step < 71; step += 1) game.update(0.1);
+  assert.equal(game.dayNight.state, 'day');
+  assert.equal(game.dayNight.telegraph, false);
+  game.update(0.1);
+  assert.equal(game.dayNight.telegraph, true);
+  assert.equal(game.effects.filter(effect => effect.type === 'dayNightTelegraph').length, 1);
+  for (let step = 0; step < 8; step += 1) game.update(0.1);
+  assert.equal(game.dayNight.state, 'night');
+  assert.equal(game.dayNight.telegraph, false);
+  assert.equal(game.effects.filter(effect => effect.type === 'dayNightSwitch').length, 1);
+});
+
+test('Tiangou receives exactly 1.20 movement speed only in daylight', () => {
+  const daylight = new Game(() => 0.2, 9).spawnEnemy('tiangou');
+  daylight.dayNightState = 'day';
+  daylight.update(1);
+  assert.equal(daylight.pathDistance, 108);
+
+  const night = new Game(() => 0.2, 9).spawnEnemy('tiangou');
+  night.dayNightState = 'night';
+  night.update(1);
+  assert.equal(night.pathDistance, 90);
+});
+
+test('Zheng night armor mitigates direct attacks but not AoE or DoT', () => {
+  const enemy = new Game(() => 0.2, 9).spawnEnemy('zheng');
+  enemy.dayNightState = 'night';
+  assert.equal(CombatSystem.resolveDamage(100, enemy, { damageKind: 'direct' }), 82);
+  assert.equal(CombatSystem.resolveDamage(100, enemy, { damageKind: 'aoe' }), 100);
+  assert.equal(CombatSystem.resolveDamage(100, enemy, { damageKind: 'dot' }), 100);
+  enemy.dayNightState = 'day';
+  assert.equal(CombatSystem.resolveDamage(100, enemy, { damageKind: 'direct' }), 100);
+});
+
+test('Zhulong forces daylight and controls exact P1/P2 switch cadence', () => {
+  const game = new Game(() => 0.2, 9);
+  game.wave.waveNumber = 10;
+  game.dayNight.state = 'night';
+  game.dayNight.elapsed = 4;
+  const boss = game.spawnEnemy('zhulong');
+  assert.deepEqual(game.dayNight, { state: 'day', elapsed: 0, telegraph: false, switchInterval: 6, bossControlled: true });
+
+  DayNightSystem.update(game, 5.19);
+  assert.equal(game.dayNight.telegraph, false);
+  DayNightSystem.update(game, 0.01);
+  assert.equal(game.dayNight.telegraph, true);
+  DayNightSystem.update(game, 0.8);
+  assert.equal(game.dayNight.state, 'night');
+
+  boss.hp = boss.maxHp * 0.5;
+  const events = BossSystem.update(boss, 0);
+  assert.deepEqual(events, [{ type: 'zhulongPhase2', phase: 2, duration: 0.8, switchInterval: 4.5 }]);
+  game.handleBossEvent(boss, events[0]);
+  assert.equal(boss.speedMultiplier, 1.12);
+  assert.deepEqual(game.dayNight, { state: 'night', elapsed: 0, telegraph: false, switchInterval: 4.5, bossControlled: true });
+  DayNightSystem.update(game, 3.69);
+  assert.equal(game.dayNight.telegraph, false);
+  DayNightSystem.update(game, 0.01);
+  assert.equal(game.dayNight.telegraph, true);
+  DayNightSystem.update(game, 0.8);
+  assert.equal(game.dayNight.state, 'day');
+  assert.equal(BossSystem.update(boss, 0).length, 0, 'P2 transition is one-shot');
+});
+
+test('Level9 victory waits for queue, escorts, and Zhulong death', () => {
+  const game = new Game(() => 0.2, 9);
+  game.state = 'combat';
+  game.time.setPaused(false);
+  game.wave.waveNumber = 10;
+  game.wave.active = true;
+  game.wave.queue.length = 0;
+  game.wave.spawnedAlive = 2;
+  const ordinary = game.spawnEnemy('zheng');
+  const boss = game.spawnEnemy('zhulong');
+  boss.takeDamage(boss.maxHp);
+  game.update(0);
+  assert.equal(game.state, 'combat');
+  assert.equal(game.levelBossDefeated, true);
+  ordinary.takeDamage(ordinary.maxHp);
+  game.update(0);
+  assert.equal(game.state, 'victory');
 });

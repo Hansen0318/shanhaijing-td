@@ -5,6 +5,7 @@ export class BossSystem {
     if (enemy.type === 'jinwu') return this.updateJinwu(enemy);
     if (enemy.type === 'kui') return this.updateKui(enemy);
     if (enemy.type === 'huashe') return this.updateHuashe(enemy, dt, context);
+    if (enemy.type === 'zhulong') return this.updateZhulong(enemy);
     if (enemy.type !== 'jiuweihu') return this.check(enemy);
     if (!enemy.bossPhase) {
       enemy.bossPhase = 1;
@@ -80,6 +81,21 @@ export class BossSystem {
       enemy.bossPhase = 2;
       enemy.speedMultiplier = 1.15;
       return [{ type: 'kuiPhase2', phase: 2, duration: 0.8 }];
+    }
+    return [];
+  }
+  static updateZhulong(enemy) {
+    enemy.bossPhase ??= 1;
+    const mechanic = enemy.data.bossMechanic;
+    if (enemy.bossPhase === 1 && enemy.hp / enemy.maxHp <= mechanic.phase2Threshold) {
+      enemy.bossPhase = 2;
+      enemy.speedMultiplier = mechanic.phase2SpeedMultiplier;
+      return [{
+        type: 'zhulongPhase2',
+        phase: 2,
+        duration: mechanic.telegraphDuration,
+        switchInterval: mechanic.phase2SwitchInterval,
+      }];
     }
     return [];
   }

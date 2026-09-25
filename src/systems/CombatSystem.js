@@ -14,6 +14,9 @@ export class CombatSystem {
     const insight = enemy.statuses?.insight;
     if (insight) damage *= 1 + (enemy.isBoss ? insight.bossVulnerability : insight.vulnerability);
     if (damageKind !== 'dot') damage *= enemy.data?.normalDamageMultiplier ?? 1;
+    if (damageKind === 'direct' && enemy.type === 'zheng' && enemy.dayNightState === 'night') {
+      damage *= enemy.data?.nightNormalDamageMultiplier ?? 1;
+    }
     if (enemy.activeDefenseMultiplier != null) {
       const defensePierce = insight?.defensePierce ?? 0;
       const reduction = (1 - enemy.activeDefenseMultiplier) * (1 - defensePierce);

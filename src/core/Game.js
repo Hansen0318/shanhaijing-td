@@ -21,6 +21,7 @@ import { SunlightSystem } from '../systems/SunlightSystem.js';
 import { ThunderSystem } from '../systems/ThunderSystem.js';
 import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
 import { TideSystem } from '../systems/TideSystem.js?v=level8-6';
+import { DayNightSystem } from '../systems/DayNightSystem.js';
 
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
@@ -68,6 +69,7 @@ export class Game {
     this.sunlight = { elapsed: 0, phase2: false, activeZoneIds: ['A'] };
     this.thunder = ThunderSystem.reset();
     this.tide = TideSystem.reset();
+    this.dayNight = level.id === 9 ? DayNightSystem.reset() : null;
     this.time.setPaused(true);
     return true;
   }
@@ -227,6 +229,13 @@ export class Game {
       : { ...baseData, hp: Math.round(baseData.hp * hpMultiplier) };
     const enemy = new Enemy(type, enemyData, this.map);
     this.enemies.push(enemy);
+    if (type === 'zhulong') {
+      DayNightSystem.configure(this, {
+        state: 'day',
+        interval: baseData.bossMechanic.phase1SwitchInterval,
+        bossControlled: true,
+      });
+    }
     if (baseData.isBoss) this.queueBanner(`Boss現身：${baseData.name}`, 1.1);
     return enemy;
   }
@@ -271,6 +280,7 @@ export class Game {
     const dt = this.time.step(realDelta);
     this.updatePendingShocks(dt);
     this.wave.update(dt, type => this.spawnEnemy(type), type => this.canSpawnEnemy(type));
+    DayNightSystem.update(this, dt);
     SunlightSystem.update(this, dt);
     TideSystem.update(this, dt);
     this.enemies.forEach(enemy => {
@@ -333,6 +343,14 @@ export class Game {
     if (this.state === 'combat' && this.wave.isComplete() && this.pendingShocks.length === 0) this.completeWave();
   }
   handleBossEvent(enemy, event) {
+    if (event.type === 'zhulongPhase2') {
+      DayNightSystem.configure(this, {
+        interval: event.switchInterval,
+        bossControlled: true,
+      });
+      this.effects.push({ type: 'zhulongPhase2', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
+      return;
+    }
     if (event.type === 'huasheTideTelegraph') {
       TideSystem.telegraphHighTide(this);
       this.effects.push({ type: 'huasheTideTelegraph', sourceId: enemy.id, x: enemy.x, y: enemy.y, life: event.duration, duration: event.duration });
