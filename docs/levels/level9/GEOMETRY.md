@@ -1,143 +1,219 @@
 # Level9 — Geometry Contract
 
 ## Status
-**GAMEPLAY GEOMETRY GUIDE V1 DEFINED / BACKGROUND REGISTRATION PENDING**
+**PLAYER-APPROVED REGISTERED GEOMETRY / PROGRAM COORDINATE SOURCE**
 
-Level9 now uses a gameplay-first geometry workflow. The path and tower layout are defined independently of background art first. The production background must be created to follow this guide; the guide must not be distorted later merely to fit an AI-generated background.
+This file is the canonical coordinate source for Level9 map implementation.
 
-This V1 guide is engineering-defined and passes static spacing/turn/readability checks. It is not yet the final production-background registration freeze.
+The player manually corrected the route on the Level9 registration overlay and approved the final corrected version on 2026-09-25. The route below was measured back into the **390×610 logical coordinate system** from that approved overlay. Future runtime code must use these coordinates rather than the superseded Guide V1 route.
 
-## Logical map
-- logical width: **390**
-- logical height: **610**
-- road width target: **54 logical px**
-- production runtime target after art approval: **780×1220** where the existing 2× asset convention is used
+## Logical map / registration
+
+- logical battlefield: **390×610**
+- approved reference background dimensions: **1024×1536**
+- registration transform:
+  - logicalX = sourceX × **390 / 1024**
+  - logicalY = sourceY × **610 / 1536**
 - coordinate origin: upper-left
-- exact production background file: pending
-- source dimensions/crop: pending until production background exists
-- source→logical registration transform: pending until production background exists
+- runtime background target when normalized at 2× logical size: **780×1220**
+- the final clean runtime background must preserve this registration; removing overlay labels/guide graphics must not recompose or reposition roads, tower pads, Spawn/Base architecture, or the celestial shrine.
 
-## L9-G100 — Gameplay Geometry Guide V1
+## L9-G100 — Final player-approved enemy centerline
 
-### Spawn / Base
-- Spawn centerline entry: **(20,70)**
-- Base endpoint: **(375,550)**
+Spawn: **(39,68)**
 
-The road intentionally enters/exits the logical edge region so sprites transition naturally from off-map/on-map space.
+Base: **(343,516)**
 
-### Ordered enemy centerline
-1. **(20,70)**
-2. **(70,75)**
-3. **(125,90)**
-4. **(180,115)**
-5. **(235,145)**
-6. **(290,180)**
-7. **(330,220)**
-8. **(345,265)**
-9. **(340,310)**
-10. **(315,350)**
-11. **(275,380)**
-12. **(225,395)**
-13. **(175,390)**
-14. **(140,370)**
-15. **(155,420)**
-16. **(200,450)**
-17. **(255,470)**
-18. **(310,490)**
-19. **(350,520)**
-20. **(375,550)**
+Ordered runtime waypoints:
 
-Composition intent:
-- upper-left entry;
-- broad clockwise broken-ring sweep around the central celestial shrine;
-- no self-crossing;
-- ring breaks on the lower-left/lower-middle side;
-- route then exits diagonally toward the lower-right Base;
-- visibly distinct from Level7 lightning-Z and Level8 broad asymmetric S/meander.
+1. **(39,68)**
+2. **(45,77)**
+3. **(50,89)**
+4. **(64,101)**
+5. **(77,113)**
+6. **(101,125)**
+7. **(166,137)**
+8. **(228,149)**
+9. **(261,161)**
+10. **(284,173)**
+11. **(298,185)**
+12. **(314,197)**
+13. **(323,208)**
+14. **(329,220)**
+15. **(336,232)**
+16. **(340,244)**
+17. **(343,256)**
+18. **(344,268)**
+19. **(344,280)**
+20. **(342,292)**
+21. **(340,304)**
+22. **(335,316)**
+23. **(329,328)**
+24. **(318,340)**
+25. **(309,351)**
+26. **(287,363)**
+27. **(252,375)**
+28. **(171,387)**
+29. **(120,399)**
+30. **(117,411)**
+31. **(123,423)**
+32. **(143,435)**
+33. **(175,447)**
+34. **(214,459)**
+35. **(247,471)**
+36. **(264,483)**
+37. **(285,494)**
+38. **(309,506)**
+39. **(327,518)**
+40. **(343,516)**
 
-### Static geometry checks
-- approximate centerline length: **~997 logical px**
-- segment lengths are moderate; no single extreme jump is used as a fake curve
-- smallest internal turn remains broad enough for interpolation without a hairpin reversal
-- runtime smoothing may densify/interpolate the approved centerline, but must not move the designed bends or cut through the central shrine
+### Implementation-ready form
 
-## L9-G110 — Tower-slot centers
+```js
+waypoints: [
+  { x: 39, y: 68 },
+  { x: 45, y: 77 },
+  { x: 50, y: 89 },
+  { x: 64, y: 101 },
+  { x: 77, y: 113 },
+  { x: 101, y: 125 },
+  { x: 166, y: 137 },
+  { x: 228, y: 149 },
+  { x: 261, y: 161 },
+  { x: 284, y: 173 },
+  { x: 298, y: 185 },
+  { x: 314, y: 197 },
+  { x: 323, y: 208 },
+  { x: 329, y: 220 },
+  { x: 336, y: 232 },
+  { x: 340, y: 244 },
+  { x: 343, y: 256 },
+  { x: 344, y: 268 },
+  { x: 344, y: 280 },
+  { x: 342, y: 292 },
+  { x: 340, y: 304 },
+  { x: 335, y: 316 },
+  { x: 329, y: 328 },
+  { x: 318, y: 340 },
+  { x: 309, y: 351 },
+  { x: 287, y: 363 },
+  { x: 252, y: 375 },
+  { x: 171, y: 387 },
+  { x: 120, y: 399 },
+  { x: 117, y: 411 },
+  { x: 123, y: 423 },
+  { x: 143, y: 435 },
+  { x: 175, y: 447 },
+  { x: 214, y: 459 },
+  { x: 247, y: 471 },
+  { x: 264, y: 483 },
+  { x: 285, y: 494 },
+  { x: 309, y: 506 },
+  { x: 327, y: 518 },
+  { x: 343, y: 516 },
+]
+```
 
-- T1: **(110,150)**
-- T2: **(250,95)**
-- T3: **(285,265)**
-- T4: **(375,365)**
-- T5: **(230,330)**
-- T6: **(165,300)**
-- T7: **(90,410)**
-- T8: **(330,430)**
+Rules:
+- runtime may interpolate/densify only to smooth motion along this exact centerline;
+- do not replace the lower hairpin with a straight diagonal;
+- do not restore the superseded Guide V1 top/lower route;
+- if smoothing cuts across the visible road, add local interpolation density rather than moving these approved anchors;
+- Spawn and Base endpoints above are part of the path contract.
 
-Static validation:
-- nearest tower-center → road-center distance range: **~51–74 px**
-- with road width 54 (27 px half-width), slots remain separated from the road body rather than sitting on it
-- nearest tower-to-tower center distance: **~72 px**
-- every slot remains close enough to meaningful route segments for the established tower ranges (~125–170 px) to matter
-- slots are split across inner/outer sides of the route; no single side owns all useful positions
+## L9-G110 — Final tower-slot centers
 
-Runtime/visual acceptance later:
-- production art must provide a readable buildable pad/ground area around each center
-- slot art/touch target must remain centered at the frozen center
-- production props may not cover or visually merge a slot with the road
-- if background generation cannot respect these locations, reject/regenerate the background rather than moving the slots casually
+- T1: **(125,106)**
+- T2: **(264,142)**
+- T3: **(292,233)**
+- T4: **(352,333)**
+- T5: **(216,324)**
+- T6: **(106,250)**
+- T7: **(88,374)**
+- T8: **(288,461)**
 
-## L9-G120 — Central 晝夜 celestial anchor
-- anchor center: **(220,260)**
-- reserved visual shrine radius target: **46 px**
-- nearest road-center distance: **~105 px**
+### Implementation-ready form
 
-Purpose:
-- primary localized 晝相／夜相 visual landmark
-- sufficient separation from enemy silhouettes and route body
-- background must leave this area visually dominant but must not bake the actual combat telegraph/state effect into static art
+```js
+slots: [
+  { x: 125, y: 106 },
+  { x: 264, y: 142 },
+  { x: 292, y: 233 },
+  { x: 352, y: 333 },
+  { x: 216, y: 324 },
+  { x: 106, y: 250 },
+  { x: 88, y: 374 },
+  { x: 288, y: 461 },
+]
+```
 
-## L9-G130 — Background production contract
-The production background must be authored/generated **from this Gameplay Geometry Guide V1**.
+Tower rules:
+- these centers correspond to the player-approved visible tower-pad centers;
+- runtime slot marker / touch target must remain centered on these coordinates;
+- do not move a slot merely to simplify implementation;
+- background cleanup must preserve the visible pad centers.
 
-Required:
-1. road surface follows the L9-G100 centerline and 54 px gameplay corridor;
-2. upper-left entry and lower-right Base region remain visually compatible with the frozen endpoints;
-3. visible buildable surfaces/pads exist around T1–T8;
-4. central shrine is centered on/registered to L9-G120;
-5. no major foreground prop blocks the road, a tower center, Spawn/Base, or the shrine anchor;
-6. no bright static state telegraph is baked into the art.
+## L9-G120 — Spawn / Base / celestial anchor
 
-After a candidate exists:
-1. record exact source dimensions;
-2. record crop/normalization;
-3. derive explicit source→390×610 transform;
-4. overlay **this same guide** on the exact clean candidate;
-5. measure registration error;
-6. if the art materially misses the guide, regenerate/correct the art;
-7. only small registration refinement is allowed after art approval;
-8. obtain player approval before changing status to CANONICAL / FROZEN.
+- Spawn: **(39,68)**
+- Base: **(343,516)**
+- central 晝夜 celestial anchor: **(203,251)**
 
-The background does **not** define the path. It must conform to the approved gameplay geometry.
+Spawn/Base presentation:
+- both locations must retain a visible architectural/portal identity;
+- they are not text-only markers;
+- final runtime text labels, if any, are program-rendered and must not be the sole identification method.
 
-## L9-G140 — Motion Lite candidates
-Exact anchors remain pending production art, because Motion Lite must attach to visible art features.
+Central anchor:
+- principal localized 晝相／夜相 visual landmark;
+- runtime day/night presentation must register to this position;
+- the static background must not bake the actual gameplay state cue into a permanent state.
+
+## L9-G130 — Approved overlay evidence
+
+Player-approved route correction history:
+1. first generated overlay was rejected because route did not follow the road;
+2. player corrected the upper Spawn entry;
+3. player corrected the lower-left hairpin and lower road with hand-drawn red guidance;
+4. corrected overlay was shown again;
+5. player explicitly confirmed **「好這個可以」**;
+6. this file records the coordinates measured from that accepted overlay.
+
+The accepted route therefore supersedes all earlier Level9 Guide V1 path values.
+
+## L9-G140 — Runtime registration acceptance
+
+Before Gate D is considered fully closed for production art:
+- create/retain a **clean background** with the same composition but without debug route/coordinate labels;
+- overlay these exact program coordinates on that clean file deterministically;
+- verify road-center / pad-center / Spawn / Base / shrine registration remains visually matched;
+- any cleanup/edit that materially shifts the composition invalidates the clean runtime candidate and must be redone.
+
+Production implementation later must use this file as the source of truth.
+
+## L9-G150 — Motion Lite candidates
+
+Exact environment anchors are still deferred until the clean runtime background is finalized.
 
 Candidate family:
 - high-altitude cloud drift;
-- restrained banner/ribbon sway where such props are actually present;
-- subtle celestial-disc/corona breathing around L9-G120;
+- restrained banner/ribbon sway where visibly present;
+- subtle celestial-disc/corona breathing around **(203,251)**;
 - sparse ember/star drift.
 
-Final Motion Lite anchors must be measured from the approved production background and remain presentation-only unless SPEC explicitly defines gameplay.
+Motion Lite is presentation-only unless SPEC explicitly defines gameplay.
 
-## Rejected / non-canonical
-- The previously generated ornate fantasy background and the later hand-drawn overlay are **style/concept references only**.
-- Their visible roads, pads, shrine placement and manually drawn blue route are **not geometry evidence** and must not be used for production measurement.
-- Do not re-derive coordinates from those images.
+## Superseded geometry
 
-## Approval / verification state
-- map concept: **PLAYER APPROVED**
-- Gameplay Geometry Guide V1: **ENGINEERING DEFINED / STATIC CHECK PASS**
-- production background: **PENDING**
-- exact source→logical registration: **PENDING**
-- registered overlay on production background: **PENDING PLAYER APPROVAL**
-- final geometry freeze: **NOT YET**
+The following Level9 values are no longer valid and must not be implemented:
+- Spawn **(20,70)**
+- Base **(375,550)**
+- T1–T8 **(110,150), (250,95), (285,265), (375,365), (230,330), (165,300), (90,410), (330,430)**
+- central anchor **(220,260)**
+- the 20-anchor Guide V1 route previously recorded before background/player correction.
+
+## Verification ownership
+- canonical coordinate contract: **STATIC / PLAYER APPROVED**
+- deterministic overlay on clean runtime background: **STATIC + PLAYER VISUAL APPROVAL**
+- runtime smoothing/no corner cut: **TARGETED_TEST + PLAYER_SMOKE**
+- slot touch/readability: **PLAYER_SMOKE**
