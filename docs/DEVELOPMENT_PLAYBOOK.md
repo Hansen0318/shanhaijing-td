@@ -138,7 +138,7 @@ For every visual:
 - classify Procedural-first / PNG-first / Hybrid;
 - decide whether a concept/mockup is needed;
 - decide exact final production inventory;
-- for Boss HUDs, compare the proposed source/runtime aspect against a released Boss HUD and preserve the fixed outer footprint;
+- for Boss HUDs, inspect the actual runtime name/track rectangles first; compare the source/runtime aspect against a released Boss HUD, preserve the fixed 44 px outer footprint, keep the upper-center name reserve clear, and align the visible empty channel with the intended `BOSS_HUD_GEOMETRY` track rectangle;
 - for required ambient effects, define a minimum phone-readable presentation target rather than only "subtle".
 
 Output:
