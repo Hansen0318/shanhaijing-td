@@ -151,15 +151,21 @@ export class Renderer {
     const anchor = game.level.map.celestialAnchor;
     const warm = state === 'day';
 
-    // Make the day/night state unmistakable on a 390px phone screen while preserving combat readability.
-    // Day uses SCREEN to lift highlights; night uses MULTIPLY for a real "lights off" drop in luminance.
+    // Keep the approved daytime presentation at its original luminance.
+    // Readability comes from making night distinctly darker, not from over-brightening day.
     ctx.save();
-    ctx.globalCompositeOperation = warm ? 'screen' : 'multiply';
-    ctx.fillStyle = warm ? 'rgba(255,116,42,.22)' : 'rgba(20,27,61,.42)';
-    ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = warm ? 'rgba(170,42,8,.055)' : 'rgba(45,63,145,.10)';
-    ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
+    if (warm) {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(154,45,18,.075)';
+      ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
+    } else {
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillStyle = 'rgba(20,27,61,.42)';
+      ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(45,63,145,.10)';
+      ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
+    }
 
     // Slow cloud drift stays in the existing upper-right mist bank.
     const cloudX = 286 + Math.sin(time * 0.22) * 7;

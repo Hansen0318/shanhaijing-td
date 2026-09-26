@@ -23,6 +23,13 @@
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Level9 daytime luminance restored
+
+- Player phone acceptance requested the daylight/open-light state return to the original brightness.
+- Level9 day overlay is restored to the original `rgba(154,45,18,.075)`; the extra SCREEN brightening is removed.
+- Night keeps the stronger MULTIPLY darkening, so day/night readability now comes from a darker night rather than a brighter day.
+- No HUD, geometry, gameplay, balance, progression or asset changes in this correction.
+
 ## 2026-09-26：Level9 phone-smoke HUD / day-night readability correction
 
 - Player phone smoke confirmed two Level9 visual defects after the asset-loader fix: day/night luminance separation was too weak, and the 燭龍 programmatic Boss name / HP fill did not align with the approved decorative frame.
