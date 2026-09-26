@@ -8,7 +8,7 @@ import { Tower } from '../entities/Tower.js?v=level9-1';
 import { Projectile } from '../entities/Projectile.js?v=level9-1';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js?v=level9-1';
-import { BlessingSystem } from '../systems/BlessingSystem.js?v=level9-1';
+import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-eligibility-1';
 import { WaveManager } from '../systems/WaveManager.js?v=level9-1';
 import { BossSystem } from '../systems/BossSystem.js?v=level9-1';
 import { StatusSystem } from '../systems/StatusSystem.js?v=level9-1';
@@ -114,6 +114,10 @@ export class Game {
   }
   availableTowerTypes() {
     return this.levelId >= 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
+  }
+  blessingEligibleTowerTypes() {
+    const owned = new Set(this.lineupRoster());
+    return this.availableTowerTypes().filter(type => owned.has(type));
   }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
   teamIntervalMultiplier() {
@@ -522,8 +526,8 @@ export class Game {
     }
     this.wave.finish();
     const deployedTypes = [...new Set(this.towers.filter(Boolean).map(tower => tower.type))];
-    const allowedTowerTypes = this.levelId >= 4 ? this.lineupSelection : null;
-    this.currentChoices = this.blessings.drawChoices(deployedTypes, allowedTowerTypes);
+    const eligibleTowerTypes = this.blessingEligibleTowerTypes();
+    this.currentChoices = this.blessings.drawChoices(deployedTypes, eligibleTowerTypes);
     this.state = 'blessing';
     this.time.setPaused(true);
   }

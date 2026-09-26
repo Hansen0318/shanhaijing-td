@@ -385,3 +385,16 @@ Before the project leaves asset production/static audit and enters Work implemen
 The purpose is to make the handoff depend on verified files, not conversation memory.
 
 This step is Chat-owned/static and must not be delegated to Work.
+
+
+### Blessing eligibility preflight
+Before shipping any level/unlock/Blessing change:
+1. derive owned/unlocked roster from progression;
+2. derive current combat-eligible roster from the level's available set or confirmed lineup;
+3. intersect them before drawing creature-specific Blessings;
+4. keep map deployment as weighting only;
+5. regression-test an early level, a lineup level, the newest released level, and any newly introduced unlock boundary;
+6. confirm future/unselected/non-runtime creatures cannot appear in the Blessing pool.
+
+### Upgrade-feedback preflight
+For each creature-specific Blessing and tower Lv.2/Lv.3 upgrade, map the real numeric/gameplay effect to a restrained phone-readable visual cue. Verify stack/level escalation at ~390 px and confirm no balance values changed as part of presentation work.

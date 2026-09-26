@@ -153,16 +153,17 @@ test('entry and style cache versions are fresh for this release', async () => {
     if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-3/);
     else assert.match(html, new RegExp(`${path.replaceAll('.', '\\.')}\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=level-visual-1/);
-  assert.match(main, /Game\.js\?v=level-visual-1/);
+  assert.match(html, /src\/main\.js\?v=blessing-eligibility-1/);
+  assert.match(main, /Game\.js\?v=blessing-eligibility-1/);
   assert.match(main, /Renderer\.js\?v=level-visual-1/);
   assert.match(main, /UIController\.js\?v=asset-load-3/);
   assert.match(main, /artAssets\.js\?v=level9-visual-3/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
   for (const module of ['gameData', 'BossSystem', 'TideSystem', 'DayNightSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
-  for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
+  for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
     assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   }
+  assert.match(game, /BlessingSystem\.js\?v=blessing-eligibility-1/);
   assert.match(enemy, /StatusSystem\.js\?v=level9-1/);
   assert.match(projectile, /CombatSystem\.js\?v=level9-1/);
   assert.match(projectile, /StatusSystem\.js\?v=level9-1/);

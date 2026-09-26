@@ -120,9 +120,40 @@ test('Level9 requires exactly three, unlocks Dijiang once, and has no phantom Le
   assert.equal(game.pendingUnlock, null);
 });
 
+
+
+test('blessing eligibility never exposes future or unselected beasts across campaign levels', () => {
+  const early = new Game(() => 0, 1);
+  assert.deepEqual(early.blessingEligibleTowerTypes(), ['bifang', 'fuzhu', 'yinglong']);
+  const earlyChoices = early.blessings.drawChoices([], early.blessingEligibleTowerTypes());
+  assert.equal(earlyChoices.some(choice => ['baize', 'jumang', 'xuangui', 'dijiang'].includes(choice.tower)), false);
+
+  const level4 = new Game(() => 0, 4);
+  for (const type of ['bifang', 'fuzhu', 'baize']) level4.toggleLineup(type);
+  assert.equal(level4.confirmLineup(), true);
+  assert.deepEqual(level4.blessingEligibleTowerTypes(), ['bifang', 'fuzhu', 'baize']);
+  const level4Choices = level4.blessings.drawChoices([], level4.blessingEligibleTowerTypes());
+  assert.equal(level4Choices.some(choice => choice.tower === 'yinglong'), false);
+  assert.equal(level4Choices.some(choice => choice.tower === 'jumang'), false);
+
+  const level7 = new Game(() => 0, 7);
+  for (const type of ['bifang', 'baize', 'jumang']) level7.toggleLineup(type);
+  assert.equal(level7.confirmLineup(), true);
+  assert.deepEqual(level7.blessingEligibleTowerTypes(), ['bifang', 'baize', 'jumang']);
+  const level7Choices = level7.blessings.drawChoices([], level7.blessingEligibleTowerTypes());
+  assert.equal(level7Choices.some(choice => choice.tower === 'xuangui'), false);
+
+  const level9 = new Game(() => 0, 9);
+  for (const type of ['fuzhu', 'jumang', 'xuangui']) level9.toggleLineup(type);
+  assert.equal(level9.confirmLineup(), true);
+  assert.deepEqual(level9.blessingEligibleTowerTypes(), ['fuzhu', 'jumang', 'xuangui']);
+  const level9Choices = level9.blessings.drawChoices([], level9.blessingEligibleTowerTypes());
+  assert.equal(level9Choices.some(choice => choice.tower && !['fuzhu', 'jumang', 'xuangui'].includes(choice.tower)), false);
+});
+
 test('blessing draw returns three distinct choices and weights deployed towers', () => {
   const blessings = new BlessingSystem(BLESSING_DATA, () => 0.2);
-  const choices = blessings.drawChoices(['bifang']);
+  const choices = blessings.drawChoices(['bifang'], ['bifang', 'fuzhu', 'yinglong']);
   assert.equal(choices.length, 3);
   assert.equal(new Set(choices.map(choice => choice.id)).size, 3);
   assert.ok(blessings.weightFor(BLESSING_DATA.find(b => b.tower === 'bifang'), ['bifang']) > blessings.weightFor(BLESSING_DATA.find(b => b.tower === 'fuzhu'), ['bifang']));
@@ -137,7 +168,7 @@ test('capped blessings are removed from later choice pools', () => {
   const blessings = new BlessingSystem(BLESSING_DATA, () => 0);
   blessings.select('bifangDamage');
   blessings.select('bifangDamage');
-  const choices = blessings.drawChoices(['bifang']);
+  const choices = blessings.drawChoices(['bifang'], ['bifang', 'fuzhu', 'yinglong']);
   assert.equal(choices.some(choice => choice.id === 'bifangDamage'), false);
 });
 

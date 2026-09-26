@@ -5,10 +5,11 @@ const MAX_STACKS = 2;
 export class BlessingSystem {
   constructor(data, random = Math.random) { this.data = data; this.random = random; this.stacks = {}; this.modifiers = {}; }
   weightFor(blessing, deployedTypes) { return blessing.weight * (blessing.tower && deployedTypes.includes(blessing.tower) ? GAME_CONFIG.deployedBlessingWeight : 1); }
-  drawChoices(deployedTypes = [], allowedTowerTypes = null) {
+  drawChoices(deployedTypes = [], eligibleTowerTypes = []) {
+    const eligible = new Set(eligibleTowerTypes);
     const pool = this.data.filter(item => (
       (this.stacks[item.id] ?? 0) < MAX_STACKS
-      && (!item.tower || !allowedTowerTypes || allowedTowerTypes.includes(item.tower))
+      && (!item.tower || eligible.has(item.tower))
     ));
     const choices = [];
     while (choices.length < 3 && pool.length) {
