@@ -37,7 +37,7 @@
 | L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FINAL | runtime 512×364 RGBA; 149,653 bytes; SHA-256 `d0f8b77457a2d55f3c225ec14d268ac74838bc9f10cede9ddc1da8c2f586cc55`; exact re-upload source recorded below |
 | L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FINAL | runtime 512×376 RGBA; 184,120 bytes; SHA-256 `330cbaae04bd40ed2952f1af45e5fbe152fe0f3ef1d5ea33b7eadb4539960b61`; exact re-upload source recorded below |
 | L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FINAL | runtime 640×442 RGBA; 324,156 bytes; SHA-256 `9e152e176cbd6ff2da90d6e735d77479fe13244553dee903b30fc4f6446984ee`; exact re-upload source recorded below |
-| L9-A013 | `ui_boss_zhulong_panel_v2.png` | 燭龍 Boss HUD frame | PNG-first | PLAYER_REPLACEMENT / ENGINEERING_VERIFYING | valid 768×213 RGBA PNG; 106,121 bytes; SHA-256 `e7e243c9a339626a5735ce6bc81853f247a38900338d8a56c45d286859efe9f2`; fixed 44px runtime slot |
+| L9-A013 | `ui_boss_zhulong_panel_v2.png` | 燭龍 Boss HUD frame | PNG-first | RELEASED / PLAYER_RECHECK_PENDING | valid 768×213 RGBA PNG; 106,121 bytes; SHA-256 `e7e243c9a339626a5735ce6bc81853f247a38900338d8a56c45d286859efe9f2`; fixed 44px runtime slot |
 | L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FINAL | runtime 512×382 RGBA; 196,178 bytes; SHA-256 `4234e1b087399e9886e51cd44f77855d58ed074f9e7c825b4adc16c9f067591a`; unlock-only presentation |
 
 ## C. Gameplay VFX — no static image unless runtime evidence fails
@@ -213,4 +213,4 @@ Valid corrected handoff:
 - Conservative HP groove interior measures source x134–632 / y120–138; runtime geometry is `left 14.2% / top 59.4% / width 71.3% / height 12.6%`.
 - `border-image-slice` for the compressed v2 source is **35 fill**.
 - The original re-uploaded v1 source/checksum records above remain historical audit evidence; they are not deleted or rewritten.
-- Engineering and deployed visual verification are still required; player phone confirmation remains separate.
+- PR #95 released the replacement at `main` SHA `f39f3465d5857c5b9c283aa27e7099073d7310aa`; Pages deployment and public 390×700 P1/P2 layout verification passed. Player physical-phone confirmation remains separate.

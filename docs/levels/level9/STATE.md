@@ -4,12 +4,12 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **HUD CORRECTION / ENGINEERING VERIFYING**
-- Production implementation: **REPLACEMENT HUD BRANCH ACTIVE**
+- Development phase: **RELEASED / PLAYER PHONE RECHECK PENDING**
+- Production implementation: **MERGED TO `main` VIA PR #95**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE H — REOPENED FOR PLAYER-SUPPLIED HUD CORRECTION**
+**GATE H — EXITED / PUBLIC HUD CORRECTION VERIFIED**
 
 ### Allowed now
 - perform player-owned phone visual acceptance on the deployed build;
@@ -67,13 +67,16 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 - 燭龍 name/HP overlays were visibly offset from the decorative HUD channels.
 - Correction branch: `fix/level9-hud-daynight-readability-20260926`.
 - Active replacement branch: `fix/level9-zhulong-hud-20260926`.
-- Player-supplied PNG has been normalized to a valid 768×213 RGBA runtime asset without stretching; Boss name and HP geometry are being reverified.
+- Player-supplied PNG was normalized to a valid 768×213 RGBA runtime asset without stretching; Boss name and HP geometry are verified.
+- PR #95 merged at `f39f3465d5857c5b9c283aa27e7099073d7310aa`; Pages deployed that SHA successfully.
+- Public 390×700 P1/P2 verification loaded `asset-load-3`: 370×44 HUD, centered `燭龍` name, lower-groove HP track, and same-origin 50% P2 fill all PASS.
 - Scope is visual-only: no gameplay, balance, geometry, tower slots, progression, or enemy logic changes.
 
 ## Current branch / SHA
 - merged implementation PR: #90.
 - release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847`.
 - active HUD correction branch: `fix/level9-zhulong-hud-20260926`.
+- current correction release source: `main` at `f39f3465d5857c5b9c283aa27e7099073d7310aa` (PR #95).
 
 ## Verification status
 - Chat-side Final Fileset Audit: **PASS**.
@@ -96,4 +99,4 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Deploy the Level9 phone-smoke visual hotfix, then player rechecks: (1) day/night luminance separation, (2) 燭龍 name centered in the upper reserve, and (3) HP fill centered in the long groove. No gameplay re-test is required unless those visual changes expose a concrete regression.**
+**Player performs the physical-phone HUD recheck; engineering resumes only if that reveals a concrete defect.**
