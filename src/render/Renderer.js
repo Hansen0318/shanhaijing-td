@@ -5,6 +5,7 @@ import { MotionSystem } from '../systems/MotionSystem.js?v=level9-1';
 import { ENEMY_VISUALS } from '../config/enemyVisuals.js?v=level9-1';
 
 const TOWER_BOXES = Object.freeze({ bifang: [54, 58], fuzhu: [48, 58], yinglong: [56, 54], baize: [56, 58], jumang: [56, 58], xuangui: [58, 56] });
+const blessingStacks = (modifiers, key, step = 1) => Math.max(0, Math.min(2, Math.round((modifiers?.[key] ?? 0) / step)));
 const LEVEL7_WATERFALLS = Object.freeze([
   // Player-confirmed waterfall locations from phone smoke. Width follows the visible waterfall body.
   Object.freeze({ x: 48, y: 137, width: 22, height: 57, phase: 0.1 }),
@@ -539,7 +540,38 @@ export class Renderer {
   drawTowers(ctx, game) {
     game.towers.forEach((tower, index) => {
       if (!tower) return;
-      if (index === game.selectedSlot) { const range = tower.getStats(game.blessings.modifiers, game.teamIntervalMultiplier?.() ?? 1).range; ctx.beginPath(); ctx.arc(tower.x, tower.y, range, 0, Math.PI * 2); ctx.fillStyle = 'rgba(241,205,103,.09)'; ctx.fill(); ctx.strokeStyle = 'rgba(241,205,103,.65)'; ctx.lineWidth = 1.5; ctx.stroke(); }
+      if (index === game.selectedSlot) {
+        const range = tower.getStats(game.blessings.modifiers, game.teamIntervalMultiplier?.() ?? 1).range;
+        const rangeStacks = tower.type === 'fuzhu'
+          ? blessingStacks(game.blessings.modifiers, 'fuzhuRange', 0.2)
+          : tower.type === 'jumang'
+            ? blessingStacks(game.blessings.modifiers, 'jumangRange', 0.15)
+            : tower.type === 'baize'
+              ? blessingStacks(game.blessings.modifiers, 'baizeSight', 1)
+              : 0;
+        ctx.beginPath(); ctx.arc(tower.x, tower.y, range, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(241,205,103,.09)'; ctx.fill();
+        ctx.strokeStyle = rangeStacks ? 'rgba(255,232,151,.92)' : 'rgba(241,205,103,.65)';
+        ctx.lineWidth = rangeStacks ? 2.2 : 1.5; ctx.stroke();
+        if (rangeStacks) {
+          ctx.save();
+          ctx.setLineDash([5, 5]);
+          ctx.strokeStyle = rangeStacks === 2 ? 'rgba(255,244,196,.9)' : 'rgba(255,225,132,.72)';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(tower.x, tower.y, Math.max(8, range - 4 - rangeStacks * 2), 0, Math.PI * 2); ctx.stroke();
+          ctx.restore();
+        }
+      }
+      const springStacks = blessingStacks(game.blessings.modifiers, 'jumangSpring', 1);
+      if (springStacks) {
+        const pulse = 0.5 + Math.sin((game.visualTime ?? 0) * 4 + index) * 0.5;
+        ctx.save();
+        ctx.globalAlpha = 0.35 + pulse * 0.18;
+        ctx.strokeStyle = springStacks === 2 ? '#caff9c' : '#9cf2a8';
+        ctx.lineWidth = 1.4 + springStacks * 0.35;
+        ctx.beginPath(); ctx.arc(tower.x, tower.y + 6, 24 + pulse * 2, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+        ctx.restore();
+      }
       const [width, height] = TOWER_BOXES[tower.type];
       const motion = MotionSystem.towerTransform(tower, game.visualTime ?? 0, game.effects, this.motionEnabled);
       const drewTower = this.drawContained(ctx, tower.type, tower.x + motion.xOffset, tower.y + 4 + motion.yOffset, width, height, {
@@ -595,14 +627,60 @@ export class Renderer {
           ctx.restore();
         }
       }
+      if (enemy.statuses.burn) {
+        const burnStacks = blessingStacks(game.blessings.modifiers, 'bifangBurn', 4);
+        const flicker = 0.5 + Math.sin((game.visualTime ?? 0) * 11 + enemy.pathDistance * 0.07) * 0.5;
+        ctx.save();
+        ctx.globalAlpha = 0.62 + flicker * 0.25;
+        ctx.fillStyle = burnStacks === 2 ? '#ffd45c' : '#ff8a38';
+        for (const offset of [-6, 0, 6]) {
+          const h = 5 + burnStacks * 2 + (offset === 0 ? 3 : 0);
+          ctx.beginPath();
+          ctx.moveTo(enemy.x + offset - 2, enemy.y - enemy.radius + 2);
+          ctx.quadraticCurveTo(enemy.x + offset, enemy.y - enemy.radius - h - flicker * 2, enemy.x + offset + 2, enemy.y - enemy.radius + 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
       if (enemy.statuses.slow) {
-        const size = (enemy.radius + 9) * 2;
-        if (!this.drawContained(ctx, 'slowMark', enemy.x, enemy.y + 1, size, size, { alpha: 0.82 })) {
-          ctx.save(); ctx.strokeStyle = 'rgba(104,224,255,.95)'; ctx.lineWidth = 2.5;
-          ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 7, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+        const slowStacks = blessingStacks(game.blessings.modifiers, 'fuzhuSlow', 0.1);
+        const vulnerableStacks = blessingStacks(game.blessings.modifiers, 'slowedVulnerability', 0.1);
+        const size = (enemy.radius + 9 + slowStacks * 2) * 2;
+        if (!this.drawContained(ctx, 'slowMark', enemy.x, enemy.y + 1, size, size, { alpha: 0.82 + slowStacks * 0.07 })) {
+          ctx.save(); ctx.strokeStyle = 'rgba(104,224,255,.95)'; ctx.lineWidth = 2.5 + slowStacks * 0.6;
+          ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 7 + slowStacks * 2, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+        }
+        if (vulnerableStacks) {
+          ctx.save();
+          ctx.strokeStyle = vulnerableStacks === 2 ? '#f4feff' : '#bdeeff';
+          ctx.lineWidth = 1.4 + vulnerableStacks * 0.4;
+          for (let crack = 0; crack < 3; crack += 1) {
+            const a = crack * Math.PI * 2 / 3 - 0.5;
+            const r0 = enemy.radius + 4;
+            const r1 = enemy.radius + 10 + vulnerableStacks * 2;
+            ctx.beginPath();
+            ctx.moveTo(enemy.x + Math.cos(a) * r0, enemy.y + Math.sin(a) * r0);
+            ctx.lineTo(enemy.x + Math.cos(a + 0.08) * r1, enemy.y + Math.sin(a + 0.08) * r1);
+            ctx.stroke();
+          }
+          ctx.restore();
         }
       }
-      if (enemy.statuses.insight) this.drawContained(ctx, 'baizeInsightMark', enemy.x, enemy.y, (enemy.radius + 11) * 2, (enemy.radius + 11) * 2, { alpha: 0.9 });
+      if (enemy.statuses.insight) {
+        const insightStacks = blessingStacks(game.blessings.modifiers, 'baizeVulnerability', 0.05);
+        const sightStacks = blessingStacks(game.blessings.modifiers, 'baizeSight', 1);
+        this.drawContained(ctx, 'baizeInsightMark', enemy.x, enemy.y, (enemy.radius + 11 + insightStacks * 2) * 2, (enemy.radius + 11 + insightStacks * 2) * 2, {
+          alpha: 0.9,
+          filter: insightStacks ? `brightness(${1.15 + insightStacks * 0.12}) saturate(${1.1 + insightStacks * 0.12})` : '',
+        });
+        if (sightStacks) {
+          ctx.save();
+          ctx.strokeStyle = sightStacks === 2 ? 'rgba(244,255,216,.9)' : 'rgba(209,255,242,.7)';
+          ctx.lineWidth = 1 + sightStacks * 0.35;
+          ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.radius + 14 + sightStacks * 2, 0, Math.PI * 2); ctx.stroke();
+          ctx.restore();
+        }
+      }
       const sunlightPulse = 0.9 + Math.sin((game.visualTime ?? 0) * 4 + enemy.pathDistance * 0.03) * 0.08;
       if (enemy.type === 'jinwu' && (enemy.bossPhase ?? 1) >= 2) {
         this.drawContained(ctx, 'jinwuPhase2', enemy.x, enemy.y, 124, 124, {
@@ -685,8 +763,9 @@ export class Renderer {
         ctx.lineCap = 'round';
         ctx.shadowColor = 'rgba(94,239,226,.78)';
         ctx.shadowBlur = 6;
-        ctx.strokeStyle = '#8ff5eb';
-        ctx.lineWidth = 3.2;
+        const waveStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockDamage', 0.2);
+        ctx.strokeStyle = waveStacks === 2 ? '#d7fffb' : waveStacks === 1 ? '#a9fbf1' : '#8ff5eb';
+        ctx.lineWidth = 3.2 + waveStacks * 0.5;
         ctx.beginPath();
         ctx.arc(0, 0, 8, -1.05, 1.05);
         ctx.stroke();
@@ -706,8 +785,9 @@ export class Renderer {
         ctx.translate(p.x, p.y);
         ctx.rotate(angle);
         ctx.shadowColor = 'rgba(158,238,255,.65)';
-        ctx.shadowBlur = 5;
-        ctx.fillStyle = '#d9fbff';
+        const slowStacks = blessingStacks(game.blessings.modifiers, 'fuzhuSlow', 0.1);
+        ctx.shadowBlur = 5 + slowStacks * 2;
+        ctx.fillStyle = slowStacks === 2 ? '#f4feff' : '#d9fbff';
         ctx.strokeStyle = '#72d7ed';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
@@ -739,8 +819,12 @@ export class Renderer {
         ctx.lineTo(p.x - Math.cos(angle) * 11, p.y - Math.sin(angle) * 11);
         ctx.stroke();
         ctx.restore();
-        const spin = (game.visualTime ?? 0) * 11;
-        if (this.drawContained(ctx, 'jumangLeafblade', p.x, p.y, 24, 11, { rotation: angle + spin })) return;
+        const damageStacks = blessingStacks(game.blessings.modifiers, 'jumangDamage', 0.2);
+        const spin = (game.visualTime ?? 0) * (11 + damageStacks * 1.5);
+        if (this.drawContained(ctx, 'jumangLeafblade', p.x, p.y, 24 + damageStacks * 2, 11 + damageStacks, {
+          rotation: angle + spin,
+          filter: damageStacks ? `brightness(${1.08 + damageStacks * 0.08}) saturate(${1.08 + damageStacks * 0.12})` : '',
+        })) return;
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(angle + spin);
@@ -752,33 +836,65 @@ export class Renderer {
         return;
       }
 
-      // 畢方 keeps its established fireball identity.
-      if (this.drawContained(ctx, 'bifangFireball', p.x, p.y, 19, 13, { rotation: angle })) return;
+      // 畢方 keeps its established fireball identity; damage blessings intensify the fireball without changing hit logic.
+      const bifangDamageStacks = blessingStacks(game.blessings.modifiers, 'bifangDamage', 0.2);
+      if (this.drawContained(ctx, 'bifangFireball', p.x, p.y, 19 + bifangDamageStacks * 2, 13 + bifangDamageStacks, {
+        rotation: angle,
+        filter: bifangDamageStacks ? `brightness(${1.08 + bifangDamageStacks * 0.08}) saturate(${1.1 + bifangDamageStacks * 0.12})` : '',
+      })) return;
       ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fillStyle = '#ff7b38'; ctx.fill();
     });
   }
   drawEffects(ctx, game) {
-    game.effects.filter(effect => effect.type === 'xuanguiShockTelegraph').forEach(effect => {
+    game.effects.filter(effect => effect.type === 'xuanguiImpact').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
+      const waveStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockDamage', 0.2);
       ctx.save();
       ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
-      ctx.strokeStyle = '#82eee3'; ctx.lineWidth = 1.8;
+      ctx.strokeStyle = waveStacks === 2 ? '#e7fffb' : '#9ff6ec';
+      ctx.lineWidth = 2 + waveStacks * 0.6;
+      ctx.beginPath(); ctx.arc(effect.x, effect.y, 5 + progress * (10 + waveStacks * 2), 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    });
+    game.effects.filter(effect => effect.type === 'xuanguiShockTelegraph').forEach(effect => {
+      const progress = 1 - effect.life / effect.duration;
+      const radiusStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockRadius', 8);
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
+      ctx.strokeStyle = radiusStacks === 2 ? '#d8fffa' : '#82eee3'; ctx.lineWidth = 1.8 + radiusStacks * 0.5;
       ctx.beginPath(); ctx.arc(effect.x, effect.y, effect.radius * (0.7 - progress * 0.42), 0, Math.PI * 2); ctx.stroke();
+      if (radiusStacks) {
+        ctx.strokeStyle = 'rgba(181,255,245,.6)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(effect.x, effect.y, effect.radius * (0.82 - progress * 0.34), 0, Math.PI * 2); ctx.stroke();
+      }
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'xuanguiShock').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
+      const damageStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockDamage', 0.2);
+      const pushStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockPushback', 5);
       ctx.save();
       ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
-      for (let ring = 0; ring < 2; ring += 1) {
+      for (let ring = 0; ring < 2 + (damageStacks === 2 ? 1 : 0); ring += 1) {
         const ringProgress = Math.max(0, Math.min(1, progress * 1.35 - ring * 0.18));
-        ctx.strokeStyle = ring === 0 ? '#b5fff4' : '#57d7d1';
-        ctx.lineWidth = 3 - ring;
+        ctx.strokeStyle = ring === 0 ? '#b5fff4' : ring === 1 ? '#57d7d1' : 'rgba(211,255,249,.72)';
+        ctx.lineWidth = Math.max(1, 3 + damageStacks * 0.35 - ring);
         ctx.beginPath(); ctx.arc(effect.x, effect.y, 8 + ringProgress * effect.radius, 0, Math.PI * 2); ctx.stroke();
       }
       const mist = ctx.createRadialGradient(effect.x, effect.y - 4, 0, effect.x, effect.y - 4, effect.radius * 0.72);
       mist.addColorStop(0, 'rgba(181,255,245,.2)'); mist.addColorStop(1, 'rgba(67,190,188,0)');
       ctx.fillStyle = mist; ctx.fillRect(effect.x - effect.radius, effect.y - effect.radius, effect.radius * 2, effect.radius * 1.5);
+      if (pushStacks) {
+        ctx.strokeStyle = pushStacks === 2 ? 'rgba(220,255,250,.85)' : 'rgba(151,244,237,.72)';
+        ctx.lineWidth = 1.5 + pushStacks * 0.4;
+        for (let streak = -1; streak <= 1; streak += 1) {
+          ctx.beginPath();
+          ctx.moveTo(effect.x + streak * 8, effect.y + 4);
+          ctx.lineTo(effect.x + streak * 11, effect.y + 14 + pushStacks * 3);
+          ctx.stroke();
+        }
+      }
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'huasheTideTelegraph').forEach(effect => {
@@ -893,8 +1009,9 @@ export class Renderer {
       ctx.lineCap = 'round';
       ctx.setLineDash([8, 7]);
       ctx.lineDashOffset = -6 * (1 - alpha);
+      const insightStacks = blessingStacks(game.blessings.modifiers, 'baizeVulnerability', 0.05);
       ctx.strokeStyle = `rgba(206,253,255,${0.18 + alpha * 0.62})`;
-      ctx.lineWidth = 1.6;
+      ctx.lineWidth = 1.6 + insightStacks * 0.45;
       ctx.beginPath();
       ctx.moveTo(effect.from.x + ux * 8, effect.from.y + uy * 8);
       ctx.lineTo(effect.to.x - ux * 8, effect.to.y - uy * 8);
@@ -910,10 +1027,11 @@ export class Renderer {
       ctx.stroke();
       ctx.restore();
 
-      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 34, 34, {
+      const durationStacks = blessingStacks(game.blessings.modifiers, 'baizeInsightDuration', 1);
+      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 34 + insightStacks * 3, 34 + insightStacks * 3, {
         alpha: Math.min(1, 0.55 + alpha * 0.45),
-        scale: 1 + (1 - alpha) * 0.16,
-        filter: 'brightness(1.4) saturate(1.2)',
+        scale: 1 + (1 - alpha) * (0.16 + durationStacks * 0.03),
+        filter: `brightness(${1.4 + insightStacks * 0.1}) saturate(${1.2 + insightStacks * 0.08})`,
       });
     });
     game.effects.filter(effect => effect.type === 'zhuyanCharge').forEach(effect => {
@@ -1015,29 +1133,62 @@ export class Renderer {
       const progress = 1 - effect.life / effect.duration;
       const radius = effect.radius * (0.35 + progress * 0.65);
       const alpha = Math.max(0, effect.life / effect.duration);
-      if (this.drawContained(ctx, 'bifangExplosion', effect.x, effect.y, radius * 2.2, radius * 2.2, { alpha })) return;
+      const radiusStacks = blessingStacks(game.blessings.modifiers, 'bifangRadius', 0.2);
+      const damageStacks = blessingStacks(game.blessings.modifiers, 'bifangDamage', 0.2);
+      const drewArt = this.drawContained(ctx, 'bifangExplosion', effect.x, effect.y, radius * 2.2, radius * 2.2, {
+        alpha,
+        filter: damageStacks ? `brightness(${1.08 + damageStacks * 0.08}) saturate(${1.08 + damageStacks * 0.1})` : '',
+      });
       ctx.save();
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = 'rgba(255,105,44,.2)';
-      ctx.strokeStyle = '#ffb33f';
-      ctx.lineWidth = 4 - progress * 2;
-      ctx.beginPath(); ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      if (!drewArt) {
+        ctx.fillStyle = 'rgba(255,105,44,.2)';
+        ctx.strokeStyle = '#ffb33f';
+        ctx.lineWidth = 4 - progress * 2;
+        ctx.beginPath(); ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      }
+      if (radiusStacks) {
+        ctx.strokeStyle = radiusStacks === 2 ? 'rgba(255,244,169,.98)' : 'rgba(255,194,78,.92)';
+        ctx.lineWidth = 2 + radiusStacks * 0.6;
+        ctx.beginPath(); ctx.arc(effect.x, effect.y, radius * (1.02 + radiusStacks * 0.04), 0, Math.PI * 2); ctx.stroke();
+        if (radiusStacks === 2) {
+          ctx.strokeStyle = 'rgba(255,138,52,.58)';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(effect.x, effect.y, radius * 1.14, 0, Math.PI * 2); ctx.stroke();
+        }
+      }
       ctx.strokeStyle = 'rgba(255,239,148,.9)'; ctx.lineWidth = 2;
       effect.hitPoints.forEach(point => { ctx.beginPath(); ctx.arc(point.x, point.y, 8 + progress * 6, 0, Math.PI * 2); ctx.stroke(); });
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'beam').forEach(effect => {
       const alpha = Math.max(0, effect.life / effect.duration);
+      const damageStacks = effect.damageStacks ?? 0;
+      const penetrationStacks = effect.penetrationStacks ?? 0;
+      const bossStacks = effect.bossStacks ?? 0;
       const segments = effect.points.slice(1).map((point, index) => [effect.points[index], point]);
-      if (segments.length && segments.every(([start, end]) => this.drawDirectional(ctx, 'yinglongBeam', start, end, 12, alpha))) return;
+      const beamWidth = 12 + damageStacks * 1.5;
+      const drewArt = segments.length && segments.every(([start, end]) => this.drawDirectional(ctx, 'yinglongBeam', start, end, beamWidth, alpha));
       ctx.save();
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.strokeStyle = `rgba(255,220,87,${alpha})`; ctx.lineWidth = 6;
-      ctx.beginPath();
-      effect.points.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
-      ctx.stroke();
-      ctx.strokeStyle = `rgba(255,250,205,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
-      effect.points.slice(1).forEach(point => { ctx.beginPath(); ctx.arc(point.x, point.y, 7, 0, Math.PI * 2); ctx.stroke(); });
+      if (!drewArt) {
+        ctx.strokeStyle = `rgba(255,220,87,${alpha})`; ctx.lineWidth = 6 + damageStacks;
+        ctx.beginPath();
+        effect.points.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(255,250,205,${alpha})`; ctx.lineWidth = 2 + damageStacks * 0.35; ctx.stroke();
+      }
+      if (penetrationStacks) {
+        ctx.strokeStyle = penetrationStacks === 2 ? `rgba(255,255,225,${alpha * 0.9})` : `rgba(255,236,144,${alpha * 0.72})`;
+        ctx.lineWidth = 1 + penetrationStacks * 0.45;
+        effect.points.slice(1).forEach(point => { ctx.beginPath(); ctx.arc(point.x, point.y, 7 + penetrationStacks * 2, 0, Math.PI * 2); ctx.stroke(); });
+      }
+      if (effect.bossHit && bossStacks) {
+        const point = effect.points.at(-1);
+        ctx.strokeStyle = `rgba(255,170,88,${alpha})`;
+        ctx.lineWidth = 2 + bossStacks * 0.5;
+        ctx.beginPath(); ctx.arc(point.x, point.y, 12 + bossStacks * 3, 0, Math.PI * 2); ctx.stroke();
+      }
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'gold').forEach(effect => {
