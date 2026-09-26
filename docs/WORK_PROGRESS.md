@@ -2,11 +2,11 @@
 
 ## CURRENT HANDOFF POINTER — READ THIS FIRST
 
-- Released baseline: **resolve dynamically from current release state**; Level1–9 are released, while Level9 player phone smoke remains pending.
-- Latest Level9 release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847` (PR #90).
+- Released baseline: **resolve dynamically from current release state**; Level1–9 are released and Level9 is player-verified/frozen.
+- Latest Level9 release source: `main` at `f9d31cd0ef4c06b770f7d2add2f7f0de71823396` through PR #99, pending this closure-doc merge.
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
-- Current gate: **Gate H REOPENED — PLAYER-SUPPLIED HUD CORRECTION / ENGINEERING VERIFYING**.
+- Current gate: **Gate J CLOSED — LEVEL9 RELEASE COMPLETE / PLAYER VERIFIED / FROZEN**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - All currently released levels remain frozen; do not redo them unless the actual Level9 shared-system change creates an identified regression risk. Do not hard-code `Level1–8` as a permanent future baseline.
@@ -22,6 +22,14 @@
 - Gate E/F complete: five new image assets were sequentially approved; all six concrete final source files were re-uploaded and exact-byte audited. Chat-side PNG transparency/size optimization, background JPG conversion, checksums and registration recheck are complete. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
+
+## 2026-09-26：Level9 final player acceptance / release closure
+
+- Player confirmed **Level9 complete** on the deployed build.
+- Remaining physical-phone acceptance is closed after the final HUD replacement/alignment, day-state brightness restore with darker night contrast, resilient asset loading, and deployable attack-identity readability pass.
+- Level9 status is now **RELEASE COMPLETE / PLAYER VERIFIED / FROZEN**.
+- Released baseline now includes Level1–9 dynamically; future work must not reopen Level9 unless a concrete regression/defect is identified.
+- Next campaign action, only when requested by the player: initialize Level10 from `docs/levels/_TEMPLATE/` and begin Gate A.
 
 ## 2026-09-26：Capability-first attack-visual rule hardened
 
@@ -143,7 +151,7 @@
 - Root-cause review is preserved in `docs/retrospectives/LEVEL8_RETROSPECTIVE.md`.
 - Permanent prevention rules were promoted into `AGENTS.md` and `DEVELOPMENT_PLAYBOOK.md`.
 - Main conclusion for every future level: freeze against the exact production background/runtime transform, validate Boss encounter order as a timeline, preserve shared HUD footprint before asset approval, and perform phone-scale visual integration preflight before release.
-- Next exact step: **Level9 initialization only when requested**.
+- Next exact step: **initialize Level10 only when the player requests the next level; do not reopen Level9 without a concrete regression.**
 
 ---
 
