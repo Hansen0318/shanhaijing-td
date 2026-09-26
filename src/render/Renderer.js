@@ -151,9 +151,14 @@ export class Renderer {
     const anchor = game.level.map.celestialAnchor;
     const warm = state === 'day';
 
-    // The global tint makes the active state readable at a glance without obscuring the approved background.
+    // Make the day/night state unmistakable on a 390px phone screen while preserving combat readability.
+    // Day uses SCREEN to lift highlights; night uses MULTIPLY for a real "lights off" drop in luminance.
     ctx.save();
-    ctx.fillStyle = warm ? 'rgba(154,45,18,.075)' : 'rgba(28,42,112,.105)';
+    ctx.globalCompositeOperation = warm ? 'screen' : 'multiply';
+    ctx.fillStyle = warm ? 'rgba(255,116,42,.22)' : 'rgba(20,27,61,.42)';
+    ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = warm ? 'rgba(170,42,8,.055)' : 'rgba(45,63,145,.10)';
     ctx.fillRect(0, 0, game.level.map.width, game.level.map.height);
 
     // Slow cloud drift stays in the existing upper-right mist bank.
@@ -195,8 +200,8 @@ export class Renderer {
 
     if (telegraph) {
       const pulse = 0.5 + Math.sin(time * 9) * 0.5;
-      ctx.strokeStyle = warm ? `rgba(255,218,133,${0.55 + pulse * 0.25})` : `rgba(182,211,255,${0.55 + pulse * 0.25})`;
-      ctx.lineWidth = 2.4;
+      ctx.strokeStyle = warm ? `rgba(255,225,145,${0.72 + pulse * 0.24})` : `rgba(195,220,255,${0.72 + pulse * 0.24})`;
+      ctx.lineWidth = 3;
       ctx.beginPath(); ctx.arc(anchor.x, anchor.y, 30 + pulse * 7, 0, Math.PI * 2); ctx.stroke();
       ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(anchor.x, anchor.y, 43 + pulse * 9, 0, Math.PI * 2); ctx.stroke();
