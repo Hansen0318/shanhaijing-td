@@ -23,6 +23,8 @@ import { JumangSupportSystem } from '../systems/JumangSupportSystem.js';
 import { TideSystem } from '../systems/TideSystem.js?v=level9-1';
 import { DayNightSystem } from '../systems/DayNightSystem.js?v=level9-1';
 
+const blessingStacks = (modifiers, key, step = 1) => Math.max(0, Math.min(2, Math.round((modifiers?.[key] ?? 0) / step)));
+
 const PLAYABLE_STATES = new Set(['preparation', 'combat']);
 
 export class Game {
@@ -484,6 +486,10 @@ export class Game {
           type: 'beam',
           points: [{ x: tower.x, y: tower.y }, ...hit.map(item => ({ x: item.x, y: item.y }))],
           hitCount: hit.length,
+          bossHit: hit.some(item => item.isBoss),
+          damageStacks: blessingStacks(this.blessings.modifiers, 'yinglongDamage', 0.2),
+          penetrationStacks: blessingStacks(this.blessings.modifiers, 'yinglongPenetration', 1),
+          bossStacks: blessingStacks(this.blessings.modifiers, 'yinglongBoss', 0.3),
           life: 0.2,
           duration: 0.2,
         });
