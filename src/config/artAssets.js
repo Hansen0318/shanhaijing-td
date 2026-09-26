@@ -116,8 +116,8 @@ export const ART_ASSETS = Object.freeze({
   dijiangUnlock: 'assets/ui/unlock_dijiang_v1.png',
 });
 
-// Inner channel geometry measured from each source panel, normalized after the
-// 768x256 runtime resize and the shared 70px nine-slice render.
+// Inner channel geometry measured from each source panel and normalized through
+// that panel's runtime dimensions and dedicated nine-slice value.
 export const BOSS_HUD_GEOMETRY = Object.freeze({
   qiongqi: Object.freeze({ left: '1.5%', top: '55%', width: '97%', height: '14.4%' }),
   paoxiao: Object.freeze({ left: '3.9%', top: '55.6%', width: '92.1%', height: '10.3%' }),

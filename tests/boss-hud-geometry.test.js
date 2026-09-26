@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { BOSS_HUD_GEOMETRY } from '../src/config/artAssets.js';
 
 const PANEL_WIDTH = 414;
@@ -121,5 +122,29 @@ test('Zhulong HP fill maps into the measured long lower channel inside the fixed
   };
   for (const key of ['left', 'top', 'width', 'height']) {
     assert.ok(Math.abs(rendered[key] - channel[key]) <= 0.8, `zhulong rendered ${key} misses its measured empty channel`);
+  }
+});
+
+test('Zhulong name centers inside the measured upper reserve using the real padding-box origin', async () => {
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  const rule = styles.match(/\.boss-hud\[data-boss-type="zhulong"\] strong \{([^}]*)\}/)?.[1] ?? '';
+  const css = Object.fromEntries([...rule.matchAll(/(top|left|width):\s*([\d.]+)(px|%)/g)].map(match => [match[1], Number(match[2])]));
+  const sourceChannel = { left: 310, top: 80, width: 148, height: 26 };
+  const sourceSlice = 35;
+  const border = 6;
+  const containingWidth = PANEL_WIDTH - border * 2;
+  const containingHeight = PANEL_HEIGHT - border * 2;
+  const expected = {
+    left: border + (sourceChannel.left - sourceSlice) / (768 - sourceSlice * 2) * containingWidth,
+    width: sourceChannel.width / (768 - sourceSlice * 2) * containingWidth,
+    centerY: border + (sourceChannel.top + sourceChannel.height / 2 - sourceSlice) / (213 - sourceSlice * 2) * containingHeight,
+  };
+  const rendered = {
+    left: border + css.left / 100 * containingWidth,
+    width: css.width / 100 * containingWidth,
+    centerY: border + css.top + 6,
+  };
+  for (const key of ['left', 'width', 'centerY']) {
+    assert.ok(Math.abs(rendered[key] - expected[key]) <= 0.2, `zhulong name ${key} misses its measured reserve`);
   }
 });
