@@ -23,6 +23,18 @@
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Deployable attack-identity readability pass
+
+- Player observed that different deployable beasts' projectiles were reading too similarly on phone.
+- Permanent project rule added: attack identity must differ by silhouette/motion/beam/trail/impact language at ~390 px; hue-only differentiation is insufficient, and comparison resolves against the currently released roster dynamically.
+- Visual-only correction, no combat rebalance:
+  - 玄龜: orb -> procedural crescent/tide-front projectile;
+  - 白澤: sustained beam-like cue -> 0.14s dashed insight flash + stronger target sigil;
+  - 夫諸: generic blue pellet -> procedural long ice-crystal/spear silhouette;
+  - 句芒: straight leaf shot -> rotating leaf-blade with short wake.
+- 畢方 fireball and 應龍 penetrating beam retain their already-distinct identities.
+- Player mixed-roster phone smoke is the final visual acceptance; engineering must not retune damage/interval/range/projectile speed for this readability pass.
+
 ## 2026-09-26：Level9 daytime luminance restored
 
 - Player phone acceptance requested the daylight/open-light state return to the original brightness.
