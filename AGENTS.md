@@ -341,6 +341,18 @@ PNG-first items belong in the formal asset-production list after the visual dire
 
 Use a small clear PNG core plus procedural trail / glow / impact when a recognizable projectile body is needed but a fully image-driven effect would be unnecessarily heavy.
 
+### Attack-identity readability is a hard rule
+
+As the deployable roster grows, attack visuals must remain distinguishable by **visual grammar**, not merely by hue.
+
+- At the established ~390 px phone width, every deployable creature's primary attack must differ from the other currently released deployables in at least one strong dimension: **projectile/body silhouette, motion pattern, beam behavior, trail language, or impact language**.
+- Changing only color while keeping the same small orb / short trail / straight beam / circular impact template is not sufficient.
+- Compare a new deployable's attack against the **currently released roster at implementation time**; never hard-code a historical roster range.
+- Preserve gameplay timing, targeting, damage, range, projectile speed and balance when correcting visual identity unless the player explicitly requests a balance change.
+- Prefer Procedural-first changes when code can produce a clear unique silhouette at 390 px. Reuse an existing approved PNG only when its body remains readable; escalate to Hybrid/PNG-first only when runtime evidence shows code-only rendering is insufficient.
+- Phone smoke must check attacks while multiple different deployed beasts are firing simultaneously, not only one isolated tower.
+- If two attacks are repeatedly confused in phone smoke, treat that as a visual defect and correct the lower-cost visual grammar before release closure.
+
 ### Decision and escalation rules
 
 - Decide Procedural-first / PNG-first / Hybrid **before** batch image generation.
