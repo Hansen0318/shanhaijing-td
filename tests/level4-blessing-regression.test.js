@@ -27,3 +27,10 @@ test('Baize blessings change insight duration, vulnerability, range and illusion
   assert.equal(Math.round(stats.range * 100) / 100, 147.2);
   assert.ok(Math.abs(stats.illusionRevealDuration - 0.6) < 1e-12);
 });
+
+
+test('blessing system fails closed for tower-specific blessings when eligibility is omitted', () => {
+  const system = new BlessingSystem(LEVEL4_BLESSINGS, () => 0);
+  const choices = system.drawChoices(['jumang']);
+  assert.equal(choices.some(choice => Boolean(choice.tower)), false);
+});
