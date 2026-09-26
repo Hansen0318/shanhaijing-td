@@ -23,6 +23,20 @@
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Blessing visual-feedback trial
+
+- Player requested a trial before making any new permanent Blessing-visual hard rule.
+- Audit found current creature-specific Blessing gameplay modifiers are wired, but many were visually weak or invisible on phone.
+- Trial pass adds visual-only feedback for the six released deployables without changing Blessing values, damage, intervals, ranges, projectile speeds, targeting, wave data or progression:
+  - 畢方: damage intensifies fireball/explosion; 火海 gets explicit outer radius ring(s); 灼燒 shows procedural flame flicker on affected enemies.
+  - 夫諸: 寒氣 strengthens ice/slow presentation; 冰域 makes selected range ring visibly upgraded; 霜蝕 adds ice-crack vulnerability cue on slowed enemies.
+  - 應龍: 龍威 thickens/intensifies beam; 龍息 emphasizes penetrated hit nodes; 逆鱗 adds Boss-only impact halo.
+  - 白澤: 明察/破妄 strengthen insight sigil persistence/intensity; 天眼 strengthens selected range and marked-target sight ring.
+  - 句芒: 青羽 strengthens/accelerates visible leaf-blade presentation; 神木 strengthens selected range ring; 春生 adds restrained green team-speed arc around deployed towers.
+  - 玄龜: 玄波 strengthens projectile/impact/shock presentation; 闊潮 adds clearer larger telegraph ring; 回瀾 adds directional water streak cue to the shock.
+- Also fixes a presentation omission: `xuanguiImpact` effects were created by gameplay code but had no Renderer branch.
+- This is explicitly a **trial / player acceptance pending** pass. Do not promote these methods into permanent hard rules until the player confirms they materially improve readability.
+
 ## 2026-09-26：Level9 final player acceptance / release closure
 
 - Player confirmed **Level9 complete** on the deployed build.

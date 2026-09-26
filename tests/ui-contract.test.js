@@ -153,9 +153,9 @@ test('entry and style cache versions are fresh for this release', async () => {
     if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-3/);
     else assert.match(html, new RegExp(`${path.replaceAll('.', '\\.')}\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=attack-identity-1/);
-  assert.match(main, /Game\.js\?v=attack-identity-1/);
-  assert.match(main, /Renderer\.js\?v=attack-identity-1/);
+  assert.match(html, /src\/main\.js\?v=blessing-visual-1/);
+  assert.match(main, /Game\.js\?v=blessing-visual-1/);
+  assert.match(main, /Renderer\.js\?v=blessing-visual-1/);
   assert.match(main, /UIController\.js\?v=asset-load-3/);
   assert.match(main, /artAssets\.js\?v=level9-visual-3/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
@@ -234,4 +234,18 @@ test('deployable attack visual identities stay distinct at phone scale', async (
   assert.match(renderer, /const spin = \(game\.visualTime \?\? 0\) \* 11/);
   assert.match(renderer, /brief "insight flash", not a sustained beam like 應龍/);
   assert.match(game, /type: 'baizeInsight'[\s\S]*life: 0\.14, duration: 0\.14/);
+});
+
+
+test('blessing visual feedback mirrors real modifier stacks without rebalance', async () => {
+  const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
+  const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
+  const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
+  for (const key of ['bifangRadius','bifangBurn','fuzhuSlow','slowedVulnerability','yinglongDamage','yinglongPenetration','yinglongBoss','baizeInsightDuration','baizeVulnerability','baizeSight','jumangDamage','jumangRange','jumangSpring','xuanguiShockDamage','xuanguiShockRadius','xuanguiShockPushback']) {
+    assert.match(renderer + game + projectile, new RegExp(key));
+  }
+  assert.match(renderer, /effect\.type === 'xuanguiImpact'/);
+  assert.match(renderer, /enemy\.statuses\.burn/);
+  assert.match(renderer, /radiusStacks === 2/);
+  assert.match(game, /bossHit: hit\.some\(item => item\.isBoss\)/);
 });
