@@ -1,7 +1,7 @@
 import { Game } from './core/Game.js?v=level9-1';
-import { Renderer } from './render/Renderer.js?v=asset-load-2';
+import { Renderer } from './render/Renderer.js?v=level9-visual-2';
 import { UIController } from './ui/UIController.js?v=asset-load-2';
-import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=asset-load-2';
+import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level9-visual-2';
 import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level9-1';
 import { setupLevelNineDev } from './dev/LevelNineDev.js?v=level9-1';
 

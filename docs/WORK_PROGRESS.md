@@ -23,6 +23,15 @@
 - Next exact step: **player performs physical-phone visual smoke; engineering resumes only for a concrete defect.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Level9 phone-smoke HUD / day-night readability correction
+
+- Player phone smoke confirmed two Level9 visual defects after the asset-loader fix: day/night luminance separation was too weak, and the 燭龍 programmatic Boss name / HP fill did not align with the approved decorative frame.
+- Chat-side correction only; no gameplay/balance/path/tower-slot/progression change.
+- New 燭龍 HUD source is vertically compressed and uses a lower centered name reserve; runtime name position is special-cased inside the existing 44px Boss slot.
+- Level9 燭龍 HP track geometry is re-aligned to the visible long groove.
+- Level9 day/night environment now uses stronger SCREEN(day) vs MULTIPLY(night) luminance separation plus a stronger 0.8s telegraph ring for 390px phone readability.
+- Player phone recheck remains required after Pages refresh.
+
 ## 2026-09-25：Global asset-loading reliability hotfix
 
 - Player physical-phone smoke exposed a shared release defect: multiple levels waited a long time, then displayed fallback battlefield art and `?` lineup placeholders.

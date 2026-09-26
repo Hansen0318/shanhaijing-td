@@ -62,6 +62,12 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 ## Not completed
 - player smoke.
 
+### Phone-smoke defect opened 2026-09-26
+- Day/night luminance separation was too weak on physical iPhone.
+- 燭龍 name/HP overlays were visibly offset from the decorative HUD channels.
+- Correction branch: `fix/level9-hud-daynight-readability-20260926`.
+- Scope is visual-only: no gameplay, balance, geometry, tower slots, progression, or enemy logic changes.
+
 ## Current branch / SHA
 - merged implementation PR: #90.
 - release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847`.
@@ -87,4 +93,4 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Player performs the separate physical-phone visual smoke; no engineering or release work remains unless that smoke finds a concrete defect.**
+**Deploy the Level9 phone-smoke visual hotfix, then player rechecks: (1) day/night luminance separation, (2) 燭龍 name centered in the upper reserve, and (3) HP fill centered in the long groove. No gameplay re-test is required unless those visual changes expose a concrete regression.**
