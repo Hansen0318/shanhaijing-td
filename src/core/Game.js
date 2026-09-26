@@ -8,7 +8,7 @@ import { Tower } from '../entities/Tower.js?v=level9-1';
 import { Projectile } from '../entities/Projectile.js?v=level9-1';
 import { Economy } from '../systems/Economy.js';
 import { CombatSystem } from '../systems/CombatSystem.js?v=level9-1';
-import { BlessingSystem } from '../systems/BlessingSystem.js?v=level9-1';
+import { BlessingSystem } from '../systems/BlessingSystem.js?v=blessing-eligibility-1';
 import { WaveManager } from '../systems/WaveManager.js?v=level9-1';
 import { BossSystem } from '../systems/BossSystem.js?v=level9-1';
 import { StatusSystem } from '../systems/StatusSystem.js?v=level9-1';
