@@ -115,6 +115,10 @@ export class Game {
   availableTowerTypes() {
     return this.levelId >= 4 ? [...this.lineupSelection] : ['bifang', 'fuzhu', 'yinglong'];
   }
+  blessingEligibleTowerTypes() {
+    const owned = new Set(this.lineupRoster());
+    return this.availableTowerTypes().filter(type => owned.has(type));
+  }
   canManageTowers() { return PLAYABLE_STATES.has(this.state); }
   teamIntervalMultiplier() {
     return JumangSupportSystem.intervalMultiplier(this.towers, this.blessings.modifiers);
@@ -522,8 +526,8 @@ export class Game {
     }
     this.wave.finish();
     const deployedTypes = [...new Set(this.towers.filter(Boolean).map(tower => tower.type))];
-    const allowedTowerTypes = this.levelId >= 4 ? this.lineupSelection : null;
-    this.currentChoices = this.blessings.drawChoices(deployedTypes, allowedTowerTypes);
+    const eligibleTowerTypes = this.blessingEligibleTowerTypes();
+    this.currentChoices = this.blessings.drawChoices(deployedTypes, eligibleTowerTypes);
     this.state = 'blessing';
     this.time.setPaused(true);
   }
