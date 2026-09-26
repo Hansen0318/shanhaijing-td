@@ -4,16 +4,17 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **HUD CORRECTION / ENGINEERING VERIFYING**
-- Production implementation: **REPLACEMENT HUD BRANCH ACTIVE**
+- Development phase: **RELEASE COMPLETE / FROZEN**
+- Production implementation: **RELEASED / PLAYER VERIFIED**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE H — REOPENED FOR PLAYER-SUPPLIED HUD CORRECTION**
+**GATE J CLOSED — PLAYER ACCEPTANCE COMPLETE / LEVEL9 FROZEN**
 
 ### Allowed now
-- perform player-owned phone visual acceptance on the deployed build;
-- open a follow-up only for a concrete deployed defect.
+- preserve Level9 as released/frozen;
+- open Level9 again only for a concrete regression or defect;
+- initialize Level10 from the repository template when the player requests the next level.
 
 ### Forbidden until gate exit
 - no asset redesign/regeneration without a concrete deployed defect;
@@ -60,20 +61,17 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 - handoff ZIP SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
 
 ## Not completed
-- player smoke.
+- none for Level9 release closure.
 
-### Phone-smoke defect opened 2026-09-26
-- Day/night luminance separation was too weak on physical iPhone.
-- 燭龍 name/HP overlays were visibly offset from the decorative HUD channels.
-- Correction branch: `fix/level9-hud-daynight-readability-20260926`.
-- Active replacement branch: `fix/level9-zhulong-hud-20260926`.
-- Player-supplied PNG has been normalized to a valid 768×213 RGBA runtime asset without stretching; Boss name and HP geometry are being reverified.
-- Scope is visual-only: no gameplay, balance, geometry, tower slots, progression, or enemy logic changes.
+### Player acceptance closed 2026-09-26
+- Player confirmed **Level9 complete** on the deployed build.
+- This closes the remaining physical-phone/player acceptance requirement after the HUD, day/night luminance, asset-loading and attack-identity corrections.
+- Level9 is now the released/frozen baseline and must not be reopened absent a concrete defect/regression.
 
 ## Current branch / SHA
 - merged implementation PR: #90.
-- release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847`.
-- active HUD correction branch: `fix/level9-zhulong-hud-20260926`.
+- final production corrections through PR #99 are in `main`.
+- final player-accepted release baseline before this closure doc: `f9d31cd0ef4c06b770f7d2add2f7f0de71823396`.
 
 ## Verification status
 - Chat-side Final Fileset Audit: **PASS**.
@@ -96,4 +94,4 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 - permanent project rules in `AGENTS.md`.
 
 ## Next exact step
-**Deploy the Level9 phone-smoke visual hotfix, then player rechecks: (1) day/night luminance separation, (2) 燭龍 name centered in the upper reserve, and (3) HP fill centered in the long groove. No gameplay re-test is required unless those visual changes expose a concrete regression.**
+**Level9 is complete and frozen. When the player requests continued campaign development, initialize Level10 from `docs/levels/_TEMPLATE/`, recover all permanent rules from GitHub, and begin Gate A without reopening Level9.**
