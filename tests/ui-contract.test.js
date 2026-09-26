@@ -153,9 +153,9 @@ test('entry and style cache versions are fresh for this release', async () => {
     if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-3/);
     else assert.match(html, new RegExp(`${path.replaceAll('.', '\\.')}\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=blessing-visual-1/);
-  assert.match(main, /Game\.js\?v=blessing-visual-1/);
-  assert.match(main, /Renderer\.js\?v=blessing-visual-1/);
+  assert.match(html, /src\/main\.js\?v=level-visual-1/);
+  assert.match(main, /Game\.js\?v=level-visual-1/);
+  assert.match(main, /Renderer\.js\?v=level-visual-1/);
   assert.match(main, /UIController\.js\?v=asset-load-3/);
   assert.match(main, /artAssets\.js\?v=level9-visual-3/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
@@ -248,4 +248,16 @@ test('blessing visual feedback mirrors real modifier stacks without rebalance', 
   assert.match(renderer, /enemy\.statuses\.burn/);
   assert.match(renderer, /radiusStacks === 2/);
   assert.match(game, /bossHit: hit\.some\(item => item\.isBoss\)/);
+});
+
+
+test('tower upgrade visual feedback scales with real tower level without changing balance', async () => {
+  const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
+  const game = await readFile(new URL('../src/core/Game.js', import.meta.url), 'utf8');
+  const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
+  assert.match(renderer, /p\.sourceTower\?\.level/);
+  assert.match(renderer, /effect\.towerLevel/);
+  assert.match(renderer, /tower\.level >= 2/);
+  assert.match(game, /towerLevel: tower\.level/);
+  assert.match(projectile, /towerLevel: this\.sourceTower\.level/);
 });

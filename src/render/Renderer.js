@@ -583,6 +583,15 @@ export class Renderer {
         ctx.beginPath(); ctx.arc(tower.x, tower.y, 22, 0, Math.PI * 2); ctx.fillStyle = '#102d25'; ctx.fill(); ctx.strokeStyle = '#e5c15a'; ctx.lineWidth = 3; ctx.stroke();
         ctx.font = '24px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(TOWER_DATA[tower.type].emoji, tower.x, tower.y);
       }
+      if (tower.level >= 2) {
+        const pulse = 0.5 + Math.sin((game.visualTime ?? 0) * 3.2 + index * 0.7) * 0.5;
+        ctx.save();
+        ctx.globalAlpha = tower.level === 3 ? 0.48 + pulse * 0.14 : 0.28 + pulse * 0.1;
+        ctx.strokeStyle = tower.level === 3 ? 'rgba(255,239,166,.92)' : 'rgba(225,238,210,.72)';
+        ctx.lineWidth = tower.level === 3 ? 2 : 1.2;
+        ctx.beginPath(); ctx.arc(tower.x, tower.y + 5, tower.level === 3 ? 26 : 24, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
       ctx.fillStyle = '#fff4c7'; ctx.font = 'bold 10px system-ui'; ctx.fillText(`Lv.${tower.level}`, tower.x, tower.y + 31);
     });
   }
@@ -764,10 +773,11 @@ export class Renderer {
         ctx.shadowColor = 'rgba(94,239,226,.78)';
         ctx.shadowBlur = 6;
         const waveStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockDamage', 0.2);
-        ctx.strokeStyle = waveStacks === 2 ? '#d7fffb' : waveStacks === 1 ? '#a9fbf1' : '#8ff5eb';
-        ctx.lineWidth = 3.2 + waveStacks * 0.5;
+        const levelBoost = Math.max(0, (p.sourceTower?.level ?? 1) - 1);
+        ctx.strokeStyle = waveStacks === 2 || levelBoost === 2 ? '#d7fffb' : waveStacks === 1 || levelBoost === 1 ? '#a9fbf1' : '#8ff5eb';
+        ctx.lineWidth = 3.2 + waveStacks * 0.5 + levelBoost * 0.45;
         ctx.beginPath();
-        ctx.arc(0, 0, 8, -1.05, 1.05);
+        ctx.arc(0, 0, 8 + levelBoost * 1.5, -1.05, 1.05);
         ctx.stroke();
         ctx.shadowBlur = 0;
         ctx.strokeStyle = 'rgba(69,193,199,.64)';
@@ -786,23 +796,27 @@ export class Renderer {
         ctx.rotate(angle);
         ctx.shadowColor = 'rgba(158,238,255,.65)';
         const slowStacks = blessingStacks(game.blessings.modifiers, 'fuzhuSlow', 0.1);
-        ctx.shadowBlur = 5 + slowStacks * 2;
-        ctx.fillStyle = slowStacks === 2 ? '#f4feff' : '#d9fbff';
+        const levelBoost = Math.max(0, (p.sourceTower?.level ?? 1) - 1);
+        ctx.shadowBlur = 5 + slowStacks * 2 + levelBoost;
+        ctx.fillStyle = slowStacks === 2 || levelBoost === 2 ? '#f4feff' : '#d9fbff';
         ctx.strokeStyle = '#72d7ed';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.moveTo(12, 0);
-        ctx.lineTo(-3, -4.2);
-        ctx.lineTo(-9, 0);
-        ctx.lineTo(-3, 4.2);
+        const tip = 12 + levelBoost * 2.5;
+        const tail = -9 - levelBoost * 1.5;
+        const half = 4.2 + levelBoost * 0.55;
+        ctx.moveTo(tip, 0);
+        ctx.lineTo(-3, -half);
+        ctx.lineTo(tail, 0);
+        ctx.lineTo(-3, half);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
         ctx.shadowBlur = 0;
         ctx.strokeStyle = 'rgba(154,232,255,.55)';
         ctx.beginPath();
-        ctx.moveTo(-9, 0);
-        ctx.lineTo(-17, 0);
+        ctx.moveTo(tail, 0);
+        ctx.lineTo(-17 - levelBoost * 2, 0);
         ctx.stroke();
         ctx.restore();
         return;
@@ -820,10 +834,11 @@ export class Renderer {
         ctx.stroke();
         ctx.restore();
         const damageStacks = blessingStacks(game.blessings.modifiers, 'jumangDamage', 0.2);
-        const spin = (game.visualTime ?? 0) * (11 + damageStacks * 1.5);
-        if (this.drawContained(ctx, 'jumangLeafblade', p.x, p.y, 24 + damageStacks * 2, 11 + damageStacks, {
+        const levelBoost = Math.max(0, (p.sourceTower?.level ?? 1) - 1);
+        const spin = (game.visualTime ?? 0) * (11 + damageStacks * 1.5 + levelBoost * 0.8);
+        if (this.drawContained(ctx, 'jumangLeafblade', p.x, p.y, 24 + damageStacks * 2 + levelBoost * 2, 11 + damageStacks + levelBoost * 0.7, {
           rotation: angle + spin,
-          filter: damageStacks ? `brightness(${1.08 + damageStacks * 0.08}) saturate(${1.08 + damageStacks * 0.12})` : '',
+          filter: damageStacks || levelBoost ? `brightness(${1.08 + damageStacks * 0.08 + levelBoost * 0.06}) saturate(${1.08 + damageStacks * 0.12 + levelBoost * 0.08})` : '',
         })) return;
         ctx.save();
         ctx.translate(p.x, p.y);
@@ -838,9 +853,10 @@ export class Renderer {
 
       // 畢方 keeps its established fireball identity; damage blessings intensify the fireball without changing hit logic.
       const bifangDamageStacks = blessingStacks(game.blessings.modifiers, 'bifangDamage', 0.2);
-      if (this.drawContained(ctx, 'bifangFireball', p.x, p.y, 19 + bifangDamageStacks * 2, 13 + bifangDamageStacks, {
+      const bifangLevelBoost = Math.max(0, (p.sourceTower?.level ?? 1) - 1);
+      if (this.drawContained(ctx, 'bifangFireball', p.x, p.y, 19 + bifangDamageStacks * 2 + bifangLevelBoost * 2, 13 + bifangDamageStacks + bifangLevelBoost, {
         rotation: angle,
-        filter: bifangDamageStacks ? `brightness(${1.08 + bifangDamageStacks * 0.08}) saturate(${1.1 + bifangDamageStacks * 0.12})` : '',
+        filter: bifangDamageStacks || bifangLevelBoost ? `brightness(${1.08 + bifangDamageStacks * 0.08 + bifangLevelBoost * 0.07}) saturate(${1.1 + bifangDamageStacks * 0.12 + bifangLevelBoost * 0.08})` : '',
       })) return;
       ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fillStyle = '#ff7b38'; ctx.fill();
     });
@@ -849,11 +865,12 @@ export class Renderer {
     game.effects.filter(effect => effect.type === 'xuanguiImpact').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
       const waveStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockDamage', 0.2);
+      const levelBoost = Math.max(0, (effect.towerLevel ?? 1) - 1);
       ctx.save();
       ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
-      ctx.strokeStyle = waveStacks === 2 ? '#e7fffb' : '#9ff6ec';
-      ctx.lineWidth = 2 + waveStacks * 0.6;
-      ctx.beginPath(); ctx.arc(effect.x, effect.y, 5 + progress * (10 + waveStacks * 2), 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = waveStacks === 2 || levelBoost === 2 ? '#e7fffb' : '#9ff6ec';
+      ctx.lineWidth = 2 + waveStacks * 0.6 + levelBoost * 0.45;
+      ctx.beginPath(); ctx.arc(effect.x, effect.y, 5 + progress * (10 + waveStacks * 2 + levelBoost * 2), 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     });
     game.effects.filter(effect => effect.type === 'xuanguiShockTelegraph').forEach(effect => {
@@ -874,9 +891,10 @@ export class Renderer {
       const progress = 1 - effect.life / effect.duration;
       const damageStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockDamage', 0.2);
       const pushStacks = blessingStacks(game.blessings.modifiers, 'xuanguiShockPushback', 5);
+      const levelBoost = Math.max(0, (effect.towerLevel ?? 1) - 1);
       ctx.save();
       ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
-      for (let ring = 0; ring < 2 + (damageStacks === 2 ? 1 : 0); ring += 1) {
+      for (let ring = 0; ring < 2 + (damageStacks === 2 || levelBoost === 2 ? 1 : 0); ring += 1) {
         const ringProgress = Math.max(0, Math.min(1, progress * 1.35 - ring * 0.18));
         ctx.strokeStyle = ring === 0 ? '#b5fff4' : ring === 1 ? '#57d7d1' : 'rgba(211,255,249,.72)';
         ctx.lineWidth = Math.max(1, 3 + damageStacks * 0.35 - ring);
@@ -947,13 +965,14 @@ export class Renderer {
     });
     game.effects.filter(effect => effect.type === 'jumangImpact').forEach(effect => {
       const progress = 1 - effect.life / effect.duration;
+      const levelBoost = Math.max(0, (effect.towerLevel ?? 1) - 1);
       ctx.save();
       ctx.globalAlpha = Math.max(0, effect.life / effect.duration);
       ctx.fillStyle = 'rgba(136, 246, 175, .24)';
-      ctx.strokeStyle = '#baffce';
-      ctx.lineWidth = 3 - progress;
+      ctx.strokeStyle = levelBoost === 2 ? '#e4ffd0' : '#baffce';
+      ctx.lineWidth = 3 - progress + levelBoost * 0.4;
       ctx.beginPath();
-      ctx.arc(effect.x, effect.y, 7 + progress * 10, 0, Math.PI * 2);
+      ctx.arc(effect.x, effect.y, 7 + progress * (10 + levelBoost * 2), 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
       ctx.restore();
@@ -1010,8 +1029,9 @@ export class Renderer {
       ctx.setLineDash([8, 7]);
       ctx.lineDashOffset = -6 * (1 - alpha);
       const insightStacks = blessingStacks(game.blessings.modifiers, 'baizeVulnerability', 0.05);
+      const levelBoost = Math.max(0, (effect.towerLevel ?? 1) - 1);
       ctx.strokeStyle = `rgba(206,253,255,${0.18 + alpha * 0.62})`;
-      ctx.lineWidth = 1.6 + insightStacks * 0.45;
+      ctx.lineWidth = 1.6 + insightStacks * 0.45 + levelBoost * 0.35;
       ctx.beginPath();
       ctx.moveTo(effect.from.x + ux * 8, effect.from.y + uy * 8);
       ctx.lineTo(effect.to.x - ux * 8, effect.to.y - uy * 8);
@@ -1028,7 +1048,7 @@ export class Renderer {
       ctx.restore();
 
       const durationStacks = blessingStacks(game.blessings.modifiers, 'baizeInsightDuration', 1);
-      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 34 + insightStacks * 3, 34 + insightStacks * 3, {
+      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 34 + insightStacks * 3 + levelBoost * 2, 34 + insightStacks * 3 + levelBoost * 2, {
         alpha: Math.min(1, 0.55 + alpha * 0.45),
         scale: 1 + (1 - alpha) * (0.16 + durationStacks * 0.03),
         filter: `brightness(${1.4 + insightStacks * 0.1}) saturate(${1.2 + insightStacks * 0.08})`,
@@ -1135,9 +1155,10 @@ export class Renderer {
       const alpha = Math.max(0, effect.life / effect.duration);
       const radiusStacks = blessingStacks(game.blessings.modifiers, 'bifangRadius', 0.2);
       const damageStacks = blessingStacks(game.blessings.modifiers, 'bifangDamage', 0.2);
+      const levelBoost = Math.max(0, (effect.towerLevel ?? 1) - 1);
       const drewArt = this.drawContained(ctx, 'bifangExplosion', effect.x, effect.y, radius * 2.2, radius * 2.2, {
         alpha,
-        filter: damageStacks ? `brightness(${1.08 + damageStacks * 0.08}) saturate(${1.08 + damageStacks * 0.1})` : '',
+        filter: damageStacks || levelBoost ? `brightness(${1.08 + damageStacks * 0.08 + levelBoost * 0.07}) saturate(${1.08 + damageStacks * 0.1 + levelBoost * 0.08})` : '',
       });
       ctx.save();
       ctx.globalAlpha = alpha;
@@ -1147,10 +1168,10 @@ export class Renderer {
         ctx.lineWidth = 4 - progress * 2;
         ctx.beginPath(); ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
       }
-      if (radiusStacks) {
-        ctx.strokeStyle = radiusStacks === 2 ? 'rgba(255,244,169,.98)' : 'rgba(255,194,78,.92)';
-        ctx.lineWidth = 2 + radiusStacks * 0.6;
-        ctx.beginPath(); ctx.arc(effect.x, effect.y, radius * (1.02 + radiusStacks * 0.04), 0, Math.PI * 2); ctx.stroke();
+      if (radiusStacks || levelBoost === 2) {
+        ctx.strokeStyle = radiusStacks === 2 || levelBoost === 2 ? 'rgba(255,244,169,.98)' : 'rgba(255,194,78,.92)';
+        ctx.lineWidth = 2 + radiusStacks * 0.6 + levelBoost * 0.35;
+        ctx.beginPath(); ctx.arc(effect.x, effect.y, radius * (1.02 + radiusStacks * 0.04 + levelBoost * 0.025), 0, Math.PI * 2); ctx.stroke();
         if (radiusStacks === 2) {
           ctx.strokeStyle = 'rgba(255,138,52,.58)';
           ctx.lineWidth = 1.2;
@@ -1166,21 +1187,22 @@ export class Renderer {
       const damageStacks = effect.damageStacks ?? 0;
       const penetrationStacks = effect.penetrationStacks ?? 0;
       const bossStacks = effect.bossStacks ?? 0;
+      const levelBoost = Math.max(0, (effect.towerLevel ?? 1) - 1);
       const segments = effect.points.slice(1).map((point, index) => [effect.points[index], point]);
-      const beamWidth = 12 + damageStacks * 1.5;
+      const beamWidth = 12 + damageStacks * 1.5 + levelBoost * 1.3;
       const drewArt = segments.length && segments.every(([start, end]) => this.drawDirectional(ctx, 'yinglongBeam', start, end, beamWidth, alpha));
       ctx.save();
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       if (!drewArt) {
-        ctx.strokeStyle = `rgba(255,220,87,${alpha})`; ctx.lineWidth = 6 + damageStacks;
+        ctx.strokeStyle = `rgba(255,220,87,${alpha})`; ctx.lineWidth = 6 + damageStacks + levelBoost * 0.8;
         ctx.beginPath();
         effect.points.forEach((point, index) => index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y));
         ctx.stroke();
         ctx.strokeStyle = `rgba(255,250,205,${alpha})`; ctx.lineWidth = 2 + damageStacks * 0.35; ctx.stroke();
       }
-      if (penetrationStacks) {
+      if (penetrationStacks || levelBoost === 2) {
         ctx.strokeStyle = penetrationStacks === 2 ? `rgba(255,255,225,${alpha * 0.9})` : `rgba(255,236,144,${alpha * 0.72})`;
-        ctx.lineWidth = 1 + penetrationStacks * 0.45;
+        ctx.lineWidth = 1 + penetrationStacks * 0.45 + levelBoost * 0.25;
         effect.points.slice(1).forEach(point => { ctx.beginPath(); ctx.arc(point.x, point.y, 7 + penetrationStacks * 2, 0, Math.PI * 2); ctx.stroke(); });
       }
       if (effect.bossHit && bossStacks) {

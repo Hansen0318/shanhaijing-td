@@ -479,7 +479,7 @@ export class Game {
             illusion.duration = Math.min(illusion.duration, stats.illusionRevealDuration);
           });
         }
-        this.effects.push({ type: 'baizeInsight', from: { x: tower.x, y: tower.y }, to: { x: target.x, y: target.y }, life: 0.14, duration: 0.14 });
+        this.effects.push({ type: 'baizeInsight', from: { x: tower.x, y: tower.y }, to: { x: target.x, y: target.y }, towerLevel: tower.level, life: 0.14, duration: 0.14 });
       } else if (tower.type === 'yinglong') {
         const hit = CombatSystem.penetrate(targets, stats.penetration, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability, bossBonus: stats.bossBonus }, tower, stats.range);
         this.effects.push({
@@ -487,6 +487,7 @@ export class Game {
           points: [{ x: tower.x, y: tower.y }, ...hit.map(item => ({ x: item.x, y: item.y }))],
           hitCount: hit.length,
           bossHit: hit.some(item => item.isBoss),
+          towerLevel: tower.level,
           damageStacks: blessingStacks(this.blessings.modifiers, 'yinglongDamage', 0.2),
           penetrationStacks: blessingStacks(this.blessings.modifiers, 'yinglongPenetration', 1),
           bossStacks: blessingStacks(this.blessings.modifiers, 'yinglongBoss', 0.3),
@@ -507,7 +508,7 @@ export class Game {
         Object.assign(enemy, enemy.map.positionAt(enemy.pathDistance));
       }
       this.effects.push({
-        type: 'xuanguiShock', x: shock.x, y: shock.y, radius: shock.radius,
+        type: 'xuanguiShock', x: shock.x, y: shock.y, radius: shock.radius, towerLevel: shock.towerLevel ?? 1,
         hitCount: hit.length, life: 0.58, duration: 0.58,
       });
     }

@@ -23,6 +23,20 @@
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Tower-level visual-feedback trial
+
+- Player requested a second trial: Lv.2/Lv.3 tower upgrades should become visibly stronger in addition to Blessing feedback.
+- This pass is visual-only and does not change upgrade costs, damage multipliers, ranges, slow values, penetration counts, cooldowns, projectile speeds or any gameplay formulas.
+- Trial visual mapping:
+  - all Lv.2/Lv.3 deployed beasts gain a restrained level ring around the tower body;
+  - 畢方 fireball/explosion intensify by level; Lv.3 explosion presentation reinforces its existing larger explosion-radius gameplay upgrade;
+  - 夫諸 ice crystal becomes longer/brighter by level, matching stronger Lv.3 slow;
+  - 應龍 beam becomes thicker/brighter by level; Lv.3 penetration presentation is emphasized;
+  - 白澤 insight flash/mark strengthen by level, matching Lv.2 insight/range and Lv.3 defense-pierce progression;
+  - 句芒 leaf-blade spin/body/impact strengthen by level without inventing a new gameplay mechanic;
+  - 玄龜 tide-front/impact/shock presentation strengthen by level without inventing a new gameplay mechanic.
+- This remains **trial / player acceptance pending**. Do not promote tower-level visual treatment into permanent hard rules until the player confirms it improves upgrade readability without making combat too noisy.
+
 ## 2026-09-26：Blessing visual-feedback trial
 
 - Player requested a trial before making any new permanent Blessing-visual hard rule.
