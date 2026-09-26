@@ -157,7 +157,7 @@ test('entry and style cache versions are fresh for this release', async () => {
   assert.match(main, /Game\.js\?v=level9-1/);
   assert.match(main, /Renderer\.js\?v=level9-visual-2/);
   assert.match(main, /UIController\.js\?v=asset-load-2/);
-  assert.match(main, /artAssets\.js\?v=asset-load-2/);
+  assert.match(main, /artAssets\.js\?v=level9-visual-2/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
   for (const module of ['gameData', 'BossSystem', 'TideSystem', 'DayNightSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
@@ -197,4 +197,18 @@ test('mobile entry resets browser scroll restoration and anchors the game at the
   assert.match(main, /window\.scrollTo\(0, 0\)/);
   assert.match(main, /window\.addEventListener\('pageshow', resetViewport\)/);
   assert.match(main, /document\.body\.classList\.remove\('art-loading'\);[\s\S]*resetViewport\(\)/);
+});
+
+
+test('Level9 phone visual hotfix keeps Zhulong overlays aligned and day/night contrast explicit', async () => {
+  const art = await readFile(new URL('../src/config/artAssets.js', import.meta.url), 'utf8');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
+  assert.match(art, /ui_boss_zhulong_panel_v2\.png/);
+  assert.match(art, /zhulong: Object\.freeze\(\{ left: '12\.8%', top: '60\.0%', width: '74\.5%', height: '14\.5%' \}\)/);
+  assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] \{ border-image-slice: 35 fill; \}/);
+  assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] strong \{ top: 13px; font-size: 12px; line-height: 12px; \}/);
+  assert.match(renderer, /globalCompositeOperation = warm \? 'screen' : 'multiply'/);
+  assert.match(renderer, /rgba\(255,116,42,\.22\)/);
+  assert.match(renderer, /rgba\(20,27,61,\.42\)/);
 });
