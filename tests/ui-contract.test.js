@@ -208,9 +208,10 @@ test('Level9 phone visual hotfix keeps Zhulong overlays aligned and day/night co
   assert.match(art, /zhulong: Object\.freeze\(\{ left: '14\.2%', top: '59\.4%', width: '71\.3%', height: '12\.6%' \}\)/);
   assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] \{ border-image-slice: 35 fill; \}/);
   assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] strong \{ top: 7px; left: 39\.4%; width: 21\.2%; font-size: 12px; line-height: 12px; \}/);
-  assert.match(renderer, /globalCompositeOperation = warm \? 'screen' : 'multiply'/);
-  assert.match(renderer, /rgba\(255,116,42,\.22\)/);
+  assert.match(renderer, /rgba\(154,45,18,\.075\)/);
+  assert.match(renderer, /globalCompositeOperation = 'multiply'/);
   assert.match(renderer, /rgba\(20,27,61,\.42\)/);
+  assert.doesNotMatch(renderer, /rgba\(255,116,42,\.22\)/);
 });
 
 
