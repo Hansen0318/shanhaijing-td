@@ -204,6 +204,9 @@ After the release source is confirmed in `main` and Pages, and no unique unmerge
 This gate is cleanup-only and must not change shipped gameplay or reopen completed design.
 
 
+### Attack identity / roster readability
+When implementing or reviewing deployable attacks, compare against the **currently released deployable roster**. At ~390 px width, each primary attack needs a distinct silhouette, motion pattern, beam behavior, trail, or impact language; hue-only differentiation is insufficient. Prefer procedural corrections that preserve balance. Include a mixed-roster phone/runtime check when attack readability is in scope.
+
 ### Dynamic released baseline
 Before planning regression, compatibility, visual comparison or "do not redo prior work" scope, resolve the product's **currently released baseline** from the current repository/release state.
 

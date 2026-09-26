@@ -676,34 +676,85 @@ export class Renderer {
   drawProjectiles(ctx, game) {
     game.projectiles.forEach(p => {
       const angle = Math.atan2(p.targetPoint.y - p.y, p.targetPoint.x - p.x);
+
+      // 玄龜: moving crescent/tide front, intentionally not another blue orb.
       if (p.type === 'xuangui') {
         ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(angle);
         ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(94, 239, 226, .72)';
-        ctx.shadowBlur = 7;
-        ctx.strokeStyle = 'rgba(86, 215, 210, .58)';
+        ctx.shadowColor = 'rgba(94,239,226,.78)';
+        ctx.shadowBlur = 6;
+        ctx.strokeStyle = '#8ff5eb';
         ctx.lineWidth = 3.2;
-        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - Math.cos(angle) * 14, p.y - Math.sin(angle) * 14); ctx.stroke();
-        const core = ctx.createRadialGradient(p.x - 1, p.y - 1, 0, p.x, p.y, 6);
-        core.addColorStop(0, '#e4fffa'); core.addColorStop(0.42, '#63e4dc'); core.addColorStop(1, 'rgba(24,126,140,0)');
-        ctx.fillStyle = core; ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath();
+        ctx.arc(0, 0, 8, -1.05, 1.05);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(69,193,199,.64)';
+        ctx.lineWidth = 1.7;
+        ctx.beginPath();
+        ctx.arc(-5, 0, 10, -0.9, 0.9);
+        ctx.stroke();
         ctx.restore();
         return;
       }
-      const id = p.type === 'bifang' ? 'bifangFireball' : p.type === 'jumang' ? 'jumangLeafblade' : 'fuzhuFrostshot';
-      if (p.type === 'jumang') {
+
+      // 夫諸: long ice crystal / spear silhouette instead of a generic blue pellet.
+      if (p.type === 'fuzhu') {
         ctx.save();
-        ctx.strokeStyle = 'rgba(141, 242, 174, .72)';
-        ctx.lineWidth = 3;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(angle);
+        ctx.shadowColor = 'rgba(158,238,255,.65)';
+        ctx.shadowBlur = 5;
+        ctx.fillStyle = '#d9fbff';
+        ctx.strokeStyle = '#72d7ed';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(12, 0);
+        ctx.lineTo(-3, -4.2);
+        ctx.lineTo(-9, 0);
+        ctx.lineTo(-3, 4.2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(154,232,255,.55)';
+        ctx.beginPath();
+        ctx.moveTo(-9, 0);
+        ctx.lineTo(-17, 0);
+        ctx.stroke();
+        ctx.restore();
+        return;
+      }
+
+      if (p.type === 'jumang') {
+        // 句芒: visibly spinning curved leaf-blade plus a short green wake.
+        ctx.save();
+        ctx.strokeStyle = 'rgba(141,242,174,.68)';
+        ctx.lineWidth = 2.4;
         ctx.lineCap = 'round';
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.x - Math.cos(angle) * 13, p.y - Math.sin(angle) * 13);
+        ctx.lineTo(p.x - Math.cos(angle) * 11, p.y - Math.sin(angle) * 11);
         ctx.stroke();
         ctx.restore();
+        const spin = (game.visualTime ?? 0) * 11;
+        if (this.drawContained(ctx, 'jumangLeafblade', p.x, p.y, 24, 11, { rotation: angle + spin })) return;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(angle + spin);
+        ctx.fillStyle = '#8df2ae';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 9, 3.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
       }
-      if (this.drawContained(ctx, id, p.x, p.y, p.type === 'bifang' ? 19 : p.type === 'jumang' ? 22 : 20, 13, { rotation: angle })) return;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.type === 'bifang' ? 6 : 5, 0, Math.PI * 2); ctx.fillStyle = p.type === 'bifang' ? '#ff7b38' : p.type === 'jumang' ? '#8df2ae' : '#9eeeff'; ctx.fill();
+
+      // 畢方 keeps its established fireball identity.
+      if (this.drawContained(ctx, 'bifangFireball', p.x, p.y, 19, 13, { rotation: angle })) return;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fillStyle = '#ff7b38'; ctx.fill();
     });
   }
   drawEffects(ctx, game) {
@@ -833,31 +884,36 @@ export class Renderer {
       const dx = effect.to.x - effect.from.x;
       const dy = effect.to.y - effect.from.y;
       const length = Math.hypot(dx, dy) || 1;
-      const nx = -dy / length;
-      const ny = dx / length;
+      const ux = dx / length;
+      const uy = dy / length;
+      const nx = -uy;
+      const ny = ux;
       ctx.save();
+      // 白澤 is a brief "insight flash", not a sustained beam like 應龍.
       ctx.lineCap = 'round';
-      ctx.shadowColor = 'rgba(160,245,255,.9)';
-      ctx.shadowBlur = 8;
-      ctx.strokeStyle = `rgba(194,252,255,${0.35 + alpha * 0.55})`;
-      ctx.lineWidth = 5;
+      ctx.setLineDash([8, 7]);
+      ctx.lineDashOffset = -6 * (1 - alpha);
+      ctx.strokeStyle = `rgba(206,253,255,${0.18 + alpha * 0.62})`;
+      ctx.lineWidth = 1.6;
       ctx.beginPath();
-      ctx.moveTo(effect.from.x, effect.from.y);
-      ctx.lineTo(effect.to.x, effect.to.y);
+      ctx.moveTo(effect.from.x + ux * 8, effect.from.y + uy * 8);
+      ctx.lineTo(effect.to.x - ux * 8, effect.to.y - uy * 8);
       ctx.stroke();
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = `rgba(255,255,224,${0.55 + alpha * 0.4})`;
-      ctx.lineWidth = 1.8;
+      ctx.setLineDash([]);
+      ctx.strokeStyle = `rgba(255,255,226,${0.32 + alpha * 0.5})`;
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.moveTo(effect.from.x + nx * 2, effect.from.y + ny * 2);
-      ctx.lineTo(effect.to.x + nx * 2, effect.to.y + ny * 2);
+      ctx.moveTo(effect.to.x - nx * 7, effect.to.y - ny * 7);
+      ctx.lineTo(effect.to.x + nx * 7, effect.to.y + ny * 7);
+      ctx.moveTo(effect.to.x - ux * 7, effect.to.y - uy * 7);
+      ctx.lineTo(effect.to.x + ux * 7, effect.to.y + uy * 7);
       ctx.stroke();
       ctx.restore();
 
-      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 30, 30, {
-        alpha: Math.min(1, 0.45 + alpha * 0.55),
-        scale: 1 + (1 - alpha) * 0.12,
-        filter: 'brightness(1.35) saturate(1.15)',
+      this.drawContained(ctx, 'baizeInsightMark', effect.to.x, effect.to.y, 34, 34, {
+        alpha: Math.min(1, 0.55 + alpha * 0.45),
+        scale: 1 + (1 - alpha) * 0.16,
+        filter: 'brightness(1.4) saturate(1.2)',
       });
     });
     game.effects.filter(effect => effect.type === 'zhuyanCharge').forEach(effect => {
