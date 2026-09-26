@@ -32,6 +32,8 @@ export class Projectile {
         type: 'explosion', x: this.targetPoint.x, y: this.targetPoint.y,
         radius: this.stats.explosionRadius, hitCount: hit.length,
         hitPoints: hit.map(enemy => ({ x: enemy.x, y: enemy.y })),
+        radiusStacks: Math.max(0, Math.min(2, Math.round((this.modifiers.bifangRadius ?? 0) / 0.2))),
+        damageStacks: Math.max(0, Math.min(2, Math.round((this.modifiers.bifangDamage ?? 0) / 0.2))),
         life: 0.36, duration: 0.36,
       });
     } else if (this.target.alive) {
@@ -46,6 +48,7 @@ export class Projectile {
       if (this.type === 'xuangui') {
         this.effects.push({
           type: 'xuanguiImpact', x: this.targetPoint.x, y: this.targetPoint.y,
+          waveStacks: Math.max(0, Math.min(2, Math.round((this.modifiers.xuanguiShockDamage ?? 0) / 0.2))),
           life: 0.24, duration: 0.24,
         });
         this.sourceTower.successfulAttacks += 1;
