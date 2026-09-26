@@ -962,3 +962,32 @@ This rule applies to all current and future levels.
 8. Public release verification must check not only that the page opens, but that representative real assets are present: production background, lineup/tower art, and any current-level first-paint asset. A fallback road or `?` placeholder is a release defect.
 9. Use the currently released product state dynamically. Do not encode today's level range or roster size as a permanent preload assumption.
 
+
+
+## 24. Blessing eligibility and progression safety are permanent hard rules
+
+Creature-specific Blessings must never leak across progression or loadout boundaries.
+
+- A creature-specific Blessing is eligible only when that creature is **owned/unlocked for the current campaign state AND eligible in the current combat loadout**.
+- For legacy levels without a lineup-selection phase, eligibility is the level's actual available deployable set.
+- For lineup levels, eligibility is exactly the player's confirmed lineup, intersected with the owned/unlocked roster and runtime tower definitions.
+- A creature that is future-locked, not yet earned, absent from the current lineup, or not runtime-playable must never appear as a creature-specific Blessing.
+- Actual map deployment may affect draw **weight**, but must not expand eligibility.
+- The Blessing system must fail closed: if no eligible creature set is supplied, tower-specific Blessings are excluded rather than globally allowed.
+- Global Blessings may remain eligible independently of creature lineup when their own progression rules allow them.
+- Every new unlock, new deployable creature, new lineup size, and new level must add/update executable coverage proving no future/unselected creature Blessing can leak into earlier/current levels.
+- Never hard-code a historical future roster as the filter. Derive eligibility from current progression + current loadout/runtime availability.
+
+## 25. Blessing and tower-upgrade visual feedback are permanent readability contracts
+
+Player phone validation confirmed that numeric upgrades need visible combat feedback.
+
+- Creature-specific Blessings must preserve their gameplay value exactly while providing a phone-readable visual change that matches the affected mechanic: damage, range, status, penetration, mark, AoE, pushback, support, or other real effect.
+- Visual feedback must represent the **actual modifier**. Do not invent a gameplay capability merely to make an upgrade look stronger.
+- Stack 1 and stack 2 should be distinguishable where practical at ~390 px without overwhelming combat.
+- Tower Lv.2/Lv.3 upgrades must likewise increase visible attack/presentation strength. Where a level has a real special upgrade (for example larger AoE, stronger slow, extra penetration, longer insight, defense pierce), the visual should reinforce that specific gameplay change.
+- When a level upgrade only increases generic damage, strengthen the existing attack language rather than inventing a new mechanic.
+- Blessing visuals and tower-level visuals must compose rather than overwrite each other.
+- Readability changes must not silently alter damage, cooldown, range, projectile speed, targeting, wave data, progression, or other balance values.
+- Validate mixed-roster combat on ~390 px phone width; if the upgrade exists numerically but the player cannot reasonably perceive it, treat that as a presentation defect.
+
