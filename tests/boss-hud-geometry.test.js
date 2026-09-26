@@ -103,15 +103,15 @@ test('Huashe HP fill maps into the approved 768x183 transparent channel without 
 });
 
 test('Zhulong HP fill maps into the measured long lower channel inside the fixed 44px HUD', () => {
-  const sourceChannel = { left: 199, top: 204, width: 754, height: 34 };
+  const sourceChannel = { left: 134, top: 120, width: 498, height: 18 };
   const border = 6;
-  const sourceSlice = 70;
+  const sourceSlice = 35;
   const geometry = BOSS_HUD_GEOMETRY.zhulong;
   const channel = {
-    left: border + (sourceChannel.left - sourceSlice) / (1152 - sourceSlice * 2) * (PANEL_WIDTH - border * 2),
-    top: border + (sourceChannel.top - sourceSlice) / (308 - sourceSlice * 2) * (PANEL_HEIGHT - border * 2),
-    width: sourceChannel.width / (1152 - sourceSlice * 2) * (PANEL_WIDTH - border * 2),
-    height: sourceChannel.height / (308 - sourceSlice * 2) * (PANEL_HEIGHT - border * 2),
+    left: border + (sourceChannel.left - sourceSlice) / (768 - sourceSlice * 2) * (PANEL_WIDTH - border * 2),
+    top: border + (sourceChannel.top - sourceSlice) / (213 - sourceSlice * 2) * (PANEL_HEIGHT - border * 2),
+    width: sourceChannel.width / (768 - sourceSlice * 2) * (PANEL_WIDTH - border * 2),
+    height: sourceChannel.height / (213 - sourceSlice * 2) * (PANEL_HEIGHT - border * 2),
   };
   const rendered = {
     left: border + percent(geometry.left) * (PANEL_WIDTH - border * 2),

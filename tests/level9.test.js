@@ -108,7 +108,7 @@ test('Level9 runtime assets match the audited v2 files', async () => {
     tiangou: ['assets/enemies/enemy_tiangou_v1.png', 149653, 'd0f8b77457a2d55f3c225ec14d268ac74838bc9f10cede9ddc1da8c2f586cc55'],
     zheng: ['assets/enemies/enemy_zheng_v1.png', 184120, '330cbaae04bd40ed2952f1af45e5fbe152fe0f3ef1d5ea33b7eadb4539960b61'],
     zhulong: ['assets/bosses/boss_zhulong_v1.png', 324156, '9e152e176cbd6ff2da90d6e735d77479fe13244553dee903b30fc4f6446984ee'],
-    zhulongBossPanel: ['assets/ui/ui_boss_zhulong_panel_v1.png', 273070, 'd5ba9f32fd2c5f5060c252f684c20e8e50212ccb6ee4ae97720a8972d7030ab6'],
+    zhulongBossPanel: ['assets/ui/ui_boss_zhulong_panel_v2.png', 106121, 'e7e243c9a339626a5735ce6bc81853f247a38900338d8a56c45d286859efe9f2'],
     dijiangUnlock: ['assets/ui/unlock_dijiang_v1.png', 196178, '4234e1b087399e9886e51cd44f77855d58ed074f9e7c825b4adc16c9f067591a'],
   };
   for (const [id, [path, bytes, sha256]] of Object.entries(expected)) {

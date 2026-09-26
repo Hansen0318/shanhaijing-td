@@ -248,6 +248,8 @@ test('result panel exposes victory and defeat state for the matching skin', () =
     'result-title': { textContent: '' }, 'result-stats': { innerHTML: '' }, 'retry-button': { textContent: '' },
     'next-level-button': { hidden: true },
   };
+  ui.renderer = { art: { ensureLevel() {} } };
+  ui.prefetchedNextLevelId = null;
 
   ui.renderResult();
   assert.equal(ui.dom['result-panel'].dataset.result, 'victory');
@@ -350,7 +352,7 @@ test('each Boss HUD applies its measured track geometry and follows 100, 50 and 
     { levelId: 6, type: 'jinwu', name: '金烏', panel: /ui_boss_jinwu_panel_v1\.png/, rect: ['3.7%', '43.8%', '92.5%', '21.9%'] },
     { levelId: 7, type: 'kui', name: '夔', panel: /ui_boss_kui_panel_v1\.png/, rect: ['9.9%', '52.6%', '80.4%', '14.2%'] },
     { levelId: 8, type: 'huashe', name: '化蛇', panel: /ui_boss_huashe_panel_v1\.png/, rect: ['11.6%', '60.9%', '76.7%', '17.3%'] },
-    { levelId: 9, type: 'zhulong', name: '燭龍', panel: /ui_boss_zhulong_panel_v1\.png/, rect: ['12.8%', '79.8%', '74.5%', '20.2%'] },
+    { levelId: 9, type: 'zhulong', name: '燭龍', panel: /ui_boss_zhulong_panel_v2\.png/, rect: ['14.2%', '59.4%', '71.3%', '12.6%'] },
   ];
 
   for (const { levelId, type, name, panel, rect } of cases) {
