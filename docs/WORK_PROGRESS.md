@@ -23,6 +23,15 @@
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Blessing eligibility global fix + visual rules promoted
+
+- Player phone screenshot exposed a global Blessing eligibility defect: Level1 could offer 句芒「青羽」 even though 句芒 is a future unlock and cannot be in the Level1 combat loadout.
+- Root cause: Level1–3 passed no allowed tower set, and BlessingSystem interpreted a missing filter as allowing every tower-specific Blessing. Deployed types only changed weight.
+- Global fix: creature-specific Blessing eligibility is now derived from owned/unlocked roster ∩ current level combat loadout. Level1–3 use their actual base deployables; Level4+ use the confirmed lineup. Deployment remains weighting only.
+- BlessingSystem now fails closed for tower-specific Blessings if eligibility is omitted.
+- Regression coverage added across Level1, Level4, Level7 and Level9 boundaries; future/unselected/non-runtime beasts may not leak into the pool.
+- Player accepted the Blessing visual-feedback and tower-level visual-feedback trials. Both are now promoted to permanent project-wide hard rules for future creatures/levels, while preserving gameplay/balance values.
+
 ## 2026-09-26：Tower-level visual-feedback trial
 
 - Player requested a second trial: Lv.2/Lv.3 tower upgrades should become visibly stronger in addition to Blessing feedback.
