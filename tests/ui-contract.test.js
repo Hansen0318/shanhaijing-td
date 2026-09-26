@@ -150,11 +150,12 @@ test('entry and style cache versions are fresh for this release', async () => {
   const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
   const progression = await readFile(new URL('../src/config/progressionData.js', import.meta.url), 'utf8');
   for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css']) {
-    assert.match(html, new RegExp(`${path.replace('.', '\\.')}\\?v=level9-1`));
+    if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-2/);
+    else assert.match(html, new RegExp(`${path.replace('.', '\\\\.')}\\\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=asset-load-2/);
+  assert.match(html, /src\/main\.js\?v=level9-visual-2/);
   assert.match(main, /Game\.js\?v=level9-1/);
-  assert.match(main, /Renderer\.js\?v=asset-load-2/);
+  assert.match(main, /Renderer\.js\?v=level9-visual-2/);
   assert.match(main, /UIController\.js\?v=asset-load-2/);
   assert.match(main, /artAssets\.js\?v=asset-load-2/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
