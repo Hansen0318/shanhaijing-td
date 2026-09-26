@@ -1,5 +1,5 @@
 import { Game } from './core/Game.js?v=level9-1';
-import { Renderer } from './render/Renderer.js?v=level9-visual-3';
+import { Renderer } from './render/Renderer.js?v=level9-daylight-1';
 import { UIController } from './ui/UIController.js?v=asset-load-3';
 import { ArtStore, LEVEL_REQUIRED_ART_IDS } from './config/artAssets.js?v=level9-visual-3';
 import { setupLevelEightDev } from './dev/LevelEightDev.js?v=level9-1';
