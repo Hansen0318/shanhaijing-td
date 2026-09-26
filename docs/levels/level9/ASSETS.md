@@ -37,7 +37,7 @@
 | L9-A010 | `enemy_tiangou_v1.png` | 天狗 | PNG-first | APPROVED_FINAL | runtime 512×364 RGBA; 149,653 bytes; SHA-256 `d0f8b77457a2d55f3c225ec14d268ac74838bc9f10cede9ddc1da8c2f586cc55`; exact re-upload source recorded below |
 | L9-A011 | `enemy_zheng_v1.png` | 猙 | PNG-first | APPROVED_FINAL | runtime 512×376 RGBA; 184,120 bytes; SHA-256 `330cbaae04bd40ed2952f1af45e5fbe152fe0f3ef1d5ea33b7eadb4539960b61`; exact re-upload source recorded below |
 | L9-A012 | `boss_zhulong_v1.png` | 燭龍 base/P1 | PNG-first | APPROVED_FINAL | runtime 640×442 RGBA; 324,156 bytes; SHA-256 `9e152e176cbd6ff2da90d6e735d77479fe13244553dee903b30fc4f6446984ee`; exact re-upload source recorded below |
-| L9-A013 | `ui_boss_zhulong_panel_v2.png` | 燭龍 Boss HUD frame | PNG-first | PHONE_SMOKE_HOTFIX / PLAYER_RECHECK_PENDING | compressed 768×213 transparent PNG; fixed 44px runtime slot; lower centered name reserve + re-aligned HP groove |
+| L9-A013 | `ui_boss_zhulong_panel_v2.png` | 燭龍 Boss HUD frame | PNG-first | PLAYER_REPLACEMENT / ENGINEERING_VERIFYING | valid 768×213 RGBA PNG; 106,121 bytes; SHA-256 `e7e243c9a339626a5735ce6bc81853f247a38900338d8a56c45d286859efe9f2`; fixed 44px runtime slot |
 | L9-A014 | `unlock_dijiang_v1.png` | 帝江 unlock presentation | PNG-first | APPROVED_FINAL | runtime 512×382 RGBA; 196,178 bytes; SHA-256 `4234e1b087399e9886e51cd44f77855d58ed074f9e7c825b4adc16c9f067591a`; unlock-only presentation |
 
 ## C. Gameplay VFX — no static image unless runtime evidence fails
@@ -201,15 +201,16 @@ Valid corrected handoff:
 - At this Level9 handoff, Level1–8 happen to be the released baseline; after later releases, the protected/reference baseline expands automatically.
 - Regression remains impact-driven: do not rerun or alter unaffected released levels merely because they are part of the baseline.
 - Valid handoff is now `shanhaijing_td_level9_minimal_handoff_v3.zip`, SHA-256 `efeb32e0b30486d456d7619e0d75779bb356988eb1b20a9311dbbb3a8337ff51`.
-- v2 is superseded.
+- The earlier handoff package v2 is superseded by handoff package v3.
 
 
-## L. 2026-09-26 phone-smoke HUD hotfix
-- Physical-phone smoke showed the programmatic `燭龍` name and HP fill visually misaligned with the original v1 frame.
-- Runtime HUD asset is superseded by `assets/ui/ui_boss_zhulong_panel_v2.png`.
-- v2 is vertically compressed and keeps the same shared **44 px** outer runtime slot.
-- Runtime Boss-name placement for 燭龍 is now special-cased to the lower centered name reserve: `top: 13px`, `font-size: 12px`, `line-height: 12px`.
-- Runtime HP groove geometry is now `left 12.8% / top 60.0% / width 74.5% / height 14.5%`.
+## M. 2026-09-26 player-replacement HUD correction
+- Physical-phone smoke showed the programmatic `燭龍` name and HP fill visually misaligned with the previous frame; the player supplied the replacement source used here.
+- Uploaded source is a valid 2172×724 RGBA PNG, 704,668 bytes, SHA-256 `2edafb3749ed49e2fdb0d06d5401da0085e25b4653261a37f632be25daa8e3ef`.
+- Runtime asset is `assets/ui/ui_boss_zhulong_panel_v2.png`: valid 768×213 RGBA PNG, 106,121 bytes, SHA-256 `e7e243c9a339626a5735ce6bc81853f247a38900338d8a56c45d286859efe9f2`.
+- Transparent trim + aspect-preserving resize reduced transfer size by **84.9%** versus the uploaded source. Visible-art ratio is preserved from about **3.851:1** to **3.850:1** without stretching.
+- Runtime keeps the shared **44 px** outer Boss slot. The visible name reserve measures source x310–458 / y80–106; the programmatic name uses `top: 7px`, `left: 39.4%`, `width: 21.2%`, `font-size: 12px`, `line-height: 12px`.
+- Conservative HP groove interior measures source x134–632 / y120–138; runtime geometry is `left 14.2% / top 59.4% / width 71.3% / height 12.6%`.
 - `border-image-slice` for the compressed v2 source is **35 fill**.
 - The original re-uploaded v1 source/checksum records above remain historical audit evidence; they are not deleted or rewritten.
-- v2 is a player-requested phone-smoke correction and remains **PLAYER_RECHECK_PENDING** until the deployed phone screenshot confirms name/HP visual alignment.
+- Engineering and deployed visual verification are still required; player phone confirmation remains separate.

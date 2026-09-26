@@ -1,5 +1,5 @@
 import { TOWER_DATA, ENEMY_DATA } from '../config/gameData.js?v=level9-1';
-import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=asset-load-2';
+import { assetUrl, BOSS_HUD_GEOMETRY } from '../config/artAssets.js?v=asset-load-3';
 import { Economy } from '../systems/Economy.js';
 import { BEAST_NAMES } from '../config/progressionData.js?v=level9-1';
 

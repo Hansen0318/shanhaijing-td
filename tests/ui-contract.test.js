@@ -78,7 +78,7 @@ test('dev menu and guarded direct controls include Level6 geometry, sunlight, wa
   for (const state of ['level5', 'level6', 'level6wave1', 'sunlightA', 'sunlightB', 'jinwu1', 'jinwu2', 'jinwu25', 'level6victory', 'level6retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=level9-1/);
+  assert.match(smoke, /index\.html\?v=asset-load-3/);
 });
 
 test('dev menu and guarded direct controls include Level7 thunder, Kui phases, victory, and retry', async () => {
@@ -96,7 +96,7 @@ test('dev menu and guarded direct controls include Level7 thunder, Kui phases, v
   for (const state of ['level7', 'level7wave1', 'thunderA', 'thunderB', 'kui1', 'kui2', 'kui25', 'level7victory', 'level7retry']) {
     assert.match(smoke, new RegExp(`data-state="${state}"`));
   }
-  assert.match(smoke, /index\.html\?v=asset-load-2/);
+  assert.match(smoke, /index\.html\?v=asset-load-3/);
 });
 
 test('dev menu and smoke controls include Level8 tide, Huashe, Xuangui, victory, and retry', async () => {
@@ -150,14 +150,14 @@ test('entry and style cache versions are fresh for this release', async () => {
   const projectile = await readFile(new URL('../src/entities/Projectile.js', import.meta.url), 'utf8');
   const progression = await readFile(new URL('../src/config/progressionData.js', import.meta.url), 'utf8');
   for (const path of ['styles.css', 'styles-fixes.css', 'styles-lineup.css']) {
-    if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-2/);
-    else assert.match(html, new RegExp(`${path.replace('.', '\\\\.')}\\\\?v=level9-1`));
+    if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-3/);
+    else assert.match(html, new RegExp(`${path.replaceAll('.', '\\.')}\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=level9-visual-2/);
+  assert.match(html, /src\/main\.js\?v=level9-visual-3/);
   assert.match(main, /Game\.js\?v=level9-1/);
-  assert.match(main, /Renderer\.js\?v=level9-visual-2/);
-  assert.match(main, /UIController\.js\?v=asset-load-2/);
-  assert.match(main, /artAssets\.js\?v=level9-visual-2/);
+  assert.match(main, /Renderer\.js\?v=level9-visual-3/);
+  assert.match(main, /UIController\.js\?v=asset-load-3/);
+  assert.match(main, /artAssets\.js\?v=level9-visual-3/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
   for (const module of ['gameData', 'BossSystem', 'TideSystem', 'DayNightSystem']) assert.match(game, new RegExp(`${module}\\.js\\?v=level9-1`));
   for (const module of ['GameMap', 'Enemy', 'Tower', 'Projectile', 'CombatSystem', 'BlessingSystem', 'StatusSystem', 'LineupSystem', 'progressionData', 'MotionSystem', 'motionData']) {
@@ -205,9 +205,9 @@ test('Level9 phone visual hotfix keeps Zhulong overlays aligned and day/night co
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
   assert.match(art, /ui_boss_zhulong_panel_v2\.png/);
-  assert.match(art, /zhulong: Object\.freeze\(\{ left: '12\.8%', top: '60\.0%', width: '74\.5%', height: '14\.5%' \}\)/);
+  assert.match(art, /zhulong: Object\.freeze\(\{ left: '14\.2%', top: '59\.4%', width: '71\.3%', height: '12\.6%' \}\)/);
   assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] \{ border-image-slice: 35 fill; \}/);
-  assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] strong \{ top: 13px; font-size: 12px; line-height: 12px; \}/);
+  assert.match(styles, /boss-hud\[data-boss-type="zhulong"\] strong \{ top: 7px; left: 39\.4%; width: 21\.2%; font-size: 12px; line-height: 12px; \}/);
   assert.match(renderer, /globalCompositeOperation = warm \? 'screen' : 'multiply'/);
   assert.match(renderer, /rgba\(255,116,42,\.22\)/);
   assert.match(renderer, /rgba\(20,27,61,\.42\)/);

@@ -6,7 +6,7 @@
 - Latest Level9 release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847` (PR #90).
 - Active level: **Level9**.
 - Active canonical folder: `docs/levels/level9/`.
-- Current gate: **Gate H EXITED — PUBLIC RELEASE VERIFIED / PLAYER PHONE SMOKE PENDING**.
+- Current gate: **Gate H REOPENED — PLAYER-SUPPLIED HUD CORRECTION / ENGINEERING VERIFYING**.
 - Gate A progression/scope is complete and frozen from inherited campaign rules.
 - Owned Level9 roster: **畢方／夫諸／應龍／白澤／句芒／玄龜**, exactly **3** selected before combat; retry returns to empty lineup.
 - All currently released levels remain frozen; do not redo them unless the actual Level9 shared-system change creates an identified regression risk. Do not hard-code `Level1–8` as a permanent future baseline.
@@ -20,7 +20,7 @@
 - Earlier Guide V1 route is superseded. The player's final corrected registration overlay is the canonical visual evidence for the new coordinates.
 - Gate D CLOSED: player-approved registered 390×610 geometry + clean background; final runtime `bg_zhongshan_extreme_night_v1.jpg` = 780×1220 / 516,931 bytes / SHA-256 `bab355fb7c323f8d150e4bb55237f9cd63dfccb50c36622262300d1473c179ec`.
 - Gate E/F complete: five new image assets were sequentially approved; all six concrete final source files were re-uploaded and exact-byte audited. Chat-side PNG transparency/size optimization, background JPG conversion, checksums and registration recheck are complete. 晝夜/敵人狀態/P2/Motion Lite remain procedural-first.
-- Next exact step: **player performs physical-phone visual smoke; engineering resumes only for a concrete defect.**
+- Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
 ## 2026-09-26：Level9 phone-smoke HUD / day-night readability correction
@@ -31,6 +31,14 @@
 - Level9 燭龍 HP track geometry is re-aligned to the visible long groove.
 - Level9 day/night environment now uses stronger SCREEN(day) vs MULTIPLY(night) luminance separation plus a stronger 0.8s telegraph ring for 390px phone readability.
 - Player phone recheck remains required after Pages refresh.
+
+## 2026-09-26：Player-supplied Zhulong HUD replacement in progress
+
+- Active branch: `fix/level9-zhulong-hud-20260926`.
+- The previously released 768×213 v2 PNG was truncated and failed full PNG data decoding; a regression check now inflates PNG IDAT data instead of trusting the header alone.
+- Player upload verified as 2172×724 RGBA PNG / 704,668 bytes / SHA-256 `2edafb3749ed49e2fdb0d06d5401da0085e25b4653261a37f632be25daa8e3ef`.
+- Aspect-preserving runtime candidate is 768×213 RGBA / 106,121 bytes / SHA-256 `e7e243c9a339626a5735ce6bc81853f247a38900338d8a56c45d286859efe9f2`; visible-art ratio remains about 3.85:1 and transfer size is 84.9% smaller.
+- Programmatic `燭龍` name and HP track have been remeasured against the replacement panel; engineering regression/review and deployed visual verification remain pending.
 
 ## 2026-09-25：Global asset-loading reliability hotfix
 

@@ -4,12 +4,12 @@
 
 ## Active level
 - Level: **9**
-- Development phase: **RELEASED / PLAYER PHONE SMOKE PENDING**
-- Production implementation: **MERGED TO `main`**
+- Development phase: **HUD CORRECTION / ENGINEERING VERIFYING**
+- Production implementation: **REPLACEMENT HUD BRANCH ACTIVE**
 - Active canonical folder: `docs/levels/level9/`
 
 ## Current gate
-**GATE H — EXITED / PUBLIC RELEASE VERIFIED**
+**GATE H — REOPENED FOR PLAYER-SUPPLIED HUD CORRECTION**
 
 ### Allowed now
 - perform player-owned phone visual acceptance on the deployed build;
@@ -66,11 +66,14 @@ PR #90 merged at `e473c7111555e5c98364bcb1fe8c0af3dee69847`; Pages exposes Level
 - Day/night luminance separation was too weak on physical iPhone.
 - 燭龍 name/HP overlays were visibly offset from the decorative HUD channels.
 - Correction branch: `fix/level9-hud-daynight-readability-20260926`.
+- Active replacement branch: `fix/level9-zhulong-hud-20260926`.
+- Player-supplied PNG has been normalized to a valid 768×213 RGBA runtime asset without stretching; Boss name and HP geometry are being reverified.
 - Scope is visual-only: no gameplay, balance, geometry, tower slots, progression, or enemy logic changes.
 
 ## Current branch / SHA
 - merged implementation PR: #90.
 - release source: `main` at `e473c7111555e5c98364bcb1fe8c0af3dee69847`.
+- active HUD correction branch: `fix/level9-zhulong-hud-20260926`.
 
 ## Verification status
 - Chat-side Final Fileset Audit: **PASS**.

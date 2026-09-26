@@ -116,8 +116,8 @@ export const ART_ASSETS = Object.freeze({
   dijiangUnlock: 'assets/ui/unlock_dijiang_v1.png',
 });
 
-// Inner channel geometry measured from each source panel, normalized after the
-// 768x256 runtime resize and the shared 70px nine-slice render.
+// Inner channel geometry measured from each source panel and normalized through
+// that panel's runtime dimensions and dedicated nine-slice value.
 export const BOSS_HUD_GEOMETRY = Object.freeze({
   qiongqi: Object.freeze({ left: '1.5%', top: '55%', width: '97%', height: '14.4%' }),
   paoxiao: Object.freeze({ left: '3.9%', top: '55.6%', width: '92.1%', height: '10.3%' }),
@@ -127,10 +127,10 @@ export const BOSS_HUD_GEOMETRY = Object.freeze({
   jinwu: Object.freeze({ left: '3.7%', top: '43.8%', width: '92.5%', height: '21.9%' }),
   kui: Object.freeze({ left: '9.9%', top: '52.6%', width: '80.4%', height: '14.2%' }),
   huashe: Object.freeze({ left: '11.6%', top: '60.9%', width: '76.7%', height: '17.3%' }),
-  zhulong: Object.freeze({ left: '12.8%', top: '60.0%', width: '74.5%', height: '14.5%' }),
+  zhulong: Object.freeze({ left: '14.2%', top: '59.4%', width: '71.3%', height: '12.6%' }),
 });
 
-const ASSET_CACHE_VERSION = 'asset-load-2';
+const ASSET_CACHE_VERSION = 'asset-load-3';
 
 const SHARED_RUNTIME_ART_IDS = Object.freeze([
   'slotPlatform', 'bifang', 'fuzhu', 'yinglong', 'minion', 'swift', 'giant',
