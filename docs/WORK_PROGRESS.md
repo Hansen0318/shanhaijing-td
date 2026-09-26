@@ -23,6 +23,18 @@
 - Next exact step: **finish fresh regression/review, merge the valid replacement HUD, verify Pages at 390×700, then request player phone recheck.**
 - New Chat / Work / Codex sessions must recover from GitHub and must not require a manual recap from the player.
 
+## 2026-09-26：Capability-first attack-visual rule hardened
+
+- Permanent rule hardened: attack visuals are selected from the creature ability semantics + combat function first, and only then differentiated against the currently released roster.
+- Generic projectile/beam templates may not be chosen first and recolored as the design method.
+- Current post-change audit:
+  - 玄龜 crescent/tide-front = water + 潮震/pushback-control semantics: PASS;
+  - 白澤 short insight flash + target sigil = 洞察/mark-reveal semantics: PASS;
+  - 夫諸 long ice crystal/spear = frost + slow semantics: PASS;
+  - 句芒 rotating leaf-blade = wood/leaf + cutting semantics: PASS.
+- 畢方 fireball/explosion and 應龍 penetrating beam already match their fire-AoE and penetration/breath functions.
+- No production VFX code change required by this semantic audit; PR #98 implementation remains valid.
+
 ## 2026-09-26：Deployable attack-identity readability pass
 
 - Player observed that different deployable beasts' projectiles were reading too similarly on phone.

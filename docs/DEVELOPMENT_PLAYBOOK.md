@@ -205,7 +205,23 @@ This gate is cleanup-only and must not change shipped gameplay or reopen complet
 
 
 ### Attack identity / roster readability
-When implementing or reviewing deployable attacks, compare against the **currently released deployable roster**. At ~390 px width, each primary attack needs a distinct silhouette, motion pattern, beam behavior, trail, or impact language; hue-only differentiation is insufficient. Prefer procedural corrections that preserve balance. Include a mixed-roster phone/runtime check when attack readability is in scope.
+Attack visual design is **capability-first**, then roster-differentiated.
+
+For each deployable attack:
+1. derive the visual from ability semantics and combat function;
+2. choose the appropriate grammar (projectile / beam-breath / wave-front / mark-sigil / pulse / field / summon);
+3. compare it against the **currently released deployable roster**;
+4. at ~390 px width, ensure a distinct silhouette, motion pattern, beam behavior, trail, or impact language.
+
+Hue-only differentiation is insufficient. A generic orb or beam must not be selected first and merely recolored. Prefer procedural corrections that preserve balance. Include a mixed-roster phone/runtime check when attack readability is in scope.
+
+Reference semantic mappings:
+- explosive fire → fireball + burst;
+- frost slow → ice crystal/spear + cold fracture;
+- penetration → long directional beam/breath;
+- insight/mark → short flash + target sigil;
+- leaf/cutting → rotating/arcing blade;
+- tide/pushback → moving wave-front/crescent/ring.
 
 ### Dynamic released baseline
 Before planning regression, compatibility, visual comparison or "do not redo prior work" scope, resolve the product's **currently released baseline** from the current repository/release state.

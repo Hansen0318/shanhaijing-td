@@ -345,6 +345,29 @@ Use a small clear PNG core plus procedural trail / glow / impact when a recogniz
 
 As the deployable roster grows, attack visuals must remain distinguishable by **visual grammar**, not merely by hue.
 
+#### Capability-first visual design is mandatory
+Before choosing projectile/VFX appearance, derive the visual from the attack's **ability semantics and combat function**.
+
+Use this order:
+1. identify the creature/weapon/ability theme and what the attack is meant to communicate;
+2. identify combat function: single-target / penetration / slow / mark-reveal / AoE / pushback-control / damage-over-time / persistent-zone / summon / other;
+3. choose the matching visual grammar: projectile body / beam-breath / wave-front / mark-sigil / pulse-ring / persistent field / summon / other;
+4. only then compare against the currently released deployable roster and remove visual collisions.
+
+Examples of semantic mapping:
+- fire + explosive AoE → fireball / flame wake / burst;
+- frost + slow → crystal / ice spear / cold fracture;
+- penetration / breath → long directional beam or breath;
+- insight / reveal / mark → brief flash + target sigil rather than sustained damage beam;
+- leaf / blade / cutting → rotating or arcing blade body;
+- tide / pushback / control → advancing wave-front / crescent / tide ring rather than a generic blue orb.
+
+Rules:
+- Do not pick a generic orb/beam first and merely recolor it to match an element.
+- The visual must communicate both **what the ability is** and **what it does in combat**.
+- If ability semantics and roster differentiation conflict, preserve the ability meaning first, then choose a different silhouette/motion/impact language within that semantic family.
+- Revalidate the mapping whenever an inherited unlock becomes first-playable; do not silently reuse a generic projectile if its frozen kit implies a more specific visual language.
+
 - At the established ~390 px phone width, every deployable creature's primary attack must differ from the other currently released deployables in at least one strong dimension: **projectile/body silhouette, motion pattern, beam behavior, trail language, or impact language**.
 - Changing only color while keeping the same small orb / short trail / straight beam / circular impact template is not sufficient.
 - Compare a new deployable's attack against the **currently released roster at implementation time**; never hard-code a historical roster range.
