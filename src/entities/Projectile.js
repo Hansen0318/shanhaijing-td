@@ -30,7 +30,7 @@ export class Projectile {
       hit.forEach(enemy => StatusSystem.applyBurn(enemy, this.stats.burnDps, 2));
       this.effects.push({
         type: 'explosion', x: this.targetPoint.x, y: this.targetPoint.y,
-        radius: this.stats.explosionRadius, hitCount: hit.length,
+        radius: this.stats.explosionRadius, hitCount: hit.length, towerLevel: this.sourceTower.level,
         hitPoints: hit.map(enemy => ({ x: enemy.x, y: enemy.y })),
         radiusStacks: Math.max(0, Math.min(2, Math.round((this.modifiers.bifangRadius ?? 0) / 0.2))),
         damageStacks: Math.max(0, Math.min(2, Math.round((this.modifiers.bifangDamage ?? 0) / 0.2))),
@@ -42,12 +42,12 @@ export class Projectile {
       if (this.type === 'jumang') {
         this.effects.push({
           type: 'jumangImpact', x: this.targetPoint.x, y: this.targetPoint.y,
-          life: 0.3, duration: 0.3,
+          towerLevel: this.sourceTower.level, life: 0.3, duration: 0.3,
         });
       }
       if (this.type === 'xuangui') {
         this.effects.push({
-          type: 'xuanguiImpact', x: this.targetPoint.x, y: this.targetPoint.y,
+          type: 'xuanguiImpact', x: this.targetPoint.x, y: this.targetPoint.y, towerLevel: this.sourceTower.level,
           waveStacks: Math.max(0, Math.min(2, Math.round((this.modifiers.xuanguiShockDamage ?? 0) / 0.2))),
           life: 0.24, duration: 0.24,
         });
@@ -60,10 +60,11 @@ export class Projectile {
             radius: this.stats.shockRadius,
             damage: this.stats.shockDamage,
             pushback: this.stats.shockPushback,
+            towerLevel: this.sourceTower.level,
           });
           this.effects.push({
             type: 'xuanguiShockTelegraph', x: this.targetPoint.x, y: this.targetPoint.y,
-            radius: this.stats.shockRadius, life: this.stats.shockDelay, duration: this.stats.shockDelay,
+            towerLevel: this.sourceTower.level, radius: this.stats.shockRadius, life: this.stats.shockDelay, duration: this.stats.shockDelay,
           });
         }
       }
