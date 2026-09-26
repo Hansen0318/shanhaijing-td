@@ -477,7 +477,7 @@ export class Game {
             illusion.duration = Math.min(illusion.duration, stats.illusionRevealDuration);
           });
         }
-        this.effects.push({ type: 'baizeInsight', from: { x: tower.x, y: tower.y }, to: { x: target.x, y: target.y }, life: 0.35, duration: 0.35 });
+        this.effects.push({ type: 'baizeInsight', from: { x: tower.x, y: tower.y }, to: { x: target.x, y: target.y }, life: 0.14, duration: 0.14 });
       } else if (tower.type === 'yinglong') {
         const hit = CombatSystem.penetrate(targets, stats.penetration, stats.damage, { slowedVulnerability: this.blessings.modifiers.slowedVulnerability, bossBonus: stats.bossBonus }, tower, stats.range);
         this.effects.push({
