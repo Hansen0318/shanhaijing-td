@@ -153,9 +153,9 @@ test('entry and style cache versions are fresh for this release', async () => {
     if (path === 'styles.css') assert.match(html, /styles\.css\?v=level9-visual-3/);
     else assert.match(html, new RegExp(`${path.replaceAll('.', '\\.')}\\?v=level9-1`));
   }
-  assert.match(html, /src\/main\.js\?v=level9-visual-3/);
+  assert.match(html, /src\/main\.js\?v=level9-daylight-1/);
   assert.match(main, /Game\.js\?v=level9-1/);
-  assert.match(main, /Renderer\.js\?v=level9-visual-3/);
+  assert.match(main, /Renderer\.js\?v=level9-daylight-1/);
   assert.match(main, /UIController\.js\?v=asset-load-3/);
   assert.match(main, /artAssets\.js\?v=level9-visual-3/);
   assert.match(main, /LevelEightDev\.js\?v=level9-1/);
@@ -211,4 +211,12 @@ test('Level9 phone visual hotfix keeps Zhulong overlays aligned and day/night co
   assert.match(renderer, /globalCompositeOperation = warm \? 'screen' : 'multiply'/);
   assert.match(renderer, /rgba\(255,116,42,\.22\)/);
   assert.match(renderer, /rgba\(20,27,61,\.42\)/);
+});
+
+
+test('Level9 day stays at original luminance while night carries the contrast', async () => {
+  const renderer = await readFile(new URL('../src/render/Renderer.js', import.meta.url), 'utf8');
+  assert.match(renderer, /rgba\(154,45,18,\.075\)/);
+  assert.match(renderer, /rgba\(20,27,61,\.42\)/);
+  assert.doesNotMatch(renderer, /rgba\(255,116,42,\.22\)/);
 });
